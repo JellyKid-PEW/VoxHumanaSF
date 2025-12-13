@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic SEO -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vox Humana · A Post-Collapse Sci-Fi Web Serial</title>
@@ -41,7 +42,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-  <!-- Fonts & External Styles -->
+  <!-- Fonts & Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -49,8 +50,140 @@
 </head>
 
 <body>
-  <!-- Your full layout goes here -->
-  <!-- (Use the same HTML structure you already have — form, hero, panel, etc.) -->
+  <main>
+    <section class="shell">
+      <div class="shell-inner">
+        <!-- LEFT COLUMN -->
+        <div class="left">
+          <div class="logo-row" aria-label="Vox Humana serial fiction">
+            <div class="vh-mark" aria-hidden="true">VH</div>
+            <div class="logo-text">
+              <span>Web Serial · Sci-Fi</span>
+              <span>voxhumanasf.com</span>
+            </div>
+          </div>
+
+          <div>
+            <h1>
+              <span class="highlight">Vox&nbsp;Humana</span><br />
+              <span>Coming&nbsp;Soon</span>
+            </h1>
+            <p class="subheading">A ship with too much memory. A crew that refuses to drift.</p>
+          </div>
+
+          <p class="hook">
+            <strong>Vox Humana</strong> is a character-driven science fiction web serial about a myth-soaked captain,
+            an overattentive ship AI, and the people trying to build a life in the quiet between disasters.
+            No prophecies. No chosen ones. Just survival, debt, and found-family gravity.
+          </p>
+
+          <div class="meta-row">
+            <span class="pill">Serial Fiction</span>
+            <span class="pill">Soft-Burn Space Opera</span>
+            <span class="pill">Launching Soon</span>
+          </div>
+
+          <div class="signup-block">
+            <div class="signup-heading">
+              <div class="pulse-dot" aria-hidden="true"></div>
+              <span>Be first when the airlocks open.</span>
+            </div>
+            <p class="signup-copy">
+              Drop an email and we’ll let you know the moment the first chapters go live—no spam, no endless
+              promo loops. Just launch news and the occasional signal from the edge.
+            </p>
+
+            <form class="signup" method="post" action="#">
+              <div class="field-wrap">
+                <label class="sr-only" for="email">Email address</label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  placeholder="yourname@example.com"
+                />
+              </div>
+              <button class="cta" type="submit">
+                <span>Notify Me</span>
+                <span class="icon" aria-hidden="true">➜</span>
+              </button>
+            </form>
+
+            <p class="microcopy">
+              Prefer manual? You can also email
+              <a href="mailto:voxhumanasf@gmail.com">voxhumanasf@gmail.com</a> to be added to the launch list.
+            </p>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="right" aria-label="Atmospheric status card for the Vox Humana">
+          <div class="panel">
+            <div class="panel-header">
+              <span>Ship Status · Preview</span>
+              <div class="status-pill">
+                <div class="status-dot" aria-hidden="true"></div>
+                <span>Drift · Ready</span>
+              </div>
+            </div>
+
+            <div class="panel-main">
+              <div class="panel-grid" aria-hidden="true">
+                <div class="panel-cell">
+                  <span class="panel-label">Registry</span>
+                  <span class="panel-value">VOX-HUMANA</span>
+                </div>
+                <div class="panel-cell">
+                  <span class="panel-label">Vector</span>
+                  <span class="panel-value">Kes-Periphery</span>
+                </div>
+                <div class="panel-cell">
+                  <span class="panel-label">Trajectory</span>
+                  <span class="panel-value">Launch&nbsp;Window</span>
+                </div>
+                <div class="panel-cell">
+                  <span class="panel-label">Crew</span>
+                  <span class="panel-value">Unstable · Found</span>
+                </div>
+                <div class="panel-cell">
+                  <span class="panel-label">Ledger</span>
+                  <span class="panel-value">Red · Rising</span>
+                </div>
+                <div class="panel-cell">
+                  <span class="panel-label">Signal</span>
+                  <span class="panel-value">Serial · Weekly</span>
+                </div>
+              </div>
+
+              <div class="panel-foot">
+                <div class="tiny-leds" aria-hidden="true">
+                  <div class="tiny-led"></div>
+                  <div class="tiny-led"></div>
+                  <div class="tiny-led"></div>
+                </div>
+                <span>First contact: <strong>Coming soon</strong></span>
+              </div>
+            </div>
+
+            <div class="panel-footer">
+              <p>
+                Expect: slow-burn tension, AI banter, compromised autonomy, and the quiet horror of
+                trying to live like a person when the universe keeps insisting you’re a story.
+              </p>
+              <div class="tags-row" aria-hidden="true">
+                <span class="tag-chip">found family</span>
+                <span class="tag-chip">no prophecies</span>
+                <span class="tag-chip">ship with opinions</span>
+                <span class="tag-chip">soft apocalypse</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <div class="footer-inner">
