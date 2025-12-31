@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic SEO -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vox Humana · A Post-Collapse Sci-Fi Web Serial</title>
@@ -42,158 +41,238 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-  <!-- Fonts & Styles -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <link href="style.css" rel="stylesheet" />
 </head>
 
 <body>
-  <main>
-    <section class="shell">
-      <div class="shell-inner">
-        <!-- LEFT COLUMN -->
-        <div class="left">
-          <div class="logo-row" aria-label="Vox Humana serial fiction">
-            <div class="vh-mark" aria-hidden="true">VH</div>
-            <div class="logo-text">
-              <span>Web Serial · Sci-Fi</span>
-              <span>voxhumanasf.com</span>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#" aria-label="Vox Humana home">
+        <span class="brand-mark" aria-hidden="true">VH</span>
+        <span class="brand-text">
+          <span class="brand-kicker">Vox Humana</span>
+          <span class="brand-sub">A post-collapse sci-fi web serial</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#preview">Preview</a>
+        <a href="#subscribe" class="nav-cta">Subscribe</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content" class="wrap">
+    <section class="hero" aria-label="Intro">
+      <div class="hero-copy">
+        <p class="badge">
+          <span class="dot" aria-hidden="true"></span>
+          Launching soon • free to read
+        </p>
+
+        <h1>
+          A ship with too much memory.<br/>
+          A captain with too much history.<br/>
+          <span class="grad">A crew that refuses to drift.</span>
+        </h1>
+
+        <p class="lede">
+          <strong>Vox Humana</strong> is character-driven science fiction: intimate survival, quiet myth, and
+          a found family forming under pressure.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn primary" href="#subscribe">
+            Get launch updates
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn ghost" href="#preview">Read the opening tone</a>
+        </div>
+
+        <dl class="signals" aria-label="Series signals">
+          <div class="sig">
+            <dt>Vibe</dt>
+            <dd>Slow-burn tension, sharp banter</dd>
+          </div>
+          <div class="sig">
+            <dt>Focus</dt>
+            <dd>Character first, world as pressure</dd>
+          </div>
+          <div class="sig">
+            <dt>Format</dt>
+            <dd>Serialized chapters online</dd>
+          </div>
+        </dl>
+      </div>
+
+      <aside class="hero-panel" aria-label="Status panel">
+        <div class="panel-head">
+          <span class="panel-title">Ship telemetry</span>
+          <span class="panel-status">
+            <span class="status-led" aria-hidden="true"></span>
+            Coming online
+          </span>
+        </div>
+
+        <div class="panel-body">
+          <div class="metric">
+            <div class="m-label">Signal integrity</div>
+            <div class="m-value">92%</div>
+            <div class="m-bar" role="presentation"><span style="width:92%"></span></div>
+          </div>
+
+          <div class="grid">
+            <div class="cell">
+              <div class="c-label">Cadence</div>
+              <div class="c-value">Weekly</div>
+            </div>
+            <div class="cell">
+              <div class="c-label">Chapters</div>
+              <div class="c-value">Seasonal arcs</div>
+            </div>
+            <div class="cell">
+              <div class="c-label">Access</div>
+              <div class="c-value">Free</div>
             </div>
           </div>
 
-          <div>
-            <h1>
-              <span class="highlight">Vox&nbsp;Humana</span><br />
-              <span>Coming&nbsp;Soon</span>
-            </h1>
-            <p class="subheading">A ship with too much memory. A crew that refuses to drift.</p>
-          </div>
-
-          <p class="hook">
-            <strong>Vox Humana</strong> is a character-driven science fiction web serial about a myth-soaked captain,
-            an overattentive ship AI, and the people trying to build a life in the quiet between disasters.
-            No prophecies. No chosen ones. Just survival, debt, and found-family gravity.
-          </p>
-
-          <div class="meta-row">
-            <span class="pill">Serial Fiction</span>
-            <span class="pill">Soft-Burn Space Opera</span>
-            <span class="pill">Launching Soon</span>
-          </div>
-
-          <div class="signup-block">
-            <div class="signup-heading">
-              <div class="pulse-dot" aria-hidden="true"></div>
-              <span>Be first when the airlocks open.</span>
-            </div>
-            <p class="signup-copy">
-              Drop an email and we’ll let you know the moment the first chapters go live—no spam, no endless
-              promo loops. Just launch news and the occasional signal from the edge.
-            </p>
-
-            <form class="signup" method="post" action="#">
-              <div class="field-wrap">
-                <label class="sr-only" for="email">Email address</label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  required
-                  autocomplete="email"
-                  placeholder="yourname@example.com"
-                />
-              </div>
-              <button class="cta" type="submit">
-                <span>Notify Me</span>
-                <span class="icon" aria-hidden="true">➜</span>
-              </button>
-            </form>
-
-            <p class="microcopy">
-              Prefer manual? You can also email
-              <a href="mailto:voxhumanasf@gmail.com">voxhumanasf@gmail.com</a> to be added to the launch list.
-            </p>
+          <div class="panel-note">
+            Minimal spam. Just launch updates, release links, and occasional behind-the-scenes notes.
           </div>
         </div>
 
-        <!-- RIGHT COLUMN -->
-        <aside class="right" aria-label="Atmospheric status card for the Vox Humana">
-          <div class="panel">
-            <div class="panel-header">
-              <span>Ship Status · Preview</span>
-              <div class="status-pill">
-                <div class="status-dot" aria-hidden="true"></div>
-                <span>Drift · Ready</span>
-              </div>
-            </div>
+        <div class="panel-foot">
+          <span class="tiny">
+            Contact:
+            <a href="mailto:voxhumanasf@gmail.com">voxhumanasf@gmail.com</a>
+          </span>
+          <span class="tiny muted">ID: VH-01</span>
+        </div>
+      </aside>
+    </section>
 
-            <div class="panel-main">
-              <div class="panel-grid" aria-hidden="true">
-                <div class="panel-cell">
-                  <span class="panel-label">Registry</span>
-                  <span class="panel-value">VOX-HUMANA</span>
-                </div>
-                <div class="panel-cell">
-                  <span class="panel-label">Vector</span>
-                  <span class="panel-value">Kes-Periphery</span>
-                </div>
-                <div class="panel-cell">
-                  <span class="panel-label">Trajectory</span>
-                  <span class="panel-value">Launch&nbsp;Window</span>
-                </div>
-                <div class="panel-cell">
-                  <span class="panel-label">Crew</span>
-                  <span class="panel-value">Unstable · Found</span>
-                </div>
-                <div class="panel-cell">
-                  <span class="panel-label">Ledger</span>
-                  <span class="panel-value">Red · Rising</span>
-                </div>
-                <div class="panel-cell">
-                  <span class="panel-label">Signal</span>
-                  <span class="panel-value">Serial · Weekly</span>
-                </div>
-              </div>
+    <section id="about" class="section">
+      <div class="section-head">
+        <h2>What this is</h2>
+        <p>
+          Vox Humana lives in the space between infrastructure and myth—where identity can open doors,
+          and silence can be a weapon.
+        </p>
+      </div>
 
-              <div class="panel-foot">
-                <div class="tiny-leds" aria-hidden="true">
-                  <div class="tiny-led"></div>
-                  <div class="tiny-led"></div>
-                  <div class="tiny-led"></div>
-                </div>
-                <span>First contact: <strong>Coming soon</strong></span>
-              </div>
-            </div>
-
-            <div class="panel-footer">
-              <p>
-                Expect: slow-burn tension, AI banter, compromised autonomy, and the quiet horror of
-                trying to live like a person when the universe keeps insisting you’re a story.
-              </p>
-              <div class="tags-row" aria-hidden="true">
-                <span class="tag-chip">found family</span>
-                <span class="tag-chip">no prophecies</span>
-                <span class="tag-chip">ship with opinions</span>
-                <span class="tag-chip">soft apocalypse</span>
-              </div>
-            </div>
-          </div>
-        </aside>
+      <div class="cards">
+        <article class="card">
+          <h3>Character-driven</h3>
+          <p>Relationships are the engine. The world pushes; the crew decides who they become.</p>
+        </article>
+        <article class="card">
+          <h3>Post-collapse texture</h3>
+          <p>Systems are broken. Names have weight. Old debts linger as quiet hazards.</p>
+        </article>
+        <article class="card">
+          <h3>Serialized rhythm</h3>
+          <p>Chapters land in parts—built for reading online without losing momentum.</p>
+        </article>
       </div>
     </section>
+
+    <section id="preview" class="section preview" aria-label="Preview">
+      <div class="section-head">
+        <h2>Opening tone</h2>
+        <p>A small sample—vibe-forward, spoiler-light. Replace with your own excerpt whenever you’re ready.</p>
+      </div>
+
+      <figure class="excerpt" role="group" aria-label="Excerpt">
+        <blockquote>
+          The relay station didn’t look abandoned. That was the trick.<br/><br/>
+          It held itself together like someone was still watching—
+          like it expected to be judged for how it failed.
+        </blockquote>
+        <figcaption>— Vox Humana (excerpt)</figcaption>
+      </figure>
+    </section>
+
+    <section id="subscribe" class="section subscribe" aria-label="Subscribe">
+      <div class="section-head">
+        <h2>Get launch updates</h2>
+        <p>One email when we go live, then only when new chapters drop.</p>
+      </div>
+
+      <form class="form" id="signup" novalidate>
+        <label class="field">
+          <span>Email</span>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" required />
+        </label>
+
+        <button class="btn primary" type="submit">
+          Notify me
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+
+        <p class="fineprint">
+          By subscribing, you agree to receive Vox Humana email updates. Unsubscribe anytime.
+        </p>
+
+        <div class="form-msg" id="msg" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Vox Humana SF. All rights reserved.</span>
+        <span class="footer-links">
+          <a href="#about">About</a>
+          <a href="#subscribe">Subscribe</a>
+          <a href="mailto:voxhumanasf@gmail.com">Email</a>
+        </span>
+      </div>
+    </footer>
   </main>
 
-  <footer>
-    <div class="footer-inner">
-      <span>© <span id="year"></span> Vox Humana SF. All rights reserved.</span>
-      <span>Contact: <a href="mailto:voxhumanasf@gmail.com">voxhumanasf@gmail.com</a></span>
-    </div>
-  </footer>
-
   <script>
+    // Year
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Lightweight client-side validation (no backend wired)
+    const form = document.getElementById("signup");
+    const email = document.getElementById("email");
+    const msg = document.getElementById("msg");
+
+    function setMsg(type, text) {
+      msg.className = "form-msg " + type;
+      msg.textContent = text;
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = (email.value || "").trim();
+
+      if (!value) {
+        email.focus();
+        setMsg("error", "Add an email address to get launch updates.");
+        return;
+      }
+
+      if (!email.checkValidity()) {
+        email.focus();
+        setMsg("error", "That email doesn’t look right. Double-check the format.");
+        return;
+      }
+
+      // TODO: connect to your provider (Buttondown/Mailchimp/etc.)
+      setMsg("success", "You’re on the list. Watch for launch day.");
+      form.reset();
+    });
   </script>
 </body>
 </html>
