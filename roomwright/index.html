@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roomwright — Wild Huntress Bridge</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%2314171b'/><rect x='3' y='3' width='10' height='10' fill='none' stroke='%23e8a33d' stroke-width='1.5'/><rect x='6' y='9' width='4' height='4' fill='%234da3c7'/></svg>">
+<link rel="stylesheet" href="css/roomwright.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.webgpu.min.js",
+    "three/webgpu": "./vendor/three.webgpu.min.js",
+    "three/tsl": "./vendor/three.tsl.min.js",
+    "three/addons/": "./vendor/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app">
+
+  <!-- ======= TOP BAR ======= -->
+  <header id="topbar">
+    <div class="brand">
+      <span class="brand-name">ROOMWRIGHT</span>
+      <span class="brand-sub" id="project-name">Wild Huntress — Bridge</span>
+    </div>
+
+    <div class="toolbar-group" id="view-buttons">
+      <button data-view="orbit"  class="tb active" title="Orbit view (1)">Orbit</button>
+      <button data-view="fp"     class="tb" title="First-person walk (2)">Walk</button>
+      <button data-view="over"   class="tb" title="Overhead view (3)">Overhead</button>
+      <button data-view="plan"   class="tb" title="Orthographic floor plan (4)">Plan</button>
+      <button data-view="elev"   class="tb" title="Orthographic elevation (5)">Elevation</button>
+    </div>
+
+    <div class="toolbar-group" id="tool-buttons">
+      <button data-tool="select"  class="tb active" title="Select (Q)">Select</button>
+      <button data-tool="move"    class="tb" title="Move (W)">Move</button>
+      <button data-tool="rotate"  class="tb" title="Rotate (E)">Rotate</button>
+      <button data-tool="scale"   class="tb" title="Resize (R)">Resize</button>
+      <button data-tool="measure" class="tb" title="Measure — click two points (M)">Measure</button>
+    </div>
+
+    <div class="toolbar-group">
+      <label class="tb-label" title="Snap translation to grid">Snap
+        <select id="snap-select">
+          <option value="0">off</option>
+          <option value="0.05">5 cm</option>
+          <option value="0.1" selected>10 cm</option>
+          <option value="0.25">25 cm</option>
+        </select>
+      </label>
+      <button id="btn-undo" class="tb" title="Undo (Ctrl+Z)">⟲</button>
+      <button id="btn-redo" class="tb" title="Redo (Ctrl+Y)">⟳</button>
+    </div>
+
+    <div class="toolbar-group">
+      <label class="tb-label">Light
+        <select id="lighting-select">
+          <option value="normal" selected>Normal</option>
+          <option value="dim">Dim</option>
+          <option value="emergency">Emergency</option>
+          <option value="powerless">Powerless</option>
+        </select>
+      </label>
+      <button id="btn-cutaway" class="tb" title="Cutaway: slice walls above 1.2 m">Cutaway</button>
+      <button id="btn-nav" class="tb" title="Show navigable floor space">Nav space</button>
+      <button id="btn-sound" class="tb" title="Toggle ambient ship sound">♪</button>
+    </div>
+
+    <div class="toolbar-group right">
+      <button id="btn-screenshot" class="tb" title="High-resolution screenshot (PNG)">📷</button>
+      <button id="btn-save" class="tb" title="Save version">Save</button>
+      <button id="btn-export" class="tb" title="Export project JSON">Export</button>
+      <button id="btn-import" class="tb" title="Import project JSON">Import</button>
+      <input type="file" id="import-file" accept=".json" hidden>
+      <input type="file" id="doc-file" accept=".txt,.md" hidden>
+    </div>
+  </header>
+
+  <!-- ======= MAIN ======= -->
+  <div id="main">
+
+    <!-- LEFT PANEL -->
+    <aside id="left-panel">
+      <nav id="left-tabs">
+        <button data-tab="documents" class="active">Docs</button>
+        <button data-tab="constraints">Constraints</button>
+        <button data-tab="conflicts">Conflicts <span id="conflict-badge" class="badge hidden">0</span></button>
+        <button data-tab="tests">Tests</button>
+        <button data-tab="scenes">Scenes</button>
+        <button data-tab="objects">Objects</button>
+      </nav>
+      <div id="left-content">
+        <section id="tab-documents" class="tab-page active"></section>
+        <section id="tab-constraints" class="tab-page"></section>
+        <section id="tab-conflicts" class="tab-page"></section>
+        <section id="tab-tests" class="tab-page"></section>
+        <section id="tab-scenes" class="tab-page"></section>
+        <section id="tab-objects" class="tab-page"></section>
+      </div>
+    </aside>
+
+    <!-- VIEWPORT -->
+    <div id="viewport-wrap">
+      <canvas id="viewport"></canvas>
+      <div id="viewport-hud">
+        <div id="hud-mode"></div>
+        <div id="hud-measure" class="hidden"></div>
+        <div id="hud-fp" class="hidden">
+          WASD move · drag to look · C crouch · Esc exit ·
+          <span id="hud-fp-char"></span> eye <span id="hud-fp-eye"></span> m
+        </div>
+      </div>
+      <div id="char-bar">
+        <span class="char-bar-label">Walk as:</span>
+        <button data-char="quenby" class="char-chip">Quenby</button>
+        <button data-char="iri" class="char-chip">Iri</button>
+        <button data-char="nova" class="char-chip">Nova</button>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: inspector / evidence -->
+    <aside id="right-panel">
+      <div id="inspector">
+        <h3 id="insp-title">Nothing selected</h3>
+        <div id="insp-body">
+          <p class="muted">Click an object in the viewport to see what it is, why it exists, and the evidence that determines it.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- STATUS BAR -->
+  <footer id="statusbar">
+    <span id="status-renderer">…</span>
+    <span id="status-msg"></span>
+    <span id="status-save" class="right"></span>
+  </footer>
+
+  <!-- MODAL -->
+  <div id="modal-backdrop" class="hidden">
+    <div id="modal">
+      <div id="modal-title"></div>
+      <div id="modal-body"></div>
+      <div id="modal-actions"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
