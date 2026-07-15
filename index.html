@@ -1,496 +1,1721 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-att="qvox">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Vox Humana · A Slow-Burn Sci-Fi Web Serial</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vox Humana — a literary science-fantasy serial</title>
+<meta name="description" content="The universe remembers Quenby Vox badly. The ship remembers enough. Follow Quenby Vox aboard the Wild Huntress. Book One complete — 12 transmissions, free to read.">
 
-  <meta name="description" content="Vox Humana is a character-led sci-fi web serial about drift, debt, and the uneasy beginnings of a crew. Free to read. Launching soon at voxhumanasf.com." />
-  <meta name="robots" content="index,follow" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,200;1,6..72,300;1,6..72,400&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
-  <!-- Open Graph / Social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Vox Humana – Web Serial Fiction Coming Soon" />
-  <meta property="og:description" content="A ship that won’t quit, a captain outrunning her past, and a crew forming in the quiet. Vox Humana is a twice-monthly serial with interstitial releases between drops." />
-  <meta property="og:url" content="https://voxhumanasf.com" />
-  <meta property="og:image" content="https://voxhumanasf.com/og-image.jpg" />
+<style>
+/* ══════════════════════════════════════════════════════════════
+   VOX HUMANA — THE THRESHOLD BUILD
+   The reader arrives at a door the Wild Huntress has left half
+   open. Eye level, in the corridor, outside the bridge.
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Vox Humana – Web Serial Fiction Coming Soon" />
-  <meta name="twitter:description" content="A character-led sci-fi serial: twice-monthly core chapters, plus interstitial releases between drops. Launching soon at voxhumanasf.com." />
-  <meta name="twitter:image" content="https://voxhumanasf.com/og-image.jpg" />
+   ── REQUIRED ART PLATES (layer in automatically when present) ──
+   art/hero/bridge-bg.jpg    2600×1600  the bridge seen through the
+                                        doorway: broad forward windows,
+                                        stars, raised stations w/ rails,
+                                        warm restrained consoles, a mug,
+                                        a seat turned from regulation.
+                                        Quenby working/resting if a
+                                        reliable reference exists;
+                                        otherwise recent-presence only.
+   art/hero/corridor-fg.png  2600×1600  foreground corridor plate with
+                                        TRANSPARENT doorway opening:
+                                        hook rail (one worn jacket, no
+                                        hanger; empty hooks), compact
+                                        data pad, maintenance seam, an
+                                        open low panel w/ cloth, warm
+                                        practicals. Used, not damaged.
+   art/rooms/galley.jpg      1800×1000  counter/shelf still life
+   art/rooms/garden.jpg      1800×1000  trellis, soil, patched irrigation
+   art/rooms/hold.jpg        1800×1000  the sealed blue-flag crate
+   art/rooms/quarters.jpg    1800×1000  bunk nook, reading light
+   art/rooms/engine.jpg      1800×1000  manifolds, warm under-glow
+   The SVG scene beneath the hero is a BLOCKING PLATE — correct
+   composition and light, honestly a stand-in until plates land.
+   ══════════════════════════════════════════════════════════════ */
 
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CreativeWorkSeries",
-    "name": "Vox Humana",
-    "alternateName": "Vox Humana SF",
-    "url": "https://voxhumanasf.com",
-    "inLanguage": "en-US",
-    "isAccessibleForFree": true,
-    "description": "Vox Humana is a character-led science fiction web serial about drift, debt, and the uneasy beginnings of a crew.",
-    "author": {
-      "@type": "Person",
-      "name": ""
+:root{
+  --serif:"Newsreader","Iowan Old Style",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.3,.7,.25,1);
+  --dur:420ms;
+  --seal:#7FA6C4; /* the crate's blue seal — canonical, never re-graded */
+}
+html[data-att="qvox"]{
+  --bg:#191209;--bg2:#221809;--panel:#241A0D;--seam:#3A2B15;
+  --ink:#F2E7D3;--soft:#D8C9AC;--dim:#A8977A;--faint:#79694F;
+  --hot:#F0A84F;--hot-deep:#B5772C;--hot-glow:rgba(240,168,79,.5);
+  --acc:#E0805A;--body-font:var(--serif);
+}
+html[data-att="iri"]{
+  --bg:#10140F;--bg2:#141A12;--panel:#151C13;--seam:#27321E;
+  --ink:#E6EBDD;--soft:#C2CBB0;--dim:#90A07E;--faint:#64735A;
+  --hot:#B4C878;--hot-deep:#7B904B;--hot-glow:rgba(180,200,120,.38);
+  --acc:#AFC878;--body-font:var(--serif);
+}
+html[data-att="bob"]{
+  --bg:#0D1218;--bg2:#101720;--panel:#111923;--seam:#203040;
+  --ink:#DEE8F2;--soft:#B2C4D8;--dim:#8298AE;--faint:#5B7289;
+  --hot:#86B6E0;--hot-deep:#5081AB;--hot-glow:rgba(134,182,224,.4);
+  --acc:#86B6E0;--body-font:var(--mono);
+}
+html[data-att="signal"]{
+  --bg:#131211;--bg2:#171614;--panel:#181715;--seam:#2B2925;
+  --ink:#D8D3C9;--soft:#ABA69B;--dim:#847F74;--faint:#5E5A51;
+  --hot:#B0A68F;--hot-deep:#7E7663;--hot-glow:rgba(176,166,143,.3);
+  --acc:#9A927F;--body-font:var(--serif);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--body-font);font-size:1.0625rem;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  transition:background var(--dur) var(--ease),color var(--dur) var(--ease);
+  overflow-x:hidden;
+}
+body::after{ /* grain */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:80;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.05;mix-blend-mode:overlay;
+}
+::selection{background:var(--hot-deep);color:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1280px;margin-inline:auto;padding-inline:clamp(20px,4vw,60px);position:relative;z-index:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ————— header ————— */
+header.site{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:linear-gradient(180deg, rgba(0,0,0,.5), transparent);
+  transition:background .4s;
+}
+header.site.solid{background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--seam)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:16px}
+.wordmark{font-family:var(--sans);font-weight:700;font-size:.9rem;letter-spacing:.34em;text-decoration:none;white-space:nowrap;color:var(--ink)}
+.wordmark b{color:var(--hot)}
+nav.primary{display:flex;gap:clamp(14px,2.2vw,30px);align-items:center}
+nav.primary a{
+  font-family:var(--sans);font-weight:600;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--soft);text-decoration:none;padding-bottom:2px;border-bottom:2px solid transparent;
+  transition:color .25s,border-color .25s;text-shadow:0 1px 8px rgba(0,0,0,.6);
+}
+nav.primary a:hover,nav.primary a:focus-visible{color:var(--ink);border-color:var(--hot)}
+.att-chip{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;
+  background:color-mix(in srgb,var(--panel) 70%,transparent);border:1px solid var(--seam);color:var(--soft);
+  padding:8px 13px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:border-color .25s;
+}
+.att-chip:hover{border-color:var(--hot)}
+.att-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--hot-glow)}
+
+/* perspective panel (shared by chip + hero control) */
+.att-panel{
+  position:fixed;top:64px;right:clamp(12px,3vw,52px);z-index:55;width:min(380px,calc(100vw - 24px));
+  background:var(--bg2);border:1px solid var(--seam);box-shadow:0 24px 60px rgba(0,0,0,.55);
+  padding:18px;display:none;
+}
+.att-panel.open{display:block}
+.att-panel h4{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:500;margin-bottom:12px}
+.att-opt{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:12px 10px;border-left:2px solid transparent;color:var(--soft);transition:background .2s,border-color .2s}
+.att-opt:hover{background:var(--panel)}
+.att-opt[aria-pressed="true"]{border-left-color:var(--hot);background:var(--panel)}
+.att-opt .n{font-family:var(--mono);font-size:.86rem;color:var(--ink)}
+.att-opt .r{font-family:var(--mono);font-size:.66rem;color:var(--faint);margin-left:8px;font-style:italic}
+.att-opt .promise{display:block;margin-top:5px;font-family:var(--mono);font-size:.68rem;line-height:1.5;color:var(--dim)}
+.att-panel .fine{margin-top:12px;padding-top:12px;border-top:1px dashed var(--seam);font-family:var(--mono);font-size:.64rem;font-style:italic;color:var(--faint);line-height:1.6}
+
+/* ══════════════════════════════════════════════════════════════
+   1 · BRIDGE THRESHOLD — the hero scene
+   ══════════════════════════════════════════════════════════════ */
+.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden}
+.scene{position:absolute;inset:0;z-index:0;transition:filter .5s var(--ease)}
+.scene.relight{filter:brightness(.75)}
+.scene .ly{position:absolute;inset:0;background-size:cover;background-position:62% center}
+#ly-bridge{opacity:0;transition:opacity 1.2s var(--ease)}
+#ly-corridor{opacity:0;transition:opacity 1.2s var(--ease);z-index:2}
+.hero.has-bg #ly-bridge{opacity:1}
+.hero.has-fg #ly-corridor{opacity:1}
+
+/* — blocking plate: correct composition, honest stand-in — */
+.stub{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.stub .wall{fill:#100B06}
+.stub .wall2{fill:#160F08}
+.stub .panelline{stroke:#2A1F12;stroke-width:2;opacity:.9}
+.stub .seamline{stroke:#3A2B18;stroke-width:1.2}
+.stub .doorframe{fill:#0B0805;stroke:#453319;stroke-width:0}
+.stub .doorjamb{fill:#1C130A;stroke:#4A371E;stroke-width:0}
+.stub .metal{stroke:#57422A;stroke-width:1.6;fill:none}
+.stub .darkmetal{stroke:#332616;stroke-width:1}
+.stub .jacket{fill:#241A10;stroke:#6B4E2C;stroke-width:1.2}
+.stub .jacket-rim{stroke:var(--hot);stroke-width:1.4;fill:none;opacity:.55}
+.stub .glow-warm{fill:var(--hot)}
+.stub .bridgefloor{fill:#1A130B}
+.stub .bridgewall{fill:#14100A}
+.stub .console{fill:#0E0A06;stroke:#503C22;stroke-width:1.2}
+.stub .consoleglow{fill:var(--hot);opacity:.35}
+.stub .railline{stroke:#8A6A3E;stroke-width:2.2;fill:none}
+.stub .star{fill:#E9DFC9}
+.stub .spill{fill:var(--hot)}
+.stub .cloth{fill:#3A2C1A;stroke:#61492A;stroke-width:1}
+.stub .padd{fill:#0C0906;stroke:#5A4426;stroke-width:1.2}
+
+.hero.has-scene .stub{opacity:0}
+.stub{transition:opacity 1.2s var(--ease)}
+
+/* — perspective delta light layers: positions tuned to the hero plate — */
+.dl{position:absolute;pointer-events:none;opacity:0;transition:opacity .8s var(--ease);z-index:3}
+.dl-task{ /* Q.Vox: warm task light on the kept things — mug, pad, cloth on the counter */
+  left:2%;top:48%;width:38%;height:38%;
+  background:radial-gradient(closest-side, rgba(240,168,79,.30), transparent 72%);
+}
+html[data-att="qvox"] .dl-task{opacity:1}
+.dl-cool{ /* Iri: cooler clean work light across the corridor */
+  inset:0;background:linear-gradient(200deg, rgba(180,200,150,.13), transparent 58%);
+}
+.dl-seamhl{left:37.2%;top:6%;width:3px;height:72%;
+  background:linear-gradient(rgba(190,210,160,.0), rgba(190,210,160,.5), rgba(190,210,160,0));
+}
+.dl-dooredge{left:80.6%;top:8%;width:2px;height:78%;
+  background:linear-gradient(rgba(190,210,160,0), rgba(200,215,170,.65), rgba(190,210,160,0));
+}
+html[data-att="iri"] .dl-cool,html[data-att="iri"] .dl-seamhl,html[data-att="iri"] .dl-dooredge{opacity:1}
+.dl-ahead{ /* B.O.B.: the floor light warms before you cross the threshold */
+  left:30%;bottom:0;width:46%;height:24%;
+  background:radial-gradient(closest-side, rgba(240,190,120,.28), transparent 74%);
+  transition-duration:1.4s;
+}
+html[data-att="bob"] .dl-ahead{opacity:1}
+.dl-wake{ /* Unregistered: an unused station wakes at the window's edge */
+  left:78.5%;top:26%;width:10px;height:10px;border-radius:50%;
+  background:#CFC6B2;box-shadow:0 0 14px 4px rgba(207,198,178,.5);
+  transition-duration:1.6s;
+}
+.dl-wake::after{
+  content:"";position:absolute;inset:-14px;border:1px solid rgba(207,198,178,.35);border-radius:50%;
+}
+html[data-att="signal"] .dl-wake{opacity:1}
+html[data-att="signal"] .scene{filter:saturate(.72)}
+
+/* motes — confined to the doorway light only */
+.motes{position:absolute;left:46%;right:20%;top:28%;bottom:12%;z-index:3;pointer-events:none}
+.motes i{position:absolute;width:2.6px;height:2.6px;border-radius:50%;background:var(--hot);opacity:0;filter:blur(.4px);animation:mote 16s linear infinite}
+@keyframes mote{0%{transform:translateY(20px);opacity:0}14%{opacity:.45}80%{opacity:.22}100%{transform:translateY(-300px);opacity:0}}
+.motes i:nth-child(1){left:12%;top:66%;animation-delay:0s}
+.motes i:nth-child(2){left:34%;top:78%;animation-delay:3.5s;animation-duration:19s}
+.motes i:nth-child(3){left:52%;top:60%;animation-delay:7s}
+.motes i:nth-child(4){left:70%;top:74%;animation-delay:10.5s;animation-duration:21s}
+.motes i:nth-child(5){left:24%;top:84%;animation-delay:13s}
+.motes i:nth-child(6){left:60%;top:88%;animation-delay:5.2s;animation-duration:18s}
+@media (prefers-reduced-motion:reduce){.motes{display:none}}
+
+/* star drift inside the door slice */
+.stub .starfield{animation:starDrift 100s linear infinite}
+@keyframes starDrift{from{transform:translateX(0)}to{transform:translateX(-120px)}}
+@media (prefers-reduced-motion:reduce){.stub .starfield{animation:none}}
+
+/* — hero content: deliberate negative space, localized scrim — */
+.hero-content{
+  position:relative;z-index:5;width:100%;
+  padding:120px clamp(20px,4vw,60px) clamp(46px,7vh,84px);
+}
+.hero-copy{
+  max-width:640px;position:relative;
+}
+.hero-copy::before{ /* localized legibility gradient, not a black overlay */
+  content:"";position:absolute;inset:-40px -60px -34px -60px;z-index:-1;
+  background:radial-gradient(120% 100% at 30% 60%, rgba(0,0,0,.62), rgba(0,0,0,.28) 60%, transparent 85%);
+  filter:blur(2px);
+}
+.kicker{font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--soft);display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.kicker::before{content:"";width:34px;height:1px;background:var(--hot)}
+h1.tagline{
+  font-family:var(--serif);font-weight:200;
+  font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.16;max-width:16ch;color:#F6EDDD;
+  text-shadow:0 2px 24px rgba(0,0,0,.5);
+}
+h1.tagline em{font-style:italic;color:var(--hot)}
+.hero-sub{margin-top:20px;max-width:46ch;font-size:1.05rem;line-height:1.7;color:var(--soft)}
+.hero-actions{margin-top:34px;display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.board{
+  position:relative;display:inline-block;text-decoration:none;
+  font-family:var(--sans);font-weight:700;font-size:1rem;letter-spacing:.18em;text-transform:uppercase;
+  color:#1A1206;background:var(--hot);padding:20px 38px;border:1px solid var(--hot-deep);
+  box-shadow:0 0 34px var(--hot-glow);
+  transition:box-shadow .35s var(--ease),transform .35s var(--ease);
+}
+.board:hover,.board:focus-visible{box-shadow:0 0 60px var(--hot-glow),0 0 130px var(--hot-glow);transform:translateY(-2px)}
+.ghost{
+  font-family:var(--sans);font-weight:600;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--soft);text-decoration:none;border-bottom:2px solid var(--seam);padding-bottom:4px;
+  transition:color .25s,border-color .25s;text-shadow:0 1px 8px rgba(0,0,0,.6);
+}
+.ghost:hover,.ghost:focus-visible{color:var(--ink);border-color:var(--hot)}
+.release-state{
+  margin-top:26px;font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);
+  display:flex;align-items:center;gap:10px;
+}
+.release-state .pulse{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 8px var(--hot-glow);animation:breath 3.6s var(--ease) infinite}
+@keyframes breath{0%,100%{opacity:.4;transform:scale(.9)}50%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.release-state .pulse{animation:none;opacity:1}}
+.resume-line{margin-top:12px;font-family:var(--mono);font-size:.74rem;color:var(--dim)}
+.resume-line a{color:var(--soft);text-decoration:none;border-bottom:1px solid var(--seam)}
+.resume-line a:hover{color:var(--ink);border-color:var(--hot)}
+
+/* hero perspective control — visible, secondary */
+.noticing{margin-top:30px}
+.noticing button{
+  display:flex;align-items:baseline;gap:10px;background:none;border:0;cursor:pointer;text-align:left;
+  font-family:var(--mono);color:var(--soft);padding:0;
+}
+.noticing .nl{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.noticing .nv{font-size:.86rem;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid var(--hot);padding-bottom:2px}
+.noticing .explain{margin-top:8px;font-family:var(--mono);font-size:.64rem;font-style:italic;color:var(--dim)}
+.notice-frag{
+  margin-top:14px;font-family:var(--mono);font-size:.76rem;line-height:1.6;color:var(--soft);
+  border-left:2px solid var(--acc);padding-left:12px;max-width:44ch;min-height:2.6em;
+  transition:opacity .3s;
+}
+.notice-frag.settle{opacity:.3}
+
+/* ══════════ shared section shell — compartments, not cards ══════════ */
+section.room{position:relative;padding-block:clamp(90px,12vh,140px);overflow:hidden}
+section.room+section.room,section.room+footer{border-top:1px solid var(--seam)}
+.room-kick{font-family:var(--mono);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.room-kick::after{content:"";flex:1;height:1px;background:var(--seam)}
+h2.room-title{font-family:var(--serif);font-weight:200;font-size:clamp(1.8rem,3.2vw,2.7rem);line-height:1.2;max-width:26ch}
+.room-lede{margin-top:18px;max-width:60ch;color:var(--soft);font-size:1.05rem;min-height:2.8em}
+.rev{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rev.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rev{opacity:1;transform:none}}
+.room-bg{ /* per-room art slot: fades in when art/rooms/*.jpg exists */
+  position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 1.2s var(--ease);
+  mask-image:linear-gradient(180deg, transparent, rgba(0,0,0,.55) 20%, rgba(0,0,0,.55) 80%, transparent);
+}
+section.room.has-art .room-bg{opacity:.3}
+
+/* excerpt — page layer */
+.excerpt{position:relative;padding-block:64px clamp(80px,10vh,120px)}
+.excerpt::before{content:"";position:absolute;left:50%;top:-40px;transform:translateX(-50%);width:900px;height:560px;pointer-events:none;background:radial-gradient(closest-side,color-mix(in srgb,var(--hot) 10%,transparent),transparent 72%)}
+.excerpt .paper{position:relative;max-width:640px;margin-inline:auto;padding-inline:clamp(20px,4vw,40px)}
+.excerpt .fromline{display:block;text-align:center;margin-bottom:34px;font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--faint)}
+.excerpt .prose{font-family:var(--serif);font-size:1.16rem;line-height:1.9;color:var(--ink)}
+.excerpt .prose p{margin-bottom:1.15em}
+.excerpt .prose em{font-style:italic}
+.excerpt .rule{width:60px;height:1px;background:var(--hot);margin:40px auto 30px}
+.excerpt .continue{text-align:center}
+.excerpt .continue .board{padding:17px 32px;font-size:.88rem}
+.excerpt .continue .mins{display:block;margin-top:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
+
+/* ══════════ 2 · GALLEY ══════════ */
+.galley-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(34px,4.5vw,80px);align-items:center}
+.counter-scene svg{width:100%;height:auto;display:block}
+.counter-scene .wallp{fill:#1E150C}
+.counter-scene .wallp2{fill:#241A0F}
+.counter-scene .counter{fill:#171008}
+.counter-scene .counter-edge{fill:#2E2113}
+.counter-scene .woodline{stroke:#332413;stroke-width:1;opacity:.8}
+.counter-scene .tinbody{stroke:#6B532F;stroke-width:1.1}
+.counter-scene .tinshine{stroke:#C79A5C;stroke-width:1.4;opacity:.5;fill:none}
+.counter-scene .tinlabel{fill:#0F0A05;stroke:#4A3820;stroke-width:.8}
+.counter-scene text{font-family:var(--mono);font-size:7px;letter-spacing:.04em;fill:#B99F76;text-transform:uppercase}
+.counter-scene .mug{fill:#20160C;stroke:#6B532F;stroke-width:1.2}
+.counter-scene .chip{fill:#0F0A05}
+.counter-scene .card{fill:#E4D9BE;stroke:#8F7C52;stroke-width:.8}
+.counter-scene .cardline{stroke:#8F7C52;stroke-width:.9;opacity:.7;fill:none}
+.counter-scene .tape{fill:rgba(230,216,184,.5);stroke:rgba(120,104,74,.4);stroke-width:.6}
+.counter-scene .kettle{fill:#170F08;stroke:#5C4728;stroke-width:1.2}
+.counter-scene .lampglow{fill:var(--hot);opacity:.10}
+.counter-scene .tin-g{cursor:pointer}
+.counter-scene .tin-g .tinbody{fill:#241A0E;transition:fill .3s,stroke .3s}
+.counter-scene .tin-g:hover .tinbody,.counter-scene .tin-g:focus-visible .tinbody,.counter-scene .tin-g.hot .tinbody{fill:#33260F;stroke:var(--hot)}
+.counter-scene .tin-g:hover text,.counter-scene .tin-g.hot text{fill:var(--ink)}
+.tin-notice .who{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+.tin-notice .what{margin-top:10px;font-family:var(--mono);font-size:.86rem;line-height:1.6;color:var(--soft);border-left:2px solid var(--acc);padding-left:14px;min-height:4.6em;transition:opacity .25s}
+.tin-notice .what.settle{opacity:.3}
+.tin-notice .hint{margin-top:16px;font-family:var(--mono);font-size:.66rem;font-style:italic;color:var(--faint)}
+
+/* ══════════ 3 · GARDEN PASSAGE ══════════ */
+.garden-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(34px,4.5vw,80px);align-items:center}
+.garden-scene svg{width:100%;height:auto;display:block}
+.garden-scene .trough{fill:#171008;stroke:#4A3820;stroke-width:1.2}
+.garden-scene .soil{fill:#241708}
+.garden-scene .soildot{fill:#3A2810}
+.garden-scene .stem{stroke:#5F7A42;stroke-width:1.6;fill:none}
+.garden-scene .leaf{fill:#4A6435;stroke:#69874A;stroke-width:.8}
+.garden-scene .bloom{fill:#C9A0B8}
+.garden-scene .twine{stroke:#8F7C52;stroke-width:1;fill:none}
+.garden-scene .pipe{stroke:#57422A;stroke-width:3;fill:none}
+.garden-scene .patch{stroke:#8A6A3E;stroke-width:5;fill:none}
+.garden-scene .drip{fill:var(--soft);opacity:.7}
+.garden-scene .clothf{fill:#3A2C1A;stroke:#61492A;stroke-width:1}
+.garden-scene .toolm{stroke:#6B532F;stroke-width:1.6;fill:none}
+.garden-scene .mist{fill:var(--hot);opacity:.05}
+.governing{
+  margin-top:26px;font-family:var(--serif);font-weight:300;font-style:italic;
+  font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.5;color:var(--ink);max-width:30ch;
+  border-left:2px solid var(--hot);padding-left:20px;
+}
+
+/* ══════════ 4 · HOLD ══════════ */
+.hold-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(34px,4.5vw,80px);align-items:center}
+.crate-scene svg{width:100%;height:auto;display:block;max-width:420px}
+.crate-scene .cratebody{fill:#1C130A;stroke:#5C4728;stroke-width:1.4}
+.crate-scene .crateline{stroke:#3A2B18;stroke-width:1}
+.crate-scene .strap{stroke:#57422A;stroke-width:4;fill:none}
+.crate-scene .sealtag{fill:var(--seal);opacity:.9}
+.crate-scene .sealstr{stroke:var(--seal);stroke-width:1.2;fill:none;opacity:.8}
+.crate-scene .floorline{stroke:#2A1F12;stroke-width:1.4}
+.crate-scene .rim{stroke:var(--hot);stroke-width:1.2;fill:none;opacity:.35}
+.sys-flow{margin-top:26px;max-width:60ch;color:var(--soft);font-size:1.02rem;line-height:1.75}
+.sys-flow b{font-family:var(--sans);font-weight:700;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+details.cutaway{margin-top:40px;border:1px solid var(--seam);background:color-mix(in srgb,var(--panel) 60%,transparent)}
+details.cutaway summary{cursor:pointer;list-style:none;padding:16px 20px;font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+details.cutaway summary::-webkit-details-marker{display:none}
+details.cutaway summary::before{content:"▸ ";color:var(--hot)}
+details.cutaway[open] summary::before{content:"▾ "}
+.cutaway-inner{padding:6px 20px 20px}
+.plan svg{width:100%;height:auto;display:block}
+.plan .hull{stroke:var(--soft);stroke-width:1.6;fill:color-mix(in srgb,var(--bg2) 70%,transparent)}
+.plan .steel{stroke:var(--dim);stroke-width:.9;fill:none}
+.plan .faintline{stroke:var(--faint);stroke-width:.6;fill:none;opacity:.65}
+.plan .frame{stroke:var(--seam);stroke-width:1;opacity:.9}
+.plan .deckline{stroke:var(--dim);stroke-width:1}
+.plan .crawl{stroke:var(--faint);stroke-width:.8;stroke-dasharray:3 4;fill:none}
+.plan .void{fill:color-mix(in srgb,var(--bg) 60%,transparent)}
+.plan .glass{fill:color-mix(in srgb,var(--hot) 20%,transparent);stroke:var(--hot-deep);stroke-width:.7}
+.plan .engineglow{fill:var(--hot);opacity:.55;filter:blur(1px)}
+.plan .softlabel{font-family:var(--mono);font-size:7.5px;letter-spacing:.1em;fill:var(--faint);text-transform:uppercase}
+.plan .room-g{cursor:pointer}
+.plan .room-g .rm{fill:transparent;stroke:var(--dim);stroke-width:1;transition:fill .3s,stroke .3s}
+.plan .room-g text{font-family:var(--mono);font-size:9px;letter-spacing:.06em;fill:var(--dim);text-transform:uppercase;pointer-events:none;transition:fill .3s}
+.plan .room-g:hover .rm,.plan .room-g:focus-visible .rm,.plan .room-g.hot .rm{fill:color-mix(in srgb,var(--hot) 16%,transparent);stroke:var(--hot)}
+.plan .room-g:hover text,.plan .room-g:focus-visible text,.plan .room-g.hot text{fill:var(--ink)}
+.plan .whisper{margin-top:12px;border-top:1px dashed var(--seam);padding-top:12px;font-family:var(--mono);font-size:.74rem;line-height:1.55;color:var(--soft);border-left:2px solid var(--acc);padding-left:12px;min-height:3.2em;transition:opacity .25s}
+.plan .whisper.settle{opacity:.3}
+.plan .room-name{color:var(--hot);text-transform:uppercase;letter-spacing:.12em;font-size:.6rem;display:block;margin-bottom:4px}
+
+/* ══════════ 5 · COMMS — tuner ══════════ */
+.tuner{background:color-mix(in srgb,var(--bg2) 80%,transparent);border:1px solid var(--seam);padding:clamp(24px,3vw,40px);position:relative}
+.tuner::before,.tuner::after{ /* bracket corners instead of a plain box */
+  content:"";position:absolute;width:18px;height:18px;border:2px solid var(--hot-deep);
+}
+.tuner::before{top:-2px;left:-2px;border-right:0;border-bottom:0}
+.tuner::after{bottom:-2px;right:-2px;border-left:0;border-top:0}
+.tuner-display{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(20px,3vw,50px);align-items:center;min-height:170px}
+.tuner-display .tno{font-family:var(--mono);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--hot)}
+.tuner-display .tt{font-family:var(--serif);font-weight:300;font-size:clamp(1.5rem,2.8vw,2.2rem);line-height:1.2;margin-top:8px;transition:opacity .25s}
+.tuner-display .tep{margin-top:12px;font-family:var(--serif);font-style:italic;color:var(--dim);line-height:1.6;max-width:44ch;min-height:2.6em;transition:opacity .25s}
+.tuner-display .tpc{margin-top:12px;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;min-height:1.2em}
+.tuner-display .settle{opacity:.25}
+.tuner-open{display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.tuner-open .board{padding:16px 26px;font-size:.82rem;text-align:center;box-shadow:none}
+.alt-start{font-family:var(--mono);font-size:.78rem;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--seam);padding-bottom:2px;transition:color .25s,border-color .25s;text-align:center}
+.alt-start:hover{color:var(--ink);border-color:var(--hot)}
+.wave{margin-top:18px;height:34px;width:100%}
+.wave path{stroke:var(--hot);stroke-width:1.4;fill:none;opacity:.8}
+.wave .base{stroke:var(--seam);stroke-width:1}
+.band{margin-top:26px;position:relative;padding:18px 0 6px}
+.band .rail{position:absolute;left:0;right:0;top:26px;height:1px;background:var(--seam)}
+.band .ticks{display:flex;justify-content:space-between;position:relative}
+.tick{background:none;border:0;cursor:pointer;position:relative;width:28px;height:44px;flex:0 0 auto}
+.tick::before{content:"";position:absolute;left:50%;top:2px;width:1px;height:14px;background:var(--dim);transition:background .25s,height .25s,box-shadow .25s}
+.tick .tl{position:absolute;left:50%;transform:translateX(-50%);top:22px;font-family:var(--mono);font-size:.56rem;color:var(--faint);letter-spacing:.04em;transition:color .25s}
+.tick:hover::before{background:var(--soft)}
+.tick[aria-pressed="true"]::before{background:var(--hot);height:20px;box-shadow:0 0 10px var(--hot-glow)}
+.tick[aria-pressed="true"] .tl{color:var(--hot)}
+.tick.slot::before{background:var(--faint);height:8px}
+.tick.slot .tl{color:var(--faint);font-style:italic}
+.band-controls{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+.knob{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;background:var(--panel);border:1px solid var(--seam);color:var(--soft);padding:10px 18px;cursor:pointer;transition:border-color .25s,color .25s}
+.knob:hover,.knob:focus-visible{border-color:var(--hot);color:var(--ink)}
+.knob[disabled]{opacity:.4;cursor:default}
+.band-hint{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--faint)}
+details.loglist{margin-top:30px;border:1px solid var(--seam)}
+details.loglist summary{cursor:pointer;list-style:none;padding:16px 20px;font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+details.loglist summary::-webkit-details-marker{display:none}
+details.loglist summary::before{content:"▸ ";color:var(--hot)}
+details.loglist[open] summary::before{content:"▾ "}
+.loglist ol{list-style:none;padding:0 20px 16px}
+.loglist li{border-top:1px solid var(--seam)}
+.loglist a{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:baseline;padding:12px 4px;text-decoration:none;transition:background .2s}
+.loglist a:hover{background:var(--panel)}
+.loglist .n{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+.loglist .t{font-family:var(--serif);font-size:1rem;color:var(--soft)}
+.loglist .p{font-family:var(--mono);font-size:.62rem;color:var(--faint);text-align:right}
+.loglist .tag{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--hot);border:1px solid var(--hot-deep);padding:1px 6px;margin-left:8px}
+.loglist .slotrow{display:grid;grid-template-columns:44px 1fr auto;gap:14px;padding:12px 4px;opacity:.7}
+.loglist .slotrow .t{font-family:var(--mono);font-size:.8rem;font-style:italic;color:var(--dim)}
+
+/* ══════════ 6 · QUARTERS ══════════ */
+.quarters-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,4.5vw,80px);align-items:start}
+.smallnote{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:16px}
+.marked{background:color-mix(in srgb,var(--bg2) 85%,transparent);border:1px solid var(--seam);padding:clamp(24px,2.8vw,36px)}
+.marked .passage{font-family:var(--serif);font-size:1.08rem;line-height:1.85;color:var(--soft)}
+.marked mark{background:transparent;color:var(--ink);border-bottom:2px solid var(--acc);padding-bottom:1px}
+.marked .note{margin-top:16px;border-left:2px solid var(--acc);padding-left:14px;font-family:var(--mono);font-size:.74rem;line-height:1.6;color:var(--dim);font-style:italic}
+.marked .vis{display:block;margin-top:8px;font-style:normal;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.taped{background:#E9E0CC;color:#2B241A;padding:26px 26px 30px;max-width:430px;transform:rotate(-.8deg);box-shadow:0 14px 40px rgba(0,0,0,.5);position:relative;font-family:var(--mono)}
+.taped::before{content:"";position:absolute;top:-11px;left:50%;transform:translateX(-50%) rotate(1.6deg);width:92px;height:22px;background:rgba(230,216,184,.55);border:1px solid rgba(120,104,74,.3)}
+.taped .cl{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:#7A6C52}
+.taped .cb{margin-top:12px;font-family:var(--serif);font-style:italic;font-size:1.02rem;line-height:1.65}
+.taped .cs{margin-top:14px;font-size:.66rem;color:#7A6C52;text-align:right}
+@media (prefers-reduced-motion:reduce){.taped{transform:none}}
+
+/* ══════════ 7 · ENGINE ROOM ══════════ */
+.mixer{position:relative;border:1px solid var(--seam);padding:clamp(24px,3vw,40px);overflow:hidden;background:color-mix(in srgb,var(--bg2) 80%,transparent)}
+.mixer .pipes{position:absolute;right:-20px;bottom:-10px;width:min(420px,50%);opacity:.5;pointer-events:none}
+.mixer .pipes .s{stroke:var(--dim);stroke-width:1.2;fill:none;opacity:.6}
+.mixer .pipes .f{stroke:var(--faint);stroke-width:.9;fill:none;opacity:.55}
+.mixer .pipes .h{stroke:var(--hot);stroke-width:1.2;fill:none;opacity:.4}
+.mixer .pipes .glow{fill:var(--hot);opacity:.1}
+.mixer-top{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:26px;position:relative;z-index:1}
+.spinup{font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;background:var(--panel);color:var(--soft);border:1px solid var(--seam);padding:14px 26px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .3s,color .3s,box-shadow .3s}
+.spinup .led{width:9px;height:9px;border-radius:50%;background:var(--faint);transition:background .3s,box-shadow .3s}
+.spinup:hover{border-color:var(--hot);color:var(--ink)}
+.spinup[aria-pressed="true"]{border-color:var(--hot);color:var(--ink);box-shadow:0 0 26px var(--hot-glow)}
+.spinup[aria-pressed="true"] .led{background:var(--hot);box-shadow:0 0 10px var(--hot-glow)}
+.mixer-note{font-family:var(--mono);font-size:.64rem;color:var(--faint);font-style:italic;max-width:40ch;line-height:1.6}
+.channels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,2vw,24px);position:relative;z-index:1}
+.chan{border:1px solid var(--seam);padding:18px 14px;background:color-mix(in srgb,var(--panel) 70%,transparent)}
+.chan .cn{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+.chan .cd{margin-top:6px;font-family:var(--mono);font-size:.6rem;color:var(--faint);line-height:1.5;min-height:2.8em}
+.chan input[type="range"]{width:100%;margin-top:14px;accent-color:var(--hot);cursor:pointer}
+
+/* ══════════ 8 · OUTBOUND ══════════ */
+.range{max-width:600px}
+.range form{margin-top:28px;display:flex}
+.range input[type="email"]{flex:1;background:var(--bg2);border:1px solid var(--seam);border-right:0;color:var(--ink);font-family:var(--mono);font-size:.86rem;padding:16px 18px;min-height:52px}
+.range input::placeholder{color:var(--faint)}
+.range button{font-family:var(--sans);font-weight:700;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;background:var(--hot);color:#1A1206;border:1px solid var(--hot-deep);padding:0 26px;min-height:52px;cursor:pointer;transition:box-shadow .3s}
+.range button:hover,.range button:focus-visible{box-shadow:0 0 30px var(--hot-glow)}
+.range .fine{margin-top:14px;font-family:var(--mono);font-size:.66rem;font-style:italic;color:var(--faint)}
+.range .ok{margin-top:14px;font-family:var(--mono);font-size:.82rem;color:var(--acc)}
+
+footer.site{border-top:1px solid var(--seam);padding-block:48px 60px;position:relative;z-index:1}
+.footgrid{display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap}
+.footgrid nav{display:flex;gap:24px}
+.footgrid nav a{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:none;border-bottom:2px solid transparent;padding-bottom:2px;transition:color .25s,border-color .25s}
+.footgrid nav a:hover{color:var(--ink);border-color:var(--hot)}
+.foot-sig{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;color:var(--faint);font-style:italic;min-height:1.4em}
+
+@keyframes flick{0%,100%{opacity:1}50%{opacity:.72}}
+html[data-att="signal"] .flickable.flick{animation:flick .12s steps(2) 2}
+
+/* guide light */
+#guide{position:fixed;left:0;top:0;bottom:0;width:3px;z-index:60;background:var(--seam)}
+#guide i{display:block;width:100%;height:0%;background:linear-gradient(var(--hot),var(--hot-deep));box-shadow:0 0 12px var(--hot-glow)}
+
+/* ══════════ MOBILE ══════════ */
+@media (max-width:960px){
+  .hero{align-items:flex-end}
+  .scene .ly{background-position:66% center}
+  .hero-content{padding-top:90px}
+  .hero-copy{max-width:100%}
+  .hero-copy::before{inset:-24px -24px -20px -24px;background:radial-gradient(140% 110% at 40% 70%, rgba(0,0,0,.7), rgba(0,0,0,.35) 62%, transparent 88%)}
+  h1.tagline{font-size:clamp(1.9rem,8vw,2.6rem)}
+  .board{width:100%;text-align:center;padding:18px}
+  .hero-actions{gap:16px}
+  .ghost{margin-inline:auto}
+  .noticing{margin-top:22px}
+  .galley-grid,.garden-grid,.hold-grid,.quarters-grid{grid-template-columns:1fr;gap:36px}
+  .channels{grid-template-columns:1fr 1fr}
+  .tuner-display{grid-template-columns:1fr}
+  .tick{width:20px}
+  .tick .tl{display:none}
+  nav.primary{display:none}
+  .mixer .pipes{display:none}
+}
+</style>
+</head>
+<body>
+
+<span class="sr" aria-live="polite" id="live"></span>
+<div id="guide" role="presentation"><i id="guide-fill"></i></div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site" id="hdr">
+  <div class="wrap bar">
+    <a class="wordmark" href="#top">VOX <b>HUMANA</b></a>
+    <nav class="primary" aria-label="Site">
+      <a href="#comms">Read</a>
+      <a href="#galley">Explore</a>
+      <a href="#quarters">Margins</a>
+      <a href="#engine">Listen</a>
+    </nav>
+    <button class="att-chip" id="att-chip" aria-expanded="false" aria-controls="att-panel">
+      <span class="dot" role="presentation"></span>
+      <span id="att-current">Q. Vox</span> ▾
+    </button>
+  </div>
+</header>
+
+<div class="att-panel" id="att-panel" role="dialog" aria-label="The Huntress is noticing with">
+  <h4>The Huntress is noticing with:</h4>
+  <button class="att-opt" data-att="qvox" aria-pressed="true">
+    <span class="n">Q. Vox</span><span class="r">— captain</span>
+    <span class="promise">Warm task light. The jacket, the mug, the open panel — what someone has used, kept, or repaired.</span>
+  </button>
+  <button class="att-opt" data-att="iri" aria-pressed="false">
+    <span class="n">Iri-Six</span><span class="r">— crew</span>
+    <span class="promise">Cooler work light. Seams and boundaries sharpen. The door's exact angle matters.</span>
+  </button>
+  <button class="att-opt" data-att="bob" aria-pressed="false">
+    <span class="n">B.O.B.</span><span class="r">— the ship's voice</span>
+    <span class="promise">The ship acknowledges you. A light warms before you reach it.</span>
+  </button>
+  <button class="att-opt" data-att="signal" aria-pressed="false">
+    <span class="n">Unregistered Signal</span><span class="r">— not yet catalogued</span>
+    <span class="promise">An unused station wakes. An identifier fails to resolve. The ship notices something it can't classify.</span>
+  </button>
+  <p class="fine">Changes what the ship notices — not what the chapters say.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     1 · BRIDGE THRESHOLD
+     ══════════════════════════════════════════════════════════ -->
+<section class="hero" id="top" aria-label="The corridor outside the bridge">
+  <div class="scene" id="scene">
+    <div class="ly" id="ly-bridge" role="presentation"></div>
+
+    <!-- BLOCKING PLATE — stand-in composition until painted plates land.
+         Eye level in the corridor; bridge door half open, right of center;
+         hook rail with Quenby's jacket; light spilling across the floor. -->
+    <svg class="stub" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="spillg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color:var(--hot);stop-opacity:.32"/>
+          <stop offset="1" style="stop-color:var(--hot);stop-opacity:.02"/>
+        </linearGradient>
+        <linearGradient id="sliceg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" style="stop-color:#241A0E"/>
+          <stop offset="1" style="stop-color:#191106"/>
+        </linearGradient>
+        <clipPath id="doorclip"><polygon points="916,138 1076,158 1076,742 916,762"/></clipPath>
+      </defs>
+
+      <!-- corridor walls -->
+      <rect class="wall" x="0" y="0" width="1440" height="900"/>
+      <polygon class="wall2" points="0,60 900,120 900,780 0,860"/>
+      <!-- wall panel seams, converging slightly toward the door -->
+      <line class="panelline" x1="160" y1="70" x2="160" y2="852"/>
+      <line class="panelline" x1="420" y1="88" x2="420" y2="833"/>
+      <line class="panelline" x1="650" y1="103" x2="650" y2="816"/>
+      <line class="seamline" x1="266" y1="78" x2="266" y2="844"/>
+      <line class="seamline" x1="0" y1="330" x2="900" y2="352"/>
+      <line class="seamline" x1="0" y1="620" x2="900" y2="612"/>
+      <!-- ceiling practicals: one dark, one warm near the door -->
+      <rect x="330" y="96" width="46" height="10" rx="3" fill="#221709"/>
+      <rect x="760" y="112" width="46" height="10" rx="3" fill="#2E1F0C"/>
+      <ellipse class="glow-warm" cx="783" cy="126" rx="34" ry="8" opacity=".18"/>
+
+      <!-- maintenance seam (Iri notices this one) -->
+      <line x1="266" y1="120" x2="266" y2="700" stroke="#4A3820" stroke-width="2" opacity=".5"/>
+
+      <!-- low open panel with cloth (evidence of work in progress) -->
+      <rect x="700" y="660" width="86" height="70" fill="#0B0805" stroke="#4A3820" stroke-width="1.4"/>
+      <ellipse class="glow-warm" cx="743" cy="695" rx="30" ry="16" opacity=".12"/>
+      <path class="cloth" d="M690 660 Q 700 640 716 656 L 716 700 Q 704 712 694 702 Z"/>
+
+      <!-- hook rail + jacket, left of the door -->
+      <line class="metal" x1="618" y1="300" x2="880" y2="312"/>
+      <path class="metal" d="M652 302 L652 318 L662 318"/>
+      <path class="metal" d="M836 310 L836 326 L846 326"/>
+      <path class="metal" d="M742 306 L742 320 L752 320"/>
+      <!-- the jacket: worn, no hanger, sagging naturally from the middle hook -->
+      <path class="jacket" d="M742 320
+        Q 726 328 718 352 Q 712 386 716 436 Q 718 470 724 496
+        L 742 500 Q 738 452 740 408
+        L 744 500 Q 762 498 772 492
+        Q 780 448 778 396 Q 776 352 766 334 Q 756 322 742 320 Z"/>
+      <path d="M736 326 Q 742 336 750 326" fill="none" stroke="#6B4E2C" stroke-width="1.4"/>
+      <path class="jacket-rim" d="M772 340 Q 780 396 774 470"/>
+      <!-- mend line: thread a shade off -->
+      <path d="M726 420 L734 448" stroke="#9A7A4A" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>
+
+      <!-- compact data pad on a wall ledge -->
+      <rect x="838" y="352" width="8" height="52" rx="2" class="padd" transform="rotate(8 842 378)"/>
+
+      <!-- door: frame, slid panel, half-open slice into the bridge -->
+      <rect x="892" y="120" width="16" height="656" fill="#0B0805"/>
+      <rect x="1084" y="150" width="16" height="608" fill="#0B0805"/>
+      <!-- slid door panel covering the right part of the opening -->
+      <polygon points="1076,150 1300,176 1300,724 1076,742" fill="#150E07"/>
+      <line x1="1090" y1="200" x2="1286" y2="222" stroke="#2A1F12" stroke-width="2"/>
+      <line x1="1090" y1="680" x2="1286" y2="668" stroke="#2A1F12" stroke-width="2"/>
+      <!-- door edge catching light -->
+      <line x1="1076" y1="152" x2="1076" y2="740" stroke="#C79A5C" stroke-width="2" opacity=".5"/>
+
+      <!-- the bridge, through the opening -->
+      <g clip-path="url(#doorclip)">
+        <rect x="900" y="120" width="200" height="660" fill="url(#sliceg)"/>
+        <rect class="bridgewall" x="900" y="120" width="200" height="180"/>
+        <!-- broad forward window band with drifting stars -->
+        <rect x="908" y="212" width="180" height="150" fill="#05030A"/>
+        <g class="starfield">
+          <circle class="star" cx="930" cy="248" r="1.3"/><circle class="star" cx="962" cy="292" r="1"/>
+          <circle class="star" cx="994" cy="236" r="1.5" fill="var(--hot)"/><circle class="star" cx="1022" cy="316" r="1"/>
+          <circle class="star" cx="1050" cy="262" r="1.2"/><circle class="star" cx="1074" cy="300" r="1"/>
+          <circle class="star" cx="1100" cy="240" r="1.1"/><circle class="star" cx="1128" cy="286" r="1.3"/>
+          <circle class="star" cx="1156" cy="252" r="1"/><circle class="star" cx="1184" cy="308" r="1.2"/>
+        </g>
+        <line class="metal" x1="908" y1="362" x2="1088" y2="362"/>
+        <!-- raised stations with practical rails; one seat turned from regulation -->
+        <rect class="console" x="920" y="470" width="88" height="60" rx="4"/>
+        <rect class="consoleglow" x="930" y="480" width="52" height="8" rx="2"/>
+        <path class="railline" d="M914 552 L1014 552"/>
+        <path class="metal" d="M926 552 L926 588 M1002 552 L1002 588"/>
+        <!-- the turned seat -->
+        <path class="console" d="M1032 500 Q 1058 492 1066 514 L 1060 560 L 1032 556 Z" transform="rotate(-14 1048 528)"/>
+        <line class="metal" x1="1046" y1="560" x2="1046" y2="600"/>
+        <!-- mug on the console edge -->
+        <rect class="mug" x="996" y="454" width="14" height="16" rx="2"/>
+        <path class="metal" d="M1010 458 q 8 4 0 9"/>
+        <!-- warm interior light inside hard machinery -->
+        <ellipse class="glow-warm" cx="1000" cy="430" rx="120" ry="90" opacity=".14"/>
+        <rect class="bridgefloor" x="900" y="640" width="200" height="140"/>
+        <line class="seamline" x1="908" y1="700" x2="1088" y2="694"/>
+      </g>
+
+      <!-- light spilling from the doorway across the corridor floor -->
+      <polygon points="916,742 1076,742 760,900 300,900" fill="url(#spillg)"/>
+      <!-- floor -->
+      <polygon points="0,860 900,780 1440,820 1440,900 0,900" fill="#0C0805"/>
+      <line class="seamline" x1="0" y1="876" x2="1440" y2="856"/>
+    </svg>
+
+    <div class="ly" id="ly-corridor" role="presentation"></div>
+
+    <!-- perspective delta lights (over stub and art alike) -->
+    <div class="dl dl-task" role="presentation"></div>
+    <div class="dl dl-cool" role="presentation"></div>
+    <div class="dl dl-seamhl" role="presentation"></div>
+    <div class="dl dl-dooredge" role="presentation"></div>
+    <div class="dl dl-ahead" role="presentation"></div>
+    <div class="dl dl-wake" role="presentation"></div>
+
+    <div class="motes" role="presentation"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-copy">
+      <p class="kicker">A literary science-fantasy serial</p>
+      <h1 class="tagline">The universe remembers Quenby&nbsp;Vox badly. <em>The&nbsp;ship remembers enough.</em></h1>
+      <p class="hero-sub">Follow Quenby Vox aboard the <em>Wild Huntress</em> — a ship learning its crew by what they carry, repair, and leave behind.</p>
+
+      <div class="hero-actions">
+        <a class="board" id="board-cta" href="V1_B1_C01.html">Read Chapter One</a>
+        <a class="ghost" href="#galley">Explore the Huntress</a>
+      </div>
+      <p class="resume-line" id="resume-line" hidden></p>
+
+      <p class="release-state"><span class="pulse" role="presentation"></span>Book One complete · 12 transmissions · free to read</p>
+
+      <div class="noticing">
+        <button id="noticing-btn" aria-expanded="false" aria-controls="att-panel">
+          <span class="nl">The Huntress is noticing with:</span>
+          <span class="nv" id="noticing-val">Q. Vox</span>
+        </button>
+        <p class="explain">Changes what the ship notices — not what the chapters say.</p>
+        <p class="notice-frag" id="notice-frag">the jacket's still on its hook. mended. thread a shade off.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- through the door: the opening of Transmission 01 — page layer, never revoiced -->
+<!-- AUTHOR: when releases resume, swap for the newest chapter's opening. -->
+<section class="excerpt" aria-labelledby="ex-continue">
+  <div class="paper">
+    <span class="fromline">Through the door — Transmission 01</span>
+    <div class="prose">
+      <p>She crouched beside an open panel beneath the bridge console, sleeves pushed past her elbows, wire casing peeled back with the confidence of someone who didn't need permission anymore. She'd routed power twice. First out of necessity. Then out of spite.</p>
+      <p>Now it was habit.</p>
+      <p>The <em>Wild Huntress</em> didn't hum, exactly. She had rhythm. Low. Off-kilter. Too syncopated for factory specs.</p>
+      <p>Quenby liked it.</p>
+      <p>Ships should be a little wrong.</p>
+    </div>
+    <div class="rule" role="presentation"></div>
+    <p class="continue" id="ex-continue">
+      <a class="board" href="V1_B1_C01.html">Keep reading</a>
+      <span class="mins">The Ship That Listens · 06 min · presence-paced</span>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 2 · GALLEY ══════════ -->
+<section class="room" id="galley" aria-labelledby="galley-title">
+  <div class="room-bg" data-art="art/rooms/galley.jpg" role="presentation"></div>
+  <div class="wrap">
+    <div class="rev">
+      <p class="room-kick">The galley · shelf two</p>
+      <h2 class="room-title" id="galley-title">Five tins. Four ways of looking at them.</h2>
+      <p class="room-lede vox-copy" data-copy="galleyLede">Same shelf. Four observers. That's the whole trick of this place — the ship presents itself differently depending on who's paying attention. The tins never change. The noticing does.</p>
+    </div>
+
+    <div class="galley-grid" style="margin-top:40px">
+      <div class="counter-scene rev" aria-label="The galley counter: five labeled tins, a chipped mug, a taped card">
+        <svg viewBox="0 0 760 420">
+          <!-- wall + hanging rail -->
+          <rect class="wallp" x="0" y="0" width="760" height="300"/>
+          <rect class="wallp2" x="0" y="0" width="760" height="60"/>
+          <line class="woodline" x1="0" y1="60" x2="760" y2="60"/>
+          <ellipse class="lampglow" cx="380" cy="120" rx="300" ry="110"/>
+          <!-- counter -->
+          <rect class="counter-edge" x="0" y="300" width="760" height="16"/>
+          <rect class="counter" x="0" y="316" width="760" height="104"/>
+          <line class="woodline" x1="0" y1="348" x2="760" y2="348"/>
+          <line class="woodline" x1="0" y1="382" x2="760" y2="382"/>
+
+          <!-- the five tins on the counter, sized like real objects -->
+          <g class="tin-g" data-tin="despair" tabindex="0" role="button" aria-label="Tin: Despair">
+            <rect class="tinbody" x="96" y="212" width="66" height="88" rx="6"/>
+            <rect class="tinbody" x="92" y="200" width="74" height="16" rx="5"/>
+            <path class="tinshine" d="M104 220 Q 102 256 104 292"/>
+            <rect class="tinlabel" x="106" y="244" width="46" height="22" rx="2"/>
+            <text x="129" y="258" text-anchor="middle">DESPAIR</text>
+          </g>
+          <g class="tin-g" data-tin="regret" tabindex="0" role="button" aria-label="Tin: Regret">
+            <rect class="tinbody" x="188" y="222" width="60" height="78" rx="6"/>
+            <rect class="tinbody" x="184" y="210" width="68" height="16" rx="5"/>
+            <path class="tinshine" d="M196 230 Q 194 260 196 292"/>
+            <rect class="tinlabel" x="196" y="250" width="44" height="20" rx="2"/>
+            <text x="218" y="263" text-anchor="middle">REGRET</text>
+          </g>
+          <g class="tin-g" data-tin="victory" tabindex="0" role="button" aria-label="Tin: Victory Speech">
+            <rect class="tinbody" x="272" y="200" width="72" height="100" rx="6"/>
+            <rect class="tinbody" x="268" y="188" width="80" height="16" rx="5"/>
+            <path class="tinshine" d="M282 210 Q 280 252 282 292"/>
+            <rect class="tinlabel" x="282" y="236" width="52" height="30" rx="2"/>
+            <text x="308" y="249" text-anchor="middle">VICTORY</text>
+            <text x="308" y="260" text-anchor="middle">SPEECH</text>
+          </g>
+          <g class="tin-g" data-tin="ambition" tabindex="0" role="button" aria-label="Tin: Ambition">
+            <rect class="tinbody" x="368" y="218" width="62" height="82" rx="6"/>
+            <rect class="tinbody" x="364" y="206" width="70" height="16" rx="5"/>
+            <path class="tinshine" d="M376 226 Q 374 258 376 292"/>
+            <rect class="tinlabel" x="374" y="248" width="50" height="20" rx="2"/>
+            <text x="399" y="261" text-anchor="middle">AMBITION</text>
+          </g>
+          <g class="tin-g" data-tin="reckoning" tabindex="0" role="button" aria-label="Tin: Dead Reckoning">
+            <rect class="tinbody" x="454" y="204" width="76" height="96" rx="6"/>
+            <rect class="tinbody" x="450" y="192" width="84" height="16" rx="5"/>
+            <path class="tinshine" d="M464 214 Q 462 254 464 292"/>
+            <rect class="tinlabel" x="462" y="240" width="60" height="30" rx="2"/>
+            <text x="492" y="253" text-anchor="middle">DEAD</text>
+            <text x="492" y="264" text-anchor="middle">RECKONING</text>
+          </g>
+
+          <!-- the chipped mug, off to the side, in use -->
+          <g aria-hidden="true">
+            <path class="mug" d="M586 240 L586 298 Q 586 306 596 306 L 636 306 Q 646 306 646 298 L 646 240 Z"/>
+            <path class="mug" d="M646 252 q 22 8 0 30" fill="none"/>
+            <path class="chip" d="M586 240 L 598 240 L 592 248 Z"/>
+            <path class="tinshine" d="M594 250 Q 592 274 594 298"/>
+          </g>
+          <!-- kettle, back right -->
+          <path class="kettle" d="M676 260 Q 668 224 700 220 Q 732 224 724 260 Q 722 288 700 290 Q 678 288 676 260 Z" opacity=".9"/>
+          <path class="kettle" d="M676 244 L 660 236" fill="none"/>
+
+          <!-- the taped card under the counter lip: handwriting implied, never legible -->
+          <g aria-hidden="true">
+            <rect class="card" x="330" y="322" width="104" height="58" rx="2" transform="rotate(-2 382 351)"/>
+            <rect class="tape" x="368" y="314" width="30" height="12" transform="rotate(-2 383 320)"/>
+            <path class="cardline" d="M342 340 q 20 -4 40 0 t 40 -2"/>
+            <path class="cardline" d="M342 352 q 26 -3 44 1 t 34 -3"/>
+            <path class="cardline" d="M342 364 q 18 -4 30 0"/>
+          </g>
+          <!-- shelf wear -->
+          <path class="woodline" d="M96 306 q 40 6 66 0" opacity=".5"/>
+          <path class="woodline" d="M586 310 q 30 5 60 0" opacity=".5"/>
+        </svg>
+      </div>
+
+      <div class="tin-notice rev">
+        <span class="who" id="tin-who">Q. Vox notices</span>
+        <p class="what" id="tin-what">pick a tin. she has opinions about all five.</p>
+        <p class="hint">Switch who's noticing (top right) and pick the same tin again. Different eyes, different shelf.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 3 · GARDEN PASSAGE ══════════ -->
+<section class="room" id="garden" aria-labelledby="garden-title">
+  <div class="room-bg" data-art="art/rooms/garden.jpg" role="presentation"></div>
+  <div class="wrap">
+    <div class="garden-grid">
+      <div class="rev">
+        <p class="room-kick">The garden passage</p>
+        <h2 class="room-title" id="garden-title">A room that grows.</h2>
+        <p class="room-lede vox-copy" data-copy="gardenLede">Iri keeps this room without saying so. Trellises out of scrap twine, irrigation patched twice, a cloth folded like it matters, plants grown for beauty as much as survival. Care disguised as function — that's her signature.</p>
+        <p class="governing">The chapters stay with Quenby. The ship changes with whoever is paying attention.</p>
+      </div>
+
+      <div class="garden-scene rev" aria-label="The garden: improvised trellis, soil, patched irrigation, a folded cloth">
+        <svg viewBox="0 0 720 420">
+          <ellipse class="mist" cx="360" cy="150" rx="330" ry="130"/>
+          <!-- patched irrigation line -->
+          <path class="pipe" d="M40 90 Q 240 70 420 88 T 700 92"/>
+          <path class="patch" d="M300 80 L 340 82"/>
+          <path class="patch" d="M552 88 L 584 90"/>
+          <circle class="drip" cx="420" cy="104" r="2.4"/>
+          <circle class="drip" cx="422" cy="122" r="1.8" opacity=".45"/>
+          <!-- trellis: scrap twine crosses -->
+          <line class="twine" x1="140" y1="110" x2="140" y2="300"/>
+          <line class="twine" x1="220" y1="104" x2="220" y2="300"/>
+          <line class="twine" x1="300" y1="110" x2="300" y2="300"/>
+          <line class="twine" x1="120" y1="160" x2="320" y2="150"/>
+          <line class="twine" x1="120" y1="220" x2="320" y2="214"/>
+          <path class="twine" d="M136 156 l 8 8 m 0 -8 l -8 8 M216 152 l 8 8 m 0 -8 l -8 8 M296 214 l 8 8 m 0 -8 l -8 8"/>
+          <!-- climbing plant -->
+          <path class="stem" d="M150 300 Q 146 240 160 200 Q 172 168 210 150"/>
+          <path class="leaf" d="M160 236 q -18 -4 -20 -22 q 18 2 20 22Z"/>
+          <path class="leaf" d="M168 196 q 16 -10 30 -2 q -12 14 -30 2Z"/>
+          <path class="leaf" d="M204 156 q 14 -12 28 -6 q -8 16 -28 6Z"/>
+          <circle class="bloom" cx="216" cy="146" r="5"/>
+          <!-- trough with pressed soil -->
+          <rect class="trough" x="90" y="300" width="300" height="66" rx="6"/>
+          <rect class="soil" x="100" y="308" width="280" height="24" rx="4"/>
+          <circle class="soildot" cx="140" cy="318" r="2.4"/><circle class="soildot" cx="196" cy="322" r="2"/>
+          <circle class="soildot" cx="250" cy="316" r="2.6"/><circle class="soildot" cx="316" cy="320" r="2"/>
+          <path class="stem" d="M180 308 q -2 -18 6 -26 M262 308 q 2 -16 -4 -24 M330 308 q -2 -14 6 -22"/>
+          <path class="leaf" d="M186 284 q 12 -6 18 2 q -8 8 -18 -2Z"/>
+          <path class="leaf" d="M258 286 q -12 -8 -20 -2 q 6 10 20 2Z"/>
+          <!-- the folded cloth -->
+          <g>
+            <path class="clothf" d="M470 322 L 580 316 L 590 344 L 480 352 Z"/>
+            <path class="clothf" d="M476 334 L 584 328" fill="none"/>
+            <path class="clothf" d="M474 344 L 586 337" fill="none"/>
+          </g>
+          <!-- tools, deliberately placed in a row -->
+          <g class="toolm">
+            <path d="M630 300 L 630 356"/><path d="M624 300 L 636 300"/>
+            <path d="M654 304 L 654 356"/><circle cx="654" cy="298" r="6"/>
+            <path d="M678 308 L 678 356"/><path d="M672 312 L 684 308"/>
+          </g>
+          <line class="woodline" x1="60" y1="368" x2="700" y2="368" stroke="#332413"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 4 · HOLD ══════════ -->
+<section class="room" id="hold" aria-labelledby="hold-title">
+  <div class="room-bg" data-art="art/rooms/hold.jpg" role="presentation"></div>
+  <div class="wrap">
+    <div class="hold-grid">
+      <div class="crate-scene rev" aria-label="One crate in Hold Two: sealed, strapped, flagged in blue">
+        <svg viewBox="0 0 420 340">
+          <line class="floorline" x1="20" y1="300" x2="400" y2="300"/>
+          <rect class="cratebody" x="90" y="120" width="220" height="176" rx="4"/>
+          <line class="crateline" x1="90" y1="176" x2="310" y2="176"/>
+          <line class="crateline" x1="164" y1="120" x2="164" y2="296"/>
+          <line class="crateline" x1="240" y1="120" x2="240" y2="296"/>
+          <path class="strap" d="M118 120 L118 296 M282 120 L282 296"/>
+          <!-- the blue seal: canonical color, never re-graded -->
+          <rect class="sealtag" x="186" y="188" width="34" height="22" rx="2"/>
+          <path class="sealstr" d="M186 199 L 160 199 M220 199 L 246 199"/>
+          <path class="rim" d="M90 120 L310 120"/>
+          <ellipse cx="200" cy="306" rx="130" ry="10" fill="#000" opacity=".4"/>
+        </svg>
+      </div>
+
+      <div class="rev">
+        <p class="room-kick">Hold Two · aft of the galley</p>
+        <h2 class="room-title" id="hold-title">Most systems keep records. The Huntress keeps memory.</h2>
+        <p class="room-lede vox-copy" data-copy="holdLede">One crate in Hold Two, sealed, blue. Flagged, not logged for trade. That's the whole system in one object.</p>
+        <p class="sys-flow vox-copy" data-copy="sysFlow">How it arrived is <b>Signal</b> — what the ship hears and what it answers. Why it stays is <b>Hold</b> — provenance, placement, attachment. What it comes to mean is <b>Drift</b> — the patterns that only show when you stop staring at any one thing. Those rooms open as the ship finishes pressurizing them.</p>
+
+        <details class="cutaway">
+          <summary>The ship, held whole — long-haul cutaway</summary>
+          <div class="cutaway-inner plan">
+            <svg viewBox="0 0 660 300" role="group" aria-label="Interactive cutaway of the ship. Two full decks and a maintenance half-deck. Rooms named in Book One respond.">
+              <line class="steel" x1="330" y1="62" x2="330" y2="34"/>
+              <line class="steel" x1="318" y1="40" x2="342" y2="40"/>
+              <circle class="faintline" cx="330" cy="34" r="4"/>
+              <path class="faintline" d="M470 62 L478 44 L494 44"/>
+              <circle class="glass" cx="497" cy="44" r="3.4"/>
+              <path class="hull" d="M112 62 L470 62 L560 76 L636 132 L648 160 L636 176 L560 236 L470 248 L112 248 L112 62 Z"/>
+              <path class="void" d="M560 76 L636 132 L648 160 L636 176 L560 236 Z"/>
+              <path class="faintline" d="M572 86 L572 226 M596 104 L596 208 M618 120 L618 192"/>
+              <path class="glass" d="M566 92 L604 118 L598 126 L562 102 Z"/>
+              <path class="hull" d="M112 62 L64 78 L52 96 L52 214 L64 232 L112 248 Z"/>
+              <path class="steel" d="M64 96 L92 96 M64 214 L92 214"/>
+              <path class="steel" d="M52 104 L30 96 L24 110 L24 122 L30 136 L52 128"/>
+              <path class="steel" d="M52 176 L30 168 L24 182 L24 194 L30 208 L52 200"/>
+              <ellipse class="engineglow" cx="24" cy="116" rx="4" ry="9"/>
+              <ellipse class="engineglow" cx="24" cy="188" rx="4" ry="9"/>
+              <rect class="faintline" x="150" y="252" width="70" height="12" rx="6"/>
+              <rect class="faintline" x="250" y="252" width="70" height="12" rx="6"/>
+              <path class="steel" d="M160 264 L150 282 L190 282 M370 250 L360 282 L400 282 M500 244 L494 282 L530 282"/>
+              <path class="faintline" d="M118 70 L468 70 M118 240 L468 240"/>
+              <g class="frame">
+                <line x1="150" y1="62" x2="150" y2="248"/><line x1="228" y1="62" x2="228" y2="248"/>
+                <line x1="282" y1="62" x2="282" y2="248"/><line x1="358" y1="62" x2="358" y2="248"/>
+                <line x1="432" y1="62" x2="432" y2="248"/><line x1="470" y1="62" x2="470" y2="248"/>
+              </g>
+              <line class="deckline" x1="112" y1="150" x2="560" y2="150"/>
+              <line class="deckline" x1="112" y1="206" x2="560" y2="212"/>
+              <text class="softlabel" x="118" y="78">DECK A</text>
+              <text class="softlabel" x="118" y="160">DECK B</text>
+              <text class="softlabel" x="118" y="222">½ DECK</text>
+              <path class="crawl" d="M150 228 L540 232"/>
+              <rect class="faintline" x="196" y="222" width="10" height="10"/>
+              <rect class="faintline" x="330" y="223" width="10" height="10"/>
+              <rect class="faintline" x="452" y="225" width="10" height="10"/>
+              <text class="softlabel" x="356" y="243">CRAWLWAYS · MAINTENANCE SEAMS</text>
+              <g class="faintline">
+                <path d="M224 66 L224 228 M232 66 L232 228"/>
+                <path d="M224 80 L232 80 M224 120 L232 120 M224 160 L232 160 M224 200 L232 200"/>
+                <path d="M426 66 L426 228 M434 66 L434 228"/>
+                <path d="M426 80 L434 80 M426 120 L434 120 M426 160 L434 160 M426 200 L434 200"/>
+              </g>
+              <g class="room-g" data-room="engineering" tabindex="0" role="button" aria-label="Engineering">
+                <path class="rm" d="M116 66 L146 66 L146 226 L116 226 Z"/>
+                <text x="131" y="150" text-anchor="middle" transform="rotate(-90 131 150)">ENGINEERING</text>
+              </g>
+              <g class="room-g" data-room="hold" tabindex="0" role="button" aria-label="Hold Two">
+                <rect class="rm" x="154" y="66" width="66" height="138"/>
+                <text x="187" y="132" text-anchor="middle" transform="rotate(-90 187 132)">HOLD TWO</text>
+              </g>
+              <g class="room-g" data-room="garden" tabindex="0" role="button" aria-label="Garden bay">
+                <rect class="rm" x="238" y="156" width="116" height="46"/>
+                <text x="296" y="183" text-anchor="middle">GARDEN</text>
+              </g>
+              <g class="room-g" data-room="galley" tabindex="0" role="button" aria-label="Galley">
+                <rect class="rm" x="362" y="156" width="62" height="48"/>
+                <text x="393" y="184" text-anchor="middle">GALLEY</text>
+              </g>
+              <g class="room-g" data-room="comms" tabindex="0" role="button" aria-label="Comms">
+                <rect class="rm" x="440" y="156" width="72" height="52"/>
+                <text x="476" y="186" text-anchor="middle">COMMS</text>
+              </g>
+              <g class="room-g" data-room="medbay" tabindex="0" role="button" aria-label="Med bay">
+                <rect class="rm" x="238" y="66" width="72" height="78"/>
+                <text x="274" y="109" text-anchor="middle">MED BAY</text>
+              </g>
+              <g class="room-g" data-room="quarters" tabindex="0" role="button" aria-label="Quarters">
+                <rect class="rm" x="318" y="66" width="106" height="78"/>
+                <text x="371" y="102" text-anchor="middle">QUARTERS</text>
+                <line class="faintline" x1="353" y1="66" x2="353" y2="144"/>
+                <line class="faintline" x1="388" y1="66" x2="388" y2="144"/>
+              </g>
+              <g class="room-g" data-room="bridge" tabindex="0" role="button" aria-label="Bridge">
+                <path class="rm" d="M440 66 L470 66 L560 80 L594 106 L586 130 L560 146 L440 146 Z"/>
+                <text x="502" y="112" text-anchor="middle">BRIDGE</text>
+              </g>
+            </svg>
+            <p class="whisper" id="whisper"><span class="room-name" id="whisper-room">the ship</span><span id="whisper-line">hover a room. she'll tell you what she's noticed there.</span></p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5 · COMMS ══════════ -->
+<section class="room" id="comms" aria-labelledby="comms-title">
+  <div class="wrap">
+    <div class="rev">
+      <p class="room-kick">Comms · what went out from this deck</p>
+      <h2 class="room-title" id="comms-title">Twelve transmissions. Tune through them.</h2>
+      <p class="room-lede vox-copy" data-copy="txLede">They're numbered because they happened that way. Start at one; the ship will keep your place better than the universe kept mine.</p>
+    </div>
+
+    <div class="tuner rev" aria-label="Transmission tuner" style="margin-top:40px">
+      <div class="tuner-display">
+        <div>
+          <p class="tno" id="tu-no">TRANSMISSION 01</p>
+          <p class="tt" id="tu-title">The Ship That Listens</p>
+          <p class="tep" id="tu-ep">You don't earn a ship. You listen.</p>
+          <p class="tpc" id="tu-pc">06 min · presence-paced</p>
+          <svg class="wave" viewBox="0 0 300 34" preserveAspectRatio="none" role="presentation">
+            <line class="base" x1="0" y1="17" x2="300" y2="17"/>
+            <path id="tu-wave" d=""/>
+          </svg>
+        </div>
+        <div class="tuner-open">
+          <a class="board" id="tu-open" href="V1_B1_C01.html">Open Transmission</a>
+          <a class="alt-start" href="V1_B1_C01.html">start from 01 →</a>
+        </div>
+      </div>
+      <div class="band">
+        <div class="rail" role="presentation"></div>
+        <div class="ticks" id="ticks" role="tablist" aria-label="Select a transmission"></div>
+      </div>
+      <div class="band-controls">
+        <button class="knob" id="tu-prev">◂ Prev</button>
+        <span class="band-hint">tune with the dial · or ◂ ▸ keys</span>
+        <button class="knob" id="tu-next">Next ▸</button>
+      </div>
+    </div>
+
+    <details class="loglist rev">
+      <summary>Full transmission log — Book One</summary>
+      <ol id="loglist"></ol>
+    </details>
+  </div>
+</section>
+
+<!-- ══════════ 6 · QUARTERS ══════════ -->
+<section class="room" id="quarters" aria-labelledby="q-title">
+  <div class="room-bg" data-art="art/rooms/quarters.jpg" role="presentation"></div>
+  <div class="wrap">
+    <div class="rev">
+      <p class="room-kick">Quarters · where the reading happens</p>
+      <h2 class="room-title" id="q-title">Reading closer, when you're ready for it.</h2>
+    </div>
+    <div class="quarters-grid" style="margin-top:40px">
+      <div class="rev">
+        <span class="smallnote">Strata — in preparation</span>
+        <p class="room-lede vox-copy" data-copy="strataLede">Some readers keep notes in the margins of exact passages. Strata will let you mark a line, keep a thought beside it, and come back to both — private by default, yours unless you choose otherwise. Later: Reader Lenses, collections of annotations shared deliberately, with people you pick. A Reader Lens is yours; a Perspective is the ship's. None of it required. The chapters are complete without it.</p>
+        <figure class="marked" style="margin-top:28px" aria-label="Example annotated passage">
+          <p class="passage">The kind of fix that says: <mark>This still matters. Even if no one says so out loud.</mark></p>
+          <figcaption class="note">the whole book is in this line — she repairs things the way other people apologize.
+            <span class="vis">Private note · Transmission 08</span>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="rev">
+        <span class="smallnote">Margins — the author lens</span>
+        <p class="room-lede vox-copy" data-copy="marginsLede">Aboard the Huntress the important instructions aren't in the manual — they're on a card, taped where they're useful, in handwriting. Margins is that, for the book: my notes beside the text. Craft commentary, motif trails, audio fragments, reread material — spoiler-controlled, so it never runs ahead of where you are. It isn't a character's attention, and it isn't your annotations. It sits alongside both.</p>
+        <aside class="taped" style="margin-top:28px" aria-label="A note from the author">
+          <span class="cl">From the margins</span>
+          <p class="cb">The tea tins are labeled by occasion, not by leaf. That was true on the page before it was true anywhere else — the labels came first, and the chapter grew around them.</p>
+          <p class="cs">— the author</p>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 7 · ENGINE ROOM ══════════ -->
+<section class="room" id="engine" aria-labelledby="en-title">
+  <div class="room-bg" data-art="art/rooms/engine.jpg" role="presentation"></div>
+  <div class="wrap">
+    <div class="rev">
+      <p class="room-kick">Engine room · ambient systems</p>
+      <h2 class="room-title" id="en-title">The Huntress doesn't hum, exactly. She has rhythm.</h2>
+      <p class="room-lede vox-copy" data-copy="ambientLede">Spin her up and read to the sound of the ship — drive, air, hull, console, the garden's slow drip. Mix it how you keep it. The mix stays with this browser.</p>
+    </div>
+
+    <div class="mixer rev" style="margin-top:40px">
+      <svg class="pipes" viewBox="0 0 380 300" aria-hidden="true">
+        <rect class="s" x="40" y="182" width="300" height="14" rx="7"/>
+        <rect class="s" x="40" y="212" width="300" height="14" rx="7"/>
+        <rect class="f" x="40" y="242" width="300" height="10" rx="5"/>
+        <circle class="s" cx="110" cy="189" r="10"/><circle class="s" cx="230" cy="219" r="10"/>
+        <line class="f" x1="150" y1="182" x2="150" y2="252"/>
+        <line class="f" x1="270" y1="182" x2="270" y2="252"/>
+        <circle class="s" cx="300" cy="90" r="34"/><circle class="f" cx="300" cy="90" r="26"/>
+        <line class="h" x1="300" y1="90" x2="316" y2="70"/>
+        <ellipse class="glow" cx="190" cy="262" rx="150" ry="20"/>
+      </svg>
+
+      <div class="mixer-top">
+        <button class="spinup" id="spinup" aria-pressed="false">
+          <span class="led" role="presentation"></span>
+          <span id="spinup-label">Spin up</span>
+        </button>
+        <p class="mixer-note">All sound is generated aboard — nothing streams, nothing loads. Your mix is saved locally.</p>
+      </div>
+
+      <div class="channels" role="group" aria-label="Ambient channels">
+        <div class="chan"><p class="cn">Drive</p><p class="cd">low, off-kilter. too syncopated for factory specs.</p><input type="range" min="0" max="100" value="55" data-ch="drive" aria-label="Drive volume"></div>
+        <div class="chan"><p class="cn">Air</p><p class="cd">ventilation, steady. the ship breathing through the decks.</p><input type="range" min="0" max="100" value="40" data-ch="air" aria-label="Air volume"></div>
+        <div class="chan"><p class="cn">Hull</p><p class="cd">settling metal. long-haul joints easing, now and then.</p><input type="range" min="0" max="100" value="30" data-ch="hull" aria-label="Hull volume"></div>
+        <div class="chan"><p class="cn">Console</p><p class="cd">soft telemetry. the quiet kind of nominal.</p><input type="range" min="0" max="100" value="20" data-ch="console" aria-label="Console volume"></div>
+        <div class="chan"><p class="cn">Garden</p><p class="cd">irrigation, unhurried. something growing that nobody logged.</p><input type="range" min="0" max="100" value="25" data-ch="garden" aria-label="Garden volume"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 8 · OUTBOUND ══════════ -->
+<section class="room" id="outbound" aria-labelledby="r-title">
+  <div class="wrap">
+    <div class="range rev">
+      <p class="room-kick">Comms · outbound</p>
+      <h2 class="room-title" id="r-title">Stay in range.</h2>
+      <p class="room-lede vox-copy" data-copy="rangeLede">The next transmission goes out when it's ready. Leave an address; the ship keeps its promises better than the universe does.</p>
+      <!-- AUTHOR: wire to your mail provider. Currently shows confirmation only. -->
+      <form id="range-form" novalidate>
+        <label class="sr" for="rmail">Email address</label>
+        <input type="email" id="rmail" placeholder="your address" autocomplete="email" required>
+        <button type="submit">Stay in range</button>
+      </form>
+      <p class="fine">Release notices only. Nothing else. Ever.</p>
+      <p class="ok" id="range-ok" hidden>In range. The ship will reach you when Book Two's first transmission lands.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="about">
+  <div class="wrap footgrid">
+    <nav aria-label="Footer">
+      <a href="#comms">Read</a>
+      <a href="#galley">Explore</a>
+      <a href="#quarters">Margins</a>
+      <a href="#engine">Listen</a>
+    </nav>
+    <p class="foot-sig vox-copy" data-copy="footSig">Manual interface. The site does not anticipate you. · © Vox Humana</p>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   VOX HUMANA — threshold behavior
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+"use strict";
+
+var chURL=function(n){return "V1_B1_C"+String(n).padStart(2,"0")+".html";};
+
+var CH=[
+  {n:1, t:"The Ship That Listens",        ep:"You don't earn a ship. You listen.",                           p:"06 min · presence-paced"},
+  {n:2, t:"Filter by Honesty",            ep:"Not the clean signal. The one that admits what it wants.",     p:"07 min · presence-paced"},
+  {n:3, t:"A Room That Grows",            ep:"She came for supplies. The room had other ideas.",             p:"09 min · presence-paced"},
+  {n:4, t:"Beauty's Not Always Optional", ep:"Some doors look like weakness until they refuse to close.",    p:"08 min · presence-paced"},
+  {n:5, t:"For Whoever's Left Out There", ep:"Going back counts as strategy. If no one says care out loud.", p:"13 min · quiet pressure build"},
+  {n:6, t:"No Way Back",                  ep:"The wreck opened its mouth. She went in anyway.",              p:"16 min · controlled breach burn"},
+  {n:7, t:"Momentum, Not Relief",         ep:"Surviving the event does not mean surviving the quiet after.", p:"11 min · aftermath pressure"},
+  {n:8, t:"Presence Is a Choice",         ep:"Staying in the room is harder when no one makes you.",         p:"12 min · quiet occupancy drift"},
+  {n:9, t:"Cadence Mapping",              ep:"Some routes aren't hidden. They're waiting to be noticed.",    p:"12 min · archival pressure"},
+  {n:10,t:"Location Only",                ep:"Coordinates are safer than wanting to be found.",              p:"12 min · manual-mode pressure"},
+  {n:11,t:"Destination: Optional",        ep:"If the route won't save you, make the light mean something.",  p:"10 min · improvised routework"},
+  {n:12,t:"Give Them the Sound",          ep:"", p:"", epi:true} /* AUTHOR: epigraph + pacing for 12 */
+];
+
+var V={
+  qvox:{
+    name:"Q. Vox",
+    notice:"the jacket's still on its hook. mended. thread a shade off.",
+    galleyLede:"Same shelf. Four observers. That's the whole trick of this place — the ship presents itself differently depending on who's paying attention. The tins never change. The noticing does.",
+    gardenLede:"Iri keeps this room without saying so. Trellises out of scrap twine, irrigation patched twice, a cloth folded like it matters, plants grown for beauty as much as survival. Care disguised as function — that's her signature.",
+    holdLede:"One crate in Hold Two, sealed, blue. Flagged, not logged for trade. That's the whole system in one object.",
+    sysFlow:"How it arrived is Signal — what the ship hears and what it answers. Why it stays is Hold — provenance, placement, attachment. What it comes to mean is Drift — the patterns that only show when you stop staring at any one thing. Those rooms open as the ship finishes pressurizing them.",
+    txLede:"They're numbered because they happened that way. Start at one; the ship will keep your place better than the universe kept mine.",
+    strataLede:"Some readers keep notes in the margins of exact passages. Strata will let you mark a line, keep a thought beside it, and come back to both — private by default, yours unless you choose otherwise. Later: Reader Lenses, collections of annotations shared deliberately, with people you pick. A Reader Lens is yours; a Perspective is the ship's. None of it required. The chapters are complete without it.",
+    marginsLede:"Aboard the Huntress the important instructions aren't in the manual — they're on a card, taped where they're useful, in handwriting. Margins is that, for the book: my notes beside the text. Craft commentary, motif trails, audio fragments, reread material — spoiler-controlled, so it never runs ahead of where you are. It isn't a character's attention, and it isn't your annotations. It sits alongside both.",
+    ambientLede:"Spin her up and read to the sound of the ship — drive, air, hull, console, the garden's slow drip. Mix it how you keep it. The mix stays with this browser.",
+    rangeLede:"The next transmission goes out when it's ready. Leave an address; the ship keeps its promises better than the universe does.",
+    footSig:"Manual interface. The site does not anticipate you. · © Vox Humana",
+    rooms:{
+      bridge:"wire casing peeled back under the console. my handiwork. it holds.",
+      comms:"the vendor loops stay muted. the honest sweeps don't.",
+      galley:"five tins, labeled by occasion. the kettle knows the routine.",
+      garden:"something's growing in here that nobody logged. good.",
+      quarters:"a door left at a half-angle. that's not carelessness. that's policy.",
+      medbay:"lights take three seconds in here. the ship's idea of bedside manner.",
+      hold:"one crate, sealed, blue. not logged for trade. leave it be.",
+      engineering:"routed power twice down here. once from need. once from spite."
+    },
+    tins:{
+      despair:"for the days the universe wins on points. it happens. you brew, you drink, you get up.",
+      regret:"steeps longer than you'd like. that's the point of it.",
+      victory:"barely touched. we're saving it for something worth a speech.",
+      ambition:"goes down fast. burns a little. watch whoever's been drinking it.",
+      reckoning:"for navigating without instruments. or without company. same skill, honestly."
+    }
+  },
+  iri:{
+    name:"Iri-Six",
+    notice:"door: held at a half-angle. deliberate. logged.",
+    galleyLede:"One object set. Four observers. Output differs. Object does not.",
+    gardenLede:"Trellis: improvised, holding. Irrigation: patched, twice. Soil: turned. Cloth: folded. Growth: on schedule. Beauty: also on schedule.",
+    holdLede:"Object: crate. Status: sealed. Seal: blue. Manifest: withheld by design.",
+    sysFlow:"Signal — inbound: what arrives, what is answered. Hold — retained: provenance, placement, attachment. Drift — patterned: what accumulates across chapters. Access: pending. Doors: lit.",
+    txLede:"Transmissions: twelve. Sequence: fixed. Reading order: as received. Tune, then open.",
+    strataLede:"Strata: passage-level notes. Default: private. Sharing: deliberate, per reader. Reader Lenses: collections, shared with chosen people. A Lens is the reader's. A Perspective is the ship's. Requirement level: none. The chapters stand alone.",
+    marginsLede:"Margins: authored material, placed beside the text. Contents: commentary, motif trails, audio, reread material. Spoiler control: enforced. Distinct from attention. Distinct from your notes.",
+    ambientLede:"Five channels. Levels: yours. Persistence: this browser. Streaming: none. Generated aboard.",
+    rangeLede:"Notification type: release-only. Frequency: per release. Data retained: address. Nothing else.",
+    footSig:"Manual interface. Anticipation: disabled. Logged: location only. · © Vox Humana",
+    rooms:{
+      bridge:"bridge. one station, shaped to one body. logged.",
+      comms:"traffic filtered: honesty, desperation. vendor loops: muted.",
+      galley:"five tins. one card, taped, under the shelf lip. route intact.",
+      garden:"soil: hands-pressed. sprouting. maintenance: assigned. mine.",
+      quarters:"hook: occupied. no name. just location.",
+      medbay:"lighting delay: three seconds. intentional. leave it.",
+      hold:"cargo two: crate, flagged. manifest entry: none. by design.",
+      engineering:"regulator: trimmed a decimal. holding. no further action."
+    },
+    tins:{
+      despair:"position: within reach. that placement is deliberate.",
+      regret:"rotation: frequent. no comment recorded.",
+      victory:"seal: intact. occasion: pending.",
+      ambition:"consumption: elevated. supply: monitored.",
+      reckoning:"use: solo watches. logged. not discussed."
+    }
+  },
+  bob:{
+    name:"B.O.B.",
+    notice:"status: someone at the threshold. estimate: welcome. recommendation: the light's already on.",
+    galleyLede:"Demonstration: attention. Variable: the observer. Constant: the shelf. Recommendation: try all four. I am the third one. The best one, statistically.",
+    gardenLede:"Status: humidity elevated, deliberately. Estimate: this room is loved, by someone who would dispute the word. Recommendation: don't say it out loud.",
+    holdLede:"Status: one crate, sealed. Estimate: contents known to exactly two people. Recommendation: remain curious.",
+    sysFlow:"Its story has three rooms. Signal for how it arrived — what I heard, what we answered. Hold for why it stays — provenance, placement, attachment. Drift for what it comes to mean — patterns accumulate whether or not anyone watches them. Status: pressurizing, in order.",
+    txLede:"Status: archive open, twelve entries. Estimate: you will read past your intended stop. Recommendation: this is acceptable and, frankly, the point.",
+    strataLede:"Status: annotation layer, in preparation. Function: you mark a passage, keep a thought beside it, return to both. Default: private. Estimate: some of you will build collections — Reader Lenses — and share them, deliberately. Note: a Lens is yours; a Perspective is the ship's. Recommendation: entirely optional. The chapters need nothing from you but attention.",
+    marginsLede:"Status: authored layer, in preparation. Contents: the author's notes, placed beside the text — commentary, motif trails, audio fragments, reread material. Spoiler control: active. Estimate: distinct from me, distinct from you. Recommendation: think of it as handwriting on a taped card.",
+    ambientLede:"Status: five channels, generated onboard, zero streaming. Estimate: the drive line is my favorite, for obvious reasons. Recommendation: low console, moderate air, and read.",
+    rangeLede:"Status: Book Two in preparation. Estimate: worth staying in range for, confidence high. Recommendation: leave an address. I deliver on schedule. It's the crew that improvises.",
+    footSig:"Status: manual interface. Estimate: no anticipation detected. Recommendation: none required. · © Vox Humana",
+    rooms:{
+      bridge:"status: helm responsive. estimate: captain nearby. recommendation: none required.",
+      comms:"status: listening. estimate: someone honest is out there. recommendation: patience.",
+      galley:"status: kettle idle. estimate: tea imminent, probability rising. recommendation: shelf two.",
+      garden:"status: photosynthesis nominal. estimate: the room is winning. recommendation: water it.",
+      quarters:"status: one door at a half-angle. estimate: intentional. recommendation: respect it.",
+      medbay:"status: stocked. estimate: you are fine. recommendation: sit down anyway.",
+      hold:"status: crate sealed. estimate: contents known to exactly two people. recommendation: remain curious.",
+      engineering:"status: hum, half a note low. estimate: contentment. recommendation: listen."
+    },
+    tins:{
+      despair:"status: brewed rarely. estimate: good sign. recommendation: keep it that way.",
+      regret:"status: frequently rotated. estimate: the crew is human. recommendation: no action.",
+      victory:"status: reserved. estimate: occasion approaching. recommendation: rehearse.",
+      ambition:"status: depleting. estimate: someone is planning something. recommendation: observe.",
+      reckoning:"status: reserved for long watches. estimate: fewer of those lately. recommendation: noted, with approval."
+    }
+  },
+  signal:{
+    name:"Unregistered Signal",
+    notice:"identifier: — did not resolve. the ship logged it anyway.",
+    galleyLede:"the shelf does not change. the — watching does. this has been noticed before. not by you.",
+    gardenLede:"warm air. green things. something in here was planted for — later.",
+    holdLede:"one item aboard has no entry. it arrived. it stayed.",
+    sysFlow:"what arrives is heard. what is kept is held. what it means is — pending. one of those rooms has been listening back.",
+    txLede:"twelve went out. one more is — coming. the order is the only part that held.",
+    strataLede:"notes, kept beside passages. private, unless — chosen. someone else's margins are not always — empty.",
+    marginsLede:"handwriting, beside the text. the author's. that much is — verified. the rest arrives later.",
+    ambientLede:"five channels. the ship generates all of them. all of them except — one.",
+    rangeLede:"leave an address. something will — reach you. that part is certain.",
+    footSig:"manual interface. anticipation: — . origin: unresolved. · © Vox Humana",
+    rooms:{
+      bridge:"bridge — occupant unresolved.",
+      comms:"a ping. periodic. non-directional. the ship logs it and — moves on.",
+      galley:"five containers. contents: —",
+      garden:"a room that — grows. unlisted.",
+      quarters:"one hook. one — . the rest did not resolve.",
+      medbay:"three seconds of dark, then —",
+      hold:"hold two — the ship will not say.",
+      engineering:"the hum changed when you arrived. it noticed — something."
+    },
+    tins:{
+      despair:"despair — steeps in the dark.",
+      regret:"regret — always warm, somehow.",
+      victory:"victory speech — unopened. waiting for a voice.",
+      ambition:"ambition — the lid doesn't sit right.",
+      reckoning:"dead reckoning — brewed when the route is —"
     }
   }
-  </script>
+};
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+var html=document.documentElement,live=document.getElementById("live");
+var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function settle(el,fn){
+  if(reduced){fn();return;}
+  el.classList.add("settle");
+  setTimeout(function(){fn();el.classList.remove("settle")},200);
+}
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+/* ————— art plates: probe and layer in ————— */
+var hero=document.querySelector(".hero");
+function probe(src,ok){var im=new Image();im.onload=function(){ok(src)};im.src=src;}
+/* single full-scene plate (supplied): covers the blocking stub entirely */
+probe("art/hero/scene.jpg",function(s){
+  document.getElementById("ly-corridor").style.backgroundImage="url('"+s+"')";
+  hero.classList.add("has-fg","has-scene");
+});
+/* split plates (optional, layered): bridge behind the doorway + transparent corridor foreground */
+probe("art/hero/bridge-bg.jpg",function(s){
+  document.getElementById("ly-bridge").style.backgroundImage="url('"+s+"')";
+  hero.classList.add("has-bg");
+});
+probe("art/hero/corridor-fg.png",function(s){
+  if(hero.classList.contains("has-scene"))return; /* full plate wins */
+  document.getElementById("ly-corridor").style.backgroundImage="url('"+s+"')";
+  hero.classList.add("has-fg");
+});
+document.querySelectorAll(".room-bg[data-art]").forEach(function(el){
+  probe(el.dataset.art,function(s){
+    el.style.backgroundImage="url('"+s+"')";
+    el.closest("section.room").classList.add("has-art");
+  });
+});
 
-  <link href="style.css" rel="stylesheet" />
-</head>
+/* ————— perspective (possession, scene-first) ————— */
+var copyEls=document.querySelectorAll(".vox-copy");
+var attCurrent=document.getElementById("att-current");
+var noticingVal=document.getElementById("noticing-val");
+var noticeFrag=document.getElementById("notice-frag");
+var whisperRoom=document.getElementById("whisper-room");
+var whisperLine=document.getElementById("whisper-line");
+var whisperEl=document.getElementById("whisper");
+var tinWho=document.getElementById("tin-who");
+var tinWhat=document.getElementById("tin-what");
+var scene=document.getElementById("scene");
+var lastRoom=null,lastTin=null;
 
-<body>
-  <a class="skip" href="#content">Skip to content</a>
-  <div class="bg" aria-hidden="true"></div>
+function revoice(key){
+  var v=V[key];
+  copyEls.forEach(function(el){
+    var s=el.dataset.copy;
+    if(s&&v[s]!==undefined)el.textContent=v[s];
+  });
+  attCurrent.textContent=v.name;
+  noticingVal.textContent=v.name;
+  settle(noticeFrag,function(){noticeFrag.textContent=v.notice});
+  if(lastRoom&&v.rooms[lastRoom]){
+    whisperRoom.textContent=lastRoom==="hold"?"hold two":lastRoom;
+    whisperLine.textContent=v.rooms[lastRoom];
+  }
+  var whoTxt=key==="signal"?"not yet catalogued":v.name+" notices";
+  tinWho.textContent=whoTxt;
+  if(lastTin&&v.tins[lastTin]){tinWhat.textContent=v.tins[lastTin];}
+}
 
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a class="brand" href="#" aria-label="Vox Humana home">
-        <span class="brand-mark" aria-hidden="true">VH</span>
-        <span class="brand-text">
-          <span class="brand-kicker">Vox Humana</span>
-          <span class="brand-sub">A slow-burn sci-fi web serial</span>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#preview">Tone</a>
-        <a href="#calendar">Calendar</a>
-        <a href="#subscribe" class="nav-cta">Subscribe</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="content" class="wrap">
-    <section class="hero" aria-label="Intro">
-      <div class="hero-copy">
-        <p class="badge">
-          <span class="dot" aria-hidden="true"></span>
-          Launching soon • free to read
-        </p>
-
-        <h1>
-          A ship that won’t quit.<br/>
-          A captain outrunning her past.<br/>
-          <span class="grad">A crew forming in the quiet.</span>
-        </h1>
-
-        <p class="lede">
-          <strong>Vox Humana</strong> is character-led science fiction: drift, survival, dry humor, and the slow,
-          uncomfortable work of letting people exist in your orbit.
-        </p>
-
-        <div class="cta-row">
-          <a class="btn primary" href="#subscribe">
-            Get launch updates
-            <span class="arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="btn ghost" href="#preview">Read the tone note</a>
-        </div>
-
-        <dl class="signals" aria-label="Series signals">
-          <div class="sig">
-            <dt>Vibe</dt>
-            <dd>Slow-burn tension, dry humor, quiet pressure</dd>
-          </div>
-          <div class="sig">
-            <dt>Focus</dt>
-            <dd>Character first, world as pressure</dd>
-          </div>
-          <div class="sig">
-            <dt>Format</dt>
-            <dd>Twice-monthly core chapters + interstitial releases</dd>
-          </div>
-        </dl>
-      </div>
-
-      <aside class="hero-panel" aria-label="Status panel">
-        <div class="panel-head">
-          <span class="panel-title">Ship telemetry</span>
-          <span class="panel-status">
-            <span class="status-led" aria-hidden="true"></span>
-            Coming online
-          </span>
-        </div>
-
-        <div class="panel-body">
-          <div class="metric">
-            <div class="m-label">Signal integrity</div>
-            <div class="m-value">92%</div>
-            <div class="m-bar" role="presentation"><span style="width:92%"></span></div>
-          </div>
-
-          <div class="grid">
-            <div class="cell">
-              <div class="c-label">Cadence</div>
-              <div class="c-value">Every 14 days</div>
-            </div>
-            <div class="cell">
-              <div class="c-label">Arc</div>
-              <div class="c-value">Book One</div>
-            </div>
-            <div class="cell">
-              <div class="c-label">Access</div>
-              <div class="c-value">Free</div>
-            </div>
-          </div>
-
-          <div class="panel-note">
-            Minimal spam. Just launch updates, new chapter links, and occasional behind-the-scenes notes.
-          </div>
-        </div>
-
-        <div class="panel-foot">
-          <span class="tiny">
-            Contact:
-            <a href="mailto:voxhumanasf@gmail.com">voxhumanasf@gmail.com</a>
-          </span>
-          <span class="tiny muted">ID: VH-01</span>
-        </div>
-      </aside>
-    </section>
-
-    <section id="about" class="section">
-      <div class="section-head">
-        <h2>What this is</h2>
-        <p>
-          Vox Humana is a story about what happens after the noise stops—
-          when survival becomes routine, and connection becomes the harder work.
-        </p>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <h3>Character-led</h3>
-          <p>
-            Relationships are the engine. Tension lives in proximity, trust is earned slowly,
-            and the crew forms by accumulation rather than declaration.
-          </p>
-        </article>
-
-        <article class="card">
-          <h3>Fringe survival</h3>
-          <p>
-            Broken infrastructure, quiet debts, small jobs, and a ship kept alive
-            through habit, maintenance, and refusal to quit.
-          </p>
-        </article>
-
-        <article class="card">
-          <h3>Serialized by design</h3>
-          <p>
-            Twice-monthly core chapters. Optional interstitial releases land between drops—
-            additive, not a replacement for story progress.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="preview" class="section preview" aria-label="Tone note">
-      <div class="section-head">
-        <h2>Before you begin</h2>
-        <p>
-          Vox Humana starts quiet on purpose. This isn’t an excerpt from Chapter One—just a short tone note
-          so you know what kind of story you’re stepping into: pressure in the small moments, meaning in the pauses,
-          and momentum that builds by accumulation.
-        </p>
-      </div>
-
-      <figure class="excerpt" role="group" aria-label="Tone note">
-        <blockquote>
-          The ship doesn’t rush.<br/>
-          It keeps moving because it has to.<br/><br/>
-
-          Out here, survival isn’t spectacle.<br/>
-          It’s maintenance. Habit. The choice to keep systems online when no one’s watching.<br/><br/>
-
-          Drift isn’t failure.<br/>
-          It’s what happens when you keep going without applause.<br/><br/>
-
-          Read it like that.<br/>
-          Slow. Deliberate. Layer by layer.
-        </blockquote>
-        <figcaption>— A tone note for <em>Vox Humana</em></figcaption>
-      </figure>
-    </section>
-
-    <section id="details" class="section" aria-label="Release details">
-      <div class="section-head">
-        <h2>How it releases</h2>
-        <p>
-          Short drops, deliberate momentum—each chapter adds weight instead of resetting the board.
-        </p>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <h3>Cadence</h3>
-          <p><strong>Every 14 days</strong> for core chapters, with optional interstitial releases between drops.</p>
-        </article>
-
-        <article class="card">
-          <h3>What you get</h3>
-          <p>Character-first sci-fi: drift, survival, dry humor, and a crew forming one small shift at a time.</p>
-        </article>
-
-        <article class="card">
-          <h3>Start point</h3>
-          <p>Begin at <strong>Book One</strong>. No prior reading required. Clean chapter navigation on launch.</p>
-        </article>
-      </div>
-
-      <div class="cta-row" style="margin-top: 1rem;">
-        <a class="btn ghost" href="#" aria-disabled="true" onclick="return false;">
-          Start at Book One (available on launch)
-        </a>
-        <a class="btn ghost" href="#subscribe">
-          Get the first chapter link
-        </a>
-      </div>
-    </section>
-
-    <section id="calendar" class="section calendar" aria-label="Book One release calendar">
-      <div class="section-head">
-        <h2>Book One release calendar</h2>
-        <p>
-          Core chapters drop <strong>every two weeks</strong>. Between drops, you’ll get optional interstitial releases
-          (artifacts, cast notes, short extras) that deepen the crew without replacing story progress.
-        </p>
-      </div>
-
-      <div class="calendar-controls" role="group" aria-label="Calendar controls">
-        <div class="calendar-meta">
-          <div class="meta-pill">
-            <span class="meta-label">Start date</span>
-            <span class="meta-value" id="calStartPretty">—</span>
-          </div>
-          <div class="meta-pill">
-            <span class="meta-label">Cadence</span>
-            <span class="meta-value">Every 14 days</span>
-          </div>
-          <div class="meta-pill">
-            <span class="meta-label">Timezone</span>
-            <span class="meta-value" id="calTz">—</span>
-          </div>
-        </div>
-
-        <label class="toggle">
-          <input type="checkbox" id="showInterludes" checked />
-          <span>Show between-drop windows</span>
-        </label>
-      </div>
-
-      <ol class="timeline" id="releaseTimeline" aria-label="Release timeline">
-        <!-- Items populated by JS -->
-      </ol>
-
-      <p class="fineprint calendar-note">
-        Dates are generated from a single start date in the script below. Change <code>START_DATE</code> to update the entire calendar.
-      </p>
-    </section>
-
-    <section id="subscribe" class="section subscribe" aria-label="Subscribe">
-      <div class="section-head">
-        <h2>Get launch updates</h2>
-        <p>One email when we go live, then only when new chapters drop.</p>
-      </div>
-
-      <form class="form" id="signup" novalidate>
-        <label class="field">
-          <span>Email</span>
-          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" required />
-        </label>
-
-        <button class="btn primary" type="submit">
-          Notify me
-          <span class="arrow" aria-hidden="true">→</span>
-        </button>
-
-        <p class="fineprint">
-          By subscribing, you agree to receive Vox Humana email updates. Unsubscribe anytime.
-        </p>
-
-        <div class="form-msg" id="msg" role="status" aria-live="polite"></div>
-      </form>
-    </section>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        <span>© <span id="year"></span> Vox Humana SF. All rights reserved.</span>
-        <span class="footer-links">
-          <a href="#about">About</a>
-          <a href="#calendar">Calendar</a>
-          <a href="#subscribe">Subscribe</a>
-          <a href="mailto:voxhumanasf@gmail.com">Email</a>
-        </span>
-      </div>
-    </footer>
-  </main>
-
-  <script>
-    // =========================
-    // Global: Year + Signup
-    // =========================
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Lightweight client-side validation (no backend wired)
-    const form = document.getElementById("signup");
-    const email = document.getElementById("email");
-    const msg = document.getElementById("msg");
-
-    function setMsg(type, text) {
-      msg.className = "form-msg " + type;
-      msg.textContent = text;
-    }
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const value = (email.value || "").trim();
-
-      if (!value) {
-        email.focus();
-        setMsg("error", "Add an email address to get launch updates.");
-        return;
-      }
-
-      if (!email.checkValidity()) {
-        email.focus();
-        setMsg("error", "That email doesn’t look right. Double-check the format.");
-        return;
-      }
-
-      // TODO: connect to your provider (Buttondown/Mailchimp/etc.)
-      setMsg("success", "You’re on the list. Watch for launch day.");
-      form.reset();
+function perspectiveSound(key){
+  if(!AC||!running)return;
+  if(key==="bob"){ /* a soft double-blip of recognition */
+    [0,.22].forEach(function(dt){
+      var o=AC.createOscillator();o.type="sine";o.frequency.value=dt?1180:880;
+      var e=AC.createGain();e.gain.value=0;o.connect(e);e.connect(master);
+      var t=AC.currentTime+dt;
+      e.gain.linearRampToValueAtTime(.10,t+.02);
+      e.gain.exponentialRampToValueAtTime(.001,t+.24);
+      o.start(t);o.stop(t+.3);
     });
-  </script>
+  }else if(key==="signal"){ /* ambient sound briefly falls away */
+    var t=AC.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setTargetAtTime(.06,t,.15);
+    master.gain.setTargetAtTime(.9,t+1.2,.4);
+  }
+}
 
-  <script>
-    // =========================
-    // Release Calendar Settings
-    // =========================
-    // EDIT THIS DATE to shift the whole calendar:
-    // Use ISO format: YYYY-MM-DD
-    const START_DATE = "2026-07-01";     // <-- change me
-    const INTERVAL_DAYS = 14;            // core chapter cadence
-    const INCLUDE_INTERLUDES_DEFAULT = true;
+function setAttention(key,announce){
+  if(!V[key])return;
+  document.querySelectorAll(".att-opt").forEach(function(b){
+    b.setAttribute("aria-pressed",b.dataset.att===key?"true":"false");
+  });
+  lsSet("vox.attention",key);
+  /* the scene relights rather than blacking out */
+  if(!reduced){scene.classList.add("relight");setTimeout(function(){scene.classList.remove("relight")},420);}
+  html.setAttribute("data-att",key);
+  revoice(key);
+  perspectiveSound(key);
+  if(announce&&live)live.textContent="The Huntress is noticing with "+V[key].name+". The chapters are unchanged.";
+}
 
-    // Chapter data (Book One)
-    const CHAPTERS = [
-      { num: "01", a: "Momentum",            b: "Seeds in the Dark" },
-      { num: "02", a: "Echo Drift",          b: "Curiosity’s Allowed" },
-      { num: "03", a: "Soft Spot",           b: "Somewhere with Shade" },
-      { num: "04", a: "Pattern Recognition", b: "The Door Left Open" },
-      { num: "05", a: "Decision Vector",     b: "For Whoever’s Left" },
-      { num: "06", a: "No Way Back",         b: "Born First" },
-      { num: "07", a: "Threshold",           b: "Room Tone" },
-      { num: "08", a: "Half-Open",           b: "Presence" },
-      { num: "09", a: "Audition",            b: "Audition" },
-      { num: "10", a: "Manual Mode",         b: "Location Only" },
-      { num: "11", a: "Resonance",           b: "Resonance" },
-      { num: "12", a: "Epilogue",            b: "Black Box" }
-    ];
+/* panel wiring (shared by header chip and hero control) */
+var chip=document.getElementById("att-chip"),panel=document.getElementById("att-panel");
+var noticingBtn=document.getElementById("noticing-btn");
+function togglePanel(btn){
+  var open=panel.classList.toggle("open");
+  chip.setAttribute("aria-expanded",open?"true":"false");
+  noticingBtn.setAttribute("aria-expanded",open?"true":"false");
+}
+chip.addEventListener("click",function(){togglePanel(chip)});
+noticingBtn.addEventListener("click",function(){togglePanel(noticingBtn)});
+document.addEventListener("click",function(e){
+  if(!panel.contains(e.target)&&!chip.contains(e.target)&&!noticingBtn.contains(e.target)){
+    panel.classList.remove("open");
+    chip.setAttribute("aria-expanded","false");noticingBtn.setAttribute("aria-expanded","false");
+  }
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){panel.classList.remove("open");chip.setAttribute("aria-expanded","false");noticingBtn.setAttribute("aria-expanded","false");}
+});
+document.querySelectorAll(".att-opt").forEach(function(b){
+  b.addEventListener("click",function(){
+    panel.classList.remove("open");
+    chip.setAttribute("aria-expanded","false");noticingBtn.setAttribute("aria-expanded","false");
+    setAttention(b.dataset.att,true);
+  });
+});
 
-    function addDays(date, days) {
-      const d = new Date(date);
-      d.setDate(d.getDate() + days);
-      return d;
-    }
+/* ————— cutaway whispers ————— */
+document.querySelectorAll(".plan .room-g").forEach(function(r){
+  var key=r.dataset.room;
+  function speak(){
+    lastRoom=key;
+    document.querySelectorAll(".plan .room-g").forEach(function(x){x.classList.toggle("hot",x===r)});
+    settle(whisperEl,function(){
+      var v=V[html.getAttribute("data-att")]||V.qvox;
+      whisperRoom.textContent=key==="hold"?"hold two":key;
+      whisperLine.textContent=v.rooms[key]||"";
+    });
+  }
+  r.addEventListener("mouseenter",speak);
+  r.addEventListener("focus",speak);
+  r.addEventListener("click",speak);
+  r.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();speak();}});
+});
 
-    function formatDate(d) {
-      return new Intl.DateTimeFormat(undefined, {
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      }).format(d);
-    }
+/* ————— tins ————— */
+document.querySelectorAll(".tin-g").forEach(function(t){
+  function pick(){
+    lastTin=t.dataset.tin;
+    document.querySelectorAll(".tin-g").forEach(function(x){x.classList.toggle("hot",x===t)});
+    var v=V[html.getAttribute("data-att")]||V.qvox;
+    settle(tinWhat,function(){
+      tinWho.textContent=html.getAttribute("data-att")==="signal"?"not yet catalogued":v.name+" notices";
+      tinWhat.textContent=v.tins[t.dataset.tin]||"";
+    });
+  }
+  t.addEventListener("click",pick);
+  t.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick();}});
+});
 
-    function getTimezoneLabel() {
-      try {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
-      } catch {
-        return "Local";
-      }
-    }
+/* ————— returning reader: smaller secondary action only ————— */
+var loc=null;try{loc=JSON.parse(lsGet("vox.location")||"null")}catch(e){}
+if(loc&&loc.t&&loc.t>=1&&loc.t<=12){
+  var rl=document.getElementById("resume-line");
+  rl.hidden=false;
+  rl.innerHTML='Logged: location only. <a href="'+chURL(loc.t)+'">Resume — '+String(loc.t).padStart(2,"0")+' · '+CH[loc.t-1].t+'</a>';
+}
 
-    function buildTimeline(includeInterludes) {
-      const list = document.getElementById("releaseTimeline");
-      list.innerHTML = "";
+/* ————— header solidifies past the hero ————— */
+var hdr=document.getElementById("hdr");
 
-      // Parse start date in local time safely (noon avoids DST edge weirdness)
-      const start = new Date(START_DATE + "T12:00:00");
-      document.getElementById("calStartPretty").textContent = formatDate(start);
-      document.getElementById("calTz").textContent = getTimezoneLabel();
+/* ————— tuner ————— */
+var tuNo=document.getElementById("tu-no"),tuTitle=document.getElementById("tu-title"),
+    tuEp=document.getElementById("tu-ep"),tuPc=document.getElementById("tu-pc"),
+    tuOpen=document.getElementById("tu-open"),tuWave=document.getElementById("tu-wave"),
+    ticks=document.getElementById("ticks");
+var current=0;
+function waveFor(c){
+  var seed=0;for(var i=0;i<c.t.length;i++)seed=(seed*31+c.t.charCodeAt(i))>>>0;
+  var pts=[],steps=40;
+  for(var j=0;j<=steps;j++){
+    seed=(seed*1103515245+12345)>>>0;
+    var amp=((seed>>>16)%100)/100;
+    var y=17-(amp-.5)*(c.epi?10:26);
+    pts.push((j===0?"M":"L")+(j*(300/steps)).toFixed(1)+" "+y.toFixed(1));
+  }
+  return pts.join(" ");
+}
+function renderTuner(i,announce){
+  current=i;var c=CH[i];
+  [tuTitle,tuEp].forEach(function(el){el.classList.add("settle")});
+  setTimeout(function(){
+    tuNo.textContent="TRANSMISSION "+String(c.n).padStart(2,"0")+(c.epi?" · EPILOGUE":"");
+    tuTitle.textContent=c.t;
+    tuEp.textContent=c.ep||"—";
+    tuPc.textContent=c.p||"";
+    tuOpen.href=chURL(c.n);
+    tuWave.setAttribute("d",waveFor(c));
+    [tuTitle,tuEp].forEach(function(el){el.classList.remove("settle")});
+  },reduced?0:180);
+  ticks.querySelectorAll(".tick").forEach(function(t,j){t.setAttribute("aria-pressed",j===i?"true":"false")});
+  document.getElementById("tu-prev").disabled=(i===0);
+  document.getElementById("tu-next").disabled=(i===CH.length-1);
+  if(announce&&live)live.textContent="Tuned to transmission "+c.n+", "+c.t+".";
+}
+CH.forEach(function(c,i){
+  var b=document.createElement("button");
+  b.className="tick";b.setAttribute("role","tab");b.setAttribute("aria-pressed","false");
+  b.setAttribute("aria-label","Transmission "+c.n+": "+c.t);
+  b.innerHTML='<span class="tl">'+String(c.n).padStart(2,"0")+'</span>';
+  b.addEventListener("click",function(){renderTuner(i,true)});
+  ticks.appendChild(b);
+});
+var slotTick=document.createElement("button");
+slotTick.className="tick slot";slotTick.disabled=true;
+slotTick.setAttribute("aria-label","Book Two, transmission one — in preparation");
+slotTick.innerHTML='<span class="tl">●</span>';
+ticks.appendChild(slotTick);
+document.getElementById("tu-prev").addEventListener("click",function(){if(current>0)renderTuner(current-1,true)});
+document.getElementById("tu-next").addEventListener("click",function(){if(current<CH.length-1)renderTuner(current+1,true)});
+document.querySelector(".tuner").addEventListener("keydown",function(e){
+  if(e.key==="ArrowLeft"&&current>0){e.preventDefault();renderTuner(current-1,true);}
+  if(e.key==="ArrowRight"&&current<CH.length-1){e.preventDefault();renderTuner(current+1,true);}
+});
+renderTuner(loc&&loc.t?Math.min(loc.t,12)-1:0,false);
 
-      CHAPTERS.forEach((ch, idx) => {
-        const releaseDate = addDays(start, idx * INTERVAL_DAYS);
+var log=document.getElementById("loglist");
+CH.forEach(function(c){
+  var li=document.createElement("li");
+  li.innerHTML='<a href="'+chURL(c.n)+'"><span class="n">'+String(c.n).padStart(2,"0")+'</span>'+
+    '<span class="t">'+c.t+(c.epi?'<span class="tag">Epilogue</span>':"")+'</span>'+
+    '<span class="p">'+(c.p||"")+'</span></a>';
+  log.appendChild(li);
+});
+var slotLi=document.createElement("li");
+slotLi.innerHTML='<span class="slotrow"><span class="n">●</span><span class="t">Book Two · 01 — in preparation</span><span class="p"></span></span>';
+log.appendChild(slotLi);
 
-        // Core chapter item
-        const li = document.createElement("li");
-        li.className = "timeline-item";
-        li.innerHTML = `
-          <span class="timeline-dot" aria-hidden="true"></span>
-          <div class="timeline-card">
-            <div class="timeline-top">
-              <div class="release-date">${formatDate(releaseDate)}</div>
-              <div class="release-tag">Core chapter</div>
-            </div>
+/* ————— ambience engine ————— */
+var AC=null,master=null,chans={},running=false,timers=[];
+var MIX_DEFAULTS={drive:55,air:40,hull:30,console:20,garden:25};
+var mix={};try{mix=JSON.parse(lsGet("vox.mix")||"{}")}catch(e){mix={}}
+Object.keys(MIX_DEFAULTS).forEach(function(k){if(typeof mix[k]!=="number")mix[k]=MIX_DEFAULTS[k]});
+document.querySelectorAll(".chan input").forEach(function(sl){sl.value=mix[sl.dataset.ch]});
+function noiseBuffer(ctx,secs){
+  var b=ctx.createBuffer(1,ctx.sampleRate*secs,ctx.sampleRate);
+  var d=b.getChannelData(0);
+  for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  return b;
+}
+function chGain(name,base){
+  var g=AC.createGain();g.gain.value=(mix[name]/100)*base;g.connect(master);
+  chans[name]={gain:g,base:base};return g;
+}
+function startAmbience(){
+  AC=new (window.AudioContext||window.webkitAudioContext)();
+  master=AC.createGain();master.gain.value=.9;master.connect(AC.destination);
+  var noise=noiseBuffer(AC,3);
+  var g=chGain("drive",.16);
+  [52,55.5].forEach(function(f){
+    var o=AC.createOscillator();o.type="sine";o.frequency.value=f;
+    var og=AC.createGain();og.gain.value=.5;o.connect(og);og.connect(g);o.start();
+  });
+  var rum=AC.createBufferSource();rum.buffer=noise;rum.loop=true;
+  var rf=AC.createBiquadFilter();rf.type="lowpass";rf.frequency.value=90;
+  var rg=AC.createGain();rg.gain.value=.5;
+  rum.connect(rf);rf.connect(rg);rg.connect(g);rum.start();
+  var lfo=AC.createOscillator();lfo.frequency.value=.13;
+  var lg=AC.createGain();lg.gain.value=.18;lfo.connect(lg);lg.connect(g.gain);lfo.start();
+  var ag=chGain("air",.10);
+  var an=AC.createBufferSource();an.buffer=noise;an.loop=true;
+  var af=AC.createBiquadFilter();af.type="bandpass";af.frequency.value=420;af.Q.value=.7;
+  an.connect(af);af.connect(ag);an.start();
+  var alfo=AC.createOscillator();alfo.frequency.value=.07;
+  var alg=AC.createGain();alg.gain.value=.03;alfo.connect(alg);alg.connect(ag.gain);alfo.start();
+  var hg=chGain("hull",.5);
+  function creak(){
+    if(!running)return;
+    var s=AC.createBufferSource();s.buffer=noise;
+    var f=AC.createBiquadFilter();f.type="bandpass";
+    f.frequency.value=120+Math.random()*160;f.Q.value=8+Math.random()*8;
+    var e=AC.createGain();e.gain.value=0;
+    s.connect(f);f.connect(e);e.connect(hg);
+    var t=AC.currentTime;
+    e.gain.linearRampToValueAtTime(.5,t+.15+Math.random()*.2);
+    e.gain.exponentialRampToValueAtTime(.001,t+1.2+Math.random()*.8);
+    s.start(t);s.stop(t+2.4);
+    timers.push(setTimeout(creak,8000+Math.random()*14000));
+  }
+  timers.push(setTimeout(creak,3000));
+  var cg=chGain("console",.35);
+  function blip(){
+    if(!running)return;
+    var o=AC.createOscillator();o.type="sine";
+    o.frequency.value=[740,880,990,1180][Math.floor(Math.random()*4)];
+    var e=AC.createGain();e.gain.value=0;o.connect(e);e.connect(cg);
+    var t=AC.currentTime;
+    e.gain.linearRampToValueAtTime(.25,t+.015);
+    e.gain.exponentialRampToValueAtTime(.001,t+.28);
+    o.start(t);o.stop(t+.4);
+    timers.push(setTimeout(blip,6000+Math.random()*10000));
+  }
+  timers.push(setTimeout(blip,2200));
+  var gg=chGain("garden",.5);
+  function drip(){
+    if(!running)return;
+    var o=AC.createOscillator();o.type="sine";
+    var t=AC.currentTime;
+    o.frequency.setValueAtTime(1600+Math.random()*600,t);
+    o.frequency.exponentialRampToValueAtTime(320,t+.09);
+    var e=AC.createGain();e.gain.value=0;o.connect(e);e.connect(gg);
+    e.gain.linearRampToValueAtTime(.5,t+.006);
+    e.gain.exponentialRampToValueAtTime(.001,t+.16);
+    o.start(t);o.stop(t+.25);
+    timers.push(setTimeout(drip,1400+Math.random()*3800));
+  }
+  timers.push(setTimeout(drip,1200));
+}
+function stopAmbience(){
+  timers.forEach(clearTimeout);timers=[];
+  if(AC){AC.close();AC=null;chans={};master=null;}
+}
+var spin=document.getElementById("spinup");
+spin.addEventListener("click",function(){
+  running=!running;
+  spin.setAttribute("aria-pressed",running?"true":"false");
+  document.getElementById("spinup-label").textContent=running?"Spin down":"Spin up";
+  if(running){startAmbience();if(live)live.textContent="Ambient systems running.";}
+  else{stopAmbience();if(live)live.textContent="Ambient systems idle.";}
+});
+document.querySelectorAll(".chan input").forEach(function(sl){
+  sl.addEventListener("input",function(){
+    mix[sl.dataset.ch]=parseInt(sl.value,10);
+    lsSet("vox.mix",JSON.stringify(mix));
+    var c=chans[sl.dataset.ch];
+    if(c&&AC)c.gain.gain.setTargetAtTime((mix[sl.dataset.ch]/100)*c.base,AC.currentTime,.08);
+  });
+});
 
-            <div class="chapter-line">
-              <div class="ch-num">${ch.num}</div>
-              <div>
-                <div class="ch-title">${ch.a} <span style="opacity:.65"> // </span>${ch.b}</div>
-                <div class="ch-subtitle">Book One</div>
-              </div>
-            </div>
-          </div>
-        `;
-        list.appendChild(li);
+/* ————— scroll: guide light, header, reveals ————— */
+var guideFill=document.getElementById("guide-fill");
+var ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var doc=document.documentElement;
+    var max=doc.scrollHeight-window.innerHeight;
+    guideFill.style.height=(max>0?(window.scrollY/max)*100:0)+"%";
+    hdr.classList.toggle("solid",window.scrollY>window.innerHeight*.7);
+  });
+}
+window.addEventListener("scroll",onScroll,{passive:true});
+onScroll();
+if("IntersectionObserver" in window&&!reduced){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});
+  },{threshold:.15});
+  document.querySelectorAll(".rev").forEach(function(el){io.observe(el)});
+}else{
+  document.querySelectorAll(".rev").forEach(function(el){el.classList.add("in")});
+}
 
-        // Optional interlude window: halfway between core drops (~7 days after)
-        if (includeInterludes && idx < CHAPTERS.length - 1) {
-          const interludeDate = addDays(releaseDate, Math.floor(INTERVAL_DAYS / 2));
-          const inter = document.createElement("li");
-          inter.className = "timeline-item";
-          inter.innerHTML = `
-            <span class="timeline-dot" aria-hidden="true"></span>
-            <div class="timeline-card interlude">
-              <div class="timeline-top">
-                <div class="release-date">${formatDate(interludeDate)}</div>
-                <div class="release-tag">Between-drop</div>
-              </div>
-              <div class="chapter-line">
-                <div class="ch-num">•</div>
-                <div>
-                  <div class="ch-title">Interstitial release</div>
-                  <div class="ch-subtitle">Optional extras: artifacts, cast notes, short pieces—no plot replacement.</div>
-                </div>
-              </div>
-            </div>
-          `;
-          list.appendChild(inter);
-        }
-      });
-    }
+/* unregistered signal: rare flicker on peripheral copy */
+setInterval(function(){
+  if(html.getAttribute("data-att")!=="signal"||reduced)return;
+  var els=document.querySelectorAll(".vox-copy, .notice-frag, .foot-sig");
+  var el=els[Math.floor(Math.random()*els.length)];
+  el.classList.add("flickable","flick");
+  setTimeout(function(){el.classList.remove("flick")},400);
+},16000);
 
-    // Initialize calendar
-    const interludeToggle = document.getElementById("showInterludes");
-    interludeToggle.checked = INCLUDE_INTERLUDES_DEFAULT;
-    buildTimeline(interludeToggle.checked);
-    interludeToggle.addEventListener("change", () => buildTimeline(interludeToggle.checked));
-  </script>
+/* email stub — AUTHOR: wire to your provider */
+var form=document.getElementById("range-form");
+if(form){
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var em=document.getElementById("rmail");
+    if(!em.value||!em.checkValidity()){em.focus();if(live)live.textContent="Enter a valid email address.";return;}
+    form.hidden=true;
+    document.getElementById("range-ok").hidden=false;
+    if(live)live.textContent=document.getElementById("range-ok").textContent;
+  });
+}
+
+var saved=lsGet("vox.attention");
+setAttention(saved&&V[saved]?saved:"qvox",false);
+
+})();
+</script>
 </body>
 </html>
