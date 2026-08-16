@@ -55,18 +55,10 @@ export function initAtmosphere() {
   rig.key.shadow.camera.top = 6; rig.key.shadow.camera.bottom = -6;
   scene.add(rig.key);
 
-  // ceiling channel fills (kept off the forward wall to avoid glare on the glass)
-  for (const z of [-0.9, 0.4, 1.6]) {
-    const p = new THREE.PointLight(0xdfe8f0, 8.5, 7, 1.9);
-    p.position.set(0, 2.05, z);
-    scene.add(p);
-    rig.fills.push(p);
-  }
-  // console glow
-  const cg = new THREE.PointLight(0x2d7c96, 6, 4, 1.6);
-  cg.position.set(0, 1.1, -1.4);
-  scene.add(cg);
-  rig.fills.push(cg);
+  // ceiling channel fills follow the rooms (rebuilt whenever floors change)
+  rebuildRoomLights();
+  bus.on('objects:changed', rebuildRoomLights);
+  bus.on('room:rebuilt', rebuildRoomLights);
 
   // emergency strips (off unless emergency mode)
   for (const x of [-1.8, 1.8]) {
@@ -84,18 +76,58 @@ export function initAtmosphere() {
   });
 }
 
+// One point light per ~2.2 m of each room's floor, plus the console glow.
+// Intensity is (base × mode factor) so lighting modes keep working.
+let rebuildQueued = false;
+export function rebuildRoomLights() {
+  if (rebuildQueued) return;
+  rebuildQueued = true;
+  setTimeout(() => {
+    rebuildQueued = false;
+    const scene = editor.scene;
+    rig.fills.forEach(f => scene.remove(f));
+    rig.fills = [];
+    const M = MODE_TABLE[rig.mode] || MODE_TABLE.normal;
+    for (const f of state.project.objects.filter(o => o.type === 'floor')) {
+      const fw = f.params.width ?? 4, fd = f.params.depth ?? 4;
+      const long = Math.max(fw, fd), along = fd >= fw ? 'z' : 'x';
+      const n = Math.max(1, Math.round(long / 2.2));
+      const base = Math.min(8.5, 3.0 + fw * fd * 0.32);   // small rooms, softer light
+      for (let i = 0; i < n; i++) {
+        const t = (i + 0.5) / n - 0.5;
+        const p = new THREE.PointLight(0xdfe8f0, base * (M.fill / 8.5), Math.max(4, long * 0.9), 1.9);
+        p.position.set(
+          f.pos[0] + (along === 'x' ? t * long * 0.8 : 0),
+          2.0,
+          f.pos[2] + (along === 'z' ? t * long * 0.8 : 0));
+        p.userData.baseIntensity = base;
+        scene.add(p);
+        rig.fills.push(p);
+      }
+    }
+    // console glow on the bridge
+    const cg = new THREE.PointLight(0x2d7c96, 6 * (M.fill / 8.5), 4, 1.6);
+    cg.position.set(0, 1.1, -1.4);
+    cg.userData.baseIntensity = 6;
+    scene.add(cg);
+    rig.fills.push(cg);
+  }, 60);
+}
+
+const MODE_TABLE = {
+  normal:    { hemi: 0.65, key: 0.7, fill: 8.5, emer: 0, exp: 1.0, bg: 0x04060a },
+  dim:       { hemi: 0.26, key: 0.18, fill: 3.2, emer: 0, exp: 0.85, bg: 0x030408 },
+  emergency: { hemi: 0.06, key: 0.0, fill: 0.6, emer: 14, exp: 0.8, bg: 0x030304 },
+  powerless: { hemi: 0.035, key: 0.0, fill: 0.0, emer: 0, exp: 0.7, bg: 0x020204 },
+};
+
 export function setLightingMode(mode) {
   rig.mode = mode;
   state.project.settings.lightingMode = mode;
-  const M = {
-    normal:    { hemi: 0.65, key: 0.7, fill: 8.5, emer: 0, exp: 1.0, bg: 0x04060a },
-    dim:       { hemi: 0.26, key: 0.18, fill: 3.2, emer: 0, exp: 0.85, bg: 0x030408 },
-    emergency: { hemi: 0.06, key: 0.0, fill: 0.6, emer: 14, exp: 0.8, bg: 0x030304 },
-    powerless: { hemi: 0.035, key: 0.0, fill: 0.0, emer: 0, exp: 0.7, bg: 0x020204 },
-  }[mode] || {};
+  const M = MODE_TABLE[mode] || MODE_TABLE.normal;
   if (rig.hemi) rig.hemi.intensity = M.hemi;
   if (rig.key) rig.key.intensity = M.key;
-  rig.fills.forEach(f => f.intensity = M.fill);
+  rig.fills.forEach(f => f.intensity = (f.userData.baseIntensity ?? 8.5) * (M.fill / 8.5));
   rig.emergency.forEach(e => e.intensity = M.emer);
   editor.renderer.toneMappingExposure = M.exp;
   editor.scene.background = new THREE.Color(M.bg);

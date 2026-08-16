@@ -165,8 +165,9 @@ function onResize() {
   editor.renderer.setSize(w, h, false);
   editor.perspCam.aspect = w / Math.max(1, h);
   editor.perspCam.updateProjectionMatrix();
-  const oh = editor.orthoCam.top - editor.orthoCam.bottom;
-  const ow = oh * (w / Math.max(1, h));
+  const half = editor.orthoHalf || 4.5;
+  editor.orthoCam.top = half; editor.orthoCam.bottom = -half;
+  const ow = half * 2 * (w / Math.max(1, h));
   editor.orthoCam.left = -ow / 2; editor.orthoCam.right = ow / 2;
   editor.orthoCam.updateProjectionMatrix();
 }
@@ -244,6 +245,21 @@ function drawPaths() {
   }
 }
 
+// Bounds of all floors — the ship footprint, for framing views.
+export function modelBounds() {
+  const floors = state.project.objects.filter(o => o.type === 'floor');
+  if (!floors.length) return { cx: 0, cz: 0, w: 8, d: 8 };
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  for (const f of floors) {
+    const fw = f.params.width ?? 6, fd = f.params.depth ?? 5;
+    const rot = Math.abs(Math.sin(f.rotY || 0)) > 0.5;
+    const hw = (rot ? fd : fw) / 2, hd = (rot ? fw : fd) / 2;
+    minX = Math.min(minX, f.pos[0] - hw); maxX = Math.max(maxX, f.pos[0] + hw);
+    minZ = Math.min(minZ, f.pos[2] - hd); maxZ = Math.max(maxZ, f.pos[2] + hd);
+  }
+  return { cx: (minX + maxX) / 2, cz: (minZ + maxZ) / 2, w: maxX - minX, d: maxZ - minZ, maxX, maxZ };
+}
+
 // ================= views =================
 export function setView(name) {
   editor.view = name;
@@ -253,9 +269,11 @@ export function setView(name) {
   const hudMode = document.getElementById('hud-mode');
   editor.orbit.enabled = false;
 
+  const mb = modelBounds();
   if (name === 'orbit') {
     editor.activeCam = editor.perspCam;
     editor.orbit.object = editor.perspCam;
+    editor.orbit.target.set(mb.cx, 1, mb.cz);
     editor.orbit.enabled = true;
     editor.orbit.enableRotate = true;
     editor.orbit.minPolarAngle = 0; editor.orbit.maxPolarAngle = Math.PI * 0.495;
@@ -265,31 +283,39 @@ export function setView(name) {
     hudMode.textContent = '';
   } else if (name === 'over') {
     editor.activeCam = editor.perspCam;
-    editor.perspCam.position.set(0, 13, 0.02);
+    const h = Math.max(13, Math.max(mb.w, mb.d) * 1.25);
+    editor.perspCam.position.set(mb.cx, h, mb.cz + 0.02);
     editor.orbit.object = editor.perspCam;
-    editor.orbit.target.set(0, 0, 0);
+    editor.orbit.target.set(mb.cx, 0, mb.cz);
     editor.orbit.enabled = true;
     editor.orbit.enableRotate = true;
     editor.orbit.minPolarAngle = 0; editor.orbit.maxPolarAngle = 0.6;
     hudMode.textContent = 'Overhead — wheel zoom · right-drag pan';
   } else if (name === 'plan') {
     editor.activeCam = editor.orthoCam;
-    editor.orthoCam.position.set(0, 30, 0);
+    editor.orthoHalf = Math.max(mb.w, mb.d) / 2 + 1.2;
+    editor.orthoCam.position.set(mb.cx, 30, mb.cz);
     editor.orthoCam.up.set(0, 0, -1);
-    editor.orthoCam.lookAt(0, 0, 0);
+    editor.orthoCam.lookAt(mb.cx, 0, mb.cz);
     editor.orbit.object = editor.orthoCam;
+    editor.orbit.target.set(mb.cx, 0, mb.cz);
     editor.orbit.enabled = true;
     editor.orbit.enableRotate = false;
+    onResize();
     hudMode.textContent = 'Floor plan (orthographic) — wheel zoom · drag pan';
   } else if (name === 'elev') {
+    // side elevation: the ship in profile from starboard
     editor.activeCam = editor.orthoCam;
+    editor.orthoHalf = Math.max(mb.d / 2 + 1.2, 3.5);
     editor.orthoCam.up.set(0, 1, 0);
-    editor.orthoCam.position.set(0, 1.4, 30);
-    editor.orthoCam.lookAt(0, 1.4, 0);
+    editor.orthoCam.position.set(mb.maxX + 30, 1.2, mb.cz);
+    editor.orthoCam.lookAt(mb.cx, 1.2, mb.cz);
     editor.orbit.object = editor.orthoCam;
+    editor.orbit.target.set(mb.cx, 1.2, mb.cz);
     editor.orbit.enabled = true;
     editor.orbit.enableRotate = false;
-    hudMode.textContent = 'Elevation (orthographic) — wheel zoom · drag pan';
+    onResize();
+    hudMode.textContent = 'Elevation (orthographic, from starboard) — wheel zoom · drag pan';
   }
   editor.gizmo.camera = editor.activeCam;
   document.getElementById('hud-fp').classList.toggle('hidden', name !== 'fp');
@@ -329,11 +355,12 @@ function fpUpdate(dt) {
   if (!f.active) return;
   const spec = CHARACTERS[f.character];
   const speed = (f.keys['shift'] ? 2.6 : 1.4) * (spec.height / 1.7);
+  // forward = the look direction (sin yaw, 0, cos yaw); right = look × up
   const dir = new THREE.Vector3();
-  if (f.keys['w']) dir.z -= 1;
-  if (f.keys['s']) dir.z += 1;
-  if (f.keys['a']) dir.x -= 1;
-  if (f.keys['d']) dir.x += 1;
+  if (f.keys['w']) dir.z += 1;
+  if (f.keys['s']) dir.z -= 1;
+  if (f.keys['a']) dir.x += 1;
+  if (f.keys['d']) dir.x -= 1;
   dir.normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), f.yaw);
   const step = dir.multiplyScalar(speed * dt);
   const radius = Math.max(0.16, 0.22 * (spec.height / 1.7));

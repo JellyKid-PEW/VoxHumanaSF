@@ -5,7 +5,7 @@ import { initEditor, editor, setView, setTool, enterFP, setCutaway, screenshot, 
 import { initAtmosphere, setLightingMode, toggleSound } from './atmosphere.js';
 import { initPersistence, loadAutosave, autosave, exportProject, importProjectFile } from './persist.js';
 import { generateLayout } from './layout.js';
-import { SEED_CONSTRAINTS, buildSeedDocuments, SEED_SCENE } from '../data/seed.js';
+import { SEED_CONSTRAINTS, buildSeedDocuments, SEED_SCENES } from '../data/seed.js';
 import { initUI, renderTab, toggleNavOverlay, renderInspector } from './ui.js';
 import { conflictBadgeRefresh } from './constraints.js';
 
@@ -36,11 +36,49 @@ function seedProject() {
   }
   // layout from constraints
   generateLayout({ fresh: true });
-  // default scene
-  const scene = state.addScene(JSON.parse(JSON.stringify(SEED_SCENE)));
-  p.settings.activeSceneId = scene.id;
+  // default scenes
+  let first = null;
+  for (const s of SEED_SCENES) {
+    const scene = state.addScene(JSON.parse(JSON.stringify(s)));
+    if (!first) first = scene;
+  }
+  p.settings.activeSceneId = first?.id || null;
   state.dirty = true;
   return p;
+}
+
+// Bring an older autosaved project up to date: refresh the bundled excerpt
+// documents, add seed constraints and scenes that appeared in newer versions,
+// and generate any rooms the saved layout doesn't have yet. User edits,
+// rulings, and deliberate deletions are preserved.
+function migrateSeed() {
+  const p = state.project;
+  p.deletedLayoutKeys = p.deletedLayoutKeys || [];
+  const docByKey = {};
+  for (const d of buildSeedDocuments()) {
+    let rec = p.documents.find(x => x.title === d.title);
+    if (rec) rec.text = d.text;
+    else rec = state.addDocument(d.title, d.source, d.text);
+    docByKey[d.key] = rec;
+  }
+  let addedCons = 0;
+  for (const c of SEED_CONSTRAINTS) {
+    if (p.constraints.some(x => x.seedKey === c.key)) continue;
+    const arc = c.source.startsWith('Next') ? 'Next' : c.source.startsWith('Presence') ? 'Presence' : 'VH1_B3';
+    state.addConstraint({
+      seedKey: c.key, docId: docByKey[arc]?.id, source: c.source,
+      quote: c.quote, category: c.category, subject: c.subject,
+      interpretation: c.interpretation, evidence: c.evidence, claims: c.claims || [],
+    });
+    addedCons++;
+  }
+  const addedObjs = generateLayout({});
+  for (const s of SEED_SCENES) {
+    if (!p.scenes.some(x => x.name === s.name)) state.addScene(JSON.parse(JSON.stringify(s)));
+  }
+  if (addedCons || addedObjs) {
+    status(`Project updated: ${addedCons} new constraints, ${addedObjs} new objects (corridor & galley) — check the Conflicts tab.`, 9000);
+  }
 }
 
 async function boot() {
@@ -51,6 +89,7 @@ async function boot() {
   const saved = loadAutosave();
   if (saved) {
     state.replaceProject(saved);
+    migrateSeed();
     status('Restored autosaved project');
   } else {
     seedProject();

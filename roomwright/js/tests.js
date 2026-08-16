@@ -8,16 +8,19 @@ import { fmt } from './util.js';
 
 // ---------- navigation grid ----------
 export function computeNavGrid(radius = 0.24, extraObstacles = []) {
-  const floorRec = state.project.objects.find(o => o.type === 'floor');
-  if (!floorRec) return null;
-  // true walkable bounds from the floor's own parameters (its meshes are
-  // non-collidable, so an AABB query would come back empty)
-  const fw = floorRec.params.width ?? 6, fd = floorRec.params.depth ?? 5;
-  const rot = Math.abs(Math.sin(floorRec.rotY || 0)) > 0.5;
-  const hw = (rot ? fd : fw) / 2, hd = (rot ? fw : fd) / 2;
+  // walkable ground = the union of all floor rects (their meshes are
+  // non-collidable, so bounds come from the floors' own parameters)
+  const floorRects = state.project.objects.filter(o => o.type === 'floor').map(f => {
+    const fw = f.params.width ?? 6, fd = f.params.depth ?? 5;
+    const rot = Math.abs(Math.sin(f.rotY || 0)) > 0.5;
+    const hw = (rot ? fd : fw) / 2, hd = (rot ? fw : fd) / 2;
+    return { minX: f.pos[0] - hw, maxX: f.pos[0] + hw, minZ: f.pos[2] - hd, maxZ: f.pos[2] + hd };
+  });
+  if (!floorRects.length) return null;
   const fb = new THREE.Box3(
-    new THREE.Vector3(floorRec.pos[0] - hw, 0, floorRec.pos[2] - hd),
-    new THREE.Vector3(floorRec.pos[0] + hw, 0, floorRec.pos[2] + hd));
+    new THREE.Vector3(Math.min(...floorRects.map(r => r.minX)), 0, Math.min(...floorRects.map(r => r.minZ))),
+    new THREE.Vector3(Math.max(...floorRects.map(r => r.maxX)), 0, Math.max(...floorRects.map(r => r.maxZ))));
+  const onFloor = (x, z) => floorRects.some(r => x >= r.minX && x <= r.maxX && z >= r.minZ && z <= r.maxZ);
   const cell = 0.1;
   const ox = fb.min.x + cell / 2, oz = fb.min.z + cell / 2;
   const nx = Math.max(1, Math.floor((fb.max.x - fb.min.x) / cell));
@@ -37,6 +40,7 @@ export function computeNavGrid(radius = 0.24, extraObstacles = []) {
   for (let i = 0; i < nx; i++) {
     for (let j = 0; j < nz; j++) {
       const x = ox + i * cell, z = oz + j * cell;
+      if (!onFloor(x, z)) { walkable[i * nz + j] = 0; continue; }
       let blocked = false;
       for (const bb of blockers) {
         const cx = Math.max(bb.min.x, Math.min(x, bb.max.x));
@@ -60,7 +64,7 @@ export function findPath(grid, from, to, snapRadius = 4) {
     Math.round((p.x - grid.ox) / grid.cell),
     Math.round((p.z - grid.oz) / grid.cell),
   ];
-  // snap endpoints to nearest walkable cell within snapRadius cells
+  // snap the START to the nearest walkable cell
   const snap = ([ci, cj]) => {
     if (ci >= 0 && cj >= 0 && ci < grid.nx && cj < grid.nz && grid.walkable[ci * grid.nz + cj]) return [ci, cj];
     for (let r = 1; r <= snapRadius; r++) {
@@ -71,14 +75,16 @@ export function findPath(grid, from, to, snapRadius = 4) {
     }
     return null;
   };
-  const a = snap(toCell(from)), b = snap(toCell(to));
-  if (!a || !b) return null;
+  const a = snap(toCell(from));
+  if (!a) return null;
+  // flood-fill from the start, then accept the nearest REACHED cell within
+  // snapRadius of the target — a merely-walkable cell could sit in an
+  // isolated pocket the start can't actually reach.
   const prev = new Int32Array(grid.nx * grid.nz).fill(-1);
-  const startIdx = a[0] * grid.nz + a[1], endIdx = b[0] * grid.nz + b[1];
+  const startIdx = a[0] * grid.nz + a[1];
   const q = [startIdx];
   prev[startIdx] = startIdx;
-  let found = startIdx === endIdx;
-  while (q.length && !found) {
+  while (q.length) {
     const cur = q.shift();
     const ci = Math.floor(cur / grid.nz), cj = cur % grid.nz;
     for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
@@ -87,11 +93,22 @@ export function findPath(grid, from, to, snapRadius = 4) {
       const idx = i * grid.nz + j;
       if (!grid.walkable[idx] || prev[idx] !== -1) continue;
       prev[idx] = cur;
-      if (idx === endIdx) { found = true; break; }
       q.push(idx);
     }
   }
-  if (!found) return null;
+  const [ti, tj] = toCell(to);
+  let endIdx = -1;
+  outer:
+  for (let r = 0; r <= snapRadius; r++) {
+    for (let di = -r; di <= r; di++) for (let dj = -r; dj <= r; dj++) {
+      if (Math.max(Math.abs(di), Math.abs(dj)) !== r) continue;
+      const i = ti + di, j = tj + dj;
+      if (i < 0 || j < 0 || i >= grid.nx || j >= grid.nz) continue;
+      const idx = i * grid.nz + j;
+      if (prev[idx] !== -1) { endIdx = idx; break outer; }
+    }
+  }
+  if (endIdx === -1) return null;
   const path = [];
   let cur = endIdx;
   while (cur !== startIdx) {
@@ -427,6 +444,65 @@ export const HABIT_TESTS = [
       }
       if (!problems.length) return { status: 'pass', details: 'No illegal overlaps; entrances and control faces are clear.' };
       return { status: 'fail', details: [...new Set(problems)].join('\n') };
+    },
+  },
+  {
+    id: 'ship-route',
+    name: 'Bridge and galley connect through the corridor',
+    basis: ['corridor-route', 'galley-sounds', 'galley-aft'],
+    run() {
+      const bridge = state.project.objects.find(o => o.layoutKey === 'floor');
+      const galley = state.project.objects.find(o => o.layoutKey === 'galFloor');
+      if (!galley) return { status: 'warn', details: 'No galley in the model yet.' };
+      const grid = computeNavGrid(0.24);
+      const path = findPath(grid,
+        new THREE.Vector3(bridge?.pos[0] ?? 0, 0, bridge?.pos[2] ?? 0),
+        new THREE.Vector3(galley.pos[0], 0, galley.pos[2]), 8);
+      if (!path) {
+        const slim = findPath(computeNavGrid(0.19),
+          new THREE.Vector3(bridge?.pos[0] ?? 0, 0, 0), new THREE.Vector3(galley.pos[0], 0, galley.pos[2]), 8);
+        if (slim) return { status: 'warn', details: 'Only a slim person can squeeze the whole route — something pinches the corridor.' };
+        return { status: 'fail', details: 'No continuous walkable route from the bridge to the galley.' };
+      }
+      const len = path.length * 0.1;
+      return { status: 'pass', details: `Continuous route bridge → corridor → galley, about ${fmt(len, 1)} m walking — close enough that galley sounds carry to the cradle (Presence-08).` };
+    },
+  },
+  {
+    id: 'galley-crowd',
+    name: 'Galley is tight but usable (three people barely fit)',
+    basis: ['galley-tiny', 'galley-island', 'galley-bench', 'galley-table'],
+    run() {
+      const galley = state.project.objects.find(o => o.layoutKey === 'galFloor');
+      if (!galley) return { status: 'warn', details: 'No galley in the model yet.' };
+      const hatch = state.project.objects.find(o => o.layoutKey === 'galHatch');
+      const grid = computeNavGrid(0.22);
+      const inside = new THREE.Vector3(hatch ? hatch.pos[0] : galley.pos[0], 0, (hatch ? hatch.pos[2] : galley.pos[2]) + 0.5);
+      const problems = [];
+      for (const key of ['galCounter', 'galTable', 'galBench', 'galCabinet']) {
+        const t = state.project.objects.find(o => o.layoutKey === key);
+        if (!t) continue;
+        // within a long step (1 m) of the piece counts — bench seats are
+        // entered by sliding in sideways, which the grid cannot model
+        if (!findPath(grid, inside, new THREE.Vector3(t.pos[0], 0, t.pos[2]), 10)) {
+          problems.push(`${t.name} is unreachable from the hatch`);
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      // free-floor area inside the galley rect — the prose wants it TIGHT
+      const gw = galley.params.width, gd = galley.params.depth;
+      let free = 0;
+      for (let i = 0; i < grid.nx; i++) {
+        for (let j = 0; j < grid.nz; j++) {
+          if (!grid.walkable[i * grid.nz + j]) continue;
+          const x = grid.ox + i * grid.cell, z = grid.oz + j * grid.cell;
+          if (Math.abs(x - galley.pos[0]) <= gw / 2 && Math.abs(z - galley.pos[2]) <= gd / 2) free++;
+        }
+      }
+      const area = free * 0.01;
+      if (area < 0.9) return { status: 'fail', details: `Only ${fmt(area, 2)} m² of clear floor — even two people cannot work here.` };
+      if (area <= 4.2) return { status: 'pass', details: `${fmt(area, 1)} m² of clear floor: everything reachable, and three bodies genuinely crowd it — "The three of them didn’t fit, not quite."` };
+      return { status: 'warn', details: `${fmt(area, 1)} m² of clear floor — roomier than the prose suggests. Presence-06 calls the galley tiny; consider the smaller size in the Conflicts tab.` };
     },
   },
 ];

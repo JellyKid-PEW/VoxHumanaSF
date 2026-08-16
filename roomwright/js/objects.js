@@ -342,6 +342,68 @@ function buildBench(p) {
   return g;
 }
 
+// Galley counter: worktop with cabinet base; optional sink recess + status light.
+function buildCounter(p) {
+  const g = new THREE.Group();
+  const baseH = p.height - 0.05;
+  const base = box(p.width, baseH, p.depth, MATS.panel);
+  base.position.y = baseH / 2;
+  g.add(base);
+  const top = box(p.width + 0.04, 0.05, p.depth + 0.05, MATS.hullDark);
+  top.position.y = p.height - 0.025;
+  g.add(top);
+  // counter lip
+  const lip = box(p.width + 0.04, 0.03, 0.03, MATS.trim, false);
+  lip.position.set(0, p.height - 0.015, p.depth / 2 + 0.04);
+  g.add(lip);
+  // door seams on the cabinet face
+  const doors = Math.max(1, Math.round(p.width / 0.5));
+  for (let i = 1; i < doors; i++) {
+    const seam = box(0.01, baseH * 0.82, 0.012, MATS.hullDark, false);
+    seam.position.set(-p.width / 2 + i * (p.width / doors), baseH / 2, p.depth / 2 + 0.006);
+    g.add(seam);
+  }
+  if (p.sink) {
+    const basin = box(0.42, 0.02, 0.34, MATS.hullDark, false);
+    basin.position.set(p.width / 2 - 0.35, p.height + 0.002, 0);
+    g.add(basin);
+    const tap = cyl(0.015, 0.015, 0.16, MATS.rail, 8, false);
+    tap.position.set(p.width / 2 - 0.35, p.height + 0.08, -p.depth / 2 + 0.1);
+    g.add(tap);
+    // blinking status light by the sink
+    const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.014, 8, 6),
+      new THREE.MeshStandardMaterial({ color: 0x142014, emissive: 0x2fae62, emissiveIntensity: 1.4 }));
+    lamp.position.set(p.width / 2 - 0.12, p.height + 0.02, -p.depth / 2 + 0.06);
+    lamp.userData.collidable = false;
+    g.add(lamp);
+  }
+  const reach = new THREE.Object3D();
+  reach.name = 'reachPoint';
+  reach.position.set(0, p.height + 0.05, p.depth / 2 + 0.15);
+  g.add(reach);
+  return g;
+}
+
+// Wall shelf with a row of battered tins.
+function buildShelf(p) {
+  const g = new THREE.Group();
+  const board = box(p.width, 0.035, p.depth, MATS.panel);
+  board.position.y = p.mountHeight;
+  g.add(board);
+  for (const s of [-1, 1]) {
+    const bracket = box(0.03, 0.12, p.depth * 0.8, MATS.hullDark, false);
+    bracket.position.set(s * (p.width / 2 - 0.06), p.mountHeight - 0.075, 0);
+    g.add(bracket);
+  }
+  const n = p.tins || 0;
+  for (let i = 0; i < n; i++) {
+    const tin = cyl(0.05, 0.05, 0.11, MATS.warn, 12, false);
+    tin.position.set(-p.width / 2 + (i + 0.7) * (p.width / (n + 0.4)), p.mountHeight + 0.073, 0);
+    g.add(tin);
+  }
+  return g;
+}
+
 function buildCrate(p) {
   const g = new THREE.Group();
   const c = box(p.width, p.height, p.depth, MATS.warn);
@@ -501,6 +563,27 @@ export const OBJECT_TYPES = {
       { key: 'width', label: 'Width (m)', min: 0.3, max: 3, step: 0.05 },
       { key: 'depth', label: 'Depth (m)', min: 0.3, max: 2, step: 0.05 },
       { key: 'height', label: 'Height (m)', min: 0.4, max: 1.2, step: 0.02 },
+    ],
+  },
+  counter: {
+    label: 'Counter',
+    build: buildCounter,
+    defaults: { width: 1.6, depth: 0.55, height: 0.9, sink: true },
+    schema: [
+      { key: 'width', label: 'Width (m)', min: 0.5, max: 4, step: 0.05 },
+      { key: 'depth', label: 'Depth (m)', min: 0.3, max: 1, step: 0.05 },
+      { key: 'height', label: 'Height (m)', min: 0.6, max: 1.2, step: 0.02 },
+      { key: 'sink', label: 'Sink', options: [true, false] },
+    ],
+  },
+  shelf: {
+    label: 'Wall shelf',
+    build: buildShelf,
+    defaults: { width: 1.0, depth: 0.24, mountHeight: 1.3, tins: 3 },
+    schema: [
+      { key: 'width', label: 'Width (m)', min: 0.3, max: 2.5, step: 0.05 },
+      { key: 'mountHeight', label: 'Height (m)', min: 0.5, max: 2, step: 0.05 },
+      { key: 'tins', label: 'Tins', min: 0, max: 8, step: 1 },
     ],
   },
   bench: {

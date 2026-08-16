@@ -657,16 +657,23 @@ function renderObjects() {
     addRow.appendChild(b);
   }
   const list = root.querySelector('#obj-list');
-  for (const o of state.project.objects) {
-    const card = el(`<div class="card clickable ${state.selection === o.id ? 'selected' : ''}">
-      <h4>${esc(o.name)} ${o.locked ? '🔒' : ''}</h4>
-      <div class="row">
-        <span class="pill ${esc(o.evidence)}">${esc(o.evidence)}</span>
-        <span class="pill category">${esc(o.type)}</span>
-      </div>
-    </div>`);
-    card.addEventListener('click', () => state.select(o.id));
-    list.appendChild(card);
+  const ROOM_LABEL = { bridge: 'Bridge', corridor: 'Corridor', galley: 'Galley', other: 'Custom' };
+  const groups = { bridge: [], corridor: [], galley: [], other: [] };
+  for (const o of state.project.objects) (groups[o.room] || groups.other).push(o);
+  for (const [room, objs] of Object.entries(groups)) {
+    if (!objs.length) continue;
+    list.appendChild(el(`<div class="section-head"><span>${esc(ROOM_LABEL[room])} (${objs.length})</span></div>`));
+    for (const o of objs) {
+      const card = el(`<div class="card clickable ${state.selection === o.id ? 'selected' : ''}">
+        <h4>${esc(o.name)} ${o.locked ? '🔒' : ''}</h4>
+        <div class="row">
+          <span class="pill ${esc(o.evidence)}">${esc(o.evidence)}</span>
+          <span class="pill category">${esc(o.type)}</span>
+        </div>
+      </div>`);
+      card.addEventListener('click', () => state.select(o.id));
+      list.appendChild(card);
+    }
   }
 }
 
@@ -730,6 +737,7 @@ export function renderInspector() {
   body.appendChild(el(`<div class="row" style="margin-bottom:6px;">
     <span class="pill ${esc(o.evidence)}">${esc(EV_LABEL[o.evidence] || o.evidence)}</span>
     <span class="pill category">${esc(def?.label || o.type)}</span>
+    ${o.room ? `<span class="pill category">${esc(o.room)}</span>` : ''}
   </div>`));
 
   if (o.note) body.appendChild(el(`<p style="font-size:12px;color:var(--muted);margin:6px 0;">${esc(o.note)}</p>`));

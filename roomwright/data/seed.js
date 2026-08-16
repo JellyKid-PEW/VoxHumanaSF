@@ -488,19 +488,217 @@ export const SEED_CONSTRAINTS = [
     interpretation: 'The galley (where the spoons stand) lies aft of the bridge — the bridge is the forward compartment.',
     evidence: 'inference', claims: [],
   },
+
+  // ======== corridor (bridge → galley) ========
+  {
+    key: 'corridor-route', source: 'VH1_B3_05',
+    quote: 'Halfway to the galley, she passed the turn toward the storage spine.',
+    category: 'adjacency', subject: 'corridor topology',
+    interpretation: 'One corridor runs from the bridge to the galley, with a branch turn to the storage spine roughly midway.',
+    evidence: 'explicit',
+    claims: [
+      { kind: 'presence', target: 'corridor' },
+      { kind: 'presence', target: 'spineTurn' },
+      { kind: 'relation', a: 'galley', b: 'corridor', rel: 'adjacent' },
+    ],
+  },
+  {
+    key: 'corridor-narrow', source: 'Presence-08',
+    quote: 'Quenby didn’t slow. The corridor pressed narrow, hum riding the bones of the ship.',
+    category: 'dimension', subject: 'corridor width',
+    interpretation: 'Corridors between compartments are narrow — little more than one body wide.',
+    evidence: 'explicit',
+    claims: [{ kind: 'dimension', target: 'corridor.width', max: 1.4 }],
+  },
+  {
+    key: 'corridor-widened', source: 'VH1_B3_04',
+    quote: 'The corridor seemed longer with a destination attached to it. She passed the widened',
+    category: 'dimension', subject: 'widened wall section',
+    interpretation: 'A widened stretch of the corridor wall (with Quenby’s pencil marks) lies between the bridge and the storage spine.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'spine-hatch', source: 'VH1_B3_04',
+    quote: 'Starboard pocket three sat two turns down, behind a narrow manual hatch with a',
+    category: 'door', subject: 'storage spine hatch',
+    interpretation: 'The storage spine is reached through narrow MANUAL hatches with recessed grips — pocket three lies two turns down.',
+    evidence: 'explicit',
+    claims: [{ kind: 'property', target: 'spineHatch', key: 'operation', value: 'manual (recessed grip)' }],
+  },
+  {
+    key: 'corridor-smell', source: 'Presence-06',
+    quote: 'The corridor smelled of heat, adhesive, copper.',
+    category: 'adjacency', subject: 'corridor environment',
+    interpretation: 'A corridor connects galley and bridge; air carries between compartments.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'galley-junction-cup', source: 'VH1_B3_09',
+    quote: 'At the turn toward the storage spine, Quenby stopped.',
+    category: 'adjacency', subject: 'corridor junction',
+    interpretation: 'The storage-spine turn is a recognizable junction on the walking route (a covered cup waited at the galley junction).',
+    evidence: 'explicit', claims: [],
+  },
+
+  // ======== galley ========
+  {
+    key: 'galley-tiny', source: 'Presence-06',
+    quote: 'The three of them didn’t fit, not quite. The galley felt like it was measuring their bodies and finding the math impolite.',
+    category: 'dimension', subject: 'galley size',
+    interpretation: 'The galley barely holds three standing people — roughly a two-person compartment.',
+    evidence: 'explicit',
+    claims: [
+      { kind: 'presence', target: 'galley' },
+      { kind: 'dimension', target: 'galley.width', max: 3.2 },
+      { kind: 'clashes-with', target: 'galley-island',
+        explanation: 'Presence calls it a "tiny galley" where three people don’t quite fit. But the Next arc shows a CENTRAL prep counter that can be walked around, with a cooling unit "across the room" — an island layout needs clearance on all sides, which a galley too small for three bodies cannot provide. Both cannot be literally true of one room.',
+        options: [
+          { id: 'compact', label: 'Compact galley with a tight island (recommended)', detail: 'A ~3.0 × 2.8 m galley with a small central prep counter and minimum clearances. Rounding the island is possible but shoulder-tight; three people genuinely crowd it. Satisfies both arcs approximately.' },
+          { id: 'tiny', label: 'Tiny galley, wall counter only', detail: 'A ~2.6 × 2.4 m galley. The "central prep counter" becomes a wall counter — treats the Next-arc island phrasing as loose. Marks the Next-07 line as tension.' },
+          { id: 'roomy', label: 'Roomier galley with a full island', detail: 'A ~3.6 × 3.2 m galley with a free-standing island and two work zones. Treats "didn’t fit, not quite" as emotional rather than physical. Marks the Presence-06 line as tension.' },
+        ] },
+    ],
+  },
+  {
+    key: 'galley-island', source: 'Next-07',
+    quote: 'Quenby didn’t sit. She leaned. One elbow braced against the side of the central prep counter, watching the water generator refill.',
+    category: 'furniture', subject: 'central prep counter',
+    interpretation: 'The galley is organized around a central prep counter (an island you can lean on and round), with a water generator.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyIsland' }],
+  },
+  {
+    key: 'galley-across', source: 'Next-07',
+    quote: 'Across the room, Iri-Six crouched beside the cooling unit, cataloging sealed packs with a quiet efficiency that made Quenby itch.',
+    category: 'furniture', subject: 'galley work zones',
+    interpretation: 'A floor-level cooling unit sits across the galley from the prep counter — the room has at least two work zones.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'galley-bench', source: 'Presence-06',
+    quote: 'Bench too narrow. Edges that caught.',
+    category: 'furniture', subject: 'galley bench',
+    interpretation: 'The galley bench is narrower than a sleeping body, with hard catching edges.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyBench' }, { kind: 'dimension', target: 'galleyBench.depth', max: 0.5 }],
+  },
+  {
+    key: 'galley-bench-wall', source: 'Presence-06',
+    quote: 'By the last stitch, Iri-Six’s head had dropped back against the wall, sweat along her temple.',
+    category: 'furniture', subject: 'bench placement',
+    interpretation: 'The bench stands against a wall — a seated person can drop their head back onto it.',
+    evidence: 'inference',
+    claims: [{ kind: 'relation', a: 'galleyBench', b: 'galley', rel: 'adjacent' }],
+  },
+  {
+    key: 'galley-table', source: 'Presence-06',
+    quote: 'Iri-Six set the medkit on the table, tape strip laid across its lid.',
+    category: 'furniture', subject: 'galley table',
+    interpretation: 'The galley has a table large enough for a medkit and stitching work.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyTable' }],
+  },
+  {
+    key: 'galley-sink-light', source: 'Presence-06',
+    quote: 'A status light near the sink blinked the patience of a metronome.',
+    category: 'lighting', subject: 'galley sink',
+    interpretation: 'The galley has a sink with a blinking status light beside it.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyCounter' }],
+  },
+  {
+    key: 'galley-index-card', source: 'Presence-06',
+    quote: 'The girl’s hand drifted to the index card taped over the sink.',
+    category: 'object', subject: 'index card over the sink',
+    interpretation: 'An index card (labeling the named ration tins) is taped on the wall above the sink, at arm reach.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'galley-counter-lean', source: 'Presence-06',
+    quote: 'She turned, hip against the counter, blanket sliding to her elbows.',
+    category: 'furniture', subject: 'galley counter height',
+    interpretation: 'The counter is at hip height for slight Nova to lean against.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'galley-drawer-cabinet', source: 'Presence-06',
+    quote: 'A drawer: two spoons, one bent. A cabinet: bolts stored in a mug that should’ve held tea.',
+    category: 'object', subject: 'galley storage',
+    interpretation: 'A drawer (two spoons) and a cabinet holding a mug full of loose bolts — the source of the bolts Nova plays with.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyCabinet' }],
+  },
+  {
+    key: 'galley-tins-shelf', source: 'Presence-11',
+    quote: 'On the shelf, three battered tins waited in their row.',
+    category: 'object', subject: 'tin shelf',
+    interpretation: 'An open shelf holds the row of named ration tins (Regret, Dead Reckoning, Victory Speech…).',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyShelf' }],
+  },
+  {
+    key: 'galley-plants', source: 'Presence-11',
+    quote: 'The galley hummed low, not quiet but close enough. The new plants sat in the corner, soil still damp, their smell edging against the recycled air.',
+    category: 'object', subject: 'plants in the corner',
+    interpretation: 'Potted medicinal plants live in a corner of the galley after the garden visit.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyPlants' }],
+  },
+  {
+    key: 'galley-fan', source: 'Presence-06',
+    quote: 'The fan in the corner ticked once, then went patient.',
+    category: 'object', subject: 'corner fan',
+    interpretation: 'A small ticking fan sits in a corner of the galley.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'galleyFan' }],
+  },
+  {
+    key: 'galley-hatch-quiet', source: 'Presence-06',
+    quote: 'The hatch slid open. Soft, careful. Not Six’s sound.',
+    category: 'door', subject: 'galley hatch',
+    interpretation: 'The galley hatch is a sliding door quiet enough that who opens it is identifiable by sound.',
+    evidence: 'explicit',
+    claims: [
+      { kind: 'presence', target: 'galleyHatch' },
+      { kind: 'property', target: 'galleyHatch', key: 'kind', value: 'sliding' },
+    ],
+  },
+  {
+    key: 'galley-hatch-sticks', source: 'Presence-08',
+    quote: 'From the galley: a clang. Metal set down too hard. A drawer yanked. The slam of a hatch that stuck and didn’t hurry.',
+    category: 'door', subject: 'galley hatch behavior',
+    interpretation: 'The galley hatch sticks and moves slowly.',
+    evidence: 'inference', claims: [],
+  },
+  {
+    key: 'galley-tabletop-nova', source: 'Presence-11',
+    quote: 'Nova sat at the table, chin on her folded arms, watching like it was theatre.',
+    category: 'character-behavior', subject: 'table seating',
+    interpretation: 'The table seats Nova with sightlines to the shelf and counter.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'galley-grates', source: 'Next-08',
+    quote: 'A shallow container sat balanced between the floor grates, edges dark with mineral scrape.',
+    category: 'floor', subject: 'galley floor',
+    interpretation: 'The galley floor includes open grates; Iri grows a sprout at the warm wall vent.',
+    evidence: 'explicit', claims: [],
+  },
 ];
 
 // ---- documents (assembled from the same quote strings) ----
 const CHAPTER_TITLES = {
-  'Next-01': 'Momentum / Seeds in the Dark', 'Next-05': 'Decision Vector / For Whoever’s Left',
-  'Next-07': 'Threshold / Room Tone', 'Next-10': 'Manual Mode / Location Only',
-  'Next-11': 'Resonance / Resonance',
+  'Next-01': 'Momentum / Seeds in the Dark', 'Next-02': 'Echo Drift / Curiosity’s Allowed',
+  'Next-05': 'Decision Vector / For Whoever’s Left',
+  'Next-07': 'Threshold / Room Tone', 'Next-08': 'Half-Open / Presence',
+  'Next-10': 'Manual Mode / Location Only', 'Next-11': 'Resonance / Resonance',
   'Presence-02': 'Both Hands / Between the Wells', 'Presence-05': 'Cleanest Filthy Lane / The Economy of Heat',
   'Presence-06': 'For, Not Against / The Arithmetic of Outcomes', 'Presence-07': 'Pending, Erased / A Market That Watches Itself',
   'Presence-08': 'Stop Letting it Write You / The Gravity of Unowned Memory',
   'Presence-09': 'Better Than Drift / On the Non-Neutrality of Names',
   'Presence-11': 'Sugar / The Coin That Keeps Counting',
   'VH1_B3_02': 'Book 3, Chapter 2', 'VH1_B3_04': 'Book 3, Chapter 4', 'VH1_B3_05': 'Book 3, Chapter 5',
+  'VH1_B3_09': 'Book 3, Chapter 9',
 };
 
 export function buildSeedDocuments() {
@@ -536,17 +734,29 @@ export function buildSeedDocuments() {
   return docs;
 }
 
-// ---- default scene ----
-export const SEED_SCENE = {
-  name: 'Three on the bridge',
-  note: 'Presence-09/11 arrangement: Quenby in the cradle, Iri at the auxiliary console, Nova cross-legged on the deck with her bolts.',
-  mannequins: [
-    { character: 'quenby', pos: [0, 0, -0.7], rotY: Math.PI, pose: 'sit', supportHeight: 0.42, props: null },
-    { character: 'iri', pos: [-1.45, 0, -0.55], rotY: Math.PI * 0.85, pose: 'stand', props: null },
-    { character: 'nova', pos: [1.0, 0, 0.9], rotY: Math.PI * 1.15, pose: 'sitFloor', props: 'bolts' },
-  ],
-  paths: [
-    { id: 'path_nova', name: 'Nova: hatch → copilot chair', character: 'nova',
-      points: [[1.15, 0, 2.05], [1.3, 0, 1.2], [1.35, 0, 0.15], [1.15, 0, -0.5]] },
-  ],
-};
+// ---- default scenes ----
+export const SEED_SCENES = [
+  {
+    name: 'Three on the bridge',
+    note: 'Presence-09/11 arrangement: Quenby in the cradle, Iri at the auxiliary console, Nova cross-legged on the deck with her bolts.',
+    mannequins: [
+      { character: 'quenby', pos: [0, 0, -0.7], rotY: Math.PI, pose: 'sit', supportHeight: 0.42, props: null },
+      { character: 'iri', pos: [-1.45, 0, -0.55], rotY: Math.PI * 0.85, pose: 'stand', props: null },
+      { character: 'nova', pos: [1.0, 0, 0.9], rotY: Math.PI * 1.15, pose: 'sitFloor', props: 'bolts' },
+    ],
+    paths: [
+      { id: 'path_nova', name: 'Nova: hatch → copilot chair', character: 'nova',
+        points: [[1.15, 0, 2.05], [1.3, 0, 1.2], [1.35, 0, 0.15], [1.15, 0, -0.5]] },
+    ],
+  },
+  {
+    name: 'Stitches in the galley',
+    note: 'Presence-06: Iri on the bench getting stitched, Quenby working at the table, Nova leaning at the counter. Positions assume the compact galley; adjust after ruling on its size.',
+    mannequins: [
+      { character: 'iri', pos: [0.85, 0, 9.4], rotY: Math.PI, pose: 'sit', supportHeight: 0.42, props: null },
+      { character: 'quenby', pos: [0.0, 0, 8.75], rotY: Math.PI * 0.75, pose: 'lean', props: null },
+      { character: 'nova', pos: [-0.15, 0, 8.25], rotY: -Math.PI / 2, pose: 'lean', props: null },
+    ],
+    paths: [],
+  },
+];

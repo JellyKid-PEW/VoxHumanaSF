@@ -16,8 +16,9 @@ export function emptyProject() {
     constraints: [],   // {id, docId, quote, category, subject, interpretation,
                        //  strength, evidence, claims:[], status:'active'|'rejected', note}
     rulings: [],       // {id, conflictKey, choice, label, note, decidedAt}
-    objects: [],       // {id, type, name, params, pos:[x,y,z], rotY, locked,
+    objects: [],       // {id, type, name, room, params, pos:[x,y,z], rotY, locked,
                        //  evidence, evidenceRefs:[constraintId], note}
+    deletedLayoutKeys: [],  // generated objects the user removed — never resurrected
     scenes: [],        // {id, name, note, mannequins:[{character,pos,rotY,pose,props}],
                        //  paths:[{id,name,character,points:[[x,y,z]]}]}
     settings: {
@@ -123,7 +124,13 @@ class State {
   removeObject(id) {
     const i = this.project.objects.findIndex(o => o.id === id);
     if (i >= 0) {
-      this.project.objects.splice(i, 1);
+      const [rec] = this.project.objects.splice(i, 1);
+      if (rec.layoutKey) {
+        this.project.deletedLayoutKeys = this.project.deletedLayoutKeys || [];
+        if (!this.project.deletedLayoutKeys.includes(rec.layoutKey)) {
+          this.project.deletedLayoutKeys.push(rec.layoutKey);
+        }
+      }
       if (this.selection === id) this.select(null);
       bus.emit('objects:changed');
       this.markDirty();
