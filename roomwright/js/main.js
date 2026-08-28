@@ -4,7 +4,7 @@ import { bus, status } from './util.js';
 import { initEditor, editor, setView, setTool, enterFP, setCutaway, screenshot, rebuildRoom, rebuildMannequins, clearMeasurements } from './editor.js';
 import { initAtmosphere, setLightingMode, toggleSound } from './atmosphere.js';
 import { initPersistence, loadAutosave, autosave, exportProject, importProjectFile } from './persist.js';
-import { generateLayout } from './layout.js';
+import { generateLayout, LAYOUT_VERSION, LAYOUT_MIGRATION_KEYS } from './layout.js';
 import { SEED_CONSTRAINTS, buildSeedDocuments, SEED_SCENES } from '../data/seed.js';
 import { initUI, renderTab, toggleNavOverlay, renderInspector } from './ui.js';
 import { conflictBadgeRefresh } from './constraints.js';
@@ -36,6 +36,7 @@ function seedProject() {
   }
   // layout from constraints
   generateLayout({ fresh: true });
+  p.layoutVersion = LAYOUT_VERSION;
   // default scenes
   let first = null;
   for (const s of SEED_SCENES) {
@@ -72,7 +73,16 @@ function migrateSeed() {
     });
     addedCons++;
   }
-  const addedObjs = generateLayout({});
+  // force-regenerate keys whose definitions changed since this project was saved
+  const fromVersion = p.layoutVersion || 1;
+  const changedKeys = [];
+  for (let v = fromVersion + 1; v <= LAYOUT_VERSION; v++) {
+    if (LAYOUT_MIGRATION_KEYS[v]) changedKeys.push(...LAYOUT_MIGRATION_KEYS[v]);
+  }
+  let addedObjs = 0;
+  if (changedKeys.length) addedObjs += generateLayout({ replaceKeys: changedKeys });
+  addedObjs += generateLayout({});
+  p.layoutVersion = LAYOUT_VERSION;
   for (const s of SEED_SCENES) {
     if (!p.scenes.some(x => x.name === s.name)) state.addScene(JSON.parse(JSON.stringify(s)));
   }

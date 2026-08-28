@@ -244,11 +244,27 @@ function defs(rulings) {
     pos: [cx, 0, corCz], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Lower than the bridge overhead (assumption).',
   });
+  // port wall split by the medbay hatch
+  const medHatchZ = 5.75;
+  const portSeg1 = (medHatchZ - 0.6) - corStartZ;
+  const portSeg2 = corEndZ - (medHatchZ + 0.6);
   add('corWallPort', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (port)', params: { length: corLen, height: COR.H, thickness: 0.12 },
-    pos: [cx - COR.W / 2, 0, corCz], rotY: Math.PI / 2, locked: true,
+    room: 'corridor', type: 'wall', name: 'Corridor wall (port fwd)', params: { length: portSeg1, height: COR.H, thickness: 0.12 },
+    pos: [cx - COR.W / 2, 0, corStartZ + portSeg1 / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'corridor-widened', 'corridor-smell'],
     note: corNote,
+  });
+  add('medHatch', {
+    room: 'medbay', type: 'doorway', name: 'Medbay hatch',
+    params: { length: 1.2, height: COR.H, thickness: 0.12, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [cx - COR.W / 2, 0, medHatchZ], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-corridor', 'med-deeper', 'doors-wait'],
+    note: 'The cycling medbay door — its soft confirm is audible from the bridge. Opens off the main corridor.',
+  });
+  add('corWallPort2', {
+    room: 'corridor', type: 'wall', name: 'Corridor wall (port aft)', params: { length: portSeg2, height: COR.H, thickness: 0.12 },
+    pos: [cx - COR.W / 2, 0, corEndZ - portSeg2 / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'med-corridor'], note: 'Corridor wall between the medbay and the galley junction.',
   });
   // starboard wall split by the storage-spine hatch at the midpoint
   const seg1Len = (spineZ - 0.5) - corStartZ;
@@ -270,25 +286,137 @@ function defs(rulings) {
     pos: [cx + COR.W / 2, 0, corEndZ - seg2Len / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall from the spine turn to the galley.',
   });
-  // spine stub (placeholder for the storage spine)
-  add('spineStubFloor', {
-    room: 'corridor', type: 'floor', name: 'Storage spine (stub)', params: { width: 1.0, depth: 1.0 },
-    pos: [cx + COR.W / 2 + 0.5, 0, spineZ], rotY: 0, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-route', 'spine-hatch'],
-    note: 'First step of the storage spine. The spine itself (two turns down to starboard pocket three) is a future room.',
+  // ================= STORAGE SPINE =================
+  // "Two turns down": turn one off the main corridor at the spine hatch,
+  // turn two where the spine bends aft. Pocket three opens off the aft leg.
+  const SPW = 1.0, SPH = 2.05;           // spine width / height — narrow and low
+  const leg1x0 = cx + COR.W / 2;         // spine hatch wall plane
+  const leg1Len = 1.2;
+  const leg2x = leg1x0 + leg1Len + SPW / 2;         // centerline of the aft leg
+  const leg2z0 = spineZ - SPW / 2, leg2z1 = spineZ + 2.5;
+  const pktHatchZ = spineZ + 1.7;
+
+  add('spnLeg1Floor', {
+    room: 'spine', type: 'floor', name: 'Storage spine deck (first turn)', params: { width: leg1Len, depth: SPW },
+    pos: [leg1x0 + leg1Len / 2, 0, spineZ], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route', 'spine-hatch', 'spine-narrow-dim'],
+    note: 'First leg of the storage spine, off the main corridor.',
   });
-  add('spineStubEnd', {
-    room: 'corridor', type: 'wall', name: 'Spine stub end', params: { length: 1.0, height: COR.H, thickness: 0.12 },
-    pos: [cx + COR.W / 2 + 1.0, 0, spineZ], rotY: Math.PI / 2, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: 'Temporary cap — the spine continues here in a later milestone.',
+  add('spnLeg1Ceil', {
+    room: 'spine', type: 'ceiling', name: 'Spine overhead', params: { width: leg1Len, depth: SPW, height: SPH },
+    pos: [leg1x0 + leg1Len / 2, 0, spineZ], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Low service overhead (assumption).',
   });
-  for (const s of [-1, 1]) {
-    add(s < 0 ? 'spineStubN' : 'spineStubS', {
-      room: 'corridor', type: 'wall', name: 'Spine stub wall', params: { length: 1.0, height: COR.H, thickness: 0.12 },
-      pos: [cx + COR.W / 2 + 0.5, 0, spineZ + s * 0.5], rotY: 0, locked: true,
-      evidence: 'assumption', evidenceRefs: [], note: 'Temporary cap — future rooms.',
-    });
-  }
+  add('spnLeg1N', {
+    room: 'spine', type: 'wall', name: 'Spine wall', params: { length: leg1Len, height: SPH, thickness: 0.1 },
+    pos: [leg1x0 + leg1Len / 2, 0, spineZ - SPW / 2], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['spine-narrow-dim'], note: 'Narrow and dim.',
+  });
+  add('spnLeg1S', {
+    room: 'spine', type: 'wall', name: 'Spine wall', params: { length: leg1Len, height: SPH, thickness: 0.1 },
+    pos: [leg1x0 + leg1Len / 2, 0, spineZ + SPW / 2], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['spine-narrow-dim'], note: 'Narrow and dim.',
+  });
+  add('spnLeg2Floor', {
+    room: 'spine', type: 'floor', name: 'Storage spine deck (second turn)', params: { width: SPW, depth: leg2z1 - leg2z0 },
+    pos: [leg2x, 0, (leg2z0 + leg2z1) / 2], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['spine-narrow-dim', 'pocket-inbetween'],
+    note: 'The aft leg — pocket three opens off its starboard side.',
+  });
+  add('spnLeg2Ceil', {
+    room: 'spine', type: 'ceiling', name: 'Spine overhead', params: { width: SPW, depth: leg2z1 - leg2z0, height: SPH },
+    pos: [leg2x, 0, (leg2z0 + leg2z1) / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('spnLeg2N', {
+    room: 'spine', type: 'wall', name: 'Spine wall (fwd)', params: { length: SPW, height: SPH, thickness: 0.1 },
+    pos: [leg2x, 0, leg2z0], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('spnLeg2S', {
+    room: 'spine', type: 'wall', name: 'Spine end wall', params: { length: SPW, height: SPH, thickness: 0.1 },
+    pos: [leg2x, 0, leg2z1], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'The spine continues deeper aft in the prose ("two turns down" is only the start) — capped here for now.',
+  });
+  add('spnLeg2W', {
+    room: 'spine', type: 'wall', name: 'Spine wall (inboard)', params: { length: leg2z1 - (spineZ + SPW / 2), height: SPH, thickness: 0.1 },
+    pos: [leg1x0 + leg1Len, 0, (spineZ + SPW / 2 + leg2z1) / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  // pocket three hatch splits the outboard wall of the aft leg
+  const pktWx = leg2x + SPW / 2;
+  const segA = (pktHatchZ - 0.45) - leg2z0;
+  const segB = leg2z1 - (pktHatchZ + 0.45);
+  add('spnLeg2E1', {
+    room: 'spine', type: 'wall', name: 'Spine wall (outboard fwd)', params: { length: segA, height: SPH, thickness: 0.1 },
+    pos: [pktWx, 0, leg2z0 + segA / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('pktHatch', {
+    room: 'pocket', type: 'doorway', name: 'Pocket three hatch',
+    params: { length: 0.9, height: SPH, thickness: 0.1, doorWidth: 0.62, doorHeight: 1.8, kind: 'hinged', hinge: 'left', swing: 'in', open: 0 },
+    pos: [pktWx, 0, pktHatchZ], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit',
+    evidenceRefs: ['spine-hatch', 'pocket-grip', 'pocket-hatch-manual', 'pocket-seam-light'],
+    note: 'Narrow manual hatch with a recessed grip — it sticks if pulled at the wrong angle, closes without a slam, and leaks lamplight at the seam. An amber occupancy indicator sits above it.',
+  });
+  add('spnLeg2E2', {
+    room: 'spine', type: 'wall', name: 'Spine wall (outboard aft)', params: { length: segB, height: SPH, thickness: 0.1 },
+    pos: [pktWx, 0, leg2z1 - segB / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+  // ---------- starboard pocket three ----------
+  const PKW = 1.25, PKD = 1.6;           // depth (x) “too shallow for staging”, width (z)
+  const pkx = pktWx + PKW / 2, pkz = pktHatchZ;
+  add('pktFloor', {
+    room: 'pocket', type: 'floor', name: 'Pocket three deck', params: { width: PKW, depth: PKD },
+    pos: [pkx, 0, pkz], rotY: 0, locked: true,
+    evidence: 'explicit',
+    evidenceRefs: ['pocket-inbetween', 'pocket-crowded', 'pocket-choose-stand', 'pocket-nova-crate', 'pocket-threshold'],
+    note: `Pocket three, ${PKW} × ${PKD} m — too shallow for equipment staging, too deep for a locker. Two people make it crowded; a third stays at the hatch line.`,
+  });
+  add('pktCeil', {
+    room: 'pocket', type: 'ceiling', name: 'Pocket overhead', params: { width: PKW, depth: PKD, height: SPH },
+    pos: [pkx, 0, pkz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('pktWallN', {
+    room: 'pocket', type: 'wall', name: 'Pocket wall (fwd)', params: { length: PKW, height: SPH, thickness: 0.1 },
+    pos: [pkx, 0, pkz - PKD / 2], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['pocket-hum'], note: 'The ship hums through this wall — structure sits directly behind it.',
+  });
+  add('pktWallS', {
+    room: 'pocket', type: 'wall', name: 'Pocket wall (aft)', params: { length: PKW, height: SPH, thickness: 0.1 },
+    pos: [pkx, 0, pkz + PKD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('pktWallE', {
+    room: 'pocket', type: 'wall', name: 'Pocket wall (outboard)', params: { length: PKD, height: SPH, thickness: 0.1 },
+    pos: [pkx + PKW / 2, 0, pkz], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['pocket-hum'], note: 'Hull side.',
+  });
+  add('pktShelf', {
+    room: 'pocket', type: 'shelf', name: 'Narrow shelf',
+    params: { width: 0.9, depth: 0.22, mountHeight: 1.15, tins: 0 },
+    pos: [pkx + PKW / 2 - 0.13, 0, pkz - 0.15], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['pocket-shelf'],
+    note: 'The narrow shelf Quenby settles beside, cup in hand.',
+  });
+  add('pktBox', {
+    room: 'pocket', type: 'crate', name: 'Low storage box',
+    params: { width: 0.46, height: 0.34, depth: 0.36 },
+    pos: [pkx - 0.3, 0, pkz + 0.6], rotY: 0.2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['pocket-box'],
+    note: 'The low box Nova dragged near the crate — the only seat in storage. Iri sits down on it, not all at once, not easily.',
+  });
+  add('pktCrate', {
+    room: 'pocket', type: 'crate', name: 'R. Vale’s crate',
+    params: { width: 0.56, height: 0.5, depth: 0.44 },
+    pos: [pkx + 0.32, 0, pkz + 0.52], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['pocket-slates', 'pocket-nova-crate'],
+    note: 'The crate from starboard pocket three — stills, the throat-pickup case, pause-notation pages. Slates spread across the floor around it; a utility lamp angled away from the door.',
+  });
   // side-door configuration: the short east leg from the bridge to the aft run
   if (doorOnSideWall) {
     add('corLegFloor', {
@@ -448,6 +576,103 @@ function defs(rulings) {
     });
   }
 
+  // ================= MEDBAY =================
+  // Port side of the main corridor, "deeper in the ship" than the bridge,
+  // its hatch just forward of the galley junction.
+  const bedsRuling = rulings['declared:med-cot~med-two-beds']?.choice || null;
+  const bedsProvisional = !bedsRuling;
+  const MW = 2.6, MD = 2.4, MH = 2.1;
+  const mE = cx - COR.W / 2;             // shared wall with the corridor
+  const mx = mE - MW / 2, mz = medHatchZ; // room centered on its hatch (z 4.7–6.8 for default)
+  const mrel = (dx, dz) => [mx + dx, 0, mz + dz];
+
+  add('medFloor', {
+    room: 'medbay', type: 'floor', name: 'Medbay deck', params: { width: MW, depth: MD },
+    pos: [mx, 0, mz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['med-two-beds', 'med-reach', 'med-corridor'],
+    note: `Medbay ${MW} × ${MD} m — compact enough that supplies are within blind arm’s reach one step inside the door.`,
+  });
+  add('medCeil', {
+    room: 'medbay', type: 'ceiling', name: 'Medbay overhead', params: { width: MW, depth: MD, height: MH },
+    pos: [mx, 0, mz], rotY: 0, locked: true,
+    evidence: 'inference', evidenceRefs: ['med-lights-low'], note: 'Low overhead; recovery lighting dims.',
+  });
+  add('medWallN', {
+    room: 'medbay', type: 'wall', name: 'Medbay wall (fwd)', params: { length: MW, height: MH, thickness: 0.14 },
+    pos: [mx, 0, mz - MD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('medWallS', {
+    room: 'medbay', type: 'wall', name: 'Medbay wall (aft)', params: { length: MW, height: MH, thickness: 0.14 },
+    pos: [mx, 0, mz + MD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('medWallW', {
+    room: 'medbay', type: 'wall', name: 'Medbay wall (port)', params: { length: MD, height: MH, thickness: 0.14 },
+    pos: [mx - MW / 2, 0, mz], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The cot wall.',
+  });
+  // the cot (and, per ruling, a second recessed bed above it)
+  add('medCot', {
+    room: 'medbay', type: 'bench', name: bedsRuling === 'two-beds' ? 'Lower wall bed' : 'Medbay cot',
+    params: { width: 0.7, height: 0.52, depth: 1.5 },
+    pos: mrel(-MW / 2 + 0.42, 0), rotY: 0, locked: false,
+    evidence: bedsProvisional ? 'assumption' : 'decision',
+    evidenceRefs: ['med-cot', 'med-two-beds', 'med-telemetry'],
+    note: (bedsProvisional ? '⚠ Provisional — the bed-count conflict (two recessed wall beds vs. the single cot) is unresolved. ' : '') +
+      'Reclines "at an angle designed by someone who believed recovery worked better if the body had nowhere useful to go." The telemetry projection hovers past its foot.',
+  });
+  if (bedsRuling === 'two-beds' || bedsRuling === 'cot-plus-folded') {
+    // wall-mounted (legless) upper bunk — a shelf, structurally
+    add('medUpperBed', {
+      room: 'medbay', type: 'shelf',
+      name: bedsRuling === 'two-beds' ? 'Upper wall bed' : 'Folded upper bunk',
+      params: {
+        width: 1.5, tins: 0,
+        depth: bedsRuling === 'two-beds' ? 0.6 : 0.2,
+        mountHeight: bedsRuling === 'two-beds' ? 1.3 : 1.25,
+      },
+      pos: mrel(-MW / 2 + (bedsRuling === 'two-beds' ? 0.36 : 0.18), 0), rotY: Math.PI / 2, locked: false,
+      evidence: 'decision', evidenceRefs: ['med-two-beds', 'med-cot'],
+      note: bedsRuling === 'two-beds'
+        ? 'Your ruling: both recessed wall beds modeled — the upper folds down over the cot.'
+        : 'Your ruling: the second recessed bed exists but stays folded flat against the wall.',
+    });
+  }
+  add('medConsole', {
+    room: 'medbay', type: 'console', name: 'Medbay console',
+    params: { width: 0.9, depth: 0.55, height: 0.95, screens: 1, lit: true },
+    pos: mrel(0.1, -MD / 2 + 0.37), rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-console', 'med-telemetry', 'med-drawer'],
+    note: 'Standing-height console with a braceable edge; drives the telemetry projection; the drawer where patches live.',
+  });
+  add('medChair', {
+    room: 'medbay', type: 'seat', name: 'Medbay chair',
+    params: { seatHeight: 0.45, width: 0.46, hasArms: false },
+    pos: mrel(0.0, -0.15), rotY: Math.PI - 0.4, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-chair', 'med-chair-hook'],
+    note: 'The one chair — hooked into position beside the console, within reach of the tea, angled toward both telemetry and cot.',
+  });
+  add('medShelf', {
+    room: 'medbay', type: 'storage', name: 'Storage shelf',
+    params: { width: 0.8, height: 1.5, depth: 0.34 },
+    pos: mrel(0.35, MD / 2 - 0.15), rotY: Math.PI, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-shelf', 'med-reach'],
+    note: 'Where Nova stands with her borrowed blanket — supplies within blind reach of the door.',
+  });
+  add('medSideConsole', {
+    room: 'medbay', type: 'console', name: 'Side console',
+    params: { width: 0.7, depth: 0.3, height: 0.85, screens: 1, lit: true },
+    pos: mrel(-0.8, MD / 2 - 0.2), rotY: Math.PI, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-side-console'],
+    note: 'The side console that hums beside the cot while she recovers.',
+  });
+  add('medSterilizer', {
+    room: 'medbay', type: 'crate', name: 'Sterilizer unit',
+    params: { width: 0.38, height: 0.95, depth: 0.4 },
+    pos: mrel(0.8, -MD / 2 + 0.35), rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-two-beds'],
+    note: 'Sterilizer unit with its blinking diagnostic loop.',
+  });
+
   return list;
 }
 
@@ -484,9 +709,19 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 }
 
 // Keys affected by each curated conflict — regenerated when a ruling lands.
-// The door ruling moves the whole aft wing (corridor + galley follow the hatch).
+// The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
+// and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'gal*'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
+  'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
+};
+
+// Layout-format migrations: when a generated object's DEFINITION changed
+// between app versions, these keys are force-regenerated on old projects
+// (user-added objects and rulings are untouched).
+export const LAYOUT_VERSION = 3;
+export const LAYOUT_MIGRATION_KEYS = {
+  3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
 };

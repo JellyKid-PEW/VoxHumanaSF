@@ -1,10 +1,11 @@
 # ROOMWRIGHT
 
 Roomwright converts prose descriptions into evidence-backed, editable 3D
-environments for fiction writers. It currently models three connected rooms of
-the **Wild Huntress** from the Vox Humana series: the bridge, the corridor
-(with the storage-spine turn "halfway to the galley"), and the galley — one
-continuous walkable interior.
+environments for fiction writers. It currently models six connected spaces of
+the **Wild Huntress** from the Vox Humana series: the bridge, the main
+corridor, the medbay (to port), the storage spine with its two turns down to
+starboard pocket three, and the galley aft — one continuous walkable
+interior.
 
 **Run it:** serve this folder over HTTP (any static server) and open
 `index.html` — e.g. `python3 -m http.server` then
@@ -26,11 +27,13 @@ it and falls back to WebGL2 automatically.
 3. **Conflicts tab** — statements that cannot both be literally true are shown
    side by side with their sources, a plain-language explanation of the
    physical problem, and candidate spatial solutions. Accept one, fix the model
-   manually, or defer. Rulings are remembered and re-applied. Three genuine
+   manually, or defer. Rulings are remembered and re-applied. Four genuine
    contradictions ship with the seed: the bridge door's position ("behind her"
    vs. a profile view from the doorway — this one moves the whole aft wing),
-   the rail between the two stations vs. knees that nearly touch, and the
-   "tiny galley" of Presence vs. the walk-around prep island of Next.
+   the rail between the two stations vs. knees that nearly touch, the
+   "tiny galley" of Presence vs. the walk-around prep island of Next, and the
+   medbay's "two recessed wall beds" (Next) vs. the single cot with one chair
+   that Presence and Book 3 agree on.
 4. **The 3D bridge** — generated from the constraint database. Orbit / Walk /
    Overhead / Plan / Elevation views; Move/Rotate/Resize gizmos with snapping;
    the Measure tool; cutaway slicing; navigable-space overlay; lighting modes
@@ -48,8 +51,10 @@ it and falls back to WebGL2 automatically.
    three seats occupiable, Nova's floor play doesn't block routes, feet reach a
    rail, passage behind the seats, doors open fully, consoles reachable,
    prose sightlines hold (drawn live in the viewport), no illegal overlaps,
-   the bridge–corridor–galley route stays walkable, and the galley stays
-   *tight but usable* — it turns amber if you make it roomier than the prose.
+   the bridge–corridor–galley route stays walkable, the galley stays
+   *tight but usable* (amber if roomier than the prose), pocket three keeps
+   making you choose where to stand, and medbay supplies stay within blind
+   reach of the door.
 8. **Check new writing** (Docs tab) — paste a new passage; it's checked
    against the constraint database and your rulings.
 9. **Save/Export** — autosave to the browser, named versions, JSON project
@@ -79,9 +84,12 @@ vendor/               three.js r0.185 (webgpu build) + control addons
 The layout generator keys every generated object with a `layoutKey`, so ruling
 changes regenerate only the affected geometry and manual edits survive (and
 deliberately deleted objects stay deleted). The door-position ruling
-re-anchors the corridor and galley to wherever the bridge hatch lands —
-including an L-bend corridor for the side-door option. Older autosaved
-projects are migrated in place: new constraints, rooms, and scenes are added
-without disturbing user edits or rulings. Additional rooms (the storage spine
-stub is already capped and waiting) follow the same pattern — the intended
-path to the full ship.
+re-anchors the whole aft wing (corridor, medbay, spine, pocket, galley) to
+wherever the bridge hatch lands — including an L-bend corridor for the
+side-door option. Older autosaved projects are migrated in place: new
+constraints, rooms, and scenes are added, and a layout-version system
+force-regenerates only the generated pieces whose definitions changed,
+without disturbing user edits or rulings. Remaining rooms from the prose
+(crew quarters and cabins, the engine bay, the skiff/gear bay, the
+observation dome, the airlock) follow the same pattern — the path to the
+full ship.

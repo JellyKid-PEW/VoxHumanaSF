@@ -505,6 +505,91 @@ export const HABIT_TESTS = [
       return { status: 'warn', details: `${fmt(area, 1)} m² of clear floor — roomier than the prose suggests. Presence-06 calls the galley tiny; consider the smaller size in the Conflicts tab.` };
     },
   },
+  {
+    id: 'pocket-crowd',
+    name: 'Pocket three makes you choose where to stand',
+    basis: ['pocket-inbetween', 'pocket-crowded', 'pocket-choose-stand', 'pocket-shelf'],
+    run() {
+      const floor = state.project.objects.find(o => o.layoutKey === 'pktFloor');
+      if (!floor) return { status: 'warn', details: 'No pocket three in the model yet.' };
+      const hatch = state.project.objects.find(o => o.layoutKey === 'pktHatch');
+      // storage is a squeeze — test with slim clearance
+      const grid = computeNavGrid(0.2);
+      // point just inside the pocket (the hatch's local +z side)
+      const v = new THREE.Vector3(0, 0, 0.45).applyAxisAngle(new THREE.Vector3(0, 1, 0), hatch?.rotY || 0);
+      let inPt = hatch ? new THREE.Vector3(hatch.pos[0] + v.x, 0, hatch.pos[2] + v.z)
+                       : new THREE.Vector3(floor.pos[0], 0, floor.pos[2]);
+      if (Math.abs(inPt.x - floor.pos[0]) > floor.params.width / 2 ||
+          Math.abs(inPt.z - floor.pos[2]) > floor.params.depth / 2) {
+        inPt = new THREE.Vector3(hatch.pos[0] - v.x, 0, hatch.pos[2] - v.z);
+      }
+      const problems = [];
+      for (const key of ['pktShelf', 'pktCrate', 'pktBox']) {
+        const t = state.project.objects.find(o => o.layoutKey === key);
+        if (!t) continue;
+        if (!findPath(grid, inPt, new THREE.Vector3(t.pos[0], 0, t.pos[2]), 10)) {
+          problems.push(`${t.name} is unreachable from the hatch line`);
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      let free = 0;
+      const gw = floor.params.width, gd = floor.params.depth;
+      for (let i = 0; i < grid.nx; i++) {
+        for (let j = 0; j < grid.nz; j++) {
+          if (!grid.walkable[i * grid.nz + j]) continue;
+          const x = grid.ox + i * grid.cell, z = grid.oz + j * grid.cell;
+          if (Math.abs(x - floor.pos[0]) <= gw / 2 && Math.abs(z - floor.pos[2]) <= gd / 2) free++;
+        }
+      }
+      const area = free * 0.01;
+      if (area < 0.08) return { status: 'fail', details: `Only ${fmt(area, 2)} m² of standing room — nobody fits inside at all.` };
+      if (area <= 1.6) return { status: 'pass', details: `${fmt(area, 2)} m² of standing room among the clutter — the room genuinely makes you choose where to stand; a second person crowds it.` };
+      return { status: 'warn', details: `${fmt(area, 1)} m² of standing room — roomier than "too shallow for equipment staging" suggests.` };
+    },
+  },
+  {
+    id: 'med-blind-reach',
+    name: 'Medbay supplies are within blind reach of the door',
+    basis: ['med-reach', 'med-shelf', 'med-drawer', 'med-cot'],
+    run() {
+      const floor = state.project.objects.find(o => o.layoutKey === 'medFloor');
+      if (!floor) return { status: 'warn', details: 'No medbay in the model yet.' };
+      const hatch = state.project.objects.find(o => o.layoutKey === 'medHatch');
+      if (!hatch) return { status: 'fail', details: 'The medbay has no hatch.' };
+      // one step inside the door
+      const v = new THREE.Vector3(0, 0, -0.55).applyAxisAngle(new THREE.Vector3(0, 1, 0), hatch.rotY || 0);
+      const inPt = new THREE.Vector3(hatch.pos[0] + v.x, 0, hatch.pos[2] + v.z);
+      if (Math.abs(inPt.x - floor.pos[0]) > floor.params.width / 2 ||
+          Math.abs(inPt.z - floor.pos[2]) > floor.params.depth / 2) {
+        // normal pointed the wrong way — flip
+        inPt.set(hatch.pos[0] - v.x, 0, hatch.pos[2] - v.z);
+      }
+      const results = [];
+      let worst = 0;
+      for (const key of ['medShelf', 'medConsole']) {
+        const t = state.project.objects.find(o => o.layoutKey === key);
+        if (!t) continue;
+        const bb = objectAABB(t.id, true);
+        if (!bb) continue;
+        const nx = Math.max(bb.min.x, Math.min(inPt.x, bb.max.x));
+        const nz = Math.max(bb.min.z, Math.min(inPt.z, bb.max.z));
+        const d = Math.hypot(nx - inPt.x, nz - inPt.z);
+        worst = Math.max(worst, d);
+        results.push(`${t.name}: ${fmt(d, 2)} m from one step inside the door`);
+      }
+      const cot = state.project.objects.find(o => o.layoutKey === 'medCot');
+      if (cot) {
+        const grid = computeNavGrid(0.22);
+        if (!findPath(grid, inPt, new THREE.Vector3(cot.pos[0], 0, cot.pos[2]), 8)) {
+          return { status: 'fail', details: results.join('\n') + '\nThe cot is unreachable from the door.' };
+        }
+        results.push('cot: reachable from the door');
+      }
+      if (worst <= 1.7) return { status: 'pass', details: results.join('\n') + '\nEverything within the 1.7 m blind-reach bound (Presence-04).' };
+      if (worst <= 2.3) return { status: 'warn', details: results.join('\n') + '\nSlightly beyond a natural blind reach — she would need a full step and a lean.' };
+      return { status: 'fail', details: results.join('\n') + '\nToo far to reach "without looking".' };
+    },
+  },
 ];
 
 export function runAllTests() {
