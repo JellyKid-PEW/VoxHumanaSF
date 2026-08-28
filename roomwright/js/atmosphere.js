@@ -92,7 +92,10 @@ export function rebuildRoomLights() {
       const fw = f.params.width ?? 4, fd = f.params.depth ?? 4;
       const long = Math.max(fw, fd), along = fd >= fw ? 'z' : 'x';
       const n = Math.max(1, Math.round(long / 2.2));
-      const base = Math.min(8.5, 3.0 + fw * fd * 0.32);   // small rooms, softer light
+      let base = Math.min(8.5, 3.0 + fw * fd * 0.32);   // small rooms, softer light
+      // the dome's light sensor dips low "to preserve field contrast beyond
+      // the glass" (Next-08) — keep its interior near-dark
+      if (f.room === 'dome') base *= 0.18;
       for (let i = 0; i < n; i++) {
         const t = (i + 0.5) / n - 0.5;
         const p = new THREE.PointLight(0xdfe8f0, base * (M.fill / 8.5), Math.max(4, long * 0.9), 1.9);

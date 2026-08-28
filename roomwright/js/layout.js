@@ -266,13 +266,29 @@ function defs(rulings) {
     pos: [cx - COR.W / 2, 0, corEndZ - portSeg2 / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'med-corridor'], note: 'Corridor wall between the medbay and the galley junction.',
   });
-  // starboard wall split by the storage-spine hatch at the midpoint
-  const seg1Len = (spineZ - 0.5) - corStartZ;
+  // starboard wall: split first by the airlock inner door ("two steps past
+  // the bridge"), then by the storage-spine hatch at the midpoint
+  const alkZ = 3.2;
+  const seg1aLen = (alkZ - 0.45) - corStartZ;
+  const seg1bLen = (spineZ - 0.5) - (alkZ + 0.45);
   const seg2Len = corEndZ - (spineZ + 0.5);
   add('corWallStbd1', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (starboard fwd)', params: { length: seg1Len, height: COR.H, thickness: 0.12 },
-    pos: [cx + COR.W / 2, 0, corStartZ + seg1Len / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall up to the storage-spine turn.',
+    room: 'corridor', type: 'wall', name: 'Corridor wall (starboard fwd)', params: { length: seg1aLen, height: COR.H, thickness: 0.12 },
+    pos: [cx + COR.W / 2, 0, corStartZ + seg1aLen / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall up to the main hatch.',
+  });
+  add('alkInnerDoor', {
+    room: 'airlock', type: 'doorway', name: 'Airlock inner hatch',
+    params: { length: 0.9, height: COR.H, thickness: 0.12, doorWidth: 0.7, doorHeight: 1.85, kind: 'sliding', slideDir: -1, open: 0 },
+    pos: [cx + COR.W / 2, 0, alkZ], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit',
+    evidenceRefs: ['alk-main-hatch', 'alk-two-steps', 'alk-two-stage', 'alk-inner-release', 'doors-wait'],
+    note: 'The inner lock of the main hatch — powered, opened by a wall-mounted release, two steps past the bridge.',
+  });
+  add('corWallStbd1b', {
+    room: 'corridor', type: 'wall', name: 'Corridor wall (starboard mid)', params: { length: seg1bLen, height: COR.H, thickness: 0.12 },
+    pos: [cx + COR.W / 2, 0, (alkZ + 0.45) + seg1bLen / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall between the main hatch and the storage-spine turn.',
   });
   add('spineHatch', {
     room: 'corridor', type: 'doorway', name: 'Storage spine hatch',
@@ -293,8 +309,9 @@ function defs(rulings) {
   const leg1x0 = cx + COR.W / 2;         // spine hatch wall plane
   const leg1Len = 1.2;
   const leg2x = leg1x0 + leg1Len + SPW / 2;         // centerline of the aft leg
-  const leg2z0 = spineZ - SPW / 2, leg2z1 = spineZ + 2.5;
+  const leg2z0 = spineZ - SPW / 2, leg2z1 = spineZ + 5.7;  // runs aft to the engine bay
   const pktHatchZ = spineZ + 1.7;
+  const domeZ = spineZ + 4.1;                        // dome arch, off the outboard wall
 
   add('spnLeg1Floor', {
     room: 'spine', type: 'floor', name: 'Storage spine deck (first turn)', params: { width: leg1Len, depth: SPW },
@@ -334,10 +351,11 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('spnLeg2S', {
-    room: 'spine', type: 'wall', name: 'Spine end wall', params: { length: SPW, height: SPH, thickness: 0.1 },
-    pos: [leg2x, 0, leg2z1], rotY: 0, locked: true,
-    evidence: 'assumption', evidenceRefs: [],
-    note: 'The spine continues deeper aft in the prose ("two turns down" is only the start) — capped here for now.',
+    room: 'spine', type: 'doorway', name: 'Engine bay doorway',
+    params: { length: SPW, height: SPH, thickness: 0.1, doorWidth: 0.72, doorHeight: 1.9, kind: 'hinged', hinge: 'left', swing: 'in', open: 0.35 },
+    pos: [leg2x, 0, leg2z1], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['eng-walkin', 'eng-spat-heat', 'doors-wait'],
+    note: 'The frame Quenby leans on, mug set on the deck plate within reach. The spine ends at the heat’s center.',
   });
   add('spnLeg2W', {
     room: 'spine', type: 'wall', name: 'Spine wall (inboard)', params: { length: leg2z1 - (spineZ + SPW / 2), height: SPH, thickness: 0.1 },
@@ -353,6 +371,7 @@ function defs(rulings) {
     pos: [pktWx, 0, leg2z0 + segA / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
+  // (outboard aft wall — split around the dome's low arch — is added below)
   add('pktHatch', {
     room: 'pocket', type: 'doorway', name: 'Pocket three hatch',
     params: { length: 0.9, height: SPH, thickness: 0.1, doorWidth: 0.62, doorHeight: 1.8, kind: 'hinged', hinge: 'left', swing: 'in', open: 0 },
@@ -361,9 +380,17 @@ function defs(rulings) {
     evidenceRefs: ['spine-hatch', 'pocket-grip', 'pocket-hatch-manual', 'pocket-seam-light'],
     note: 'Narrow manual hatch with a recessed grip — it sticks if pulled at the wrong angle, closes without a slam, and leaks lamplight at the seam. An amber occupancy indicator sits above it.',
   });
+  // outboard aft wall in two segments around the dome's low arch
+  const e2aLen = (domeZ - 0.45) - (pktHatchZ + 0.45);
+  const e2bLen = leg2z1 - (domeZ + 0.45);
   add('spnLeg2E2', {
-    room: 'spine', type: 'wall', name: 'Spine wall (outboard aft)', params: { length: segB, height: SPH, thickness: 0.1 },
-    pos: [pktWx, 0, leg2z1 - segB / 2], rotY: Math.PI / 2, locked: true,
+    room: 'spine', type: 'wall', name: 'Spine wall (outboard mid)', params: { length: e2aLen, height: SPH, thickness: 0.1 },
+    pos: [pktWx, 0, (pktHatchZ + 0.45) + e2aLen / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('spnLeg2E3', {
+    room: 'spine', type: 'wall', name: 'Spine wall (outboard aft)', params: { length: e2bLen, height: SPH, thickness: 0.1 },
+    pos: [pktWx, 0, leg2z1 - e2bLen / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
@@ -417,6 +444,50 @@ function defs(rulings) {
     evidence: 'explicit', evidenceRefs: ['pocket-slates', 'pocket-nova-crate'],
     note: 'The crate from starboard pocket three — stills, the throat-pickup case, pause-notation pages. Slates spread across the floor around it; a utility lamp angled away from the door.',
   });
+  // ---------- airlock chamber (starboard of the corridor) ----------
+  const AKW = 1.4, AKD = 1.3;                       // chamber width (x) × depth (z)
+  const akx = cx + COR.W / 2 + AKW / 2, akz = alkZ; // centered on the inner door
+  add('alkFloor', {
+    room: 'airlock', type: 'floor', name: 'Airlock deck', params: { width: AKW, depth: AKD },
+    pos: [akx, 0, akz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['alk-two-stage', 'alk-hatch-line', 'alk-cold-floor'],
+    note: `Airlock chamber ${AKW} × ${AKD} m — bare cold metal, cramped for two suited people; pressure returns in stages.`,
+  });
+  add('alkCeil', {
+    room: 'airlock', type: 'ceiling', name: 'Airlock overhead', params: { width: AKW, depth: AKD, height: COR.H },
+    pos: [akx, 0, akz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('alkWallN', {
+    room: 'airlock', type: 'wall', name: 'Airlock wall (fwd)', params: { length: AKW, height: COR.H, thickness: 0.12 },
+    pos: [akx, 0, akz - AKD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('alkWallS', {
+    room: 'airlock', type: 'wall', name: 'Airlock wall (aft)', params: { length: AKW, height: COR.H, thickness: 0.12 },
+    pos: [akx, 0, akz + AKD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('alkOuterDoor', {
+    room: 'airlock', type: 'doorway', name: 'Airlock outer hatch',
+    params: { length: AKD, height: COR.H, thickness: 0.14, doorWidth: 0.75, doorHeight: 1.85, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [akx + AKW / 2, 0, akz], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit',
+    evidenceRefs: ['alk-two-stage', 'alk-cycle', 'alk-tether'],
+    note: 'The outer lock — opens to space. Tether anchor points inside; the seal closes before pressure returns in stages.',
+  });
+  add('alkLocker', {
+    room: 'airlock', type: 'storage', name: 'Exterior kit locker',
+    params: { width: 0.7, height: 1.5, depth: 0.3 },
+    pos: [akx, 0, akz - AKD / 2 + 0.17], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['alk-kit-locker'],
+    note: 'Tether clips, manual lock spanner, plate key, suit seals — tools where they belong.',
+  });
+  add('alkRail', {
+    room: 'airlock', type: 'rail', name: 'Suit-up side rail',
+    params: { length: 1.0, height: 0.95, midRail: false },
+    pos: [akx, 0, akz + AKD / 2 - 0.1], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['alk-side-rail'],
+    note: 'The side rail Iri leans on, glove cuffs half-clipped to her belt.',
+  });
+
   // side-door configuration: the short east leg from the bridge to the aft run
   if (doorOnSideWall) {
     add('corLegFloor', {
@@ -576,6 +647,104 @@ function defs(rulings) {
     });
   }
 
+  // ================= OBSERVATION DOME =================
+  // Off the spine's outboard wall — "not listed on primary pathing".
+  const DR = 1.25;
+  const dcx = pktWx + DR + 0.11, dcz = domeZ;
+  add('domeFloor', {
+    room: 'dome', type: 'floor', name: 'Dome deck', params: { width: DR * 2 + 0.2, depth: DR * 2 + 0.2 },
+    pos: [dcx + 0.01, 0, dcz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['dome-hidden', 'dome-curve', 'dome-rim-dust', 'dome-warm-plating'],
+    note: 'The dome deck — its plating keeps a little warmth from the outer heat-sink loop; dust gathers at the rim.',
+  });
+  add('domeShell', {
+    room: 'dome', type: 'domeShell', name: 'Observation dome',
+    params: { radius: DR, wallHeight: 1.0, glassHeight: 0.95, archWidth: 0.85, archHeight: 1.78, ledgeHeight: 0.4 },
+    pos: [dcx, 0, dcz], rotY: -Math.PI / 2, locked: true,
+    evidence: 'explicit',
+    evidenceRefs: ['dome-hidden', 'dome-arch', 'dome-ledge', 'dome-curve', 'dome-autodim', 'dome-rim-dust'],
+    note: 'Round observation dome with real glass and its own starfield view. The entry arch dips to 1.78 m — low enough to scrape anyone who walks too proud. Interior lighting auto-dims to keep the stars sharp.',
+  });
+
+  // ================= ENGINE BAY =================
+  const engRuling = rulings['declared:eng-belowdeck~eng-walkin']?.choice || null;
+  const engProvisional = !engRuling;
+  const EBW = 2.7, EBD = 2.4;
+  const EBH = engRuling === 'low-bay' ? 1.85 : 2.15;
+  const ebx = leg2x, ebz = leg2z1 + EBD / 2;
+  const erel = (dx, dz) => [ebx + dx, 0, ebz + dz];
+  add('engFloor', {
+    room: 'engine', type: 'floor', name: 'Engine bay deck', params: { width: EBW, depth: EBD },
+    pos: [ebx, 0, ebz], rotY: 0, locked: true,
+    evidence: engProvisional ? 'assumption' : 'decision',
+    evidenceRefs: ['eng-walkin', 'eng-two-steps', 'eng-tap', 'eng-spat-heat', 'eng-belowdeck'],
+    note: (engProvisional ? '⚠ Provisional — the engineering-location conflict (walk-in bay vs. belowdeck crawl) is unresolved. ' : '') +
+      `Engine bay ${EBW} × ${EBD} m at the aft end of the spine — two steps cross it; the void forward of it, behind the galley, is the tank space Quenby once slept behind.`,
+  });
+  add('engCeil', {
+    room: 'engine', type: 'ceiling', name: 'Engine bay overhead', params: { width: EBW, depth: EBD, height: EBH },
+    pos: [ebx, 0, ebz], rotY: 0, locked: true,
+    evidence: engRuling === 'low-bay' ? 'decision' : (engProvisional ? 'assumption' : 'decision'),
+    evidenceRefs: ['eng-walkin', 'eng-belowdeck'],
+    note: engRuling === 'low-bay'
+      ? 'Your ruling: low overhead (1.85 m) — the bay keeps the belowdeck crouch; adults stoop.'
+      : 'Stand-up overhead.',
+  });
+  if (engRuling === 'bay-plus-crawl') {
+    add('engFloorHatch', {
+      room: 'engine', type: 'crate', name: 'Deck access hatch',
+      params: { width: 0.7, height: 0.03, depth: 0.7 },
+      pos: erel(-0.75, -0.55), rotY: 0, locked: false,
+      evidence: 'decision', evidenceRefs: ['eng-belowdeck', 'eng-galley-above'],
+      note: 'Your ruling: the ladder down to the underdeck crawl runs beneath this hatch — rungs that ring, oil and dust. The crawl itself arrives with the lower deck.',
+    });
+  }
+  const engWallSeg = (EBW - SPW) / 2;
+  for (const s of [-1, 1]) {
+    add(s < 0 ? 'engWallNW' : 'engWallNE', {
+      room: 'engine', type: 'wall', name: 'Engine bay wall (fwd)', params: { length: engWallSeg, height: EBH, thickness: 0.12 },
+      pos: [ebx + s * (SPW / 2 + engWallSeg / 2), 0, leg2z1], rotY: 0, locked: true,
+      evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+  }
+  add('engWallS', {
+    room: 'engine', type: 'wall', name: 'Engine bay wall (aft)', params: { length: EBW, height: EBH, thickness: 0.12 },
+    pos: [ebx, 0, ebz + EBD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The drive lives beyond — "a complaining purr."',
+  });
+  add('engWallW', {
+    room: 'engine', type: 'wall', name: 'Engine bay wall (port)', params: { length: EBD, height: EBH, thickness: 0.12 },
+    pos: [ebx - EBW / 2, 0, ebz], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: ['eng-behind-tanks'], note: 'The galley tanks stand beyond this wall.',
+  });
+  add('engWallE', {
+    room: 'engine', type: 'wall', name: 'Engine bay wall (starboard)', params: { length: EBD, height: EBH, thickness: 0.12 },
+    pos: [ebx + EBW / 2, 0, ebz], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('engBench', {
+    room: 'engine', type: 'counter', name: 'Workbench + tap',
+    params: { width: 1.6, depth: 0.55, height: 0.92, sink: true },
+    pos: erel(-0.25, EBD / 2 - 0.32), rotY: Math.PI, locked: false,
+    evidence: 'explicit',
+    evidenceRefs: ['eng-bench-cross', 'eng-toolbox', 'eng-tap', 'eng-glove-spot'],
+    note: 'The workbench with the dented toolbox and the cracked datapad on top; the tap she runs over her wrists; the empty spot where gloves would’ve lived. Clearances tight enough that a passing hip brushes it.',
+  });
+  add('engManifold', {
+    room: 'engine', type: 'storage', name: 'Cooling manifold (open)',
+    params: { width: 1.2, height: 1.5, depth: 0.3 },
+    pos: erel(EBW / 2 - 0.22, -0.1), rotY: -Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['eng-manifold'],
+    note: 'Where Iri works waist-deep, half the paneling stripped — "like ribs laid open."',
+  });
+  add('engPanels', {
+    room: 'engine', type: 'crate', name: 'Stripped paneling, stacked',
+    params: { width: 0.5, height: 0.4, depth: 0.45 },
+    pos: erel(0.55, 0.15), rotY: 0.25, locked: false,
+    evidence: 'explicit', evidenceRefs: ['eng-manifold'],
+    note: 'Stacked by her knee.',
+  });
+
   // ================= MEDBAY =================
   // Port side of the main corridor, "deeper in the ship" than the bridge,
   // its hatch just forward of the galley junction.
@@ -712,16 +881,18 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'alk*', 'eng*', 'dome*'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
+  'declared:eng-belowdeck~eng-walkin': ['engFloor', 'engCeil', 'engWall*', 'engFloorHatch'],
 };
 
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 3;
+export const LAYOUT_VERSION = 4;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
+  4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
 };

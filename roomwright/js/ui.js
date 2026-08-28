@@ -657,8 +657,8 @@ function renderObjects() {
     addRow.appendChild(b);
   }
   const list = root.querySelector('#obj-list');
-  const ROOM_LABEL = { bridge: 'Bridge', corridor: 'Corridor', spine: 'Storage spine', pocket: 'Pocket three', medbay: 'Medbay', galley: 'Galley', other: 'Custom' };
-  const groups = { bridge: [], corridor: [], spine: [], pocket: [], medbay: [], galley: [], other: [] };
+  const ROOM_LABEL = { bridge: 'Bridge', corridor: 'Corridor', airlock: 'Airlock', spine: 'Storage spine', pocket: 'Pocket three', dome: 'Observation dome', medbay: 'Medbay', galley: 'Galley', engine: 'Engine bay', other: 'Custom' };
+  const groups = { bridge: [], corridor: [], airlock: [], spine: [], pocket: [], dome: [], medbay: [], galley: [], engine: [], other: [] };
   for (const o of state.project.objects) (groups[o.room] || groups.other).push(o);
   for (const [room, objs] of Object.entries(groups)) {
     if (!objs.length) continue;

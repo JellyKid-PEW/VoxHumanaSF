@@ -32,7 +32,9 @@ export function computeNavGrid(radius = 0.24, extraObstacles = []) {
     const rec = state.getObject(id);
     if (!rec || ['floor', 'ceiling', 'bolts'].includes(rec.type)) continue;
     for (const bb of collectAABBs(g, true)) {
-      if (bb.max.y < 0.12 || bb.min.y > 1.85) continue; // sills / overhead don't block
+      // sills don't block; anything above the tallest crew member's head
+      // (door head-jambs, low lintels) doesn't block walking either
+      if (bb.max.y < 0.12 || bb.min.y > 1.74) continue;
       blockers.push(bb);
     }
   }
@@ -588,6 +590,93 @@ export const HABIT_TESTS = [
       if (worst <= 1.7) return { status: 'pass', details: results.join('\n') + '\nEverything within the 1.7 m blind-reach bound (Presence-04).' };
       if (worst <= 2.3) return { status: 'warn', details: results.join('\n') + '\nSlightly beyond a natural blind reach — she would need a full step and a lean.' };
       return { status: 'fail', details: results.join('\n') + '\nToo far to reach "without looking".' };
+    },
+  },
+  {
+    id: 'dome-arch-duck',
+    name: 'The dome arch scrapes anyone who walks too proud',
+    basis: ['dome-arch', 'dome-hidden', 'dome-curve'],
+    run() {
+      const dome = state.project.objects.find(o => o.layoutKey === 'domeShell');
+      if (!dome) return { status: 'warn', details: 'No observation dome in the model yet.' };
+      const arch = dome.params.archHeight ?? 1.78;
+      const tallest = Math.max(...Object.values(CHARACTERS).map(c => c.height));
+      const tallestName = Object.values(CHARACTERS).find(c => c.height === tallest).label;
+      const margin = arch - tallest;
+      // route: the dome must be reachable, but NOT on the shortest bridge→galley path
+      const grid = computeNavGrid(0.24);
+      const domeCenter = new THREE.Vector3(dome.pos[0], 0, dome.pos[2]);
+      const reachable = !!findPath(grid, new THREE.Vector3(0, 0, 0), domeCenter, 8);
+      if (!reachable) return { status: 'fail', details: 'The dome cannot be reached at all.' };
+      if (margin < -0.08) return { status: 'fail', details: `Arch at ${fmt(arch, 2)} m vs ${tallestName} at ${fmt(tallest, 2)} m — she cannot pass even ducking politely.` };
+      if (margin <= 0.12) return { status: 'pass', details: `Arch at ${fmt(arch, 2)} m; ${tallestName} stands ${fmt(tallest, 2)} m — ${fmt(Math.abs(margin) * 100, 0)} cm of grace. Walking proud gets scraped, exactly as written. Reachable, off the main route.` };
+      return { status: 'warn', details: `Arch at ${fmt(arch, 2)} m clears the tallest crew by ${fmt(margin * 100, 0)} cm — nobody would ever scrape it, against Next-08.` };
+    },
+  },
+  {
+    id: 'airlock-two-stage',
+    name: 'The airlock is a true two-stage lock, cramped for two',
+    basis: ['alk-two-stage', 'alk-hatch-line', 'alk-kit-locker'],
+    run() {
+      const floor = state.project.objects.find(o => o.layoutKey === 'alkFloor');
+      if (!floor) return { status: 'warn', details: 'No airlock in the model yet.' };
+      const inner = state.project.objects.find(o => o.layoutKey === 'alkInnerDoor');
+      const outer = state.project.objects.find(o => o.layoutKey === 'alkOuterDoor');
+      if (!inner || !outer) return { status: 'fail', details: 'The chamber needs both an inner and an outer lock.' };
+      // chamber must be reachable from the corridor through the inner lock
+      const grid = computeNavGrid(0.22);
+      const center = new THREE.Vector3(floor.pos[0], 0, floor.pos[2]);
+      if (!findPath(grid, new THREE.Vector3(0, 0, 0), center, 8)) {
+        return { status: 'fail', details: 'No route from the ship interior into the chamber.' };
+      }
+      // cramped-for-two: clear floor between 0.5 and 1.8 m²
+      let free = 0;
+      const w = floor.params.width, d = floor.params.depth;
+      for (let i = 0; i < grid.nx; i++) {
+        for (let j = 0; j < grid.nz; j++) {
+          if (!grid.walkable[i * grid.nz + j]) continue;
+          const x = grid.ox + i * grid.cell, z = grid.oz + j * grid.cell;
+          if (Math.abs(x - floor.pos[0]) <= w / 2 && Math.abs(z - floor.pos[2]) <= d / 2) free++;
+        }
+      }
+      const area = free * 0.01;
+      if (area < 0.4) return { status: 'fail', details: `Only ${fmt(area, 2)} m² of clear chamber floor — one suited person would not fit.` };
+      if (area <= 1.8) return { status: 'pass', details: `Both locks present; ${fmt(area, 2)} m² of clear chamber floor — "Too close" for two suited people, as VH1_B3_07 has it. Kit locker inside.` };
+      return { status: 'warn', details: `${fmt(area, 1)} m² of chamber floor — roomier than "too close" suggests.` };
+    },
+  },
+  {
+    id: 'eng-two-steps',
+    name: 'Two steps cross the engine bay to the bench',
+    basis: ['eng-two-steps', 'eng-bench-cross', 'eng-tap'],
+    run() {
+      const floor = state.project.objects.find(o => o.layoutKey === 'engFloor');
+      if (!floor) return { status: 'warn', details: 'No engine bay in the model yet.' };
+      const door = state.project.objects.find(o => o.layoutKey === 'spnLeg2S');
+      const bench = state.project.objects.find(o => o.layoutKey === 'engBench');
+      if (!door || !bench) return { status: 'fail', details: 'Missing the doorway or the workbench.' };
+      const v = new THREE.Vector3(0, 0, 0.45).applyAxisAngle(new THREE.Vector3(0, 1, 0), door.rotY || 0);
+      const inPt = new THREE.Vector3(door.pos[0] + v.x, 0, door.pos[2] + v.z);
+      const bb = objectAABB(bench.id, true);
+      if (!bb) return { status: 'warn', details: 'Bench has no geometry.' };
+      const nx = Math.max(bb.min.x, Math.min(inPt.x, bb.max.x));
+      const nz = Math.max(bb.min.z, Math.min(inPt.z, bb.max.z));
+      const dist = Math.hypot(nx - inPt.x, nz - inPt.z);
+      const grid = computeNavGrid(0.22);
+      if (!findPath(grid, inPt, new THREE.Vector3(bench.pos[0], 0, bench.pos[2]), 10)) {
+        return { status: 'fail', details: 'The bench cannot be reached from the doorway at all.' };
+      }
+      const manifold = state.project.objects.find(o => o.layoutKey === 'engManifold');
+      let manifoldNote = '';
+      if (manifold) {
+        if (!findPath(grid, inPt, new THREE.Vector3(manifold.pos[0], 0, manifold.pos[2]), 10)) {
+          return { status: 'fail', details: 'The open cooling manifold cannot be reached from the doorway.' };
+        }
+        manifoldNote = '\nManifold reachable — with the stacked paneling squeezing the lane, as written.';
+      }
+      if (dist <= 2.0) return { status: 'pass', details: `Doorway to bench: ${fmt(dist, 2)} m — two honest steps. "The room was full, the heat opinionated."` + manifoldNote };
+      if (dist <= 2.8) return { status: 'warn', details: `Doorway to bench: ${fmt(dist, 2)} m — closer to three steps than two.` };
+      return { status: 'fail', details: `Doorway to bench: ${fmt(dist, 2)} m — too far for "took two steps, stopped."` };
     },
   },
 ];

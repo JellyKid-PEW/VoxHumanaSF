@@ -436,6 +436,68 @@ function buildBolts(p) {
   return g;
 }
 
+// Observation dome: segmented cylindrical wall with a low entry arch (local
+// +z), a glass band and cap, and a sittable ledge ring at the glass line.
+// The walls are individual box segments so collision/nav stays per-segment.
+function buildDomeShell(p) {
+  const g = new THREE.Group();
+  const r = p.radius, wallH = p.wallHeight, segs = 14;
+  const archHalf = Math.asin(Math.min(0.9, (p.archWidth / 2) / r)); // angular half-width of the arch
+  for (let i = 0; i < segs; i++) {
+    const a0 = (i / segs) * Math.PI * 2, a1 = ((i + 1) / segs) * Math.PI * 2;
+    const mid = (a0 + a1) / 2;
+    // the arch faces local +z (angle 0): skip wall segments inside its span
+    const d = Math.atan2(Math.sin(mid), Math.cos(mid));
+    const inArch = Math.abs(d) < archHalf;
+    const chord = 2 * r * Math.sin((a1 - a0) / 2);
+    if (!inArch) {
+      const w = box(chord * 1.06, wallH, 0.12, MATS.hull);
+      w.position.set(r * Math.sin(mid), wallH / 2, r * Math.cos(mid));
+      w.rotation.y = mid;
+      g.add(w);
+      // ledge segment inside the wall at sitting height (the dusty metal rim)
+      const ledge = box(chord * 0.9, 0.06, 0.3, MATS.deckTread);
+      ledge.position.set((r - 0.24) * Math.sin(mid), p.ledgeHeight, (r - 0.24) * Math.cos(mid));
+      ledge.rotation.y = mid;
+      g.add(ledge);
+      const ledgeLeg = box(chord * 0.8, p.ledgeHeight, 0.24, MATS.hullDark);
+      ledgeLeg.position.set((r - 0.22) * Math.sin(mid), p.ledgeHeight / 2, (r - 0.22) * Math.cos(mid));
+      ledgeLeg.rotation.y = mid;
+      g.add(ledgeLeg);
+    } else {
+      // lintel over the arch — "low enough to scrape anyone who walked too
+      // proud". The arch cuts up through the glass line; the lintel spans
+      // from archHeight to the top of the glass band.
+      const top = wallH + p.glassHeight;
+      const lintel = box(chord * 1.06, Math.max(0.05, top - p.archHeight), 0.12, MATS.trim);
+      lintel.position.set(r * Math.sin(mid), (p.archHeight + top) / 2, r * Math.cos(mid));
+      lintel.rotation.y = mid;
+      g.add(lintel);
+    }
+  }
+  // sit anchor on the ledge opposite the arch
+  const sit = new THREE.Object3D();
+  sit.name = 'sitPoint';
+  sit.position.set(0, p.ledgeHeight + 0.03, -(r - 0.24));
+  g.add(sit);
+  // glass band + cap (visual only; the segments below carry collision)
+  const band = new THREE.Mesh(
+    new THREE.CylinderGeometry(r, r, p.glassHeight, 24, 1, true), MATS.glass);
+  band.position.y = wallH + p.glassHeight / 2;
+  band.userData.collidable = false;
+  band.userData.isWindow = true;
+  g.add(band);
+  const cap = new THREE.Mesh(
+    new THREE.SphereGeometry(r, 24, 10, 0, Math.PI * 2, 0, Math.PI / 2), MATS.glass);
+  cap.scale.y = 0.45;
+  cap.position.y = wallH + p.glassHeight;
+  cap.userData.collidable = false;
+  cap.userData.isWindow = true;
+  g.add(cap);
+  g.userData.isViewport = true;
+  return g;
+}
+
 // ---------- registry ----------
 export const OBJECT_TYPES = {
   floor: {
@@ -563,6 +625,18 @@ export const OBJECT_TYPES = {
       { key: 'width', label: 'Width (m)', min: 0.3, max: 3, step: 0.05 },
       { key: 'depth', label: 'Depth (m)', min: 0.3, max: 2, step: 0.05 },
       { key: 'height', label: 'Height (m)', min: 0.4, max: 1.2, step: 0.02 },
+    ],
+  },
+  domeShell: {
+    label: 'Observation dome',
+    build: buildDomeShell,
+    defaults: { radius: 1.25, wallHeight: 1.0, glassHeight: 0.95, archWidth: 0.85, archHeight: 1.78, ledgeHeight: 0.4 },
+    schema: [
+      { key: 'radius', label: 'Radius (m)', min: 0.8, max: 4, step: 0.05 },
+      { key: 'wallHeight', label: 'Wall height (m)', min: 0.5, max: 2, step: 0.05 },
+      { key: 'glassHeight', label: 'Glass band (m)', min: 0.3, max: 2, step: 0.05 },
+      { key: 'archHeight', label: 'Arch height (m)', min: 1.4, max: 2.2, step: 0.02 },
+      { key: 'ledgeHeight', label: 'Ledge height (m)', min: 0.2, max: 0.7, step: 0.02 },
     ],
   },
   counter: {
