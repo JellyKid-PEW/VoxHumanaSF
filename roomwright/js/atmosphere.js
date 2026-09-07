@@ -101,7 +101,7 @@ export function rebuildRoomLights() {
         const p = new THREE.PointLight(0xdfe8f0, base * (M.fill / 8.5), Math.max(4, long * 0.9), 1.9);
         p.position.set(
           f.pos[0] + (along === 'x' ? t * long * 0.8 : 0),
-          2.0,
+          (f.pos[1] || 0) + 2.0,
           f.pos[2] + (along === 'z' ? t * long * 0.8 : 0));
         p.userData.baseIntensity = base;
         scene.add(p);

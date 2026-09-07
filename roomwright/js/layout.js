@@ -11,6 +11,7 @@ import { bus, status } from './util.js';
 // Bridge shell parameters. Width/depth are assumptions chosen inside the
 // evidenced bounds (narrow-space max, crossable-room min, aft-panel-cross).
 export const BRIDGE = { W: 4.8, D: 4.6, H: 2.25 };
+export const DECK2Y = -2.7;                  // lower deck base height
 const COR = { W: 1.1, LEN: 4.6, H: 2.15 };   // corridor: narrow, lower overhead
 const GALLEY_SIZES = { tiny: [2.6, 2.4], compact: [3.0, 2.8], roomy: [3.6, 3.2] };
 
@@ -19,6 +20,8 @@ function defs(rulings) {
   const doorRuling = rulings['declared:door-behind~throttle']?.choice || null;
   const railRuling = rulings['declared:knees-touch~rail-between']?.choice || null;
   const galleyRuling = rulings['declared:galley-island~galley-tiny']?.choice || null;
+  const iriRuling = rulings['declared:iri-cabin-lower~iri-quarters-route']?.choice || null;
+  const iriProvisional = !iriRuling;
 
   // door placement
   let doorX = 1.5, doorOnSideWall = false;
@@ -244,15 +247,29 @@ function defs(rulings) {
     pos: [cx, 0, corCz], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Lower than the bridge overhead (assumption).',
   });
-  // port wall split by the medbay hatch
+  // port wall split by the stairwell opening and the medbay hatch
   const medHatchZ = 5.75;
-  const portSeg1 = (medHatchZ - 0.6) - corStartZ;
+  const stairZ = 3.65;
+  const portSeg0 = (stairZ - 0.55) - corStartZ;
+  const portSeg1 = (medHatchZ - 0.6) - (stairZ + 0.55);
   const portSeg2 = corEndZ - (medHatchZ + 0.6);
   add('corWallPort', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (port fwd)', params: { length: portSeg1, height: COR.H, thickness: 0.12 },
-    pos: [cx - COR.W / 2, 0, corStartZ + portSeg1 / 2], rotY: Math.PI / 2, locked: true,
+    room: 'corridor', type: 'wall', name: 'Corridor wall (port fwd)', params: { length: portSeg0, height: COR.H, thickness: 0.12 },
+    pos: [cx - COR.W / 2, 0, corStartZ + portSeg0 / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'corridor-widened', 'corridor-smell'],
     note: corNote,
+  });
+  add('stairDoor', {
+    room: 'stairwell', type: 'doorway', name: 'Stairwell opening',
+    params: { length: 1.1, height: COR.H, thickness: 0.12, doorWidth: 0.9, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 1 },
+    pos: [cx - COR.W / 2, 0, stairZ], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['stair-lights', 'deck-three'],
+    note: 'The stairwell down to the lower deck — its lights blink in pairs. The opening stands open; the door stays parked in its pocket.',
+  });
+  add('corWallPortMid', {
+    room: 'corridor', type: 'wall', name: 'Corridor wall (port mid)', params: { length: portSeg1, height: COR.H, thickness: 0.12 },
+    pos: [cx - COR.W / 2, 0, (stairZ + 0.55) + portSeg1 / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-narrow'], note: 'Corridor wall between the stairwell and the medbay.',
   });
   add('medHatch', {
     room: 'medbay', type: 'doorway', name: 'Medbay hatch',
@@ -712,11 +729,35 @@ function defs(rulings) {
     pos: [ebx, 0, ebz + EBD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'The drive lives beyond — "a complaining purr."',
   });
-  add('engWallW', {
-    room: 'engine', type: 'wall', name: 'Engine bay wall (port)', params: { length: EBD, height: EBH, thickness: 0.12 },
-    pos: [ebx - EBW / 2, 0, ebz], rotY: Math.PI / 2, locked: true,
-    evidence: 'assumption', evidenceRefs: ['eng-behind-tanks'], note: 'The galley tanks stand beyond this wall.',
-  });
+  if (iriRuling === 'aft-room') {
+    // door through to Iri's quarters (her ruling puts them past the galley)
+    const iqDoorZ = ebz - 0.25;
+    const wSegA = (iqDoorZ - 0.45) - (ebz - EBD / 2);
+    const wSegB = (ebz + EBD / 2) - (iqDoorZ + 0.45);
+    add('engWallW1', {
+      room: 'engine', type: 'wall', name: 'Engine bay wall (port fwd)', params: { length: wSegA, height: EBH, thickness: 0.12 },
+      pos: [ebx - EBW / 2, 0, ebz - EBD / 2 + wSegA / 2], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['eng-behind-tanks'], note: 'The galley tanks stand beyond this wall.',
+    });
+    add('engWallWDoor', {
+      room: 'quarters', type: 'doorway', name: 'Iri’s quarters door',
+      params: { length: 0.9, height: EBH, thickness: 0.12, doorWidth: 0.72, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0.45 },
+      pos: [ebx - EBW / 2, 0, iqDoorZ], rotY: Math.PI / 2, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-quarters-route', 'iri-cabin-lower'],
+      note: 'Your ruling: her quarters past the galley. The door holds at half-angle. Half-invite.',
+    });
+    add('engWallW2', {
+      room: 'engine', type: 'wall', name: 'Engine bay wall (port aft)', params: { length: wSegB, height: EBH, thickness: 0.12 },
+      pos: [ebx - EBW / 2, 0, ebz + EBD / 2 - wSegB / 2], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+  } else {
+    add('engWallW', {
+      room: 'engine', type: 'wall', name: 'Engine bay wall (port)', params: { length: EBD, height: EBH, thickness: 0.12 },
+      pos: [ebx - EBW / 2, 0, ebz], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['eng-behind-tanks'], note: 'The galley tanks stand beyond this wall.',
+    });
+  }
   add('engWallE', {
     room: 'engine', type: 'wall', name: 'Engine bay wall (starboard)', params: { length: EBD, height: EBH, thickness: 0.12 },
     pos: [ebx + EBW / 2, 0, ebz], rotY: Math.PI / 2, locked: true,
@@ -842,6 +883,324 @@ function defs(rulings) {
     note: 'Sterilizer unit with its blinking diagnostic loop.',
   });
 
+  // ================= LOWER DECK =================
+  // "Lower corridor. Coolant lines, forgotten tags." Reached by the stairwell
+  // whose lights blink in pairs. Everything below sits at DECK2.
+  const D2 = DECK2Y;
+  const mEp = cx - COR.W / 2;            // corridor port wall plane
+
+  // ---------- stairwell ----------
+  add('stwSteps', {
+    room: 'stairwell', type: 'step', name: 'Stairwell',
+    params: { width: 1.05, rise: 0.18, run: 0.2, steps: 15 },
+    pos: [mEp - 1.5, D2, stairZ], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['stair-lights', 'deck-three', 'lower-corridor'],
+    note: 'Fifteen treads down to the lower deck. The stairwell lights blink in pairs.',
+  });
+  for (const s of [-1, 1]) {
+    add(s < 0 ? 'stwWallN' : 'stwWallS', {
+      room: 'stairwell', type: 'wall', name: 'Stairwell wall', params: { length: 3.0, height: 4.85, thickness: 0.12 },
+      pos: [mEp - 1.5, D2, stairZ + s * 0.55], rotY: 0, locked: true,
+      evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+  }
+  add('stwCeil', {
+    room: 'stairwell', type: 'ceiling', name: 'Stairwell overhead', params: { width: 3.0, depth: 1.1, height: 4.85 },
+    pos: [mEp - 1.5, D2, stairZ], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+  // ---------- lower corridor ----------
+  const LCX = mEp - 3.55;                 // centerline
+  const LCW = 1.1;
+  const lcz0 = 2.0, lcz1 = 12.1;
+  add('lowFloor', {
+    room: 'lower-corridor', type: 'floor', name: 'Lower corridor deck', params: { width: LCW, depth: lcz1 - lcz0 },
+    pos: [LCX, D2, (lcz0 + lcz1) / 2], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['lower-corridor', 'cabin-row'],
+    note: 'The lower corridor — coolant lines, forgotten tags, plates memorized without belonging. The cabin row runs along its port side.',
+  });
+  add('lowCeil', {
+    room: 'lower-corridor', type: 'ceiling', name: 'Lower corridor overhead', params: { width: LCW, depth: lcz1 - lcz0, height: 2.1 },
+    pos: [LCX, D2, (lcz0 + lcz1) / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Coolant lines run exposed along it.',
+  });
+  add('lowEndS', {
+    room: 'lower-corridor', type: 'wall', name: 'Lower corridor end', params: { length: LCW, height: 2.1, thickness: 0.12 },
+    pos: [LCX, D2, lcz1], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: ['cabin-bend'],
+    note: 'The corridor bends on beyond here in the prose ("Down the bend, someone waited too") — capped for now.',
+  });
+  // east wall: solid except the stair-shaft mouth and the crew-quarters door
+  const lcE = LCX + LCW / 2;
+  const eSegs = [
+    ['lowWallE1', lcz0, 3.1], ['lowWallE2', 4.2, 5.35], ['lowWallE3', 6.45, lcz1],
+  ];
+  for (const [key, a, b] of eSegs) {
+    add(key, {
+      room: 'lower-corridor', type: 'wall', name: 'Lower corridor wall (starboard)', params: { length: b - a, height: 2.1, thickness: 0.12 },
+      pos: [lcE, D2, (a + b) / 2], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['lower-corridor'], note: '',
+    });
+  }
+  add('qtrDoor', {
+    room: 'quarters', type: 'doorway', name: 'Crew quarters door',
+    params: { length: 1.1, height: 2.1, thickness: 0.12, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [lcE, D2, 5.9], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['crew-quarters', 'doors-wait'],
+    note: 'Where B.O.B. reports Nova sleeping — "Crew quarters."',
+  });
+  // west wall: segments between the cabin doors (doors sit toward the foot
+  // of each cabin so the bunk wall stays clear)
+  const lcWx = LCX - LCW / 2;
+  const cabinCenterZ = [5.2, 7.1, 9.0, 10.9];  // cabins 1, 2, 3 (Iri's) and Cabin Six
+  const cabinDoorZ = cabinCenterZ.map(z => z + 0.25);
+  const wSegs = [];
+  let prev = lcz0;
+  for (const dz of cabinDoorZ) { wSegs.push([prev, dz - 0.45]); prev = dz + 0.45; }
+  wSegs.push([prev, lcz1]);
+  wSegs.forEach(([a, b], i) => {
+    if (b - a < 0.05) return;
+    add('lowWallW' + i, {
+      room: 'lower-corridor', type: 'wall', name: 'Lower corridor wall (port)', params: { length: b - a, height: 2.1, thickness: 0.12 },
+      pos: [lcWx, D2, (a + b) / 2], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['cabin-row'], note: '',
+    });
+  });
+
+  // ---------- cabin row ----------
+  const CABD = 1.9, CABW = 1.8;          // depth (x) × width (z)
+  const cabX = lcWx - CABD / 2;
+  const cabinDefs = [
+    ['cab1', 'Cabin One (blank)', 0, 'One blank cabin — passed without a look.', ['cabin-row']],
+    ['cab2', 'Cabin Two (door ajar)', 0.4, 'Door ajar, too orderly.', ['cabin-row']],
+    ['cab3', iriRuling === 'aft-room' ? 'Cabin Three (blank)' : 'Iri’s cabin', 0.45,
+      iriRuling === 'aft-room'
+        ? 'Your ruling: Iri’s quarters are the aft room past the galley; this cabin stands empty.'
+        : (iriProvisional ? '⚠ Provisional — the Iri’s-quarters conflict is unresolved. ' : '') +
+          'The door held at half-angle. Half-invite. Her worktable and sealed storage hatch inside.',
+      ['iri-cabin-lower', 'cabin-row', 'iri-worktable', 'iri-storage-hatch']],
+    ['cab6', 'Cabin Six', 0,
+      'Unmarked. Shut. No one’s — until Quenby takes it. The bunk low and tight-cornered, sheet pulled taut; the wall where the mirror isn’t; gravity a quarter heavy near the far bulkhead. The door slides its last centimeter on its own and catches.',
+      ['cabin-six', 'cabin-six-room', 'cabin-bunk', 'cabin-mirror', 'cabin-door-catch']],
+  ];
+  cabinDefs.forEach(([key, name, doorOpen, note, refs], i) => {
+    const cz = cabinCenterZ[i];
+    add(key + 'Floor', {
+      room: 'cabin', type: 'floor', name: name + ' deck', params: { width: CABD, depth: CABW },
+      pos: [cabX, D2, cz], rotY: 0, locked: true,
+      evidence: key === 'cab6' ? 'explicit' : 'inference', evidenceRefs: refs, note,
+    });
+    add(key + 'Ceil', {
+      room: 'cabin', type: 'ceiling', name: name + ' overhead', params: { width: CABD, depth: CABW, height: 2.05 },
+      pos: [cabX, D2, cz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add(key + 'Door', {
+      room: 'cabin', type: 'doorway', name: name + ' door',
+      params: { length: 1.1, height: 2.05, thickness: 0.1, doorWidth: 0.75, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: doorOpen },
+      pos: [lcWx, D2, cabinDoorZ[i]], rotY: Math.PI / 2, locked: false,
+      evidence: key === 'cab6' || key === 'cab3' ? 'explicit' : 'inference', evidenceRefs: refs, note,
+    });
+    for (const s of [-1, 1]) {
+      add(key + (s < 0 ? 'WallN' : 'WallS'), {
+        room: 'cabin', type: 'wall', name: name + ' wall', params: { length: CABD, height: 2.05, thickness: 0.1 },
+        pos: [cabX, D2, cz + s * CABW / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+      });
+    }
+    add(key + 'WallW', {
+      room: 'cabin', type: 'wall', name: name + ' wall (hull)', params: { length: CABW, height: 2.05, thickness: 0.1 },
+      pos: [cabX - CABD / 2, D2, cz], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: [],
+      note: key === 'cab6' ? 'Gravity runs a quarter heavy near this far bulkhead. The mirror isn’t on it.' : '',
+    });
+    add(key + 'Bunk', {
+      room: 'cabin', type: 'bench', name: name + ' bunk',
+      params: { width: 1.78, height: 0.4, depth: 0.68 },
+      pos: [cabX - 0.05, D2, cz - CABW / 2 + 0.39], rotY: 0, locked: false,
+      evidence: key === 'cab6' ? 'explicit' : 'inference',
+      evidenceRefs: key === 'cab6' ? ['cabin-bunk'] : ['cabin-row'],
+      note: key === 'cab6' ? 'Standard. Low, tight-cornered. Sheet pulled taut.' : 'Standard low bunk.',
+    });
+  });
+  if (iriRuling !== 'aft-room') {
+    add('cab3Table', {
+      room: 'cabin', type: 'table', name: 'Iri’s worktable',
+      params: { width: 0.5, depth: 0.85, height: 0.78 },
+      pos: [cabX - 0.5, D2, cabinCenterZ[2] + 0.55], rotY: 0, locked: false,
+      evidence: iriProvisional ? 'assumption' : 'decision', evidenceRefs: ['iri-worktable'],
+      note: (iriProvisional ? '⚠ Provisional — part of the unresolved Iri’s-quarters conflict. ' : '') + 'Where she lays the found pieces out with both hands.',
+    });
+    add('cab3Hatch', {
+      room: 'cabin', type: 'storage', name: 'Sealed storage hatch',
+      params: { width: 0.7, height: 1.1, depth: 0.28 },
+      pos: [cabX + 0.5, D2, cabinCenterZ[2] + CABW / 2 - 0.15], rotY: Math.PI, locked: false,
+      evidence: iriProvisional ? 'assumption' : 'decision', evidenceRefs: ['iri-storage-hatch'],
+      note: 'Soft-wrapped, layered, sealed.',
+    });
+  }
+
+  // ---------- crew quarters (Nova) ----------
+  const QW = 2.5, QD = 2.4;
+  const qx = lcE + QW / 2, qz = 5.9;
+  add('qtrFloor', {
+    room: 'quarters', type: 'floor', name: 'Crew quarters deck', params: { width: QW, depth: QD },
+    pos: [qx, D2, qz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['crew-quarters', 'quarters-loop'],
+    note: 'Where Nova sleeps — she left it 23 minutes before being found in pocket three. Its environmental loop runs at minimal.',
+  });
+  add('qtrCeil', {
+    room: 'quarters', type: 'ceiling', name: 'Crew quarters overhead', params: { width: QW, depth: QD, height: 2.1 },
+    pos: [qx, D2, qz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('qtrWallN', {
+    room: 'quarters', type: 'wall', name: 'Crew quarters wall', params: { length: QW, height: 2.1, thickness: 0.1 },
+    pos: [qx, D2, qz - QD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('qtrWallS', {
+    room: 'quarters', type: 'wall', name: 'Crew quarters wall', params: { length: QW, height: 2.1, thickness: 0.1 },
+    pos: [qx, D2, qz + QD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('qtrWallE', {
+    room: 'quarters', type: 'wall', name: 'Crew quarters wall (hull)', params: { length: QD, height: 2.1, thickness: 0.1 },
+    pos: [qx + QW / 2, D2, qz], rotY: Math.PI / 2, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('qtrBunk', {
+    room: 'quarters', type: 'bench', name: 'Nova’s bunk',
+    params: { width: 1.5, height: 0.4, depth: 0.7 },
+    pos: [qx + 0.3, D2, qz - QD / 2 + 0.4], rotY: 0, locked: false,
+    evidence: 'inference', evidenceRefs: ['crew-quarters'],
+    note: 'Sized for her; the blanket she wears like a cape lives here when it isn’t on her shoulders.',
+  });
+  add('qtrCrate', {
+    room: 'quarters', type: 'crate', name: 'Salvage crate',
+    params: { width: 0.5, height: 0.4, depth: 0.45 },
+    pos: [qx + 0.55, D2, qz + QD / 2 - 0.4], rotY: 0.3, locked: false,
+    evidence: 'inference', evidenceRefs: ['crew-quarters', 'bolts-source'],
+    note: 'Scavenger’s stock — washers, stripped bolts, things with threads.',
+  });
+
+  // ---------- skiff / gear bay ----------
+  const SBW = 5.5, SBD = 4.6;
+  const sbx = mEp - 6.0 + SBW / 2, sbz = lcz0 - SBD / 2;
+  add('sbFloor', {
+    room: 'skiffbay', type: 'floor', name: 'Gear bay deck', params: { width: SBW, depth: SBD },
+    pos: [sbx, D2, sbz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['skiff-cradle', 'bay-lights-low', 'bay-medbay-near'],
+    note: 'The gear bay — lights kept low, deck temperature neither welcome nor warning. The stairwell up to the medbay corridor makes the "short distance" of Presence-04.',
+  });
+  add('sbCeil', {
+    room: 'skiffbay', type: 'ceiling', name: 'Gear bay overhead', params: { width: SBW, depth: SBD, height: 2.5 },
+    pos: [sbx, D2, sbz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: 'Taller than the corridors — skiff clearance.',
+  });
+  add('sbWallN', {
+    room: 'skiffbay', type: 'wall', name: 'Gear bay wall (fwd)', params: { length: SBW, height: 2.5, thickness: 0.14 },
+    pos: [sbx, D2, sbz - SBD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('sbLaunchDoor', {
+    room: 'skiffbay', type: 'doorway', name: 'Launch aperture',
+    params: { length: SBD, height: 2.5, thickness: 0.16, doorWidth: 2.3, doorHeight: 2.2, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [sbx - SBW / 2, D2, sbz], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['bay-launch-dark'],
+    note: '"The skiff took the bay lights with it. Black cut into the room." The bay opens to space here.',
+  });
+  // south wall carries the door into the lower corridor
+  const sbSeg1 = (LCX - 0.55) - (sbx - SBW / 2);
+  const sbSeg2 = (sbx + SBW / 2) - (LCX + 0.55);
+  add('sbWallS1', {
+    room: 'skiffbay', type: 'wall', name: 'Gear bay wall (aft port)', params: { length: sbSeg1, height: 2.5, thickness: 0.14 },
+    pos: [sbx - SBW / 2 + sbSeg1 / 2, D2, lcz0], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('sbHatch', {
+    room: 'skiffbay', type: 'doorway', name: 'Bay hatch',
+    params: { length: 1.1, height: 2.5, thickness: 0.14, doorWidth: 0.85, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 0 },
+    pos: [LCX, D2, lcz0], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['bay-palm-hatch', 'bay-medbay-near', 'doors-wait'],
+    note: 'The palm-activated bay hatch — she lets the ship choose to open rather than be told.',
+  });
+  add('sbWallS2', {
+    room: 'skiffbay', type: 'wall', name: 'Gear bay wall (aft stbd)', params: { length: sbSeg2, height: 2.5, thickness: 0.14 },
+    pos: [LCX + 0.55 + sbSeg2 / 2, D2, lcz0], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('sbWallE', {
+    room: 'skiffbay', type: 'wall', name: 'Gear bay wall (stbd)', params: { length: SBD, height: 2.5, thickness: 0.14 },
+    pos: [sbx + SBW / 2, D2, sbz], rotY: Math.PI / 2, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('sbSkiff', {
+    room: 'skiffbay', type: 'crate', name: 'Skiff in its cradle',
+    params: { width: 2.6, height: 1.35, depth: 1.5 },
+    pos: [sbx - 0.7, D2, sbz - 0.6], rotY: 0.06, locked: false,
+    evidence: 'explicit', evidenceRefs: ['skiff-cradle', 'cradle-clunk'],
+    note: 'Sour and ready. The cradle disengages with a low clunk you feel in your teeth.',
+  });
+  add('sbRig', {
+    room: 'skiffbay', type: 'console', name: 'Rig station',
+    params: { width: 1.1, depth: 0.6, height: 0.95, screens: 1, lit: true },
+    pos: [sbx + 1.6, D2, sbz - SBD / 2 + 0.42], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['rig-station'],
+    note: 'Clamps aligned. Seals checked.',
+  });
+  add('sbGrid', {
+    room: 'skiffbay', type: 'shelf', name: 'Loadout grid',
+    params: { width: 1.4, depth: 0.28, mountHeight: 1.25, tins: 0 },
+    pos: [sbx + SBW / 2 - 0.16, D2, sbz + 0.5], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['loadout-grid'],
+    note: 'Taken the way some people take a pulpit — leaning, not preaching.',
+  });
+  add('sbLocker', {
+    room: 'skiffbay', type: 'storage', name: 'Rig locker',
+    params: { width: 1.0, height: 1.8, depth: 0.45 },
+    pos: [sbx + 1.7, D2, lcz0 - 0.28], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['rig-locker'],
+    note: 'The packed rig inside — straps threaded, clamps nested, weight balanced. Sealed, not locked.',
+  });
+
+  // ---------- Iri's quarters, aft-room ruling ----------
+  if (iriRuling === 'aft-room') {
+    const iqW = 1.8, iqD = 1.6;
+    const iqx = ebx - EBW / 2 - iqW / 2, iqz = ebz + 0.2;
+    add('iriQFloor', {
+      room: 'quarters', type: 'floor', name: 'Iri’s quarters deck', params: { width: iqW, depth: iqD },
+      pos: [iqx, 0, iqz], rotY: 0, locked: true,
+      evidence: 'decision', evidenceRefs: ['iri-quarters-route', 'eng-behind-tanks'],
+      note: 'Your ruling: her quarters sit past the galley, tucked against the tank space, entered through the engine bay.',
+    });
+    add('iriQCeil', {
+      room: 'quarters', type: 'ceiling', name: 'Iri’s quarters overhead', params: { width: iqW, depth: iqD, height: 2.05 },
+      pos: [iqx, 0, iqz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add('iriQWallN', {
+      room: 'quarters', type: 'wall', name: 'Iri’s quarters wall', params: { length: iqW, height: 2.05, thickness: 0.1 },
+      pos: [iqx, 0, iqz - iqD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add('iriQWallS', {
+      room: 'quarters', type: 'wall', name: 'Iri’s quarters wall', params: { length: iqW, height: 2.05, thickness: 0.1 },
+      pos: [iqx, 0, iqz + iqD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add('iriQWallW', {
+      room: 'quarters', type: 'wall', name: 'Iri’s quarters wall (tanks)', params: { length: iqD, height: 2.05, thickness: 0.1 },
+      pos: [iqx - iqW / 2, 0, iqz], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['eng-behind-tanks'], note: 'The galley tanks stand beyond.',
+    });
+    add('iriQTable', {
+      room: 'quarters', type: 'table', name: 'Iri’s worktable',
+      params: { width: 0.85, depth: 0.5, height: 0.78 },
+      pos: [iqx + 0.25, 0, iqz + 0.45], rotY: Math.PI, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-worktable'], note: 'Where she lays the found pieces out with both hands.',
+    });
+    add('iriQHatch', {
+      room: 'quarters', type: 'shelf', name: 'Sealed storage hatch',
+      params: { width: 0.7, depth: 0.26, mountHeight: 1.2, tins: 0 },
+      pos: [iqx - iqW / 2 + 0.14, 0, iqz + 0.1], rotY: Math.PI / 2, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-storage-hatch'],
+      note: 'A wall hatch above the bunk — soft-wrapped, layered, sealed.',
+    });
+    add('iriQBunk', {
+      room: 'quarters', type: 'bench', name: 'Iri’s bunk',
+      params: { width: 0.65, height: 0.4, depth: 1.35 },
+      pos: [iqx - iqW / 2 + 0.35, 0, iqz], rotY: 0, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-quarters-route'], note: 'The cabin she keeps and rarely sleeps in.',
+    });
+  }
+
   return list;
 }
 
@@ -881,18 +1240,20 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'alk*', 'eng*', 'dome*'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'low*', 'cab*', 'qtr*', 'sb*', 'iriQ*'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
   'declared:eng-belowdeck~eng-walkin': ['engFloor', 'engCeil', 'engWall*', 'engFloorHatch'],
+  'declared:iri-cabin-lower~iri-quarters-route': ['cab3*', 'iriQ*', 'engWall*'],
 };
 
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 4;
+export const LAYOUT_VERSION = 5;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
+  5: ['corWallPort'],                 // port wall split again for the stairwell down to the lower deck
 };

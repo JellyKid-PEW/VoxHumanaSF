@@ -1,7 +1,7 @@
 // Roomwright bootstrap: renderer → project (autosave or seed) → UI.
 import { state, emptyProject } from './state.js';
 import { bus, status } from './util.js';
-import { initEditor, editor, setView, setTool, enterFP, setCutaway, screenshot, rebuildRoom, rebuildMannequins, clearMeasurements } from './editor.js';
+import { initEditor, editor, setView, setTool, enterFP, setCutaway, screenshot, rebuildRoom, rebuildMannequins, clearMeasurements, setDeckFilter } from './editor.js';
 import { initAtmosphere, setLightingMode, toggleSound } from './atmosphere.js';
 import { initPersistence, loadAutosave, autosave, exportProject, importProjectFile } from './persist.js';
 import { generateLayout, LAYOUT_VERSION, LAYOUT_MIGRATION_KEYS } from './layout.js';
@@ -138,6 +138,7 @@ function wireToolbar() {
   });
   document.getElementById('btn-undo').addEventListener('click', () => { if (state.undo()) status('Undo'); });
   document.getElementById('btn-redo').addEventListener('click', () => { if (state.redo()) status('Redo'); });
+  document.getElementById('deck-select').addEventListener('change', e => setDeckFilter(e.target.value));
   document.getElementById('lighting-select').addEventListener('change', e => setLightingMode(e.target.value));
   document.getElementById('btn-cutaway').addEventListener('click', () => setCutaway(!editor.cutaway));
   document.getElementById('btn-nav').addEventListener('click', () => toggleNavOverlay());

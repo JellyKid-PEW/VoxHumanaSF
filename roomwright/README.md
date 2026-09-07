@@ -1,13 +1,17 @@
 # ROOMWRIGHT
 
 Roomwright converts prose descriptions into evidence-backed, editable 3D
-environments for fiction writers. It currently models nine connected spaces
-of the **Wild Huntress** from the Vox Humana series: the bridge, the main
-corridor, the two-stage airlock ("two steps past the bridge"), the medbay
-(to port), the storage spine with its two turns down to starboard pocket
-three, the half-hidden observation dome with its scrape-your-head arch, the
-galley, and the engine bay at the heat's center aft — one continuous
-walkable interior.
+environments for fiction writers. It currently models the **Wild Huntress**
+from the Vox Humana series across two decks — fifteen connected spaces, one
+continuous walkable interior. Main deck: the bridge, the corridor, the
+two-stage airlock ("two steps past the bridge"), the medbay, the storage
+spine with its two turns down to starboard pocket three, the half-hidden
+observation dome with its scrape-your-head arch, the galley, and the engine
+bay at the heat's center aft. Down the stairwell whose lights blink in
+pairs: the lower corridor with its coolant lines, the cabin row (one blank,
+one ajar, Iri's at half-angle, and Cabin Six at the end), Nova's crew
+quarters, and the skiff/gear bay. First-person walking descends the actual
+stairs; a Deck filter shows one level at a time in editing views.
 
 **Run it:** serve this folder over HTTP (any static server) and open
 `index.html` — e.g. `python3 -m http.server` then
@@ -29,15 +33,16 @@ it and falls back to WebGL2 automatically.
 3. **Conflicts tab** — statements that cannot both be literally true are shown
    side by side with their sources, a plain-language explanation of the
    physical problem, and candidate spatial solutions. Accept one, fix the model
-   manually, or defer. Rulings are remembered and re-applied. Five genuine
+   manually, or defer. Rulings are remembered and re-applied. Six genuine
    contradictions ship with the seed: the bridge door's position ("behind her"
    vs. a profile view from the doorway — this one moves the whole aft wing),
    the rail between the two stations vs. knees that nearly touch, the
    "tiny galley" of Presence vs. the walk-around prep island of Next, the
    medbay's "two recessed wall beds" (Next) vs. the single cot with one chair
-   that Presence and Book 3 agree on, and engineering as a walk-in bay with a
+   that Presence and Book 3 agree on, engineering as a walk-in bay with a
    doorframe (Presence) vs. a belowdeck crawl down ringing ladder rungs
-   (Next).
+   (Next), and Iri's quarters — the half-angle cabin door on the lower row
+   vs. the route "through the upper corridor, past the galley."
 4. **The 3D bridge** — generated from the constraint database. Orbit / Walk /
    Overhead / Plan / Elevation views; Move/Rotate/Resize gizmos with snapping;
    the Measure tool; cutaway slicing; navigable-space overlay; lighting modes
@@ -59,8 +64,11 @@ it and falls back to WebGL2 automatically.
    *tight but usable* (amber if roomier than the prose), pocket three keeps
    making you choose where to stand, medbay supplies stay within blind
    reach of the door, the dome arch keeps scraping anyone who walks too
-   proud, the airlock stays a true two-stage lock cramped for two, and two
-   steps still cross the engine bay to the bench.
+   proud, the airlock stays a true two-stage lock cramped for two, two
+   steps still cross the engine bay to the bench, the stairwell honestly
+   connects the decks, the lower corridor passes the cabin row in the
+   prose's order with a bunk that fits Quenby, and the gear bay stages the
+   skiff and the rigs.
 8. **Check new writing** (Docs tab) — paste a new passage; it's checked
    against the constraint database and your rulings.
 9. **Save/Export** — autosave to the browser, named versions, JSON project
@@ -95,7 +103,8 @@ wherever the bridge hatch lands — including an L-bend corridor for the
 side-door option. Older autosaved projects are migrated in place: new
 constraints, rooms, and scenes are added, and a layout-version system
 force-regenerates only the generated pieces whose definitions changed,
-without disturbing user edits or rulings. What remains for the full ship is
-the lower deck the prose keeps pointing at — the cabin row with Cabin Six,
-crew quarters, the skiff/gear bay, and the underdeck engineering crawls —
-which will need multi-level walking and stairs/ladders in the editor.
+without disturbing user edits or rulings. What remains of the ship is its
+attic and basement clutter: the underdeck engineering crawls, the numbered
+holds and storage rooms (Deck Three's unused one included), the paneled-over
+observation passage, nav as its own compartment, and the wiring nest under
+B.O.B.'s tertiary relay stack — all mined and waiting in the same pattern.

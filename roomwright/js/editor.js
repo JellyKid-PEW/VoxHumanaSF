@@ -192,12 +192,30 @@ export function rebuildRoom() {
 }
 
 // Dollhouse behavior: hide ceilings in exterior views so the interior reads.
+// The deck filter ('all' | 'main' | 'lower') additionally hides whole decks
+// in every view except first-person (where you are wherever you are).
 function applyCeilingVisibility() {
-  const show = editor.view === 'fp' || editor.view === 'elev';
+  const showCeil = editor.view === 'fp' || editor.view === 'elev';
+  const filter = editor.deckFilter || 'all';
+  const deckOK = y => filter === 'all' || editor.view === 'fp' ||
+    (filter === 'lower' ? y < -1 : y >= -1);
   for (const [id, g] of editor.objectGroups) {
     const rec = state.getObject(id);
-    if (rec?.type === 'ceiling') g.visible = show;
+    if (!rec) continue;
+    let v = deckOK(rec.pos[1] || 0);
+    if (rec.type === 'ceiling' && !showCeil) v = false;
+    g.visible = v;
   }
+  for (const g of editor.mannGroup.children) {
+    const scene = state.activeScene;
+    const m = scene?.mannequins[g.userData.mannequinIndex];
+    g.visible = deckOK(m?.pos[1] || 0);
+  }
+}
+
+export function setDeckFilter(v) {
+  editor.deckFilter = v;
+  applyCeilingVisibility();
 }
 
 export function rebuildMannequins() {
@@ -221,6 +239,7 @@ export function rebuildMannequins() {
     }
   });
   drawPaths();
+  applyCeilingVisibility();
   bus.emit('mannequins:rebuilt');
 }
 
@@ -330,7 +349,8 @@ export function enterFP(character) {
   editor.activeCam = editor.perspCam;
   editor.orbit.enabled = false;
   const eh = eyeHeight(character, 'stand');
-  editor.fp.pos.set(editor.fp.pos.x, eh, editor.fp.pos.z);
+  editor.fp.ground = groundHeightAt(editor.fp.pos.x, editor.fp.pos.z, editor.fp.ground ?? 0) ?? 0;
+  editor.fp.pos.set(editor.fp.pos.x, editor.fp.ground + eh, editor.fp.pos.z);
   editor.perspCam.position.copy(editor.fp.pos);
   editor.fp.yaw = Math.PI; // face -z (forward viewport)
   editor.fp.pitch = 0;
@@ -350,6 +370,41 @@ export function exitFP() {
   document.querySelectorAll('.char-chip').forEach(b => b.classList.remove('active'));
 }
 
+// Height of the walking surface under (x,z): the highest floor deck or step
+// tread there that is reachable from the current ground (≤0.32 m up, ≤0.45 m
+// down). Returns null when there is nothing to stand on (a void, or too big
+// a drop) — the walker refuses the move.
+export function groundHeightAt(x, z, currentGround = 0) {
+  let best = null;
+  for (const rec of state.project.objects) {
+    if (rec.type === 'floor') {
+      const fw = rec.params.width ?? 4, fd = rec.params.depth ?? 4;
+      const rot = Math.abs(Math.sin(rec.rotY || 0)) > 0.5;
+      const hw = (rot ? fd : fw) / 2, hd = (rot ? fw : fd) / 2;
+      if (Math.abs(x - rec.pos[0]) <= hw && Math.abs(z - rec.pos[2]) <= hd) {
+        const y = rec.pos[1] || 0;
+        if (y <= currentGround + 0.32 && (best === null || y > best)) best = y;
+      }
+    } else if (rec.type === 'step') {
+      const g = editor.objectGroups.get(rec.id);
+      if (!g) continue;
+      for (const bb of collectAABBs(g, true)) {
+        if (x >= bb.min.x && x <= bb.max.x && z >= bb.min.z && z <= bb.max.z) {
+          const y = bb.max.y;
+          if (y <= currentGround + 0.32 && (best === null || y > best)) best = y;
+        }
+      }
+    }
+  }
+  if (best === null) return null;
+  if (best < currentGround - 0.45 && Math.abs(best - currentGround) > 0.45) {
+    // dropping more than a step — only allow if we're actually above that
+    // surface already (e.g. walked off the last stair tread)
+    return null;
+  }
+  return best;
+}
+
 function fpUpdate(dt) {
   const f = editor.fp;
   if (!f.active) return;
@@ -365,14 +420,21 @@ function fpUpdate(dt) {
   const step = dir.multiplyScalar(speed * dt);
   const radius = Math.max(0.16, 0.22 * (spec.height / 1.7));
   const eh = eyeHeight(f.character, f.crouch ? 'crouch' : 'stand');
-  // slide along colliders: try x and z independently
+  if (f.ground === undefined) f.ground = groundHeightAt(f.pos.x, f.pos.z, 0) ?? 0;
+  // slide along colliders: try x and z independently; steps and deck edges
+  // are handled by the ground sampler (steps are excluded from colliders)
   const tryMove = (dx, dz) => {
     const nx = f.pos.x + dx, nz = f.pos.z + dz;
-    if (!circleHitsColliders(nx, nz, radius, 0.15, eh + 0.1)) { f.pos.x = nx; f.pos.z = nz; }
+    const g2 = groundHeightAt(nx, nz, f.ground);
+    if (g2 === null) return;
+    if (circleHitsColliders(nx, nz, radius, g2 + 0.15, g2 + eh + 0.1, true)) return;
+    f.pos.x = nx; f.pos.z = nz; f.ground = g2;
   };
   tryMove(step.x, 0);
   tryMove(0, step.z);
-  f.pos.y = eh;
+  // smooth the eye toward the current ground + eye height (stairs feel like stairs)
+  const targetY = f.ground + eh;
+  f.pos.y += (targetY - f.pos.y) * Math.min(1, dt * 11);
   editor.perspCam.position.copy(f.pos);
   const look = new THREE.Vector3(
     Math.sin(f.yaw) * Math.cos(f.pitch), Math.sin(f.pitch), Math.cos(f.yaw) * Math.cos(f.pitch)
@@ -382,12 +444,14 @@ function fpUpdate(dt) {
 }
 
 // Collision query: does a circle at (x,z) with radius r hit any collidable AABB
-// whose vertical span intersects [yLo, yHi]?
-export function circleHitsColliders(x, z, r, yLo = 0.15, yHi = 1.9) {
+// whose vertical span intersects [yLo, yHi]? skipSteps excludes stair treads
+// (they are walking surfaces for the FP ground sampler, not obstacles).
+export function circleHitsColliders(x, z, r, yLo = 0.15, yHi = 1.9, skipSteps = false) {
   for (const [id, g] of editor.objectGroups) {
     const rec = state.getObject(id);
     if (!rec) continue;
     if (rec.type === 'floor' || rec.type === 'ceiling' || rec.type === 'bolts') continue;
+    if (skipSteps && rec.type === 'step') continue;
     for (const bb of collectAABBs(g, /*skipDoorLeaf*/true)) {
       if (bb.max.y < yLo || bb.min.y > yHi) continue;
       const cx = Math.max(bb.min.x, Math.min(x, bb.max.x));
@@ -468,8 +532,8 @@ function afterGizmoDrag() {
   if (g.userData.objectId) {
     const rec = state.getObject(g.userData.objectId);
     if (rec) {
-      g.position.y = 0; // deck-bound
-      rec.pos = [g.position.x, 0, g.position.z];
+      g.position.y = rec.pos[1] || 0; // deck-bound: keep the object's own deck
+      rec.pos = [g.position.x, rec.pos[1] || 0, g.position.z];
       rec.rotY = g.rotation.y;
       rec.scale = [g.scale.x, g.scale.y, g.scale.z];
       state.markDirty();
@@ -479,8 +543,9 @@ function afterGizmoDrag() {
     const scene = state.activeScene;
     const m = scene?.mannequins[g.userData.mannequinIndex];
     if (m) {
-      m.pos = [g.position.x, 0, g.position.z];
-      g.position.y = 0;
+      const deckY = m.pos[1] || 0;   // stay on the figure's own deck
+      m.pos = [g.position.x, deckY, g.position.z];
+      g.position.y = deckY;
       m.rotY = g.rotation.y;
       state.markDirty();
       bus.emit('mannequin:transformed', g.userData.mannequinIndex);
@@ -491,7 +556,11 @@ function afterGizmoDrag() {
 function onGizmoChange() {
   const g = editor.gizmo.object;
   if (!g) return;
-  if (g.userData.isMannequin) g.position.y = 0; // keep on deck
+  if (g.userData.isMannequin) {
+    const scene = state.activeScene;
+    const m = scene?.mannequins[g.userData.mannequinIndex];
+    g.position.y = m?.pos[1] || 0; // keep on the figure's deck
+  }
   if (editor.selBox.visible && g) {
     editor.selBox.box.setFromObject(g);
   }

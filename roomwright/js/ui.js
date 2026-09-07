@@ -657,8 +657,17 @@ function renderObjects() {
     addRow.appendChild(b);
   }
   const list = root.querySelector('#obj-list');
-  const ROOM_LABEL = { bridge: 'Bridge', corridor: 'Corridor', airlock: 'Airlock', spine: 'Storage spine', pocket: 'Pocket three', dome: 'Observation dome', medbay: 'Medbay', galley: 'Galley', engine: 'Engine bay', other: 'Custom' };
-  const groups = { bridge: [], corridor: [], airlock: [], spine: [], pocket: [], dome: [], medbay: [], galley: [], engine: [], other: [] };
+  const ROOM_LABEL = {
+    bridge: 'Bridge', corridor: 'Corridor', airlock: 'Airlock', spine: 'Storage spine',
+    pocket: 'Pocket three', dome: 'Observation dome', medbay: 'Medbay', galley: 'Galley',
+    engine: 'Engine bay', stairwell: 'Stairwell', 'lower-corridor': 'Lower corridor',
+    cabin: 'Cabin row', quarters: 'Quarters', skiffbay: 'Skiff / gear bay', other: 'Custom',
+  };
+  const groups = {
+    bridge: [], corridor: [], airlock: [], spine: [], pocket: [], dome: [], medbay: [],
+    galley: [], engine: [], stairwell: [], 'lower-corridor': [], cabin: [], quarters: [],
+    skiffbay: [], other: [],
+  };
   for (const o of state.project.objects) (groups[o.room] || groups.other).push(o);
   for (const [room, objs] of Object.entries(groups)) {
     if (!objs.length) continue;
