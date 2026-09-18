@@ -119,6 +119,22 @@ Functional rationale:
 
 Exact aft-branch destination and geometry remain OPEN.
 
+
+### WORKING — Training area and aft loop
+
+A dedicated training / sparring area should exist off the lower-deck circulation loop.
+
+Established working requirements:
+- large enough for Iri and Nova to spar or train with staves without being constrained by cabin-scale clearances;
+- reached by a corridor branch from the wet/service-core side;
+- also reached by the quieter aft route that continues beyond Quenby's Cabin Six;
+- the aft route must go around Cabin Six rather than through it;
+- Cabin Six remains a private room and is never part of through-circulation;
+- the two access paths reconnect through or around the training-area zone, creating a true lower-deck loop;
+- the training room may be multi-use, but its minimum clear floor area must be set by staff-sparring clearance rather than by storage needs.
+
+Exact training-room dimensions, equipment, and secondary uses remain OPEN.
+
 ### WORKING — Secondary vertical crew access
 
 The wet/service core may include a compact secondary vertical route between the residential deck and the main-deck hygiene area.
