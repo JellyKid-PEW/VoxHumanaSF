@@ -68,6 +68,20 @@ This preserves the established Quenby/Iri shared-wall relationship while keeping
 
 The second larger cabin remains unassigned and its original purpose is OPEN.
 
+### WORKING — Quieter end created by ship structure
+
+The preferred privacy for Cabins Five and Six should arise from functional ship geometry, not from a purpose-built private or romantic alcove.
+
+Preferred rationale:
+- the residential corridor doglegs around a fixed structural / utility core or pressure-bulkhead zone;
+- Cabins Five and Six occupy the short run beyond that dogleg;
+- they are therefore partly out of sight from the main cabin corridor and naturally quieter;
+- Cabin Five and Cabin Six sit side-by-side on the same side of that short run so they can share a structural wall;
+- Cabin Six remains at the end of the residential run;
+- Cabin Six may gain some extra floor area from the end-of-run / hull geometry rather than from being designed as a luxury or captain's suite.
+
+The exact utility core, corridor orientation, and second larger cabin remain OPEN.
+
 ---
 
 ## Galley
@@ -116,6 +130,8 @@ Do not treat the current seed's selective chapter list as evidence that the rema
 - Confirm whether the preferred six-cabin arrangement should become LOCKED.
 - Exact dimensions of standard vs. larger cabins.
 - Exact door order / numbering through the bent residential corridor.
+- Exact structural / utility reason for the residential dogleg.
+- Exact geometry of the short Cabin Five / Cabin Six run.
 - Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
 - Seating type/count in galley.
