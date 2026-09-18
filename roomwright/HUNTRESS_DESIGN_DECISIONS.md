@@ -135,6 +135,33 @@ Established working requirements:
 
 Exact training-room dimensions, equipment, and secondary uses remain OPEN.
 
+
+### WORKING — Former auxiliary cargo hold, now used for training
+
+The lower-deck training area was not purpose-built as a gym or sparring room.
+
+Preferred history and present use:
+- the compartment was originally a larger auxiliary cargo-storage space / hold;
+- the Huntress has been modified and redesigned multiple times over its service life, so some current room uses no longer match the vessel's original layout;
+- routine large-cargo handling is now concentrated near the skiff / gear-bay area, where loading and launch access make more sense;
+- this leaves the former auxiliary hold comparatively open and underused;
+- the crew has repurposed that open floor area for sparring / training when cargo is not occupying it;
+- makeshift padding can be temporarily fixed to hard surfaces for training and removed afterward;
+- the room should retain visual/physical evidence of cargo use rather than reading as a dedicated training facility.
+
+### WORKING — Training-space clearance target
+
+The former cargo hold must provide enough clear floor area for **three people using full-length staves** to spar safely enough for informal training.
+
+Initial design target:
+- aim for roughly **5 × 5 m of genuinely clear working floor as a minimum**;
+- **5 × 6 m or about 6 × 6 m** would be more comfortable if the surrounding lower-deck geometry permits it;
+- wall padding, stored equipment, tie-down points, columns, or old cargo hardware should sit outside that active envelope as much as possible;
+- ceiling height should feel more generous than a cabin corridor and permit overhead staff movement without routinely striking fixtures.
+
+These are production-design targets, not yet exact canonical dimensions.
+
+
 ### WORKING — Secondary vertical crew access
 
 The wet/service core may include a compact secondary vertical route between the residential deck and the main-deck hygiene area.
@@ -214,6 +241,19 @@ The exact full loop path and the non-residential spaces along it remain to be re
 
 
 ---
+
+
+
+### WORKING — Cargo-handling evolution
+
+The Huntress has undergone multiple redesigns / refits over its service life.
+
+Current cargo-use direction:
+- large or awkward cargo is normally staged in or adjacent to the skiff / gear-bay zone;
+- that area functions as the practical modern cargo-handling space because it already has large access, staging room, and vehicle/gear infrastructure;
+- older cargo compartments elsewhere on the ship may therefore survive as secondary holds, storage, flex spaces, or repurposed rooms.
+
+Exact refit chronology and original ship class remain OPEN.
 
 
 ## Lower-deck non-residential inventory
