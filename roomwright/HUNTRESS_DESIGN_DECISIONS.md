@@ -326,6 +326,26 @@ Current cargo-use direction:
 Exact refit chronology and original cargo arrangement remain OPEN.
 
 
+
+### LOCKED DESIGN DECISION — Two-route lower-deck circulation topology
+
+The lower deck is organized around two parallel circulation choices that reconnect:
+
+- a **primary work spine** for normal movement between operational spaces;
+- a **secondary residential leg** that passes the cabin area and is a longer / less efficient route for ordinary ship business.
+
+Canonical relationships:
+- the primary work spine is the obvious route for cargo movement, skiff/gear activity, storage access, engineering/service access, and other routine work;
+- the residential leg branches away from that working route, passes the crew cabins, and later reconnects with the support / freight side of the lower deck;
+- the route beyond Cabin Six continues into the aft/service side of the loop and never passes through a cabin;
+- **nav sits at or very near the branch point into the residential leg**, so leaving nav presents a clear choice between the sensible working route and the quieter cabin route;
+- the **wet/service core** sits along the residential side and includes the secondary vertical ladder;
+- the secondary ladder provides a practical shortcut upward toward the main-deck hygiene / galley-service area without replacing the primary stairwell;
+- the former cargo hold / training space belongs on the support side of the loop and can be reached from both the normal service approach and the quieter aft route beyond Cabin Six.
+
+This topology is LOCKED. Exact wall geometry, distances, compartment dimensions, door placement, and the precise order of secondary storage/service spaces remain OPEN.
+
+
 ## Lower-deck non-residential inventory
 
 ### TEXT EVIDENCE — Already modeled on the lower deck
@@ -360,20 +380,21 @@ Exact refit chronology and original cargo arrangement remain OPEN.
 - **Paneled-over observation passage** — known but not yet placed; likely associated with observation/dome geography unless later evidence says otherwise.
 - **B.O.B. tertiary-relay wiring nest** — known but not yet placed; may become a service-space candidate, but no lower-deck placement is established yet.
 
-### WORKING — Lower-deck loop skeleton
+### LOCKED DESIGN DECISION — Lower-deck loop skeleton
 
-Preferred topology to test next:
+The lower deck uses the locked two-route topology above:
 
-1. Primary stair / skiff-gear area feeds the normal lower corridor.
-2. The normal route passes the residential section.
-3. Near the wet/service core, a branch gives the **primary** approach to the training/support side of the deck.
-4. The residential route continues around the service core to Cabins Five and Six.
-5. The corridor continues **past** Cabin Six without entering any cabin.
-6. That quieter aft route reaches the training/support side from the rear.
-7. The training/support side should continue through additional lower-deck service/storage/engineering-access spaces and eventually reconnect toward the skiff/gear / primary-lower-deck side, producing a genuine continuous ship-walking loop.
-8. Routine traffic should favor the primary route; the section beyond Cabin Six remains valid but comparatively inconvenient / service-oriented.
+1. The primary stair / skiff-gear area feeds the **primary work spine**.
+2. Nav sits at or near the branch where the **secondary residential leg** diverges.
+3. The residential leg passes the cabin area rather than serving as the ship's normal work route.
+4. The wet/service core and secondary ladder sit along this residential side.
+5. The residential route continues around the core to Cabins Five and Six.
+6. The corridor continues **past** Cabin Six without entering any cabin.
+7. That quieter aft route reaches the former cargo hold / training and support side from the rear.
+8. The support side reconnects with the primary work spine, producing a genuine continuous circulation loop.
+9. Routine traffic favors the work spine; the cabin leg remains valid but comparatively inefficient / quiet.
 
-This is topology only. Exact wall geometry, dimensions, and which additional holds/service spaces complete the loop remain OPEN.
+Exact wall geometry, dimensions, and which additional holds/service spaces complete the loop remain OPEN.
 
 
 ---
