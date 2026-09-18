@@ -40,25 +40,33 @@ Quenby's cabin should be one of the larger cabins in the residential area.
 
 This does not require luxury. It can remain plain, utilitarian, and relatively small by normal-room standards while being larger than the standard crew cabins.
 
-### WORKING — Cabin cluster
+### WORKING — Preferred six-cabin residential cluster
 
-The Huntress is imagined as having five or six cabins grouped together in the same residential area, probably off the same hall/corridor.
+Current preferred direction:
 
-Exact count remains OPEN.
+- six actual cabins;
+- two slightly larger cabins;
+- four standard cabins;
+- all grouped in the same residential area;
+- arranged off one compact residential corridor with a bend rather than one long hotel-like row;
+- cabins may sit on both sides of the corridor where useful;
+- the bend should preserve the existing lower-corridor prose and break long sightlines.
 
-### WORKING — Five-cabin version
+This is the preferred working arrangement and should guide further layout discussion, but is not yet hard-locked.
 
-If the final count is five cabins:
-- two should be slightly larger cabins;
-- three should be smaller standard cabins.
+### WORKING — Quenby / Iri placement
 
-Arrangement/order remains OPEN.
+Preferred arrangement:
 
-### OPEN — Six-cabin version
+- Iri occupies **Cabin Five**;
+- Quenby occupies **Cabin Six**;
+- Cabin Five and Cabin Six directly share a structural wall;
+- Cabin Six is one of the two larger cabins;
+- Cabin Six remains at or near the quieter end of the residential run.
 
-If the final count is six, the size mix and exact arrangement have not yet been decided.
+This preserves the established Quenby/Iri shared-wall relationship while keeping the explicit **Cabin Six** designation.
 
-The existing prose names **Cabin Six**, so the numbering system must be reconciled with whichever physical cabin count is chosen.
+The second larger cabin remains unassigned and its original purpose is OPEN.
 
 ---
 
@@ -105,10 +113,10 @@ Do not treat the current seed's selective chapter list as evidence that the rema
 
 ## Current unresolved design questions
 
-- Final physical cabin count: five or six?
-- If six, what is the cabin size mix?
-- Exact residential-hall arrangement while preserving Quenby/Iri shared wall.
-- How to reconcile Cabin Six with Quenby's larger cabin.
+- Confirm whether the preferred six-cabin arrangement should become LOCKED.
+- Exact dimensions of standard vs. larger cabins.
+- Exact door order / numbering through the bent residential corridor.
+- Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
 - Seating type/count in galley.
 - Exact food-prep, hydration/synthesis, cold-storage, and hot-storage systems.
