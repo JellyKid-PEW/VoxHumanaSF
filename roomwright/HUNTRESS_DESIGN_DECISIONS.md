@@ -177,6 +177,44 @@ Exact coolant chemistry, radiator arrangement, local terminal type, and control 
 
 ---
 
+
+### LOCKED — "Crew quarters" means the cabin/residential area
+
+The prose references to **crew quarters** do not establish a separate seventh sleeping room.
+
+Canonical interpretation:
+- **crew quarters** is the ship's residential / cabin area as a whole;
+- Nova sleeps in one of the numbered crew cabins and has a normal cabin bunk;
+- B.O.B. saying "Crew quarters" identifies Nova's location within the residential section, not a separate room;
+- "Crew quarters loop at minimal" refers to the environmental loop serving the residential/cabin area.
+
+Any separate dedicated "Nova crew quarters" room in the current Roomwright generator is an obsolete modeling interpretation and should be removed when the lower deck is refactored.
+
+### LOCKED — Lower deck is broader than the cabin area
+
+The lower deck is not merely a residential/cabin deck.
+
+It contains or connects to other functional ship spaces and circulation beyond the crew cabins. Existing modeled examples include the skiff/gear bay; current working additions include the wet/service core and training area.
+
+The cabin area is one section of a larger lower-deck circulation system.
+
+### LOCKED — Quenby's repeated walking route forms a real loop
+
+The prose includes Quenby walking the ship repeatedly and passing the cabins multiple times during the same walking sequence.
+
+Canonical spatial implication:
+- there is a continuous circulation loop that brings a walker back past the cabin area repeatedly without reversing direction;
+- the route is not necessarily convenient, direct, or intended as the normal way to move through the ship;
+- at least one leg of the loop should feel secondary / service-oriented / longer than the primary route;
+- the residential corridor therefore has access from more than one direction;
+- the route beyond Cabin Six must continue around the cabins and reconnect elsewhere rather than terminating or passing through any cabin;
+- the loop should pass through or connect to non-residential lower-deck spaces, reinforcing that this level contains more than sleeping quarters.
+
+The exact full loop path and the non-residential spaces along it remain to be resolved, but the existence of the loop is now LOCKED.
+
+
+---
+
 ## Galley
 
 ### LOCKED — Occupancy target
@@ -221,10 +259,12 @@ Do not treat the current seed's selective chapter list as evidence that the rema
 ## Current unresolved design questions
 
 - Confirm whether the preferred six-cabin arrangement should become LOCKED.
+- Assign Nova to one of Cabins One through Four.
 - Exact dimensions of standard vs. larger cabins.
 - Exact door order / numbering through the bent residential corridor.
 - Exact geometry of the wet/service core and secondary ladder well.
 - Exact geometry of the Cabin Five / Cabin Six run and the low-traffic aft reconnection.
+- Define the complete lower-deck loop and the non-residential spaces it passes through.
 - Exact destination / function of the aft secondary branch.
 - Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
