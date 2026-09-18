@@ -215,6 +215,59 @@ The exact full loop path and the non-residential spaces along it remain to be re
 
 ---
 
+
+## Lower-deck non-residential inventory
+
+### TEXT EVIDENCE — Already modeled on the lower deck
+
+- **Skiff / gear bay** — explicit lower-deck functional space with skiff cradle, rig station, loadout grid, rig locker, launch aperture, and a short route to medbay via the stairwell.
+- **Lower corridor** — explicit circulation space with exposed coolant lines; the cabin area is only one part of it.
+- **Primary stairwell / lower landing** — explicit vertical connection to the main deck.
+
+### WORKING — New lower-deck spaces established in design discussion
+
+- **Training / sparring area** — must be large enough for Iri and Nova to train with staves; should have a primary approach from the service-core side and a quieter secondary approach from the aft route beyond Cabin Six.
+- **Wet / service core** — plumbing, habitation thermal, environmental, pumps/valves/manifolds, and the secondary ladder up toward the hygiene area.
+- **Secondary circulation / aft service route** — continues beyond Cabin Six, goes around all cabins rather than through them, and participates in the ship's continuous walking loop.
+
+### TEXT EVIDENCE — Strong candidates for connection to the lower-deck loop
+
+- **Underdeck engineering crawl / service access** — prose explicitly places an engineering space belowdeck, reached by ringing ladder rungs and exited backward through a hatch. Roomwright already notes that this crawl can coexist with the walk-in engine bay and was intended to be modeled with the lower deck later.
+- **Numbered holds / storage rooms** — the repository notes that additional holds and storage rooms exist but are not yet modeled. Their exact deck locations are not all fixed, so one or more may plausibly sit along the lower-deck service half of the loop.
+
+### TEXT EVIDENCE — Known spaces that should NOT be silently moved onto the lower deck
+
+- **Storage Four / observation-dome route** — Storage Four is reached by a long route past the observation dome; the current evidence/model places this storage-spine/dome geography on the main deck.
+- **Deck Three unused storage room** — explicitly on Deck Three, not the current lower residential/support deck.
+- **Observation dome** — currently tied to the main-deck storage-spine route.
+- **Starboard Pocket Three** — tied to the main-deck storage spine.
+- **Walk-in engine bay** — currently the main-deck aft end of the storage spine; distinct from the belowdeck engineering crawl.
+- **Medbay, airlock, galley, bridge** — current main-deck spaces.
+
+### OPEN — Other mined but unplaced spaces
+
+- **Nav compartment** — explicitly exists as its own compartment, but current evidence does not require it to be on the lower deck.
+- **Paneled-over observation passage** — known but not yet placed; likely associated with observation/dome geography unless later evidence says otherwise.
+- **B.O.B. tertiary-relay wiring nest** — known but not yet placed; may become a service-space candidate, but no lower-deck placement is established yet.
+
+### WORKING — Lower-deck loop skeleton
+
+Preferred topology to test next:
+
+1. Primary stair / skiff-gear area feeds the normal lower corridor.
+2. The normal route passes the residential section.
+3. Near the wet/service core, a branch gives the **primary** approach to the training/support side of the deck.
+4. The residential route continues around the service core to Cabins Five and Six.
+5. The corridor continues **past** Cabin Six without entering any cabin.
+6. That quieter aft route reaches the training/support side from the rear.
+7. The training/support side should continue through additional lower-deck service/storage/engineering-access spaces and eventually reconnect toward the skiff/gear / primary-lower-deck side, producing a genuine continuous ship-walking loop.
+8. Routine traffic should favor the primary route; the section beyond Cabin Six remains valid but comparatively inconvenient / service-oriented.
+
+This is topology only. Exact wall geometry, dimensions, and which additional holds/service spaces complete the loop remain OPEN.
+
+
+---
+
 ## Galley
 
 ### LOCKED — Occupancy target
