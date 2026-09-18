@@ -82,6 +82,20 @@ Preferred rationale:
 
 The exact utility core, corridor orientation, and second larger cabin remain OPEN.
 
+
+### WORKING — Vertical wet/service core
+
+A promising explanation for the residential dogleg is a vertical wet/service core rather than a solid arbitrary obstruction.
+
+Current working idea:
+- the shower / bathing / hygiene area sits on the deck above the residential dogleg;
+- its plumbing, drain, reclaimed-water, and heating lines descend through a vertical service chase beside or within the dogleg;
+- the lower residential corridor bends around that chase;
+- a maintenance hatch or narrow service access follows the pipe run and allows crew to reach valves, filters, pumps, temperature controls, or the water-heating / heat-exchange hardware;
+- this should feel like ordinary ship engineering rather than a secret passage or special architectural feature.
+
+The exact location of the bathing compartment, access hatch, heater/heat exchanger, and service volume remains OPEN.
+
 ---
 
 ## Galley
