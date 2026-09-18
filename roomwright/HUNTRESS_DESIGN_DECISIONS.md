@@ -96,6 +96,47 @@ Current working idea:
 
 The exact location of the bathing compartment, access hatch, heater/heat exchanger, and service volume remains OPEN.
 
+
+### WORKING — Secondary vertical crew access
+
+The wet/service core may include a compact secondary vertical route between the residential deck and the main-deck hygiene area.
+
+Preferred form:
+- a steep ship ladder or ladder-well rather than a full second stairwell;
+- lower access opens at or just before the residential dogleg;
+- upper access opens into a dry hygiene vestibule / service landing, not directly into a wet shower floor;
+- closable hatches at the deck boundaries preserve compartment isolation;
+- this is a legitimate crew route for quick movement between cabins and hygiene spaces, while the primary stairwell remains the normal large-item / easy-access route;
+- the ladder runs alongside the utility chase so one structural opening serves both vertical circulation and service routing without making the chase itself a walk-through maintenance tunnel.
+
+Exact ladder orientation and hatch geometry remain OPEN.
+
+### WORKING — Shared wet / thermal infrastructure
+
+Best current systems arrangement:
+
+- the galley and hygiene area should sit near the same main-deck wet/service zone, sharing short utility runs without needing to be one combined room;
+- major water mass should be stored low and near the ship's central mass rather than high in the bathing area;
+- potable water, reclaimed water, and thermal-control fluid should remain functionally separate systems even if they share the same service core;
+- domestic hot water should be heated through a heat exchanger using available ship waste heat where practical, with supplemental electric/ship heating when waste heat is insufficient;
+- the residential dogleg/core may contain pumps, filters, valves, heat exchangers, buffer tanks, and distribution manifolds serving the nearby galley, hygiene area, and habitation spaces.
+
+### WORKING — Habitation thermal loop
+
+Use a dedicated water-based coolant loop for cabin and living-area temperature control rather than circulating potable water through the walls.
+
+Preferred concept:
+- a closed, treated water or water/glycol thermal loop serves cabins and other habitation spaces;
+- local fan-coils, wall/floor panels, or compact heat-exchanger units provide heating and cooling;
+- waste heat can be reclaimed for cabin heating and domestic hot water;
+- excess heat is carried onward to the ship's larger heat-rejection system;
+- the habitation loop remains separate from higher-temperature engine / machinery cooling;
+- individual spaces can be trimmed with local valves or controls, allowing different cabin temperatures without separate heaters and air conditioners in every room.
+
+This system may give the residential bend a recognizable physical character: faint pipe noise, a slightly warm service wall, access panels, or occasional maintenance scenes.
+
+Exact coolant chemistry, radiator arrangement, local terminal type, and control hardware remain OPEN.
+
 ---
 
 ## Galley
@@ -144,7 +185,7 @@ Do not treat the current seed's selective chapter list as evidence that the rema
 - Confirm whether the preferred six-cabin arrangement should become LOCKED.
 - Exact dimensions of standard vs. larger cabins.
 - Exact door order / numbering through the bent residential corridor.
-- Exact structural / utility reason for the residential dogleg.
+- Exact geometry of the wet/service core and secondary ladder well.
 - Exact geometry of the short Cabin Five / Cabin Six run.
 - Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
