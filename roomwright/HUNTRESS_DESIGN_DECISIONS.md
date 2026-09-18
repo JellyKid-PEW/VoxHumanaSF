@@ -264,19 +264,33 @@ It contains or connects to other functional ship spaces and circulation beyond t
 
 The cabin area is one section of a larger lower-deck circulation system.
 
-### LOCKED — Quenby's repeated walking route forms a real loop
+### TEXT EVIDENCE — Quenby's repeated passes by the cabin corridor
 
-The prose includes Quenby walking the ship repeatedly and passing the cabins multiple times during the same walking sequence.
+The prose does **not** explicitly state that the ship has a circulation loop.
 
-Canonical spatial implication:
-- there is a continuous circulation loop that brings a walker back past the cabin area repeatedly without reversing direction;
-- the route is not necessarily convenient, direct, or intended as the normal way to move through the ship;
-- at least one leg of the loop should feel secondary / service-oriented / longer than the primary route;
-- the residential corridor therefore has access from more than one direction;
-- the route beyond Cabin Six must continue around the cabins and reconnect elsewhere rather than terminating or passing through any cabin;
-- the loop should pass through or connect to non-residential lower-deck spaces, reinforcing that this level contains more than sleeping quarters.
+What the prose does establish:
+- Quenby drifts down the corridor just past nav toward the crew cabins;
+- Iri observes that Quenby has passed the same corridor / cabin door "four times. Maybe five" and characterizes the behavior as a recurring nightly pattern;
+- Quenby habitually sleeps in several different ship spaces rather than choosing a cabin, including nav, storage, and once behind the galley tanks;
+- elsewhere in the same chapter, Quenby passes the cabin sequence again, discusses sleeping in the observation area, storage bay, and B.O.B.'s tertiary-relay wiring nest, and later returns to the bridge.
 
-The exact full loop path and the non-residential spaces along it remain to be resolved, but the existence of the loop is now LOCKED.
+These passages strongly support habitual circulation through multiple parts of the ship, but they do not specify whether Quenby reverses direction, retraces part of the route, changes decks, or completes a literal one-way loop.
+
+### LOCKED DESIGN DECISION — Realize the repeated walking behavior as an inconvenient circulation loop
+
+For the physical design of the Huntress, the repeated-passage behavior will be realized as a **continuous circulation loop**.
+
+This is a user-established spatial interpretation of the prose rather than an explicit textual statement.
+
+Canonical design implications:
+- the loop can bring a walker back past the cabin area without requiring a dead-end turnaround;
+- the route is not necessarily convenient, direct, or intended as normal everyday circulation;
+- at least one leg should feel secondary / service-oriented / longer than the primary route;
+- the residential corridor has access from more than one direction;
+- the route beyond Cabin Six continues around the cabin block and reconnects elsewhere rather than terminating or passing through a cabin;
+- the loop should pass through or connect to non-residential ship spaces so the repeated walk reads as moving through the Huntress rather than circling a bedroom cluster.
+
+The exact full path, deck transitions, and non-residential spaces along it remain OPEN.
 
 
 ---
@@ -327,7 +341,7 @@ Exact refit chronology and original cargo arrangement remain OPEN.
 
 ### OPEN — Other mined but unplaced spaces
 
-- **Nav compartment** — explicitly exists as its own compartment, but current evidence does not require it to be on the lower deck.
+- **Nav compartment** — explicitly exists as its own compartment. The cabin-walking passage places Quenby "just past nav" before she drifts down a corridor toward the crew cabins, making nav **strongly adjacent to the cabin-approach route**. A same-deck placement is plausible, but not textually mandatory because the passage does not explicitly rule out a nearby deck transition.
 - **Paneled-over observation passage** — known but not yet placed; likely associated with observation/dome geography unless later evidence says otherwise.
 - **B.O.B. tertiary-relay wiring nest** — known but not yet placed; may become a service-space candidate, but no lower-deck placement is established yet.
 
