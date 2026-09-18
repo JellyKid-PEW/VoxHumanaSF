@@ -33,6 +33,22 @@ The exact original class, builder, age, tonnage, and refit chronology remain OPE
 
 ---
 
+
+### LOCKED — Nominal crew and economic scale
+
+The Wild Huntress was designed around a **nominal crew of six**.
+
+Design implications:
+- six people should fit the ship's normal work/rest rhythms without the vessel feeling oversized;
+- automation and later refits allow the ship to remain operable by fewer people, including one person in degraded/high-workload conditions;
+- the Huntress should read as a **small-to-midsize independent long-haul freighter**, not a bulk carrier or cavernous commercial hauler;
+- cargo capacity is meaningful but divided among multiple holds / storage areas rather than one enormous freight cavern;
+- living spaces remain compact and economical, while selected inherited freight spaces may feel unusually large relative to the current crew;
+- the ship's economic niche favors mixed, awkward, remote, time-sensitive, or small-contract freight rather than high-volume bulk cargo.
+
+Exact exterior dimensions, tonnage, and cargo mass remain OPEN.
+
+
 ## Ship operation
 
 ### LOCKED — Solo operability
