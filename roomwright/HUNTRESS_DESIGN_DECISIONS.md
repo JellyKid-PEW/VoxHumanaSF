@@ -13,6 +13,26 @@ Roomwright's `locked` UI/object flag is not the same thing as **LOCKED** here. S
 
 ---
 
+
+## Ship origin / historical role
+
+### LOCKED — Old long-haul freighter
+
+The **Wild Huntress is an old long-haul freighter** that has been refitted, repurposed, and modified multiple times over its service life.
+
+Design implications:
+- the ship was built around carrying substantial cargo over long distances, not around its current small crew;
+- multiple large cargo holds / cargo-capable compartments are therefore normal and expected rather than exceptional;
+- present-day room use does not need to match original shipyard intent;
+- later refits may have rerouted circulation, added service trunks, converted holds, subdivided spaces, or shifted which loading area is preferred;
+- the ship should retain visible traces of former cargo-handling infrastructure even in spaces now used for something else;
+- the current crew's relatively small population can make some inherited spaces feel oversized, quiet, or underused.
+
+The exact original class, builder, age, tonnage, and refit chronology remain OPEN.
+
+
+---
+
 ## Ship operation
 
 ### LOCKED — Solo operability
@@ -136,30 +156,33 @@ Established working requirements:
 Exact training-room dimensions, equipment, and secondary uses remain OPEN.
 
 
-### WORKING — Former auxiliary cargo hold, now used for training
+### WORKING — Former cargo hold, now used for training
 
 The lower-deck training area was not purpose-built as a gym or sparring room.
 
 Preferred history and present use:
-- the compartment was originally a larger auxiliary cargo-storage space / hold;
+- the compartment was originally one of the Huntress's large cargo holds, consistent with her origin as a long-haul freighter;
 - the Huntress has been modified and redesigned multiple times over its service life, so some current room uses no longer match the vessel's original layout;
-- routine large-cargo handling is now concentrated near the skiff / gear-bay area, where loading and launch access make more sense;
-- this leaves the former auxiliary hold comparatively open and underused;
-- the crew has repurposed that open floor area for sparring / training when cargo is not occupying it;
+- multiple large cargo-capable spaces may still exist elsewhere on the ship;
+- current crews often prefer the cargo/staging space near the skiff / gear-bay complex for routine bulky freight because loading and vehicle/gear access are convenient there;
+- this older hold is therefore frequently open or lightly occupied rather than continuously packed with freight;
+- the crew has repurposed its open floor area for sparring / training when cargo is not occupying it;
 - makeshift padding can be temporarily fixed to hard surfaces for training and removed afterward;
 - the room should retain visual/physical evidence of cargo use rather than reading as a dedicated training facility.
 
-### WORKING — Training-space clearance target
+### WORKING — Training-space scale
 
-The former cargo hold must provide enough clear floor area for **three people using full-length staves** to spar safely enough for informal training.
+The former cargo hold must provide enough clear floor area for **three people using full-length staves** to spar, but because it began life as a freighter hold it may be **substantially larger than training alone requires**.
 
-Initial design target:
-- aim for roughly **5 × 5 m of genuinely clear working floor as a minimum**;
-- **5 × 6 m or about 6 × 6 m** would be more comfortable if the surrounding lower-deck geometry permits it;
-- wall padding, stored equipment, tie-down points, columns, or old cargo hardware should sit outside that active envelope as much as possible;
-- ceiling height should feel more generous than a cabin corridor and permit overhead staff movement without routinely striking fixtures.
+Current scale direction:
+- treat the room as conspicuously oversized relative to the cabins and ordinary living spaces;
+- a clear sparring envelope of roughly **6 × 8 m or larger** is plausible, with the full compartment potentially larger still;
+- do not optimize the room tightly around three fighters; the unused surrounding volume is part of the point;
+- wall padding, stored equipment, tie-down points, structural ribs, old cargo hardware, or temporary crates can occupy the perimeter without making the active space feel cramped;
+- ceiling height should be more generous than a cabin corridor and easily permit overhead staff movement;
+- wide or vestigial cargo doors, floor anchors, ceiling tracks, or other freight-handling remnants are appropriate visual evidence of the room's original purpose.
 
-These are production-design targets, not yet exact canonical dimensions.
+Exact canonical dimensions remain OPEN until the lower-deck geometry is laid out.
 
 
 ### WORKING — Secondary vertical crew access
@@ -249,11 +272,13 @@ The exact full loop path and the non-residential spaces along it remain to be re
 The Huntress has undergone multiple redesigns / refits over its service life.
 
 Current cargo-use direction:
-- large or awkward cargo is normally staged in or adjacent to the skiff / gear-bay zone;
-- that area functions as the practical modern cargo-handling space because it already has large access, staging room, and vehicle/gear infrastructure;
-- older cargo compartments elsewhere on the ship may therefore survive as secondary holds, storage, flex spaces, or repurposed rooms.
+- as a former long-haul freighter, the ship can plausibly retain **multiple substantial cargo holds**;
+- large or awkward cargo is often staged in or adjacent to the skiff / gear-bay zone because that area currently offers convenient loading, staging, and vehicle/gear access;
+- this does **not** mean the skiff bay replaced all other large cargo capacity;
+- older holds elsewhere on the ship may remain active as secondary cargo spaces, sit mostly empty between jobs, or be repurposed as storage / flex / training areas;
+- differences in door width, route convenience, refit history, or installed equipment can explain why one hold is preferred for routine freight while another remains physically large but underused.
 
-Exact refit chronology and original ship class remain OPEN.
+Exact refit chronology and original cargo arrangement remain OPEN.
 
 
 ## Lower-deck non-residential inventory
