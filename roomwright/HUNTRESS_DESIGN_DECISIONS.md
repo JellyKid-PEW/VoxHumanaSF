@@ -264,6 +264,21 @@ It contains or connects to other functional ship spaces and circulation beyond t
 
 The cabin area is one section of a larger lower-deck circulation system.
 
+
+### LOCKED DESIGN DECISION — Primary circulation bypasses the cabins
+
+The ship should have an **obviously more convenient and logical circulation path** for ordinary movement that does **not** require passing through the residential / cabin corridor.
+
+Design implications:
+- the cabin corridor is a secondary residential branch or alternate leg of the broader circulation network, not the default route between major working compartments;
+- crew moving between high-use spaces should normally have a shorter, clearer, more direct path that bypasses the cabins;
+- Quenby's repeated passes by the cabin area therefore read as a behavioral choice / habitual detour rather than unavoidable ship traffic;
+- the longer loop may incorporate the cabin corridor, service passages, older freight circulation, stairs or ladders, and support spaces, while the primary route remains simpler;
+- this should help preserve the quieter character of Cabins Five and Six even though the broader ship has continuous circulation;
+- the loop through the cabin area should feel plausible but inefficient enough that another crew member could reasonably notice Quenby choosing it repeatedly.
+
+Exact geometry of the primary bypass and where it rejoins the lower-deck loop remain OPEN.
+
 ### TEXT EVIDENCE — Quenby's repeated passes by the cabin corridor
 
 The prose does **not** explicitly state that the ship has a circulation loop.
