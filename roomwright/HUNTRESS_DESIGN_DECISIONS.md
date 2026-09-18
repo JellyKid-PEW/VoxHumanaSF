@@ -97,6 +97,28 @@ Current working idea:
 The exact location of the bathing compartment, access hatch, heater/heat exchanger, and service volume remains OPEN.
 
 
+
+### WORKING — Residential corridor is a low-traffic loop, not a dead end
+
+The residential passage should not terminate completely at Cabin Six.
+
+Preferred topology:
+- the main residential route enters from the primary lower-deck landing and passes Cabins One through Four;
+- near the wet/service core, one branch leads toward the secondary ladder / hygiene-access zone;
+- the residential passage doglegs around the service core and continues past Cabins Five and Six;
+- beyond the Cabin Five / Cabin Six section, a secondary aft branch continues and eventually reconnects with the same broader service / circulation area reached from the hygiene-access branch;
+- this creates two ways into/out of the cabin hall without making the aft connection a normal through-route.
+
+The aft connection should remain quieter and less convenient than the primary route. It may be narrower, more service-oriented, include manual hatches, or take a longer path, so routine traffic naturally favors the main landing and hygiene-core branch.
+
+Functional rationale:
+- preserves the prose feel that the lower corridor continues beyond the visible cabin sequence;
+- provides redundant crew egress if one route is blocked or isolated;
+- gives maintenance access to aft systems without forcing all service movement through the main cabin passage;
+- keeps Cabins Five and Six relatively private because the rear route exists but is not the habitual path.
+
+Exact aft-branch destination and geometry remain OPEN.
+
 ### WORKING — Secondary vertical crew access
 
 The wet/service core may include a compact secondary vertical route between the residential deck and the main-deck hygiene area.
@@ -186,7 +208,8 @@ Do not treat the current seed's selective chapter list as evidence that the rema
 - Exact dimensions of standard vs. larger cabins.
 - Exact door order / numbering through the bent residential corridor.
 - Exact geometry of the wet/service core and secondary ladder well.
-- Exact geometry of the short Cabin Five / Cabin Six run.
+- Exact geometry of the Cabin Five / Cabin Six run and the low-traffic aft reconnection.
+- Exact destination / function of the aft secondary branch.
 - Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
 - Seating type/count in galley.
