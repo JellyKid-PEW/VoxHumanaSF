@@ -544,6 +544,81 @@ It may carry separate client cargo, equipment, contract modules, repair projects
 
 ---
 
+
+### LOCKED DESIGN DECISION — Lower-deck commercial / residential dual-route arrangement
+
+The lower deck is organized around two different but connected uses of the ship:
+
+- a **commercial work route** carrying freight, equipment, skiff operations, and engineering access;
+- a **residential / service route** carrying cabin traffic, domestic utilities, the future garden nook, and quieter aft circulation.
+
+These routes reconnect around the aft freight / service region rather than forcing cargo traffic through the cabin corridor.
+
+Canonical relational order:
+
+**Commercial side**
+1. Lower Operations Junction at the foot of the primary stair.
+2. Skiff / mission bay branches from this junction rather than forming through-circulation.
+3. The primary work spine runs aft from the junction.
+4. The second flex / cargo bay sits along the forward-to-middle portion of the work spine and remains commercially usable.
+5. Parts, utility, repair, and principal underdeck-engineering access occur along the work-spine/service portion rather than as one giant engineering room.
+6. The work spine reaches the Aft Freight / Service Junction.
+7. The dedicated freight-transfer lock interfaces here with the commercial loading route.
+8. The main large cargo / flex bay opens from this aft freight node and functions as the ship's primary large paying-cargo space.
+9. When empty or lightly loaded, that same bay becomes the crew's training / large-project space.
+
+**Residential side**
+1. Nav remains at or near the branch into the residential leg.
+2. Cabins One through Four occupy the approach before the wet/service dogleg.
+3. The wet/service core and secondary ladder define the dogleg.
+4. The future garden nook sits off this quieter domestic/service region, near enough to the wet/thermal core for believable utility tie-in but not directly in normal traffic.
+5. Cabins Five and Six occupy the quieter run beyond the dogleg.
+6. The corridor continues past Cabin Six into the older aft service passage.
+7. That passage reconnects at the Aft Freight / Service region without requiring anyone to pass through the main cargo bay.
+
+This is a relational topology only. Exact port/starboard placement, dimensions, wall geometry, and hull cross-section remain OPEN.
+
+### LOCKED DESIGN DECISION — Garden nook placement and character
+
+The future garden is a **small converted stores / service compartment** associated with the quieter residential-service side of the lower deck, around the wet/service dogleg rather than inside a freight bay.
+
+Canonical character:
+- the room has its own designated closable hatch;
+- the hatch / threshold is large enough for a person to stand in, lean against, or hold a conversation from without entering;
+- the garden is somewhat isolated from ordinary traffic and can maintain its own light, airflow, humidity, and temperature more easily than an open bay;
+- roughly two or three modest grow beds fit inside with a narrow working aisle;
+- grow beds may sit on top of sealed side-opening storage lockers / crates so useful general ship stores remain accessible beneath them;
+- the compartment begins life as ordinary stores / utility volume and is later converted after Garden Station;
+- the conversion does not consume either major freight bay.
+
+The exact hatch orientation, room dimensions, and final plumbing route remain OPEN.
+
+### LOCKED DESIGN DECISION — Three lower-deck architectural languages
+
+The lower deck should visibly communicate three different kinds of ship space:
+
+- **Residential side:** quieter, more finished, cabin-scale, domestic utility access, eventual garden.
+- **Commercial side:** tougher work spine, cargo-rated doors, floor guides / restraints, skiff and freight activity, secondary work head, utility access.
+- **Aft service side:** older structure, machinery access, legacy panels, crawl spaces, refit archaeology, and Nova's lower-aft equipment-crawl nest.
+
+The transitions between these zones should feel gradual and functional rather than like three unrelated sets.
+
+### LOCKED DESIGN DECISION — Lower aft spine is service geography, not a synonym for the work spine
+
+The **lower aft spine** is the older aft service structure around / beyond the rear commercial bay and machinery territory.
+
+It is distinct from the primary work spine.
+
+Canonical implications:
+- the aft service passage beyond Cabin Six feeds toward this region;
+- the Aft Freight / Service Junction sits near the transition between current commercial circulation and older aft service fabric;
+- Nova's port-side equipment crawl / listening nest belongs within this lower-aft service geography;
+- additional engineering hatches, service pockets, and legacy utility spaces may occur here;
+- exact relation to port/starboard hull structure remains OPEN beyond the draft-text evidence placing Nova's equipment crawl on the port side.
+
+
+---
+
 ## Lower-deck non-residential inventory
 
 
@@ -719,24 +794,24 @@ These may be small distributed systems rather than full rooms and should not be 
 
 ### LOCKED DESIGN INTENT — Small Huntress garden after departure from Garden Station
 
-After the crew eventually leaves Garden Station, they create a **small garden area aboard the Wild Huntress itself**.
+After the crew eventually leaves Garden Station, they create a **small dedicated garden nook aboard the Wild Huntress itself**.
 
 Canonical intent:
-- this is a new shipboard garden created later; it is **not** the Garden Station garden moved into the ship and should never retroactively blur the station / ship boundary;
-- the onboard version is compact and practical rather than a full greenhouse or large agricultural bay;
-- it contains **multiple growing beds** so it reads as a real shared growing space rather than a single planter;
-- it should remain modest enough to fit the Huntress's small-to-midsize freighter scale;
-- its existence can carry forward habits, knowledge, or emotional associations developed at Garden Station without reproducing the station room exactly.
+- this is a new shipboard garden created later; it is **not** the Garden Station garden moved into the ship;
+- it occupies a small converted stores / service compartment on the quieter lower-deck residential-service side, near the wet/service dogleg;
+- it has its own closable hatch and a threshold where someone can stand or linger without entering;
+- it contains roughly two or three modest growing beds with a narrow working aisle;
+- beds may be raised over sealed side-opening storage lockers / crates so useful ship stores remain accessible underneath;
+- the room has controllable lighting, airflow, humidity, drainage, and thermal support;
+- the conversion preserves both major commercial flex / cargo bays.
 
 OPEN:
-- exact deck / compartment;
-- whether it uses a converted storage or service space versus a newly partitioned corner;
-- number, size, and configuration of beds;
-- lighting, water, nutrient, drainage, and thermal integration;
-- whether Nova claims an adjacent niche or monitoring spot;
-- how much cargo / utility capacity the conversion displaces.
+- exact dimensions and hatch orientation;
+- precise bed layout;
+- final water / nutrient / drainage hardware;
+- exact utility tie-in route;
+- whether any of the grow-bed support lockers predate the conversion or are installed specifically for it.
 
-This future garden should be considered when reserving flexible ship volume so later geometry does not accidentally leave no plausible place for it.
 
 ---
 
@@ -988,8 +1063,6 @@ Most importantly, the current Chapter 6 draft places a **port-side equipment cra
 - Exact door order / numbering through the bent residential corridor.
 - Exact geometry of the wet/service core and secondary ladder well.
 - Exact geometry of the Cabin Five / Cabin Six run and the low-traffic aft reconnection.
-- Define the complete lower-deck loop and the non-residential spaces it passes through.
-- Exact destination / function of the aft secondary branch.
 - Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
 - Seating type/count in galley.
