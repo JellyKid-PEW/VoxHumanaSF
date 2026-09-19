@@ -740,6 +740,19 @@ Canonical relational sequence:
 - Starboard Pocket Three, the observation-dome route, Storage Four, and the walk-in engine bay belong to this storage / service side of the deck;
 - exact wall geometry and distances remain OPEN.
 
+
+### LOCKED DESIGN DECISION — Medbay is not on a straight airlock sightline
+
+Medbay should **not** have a direct straight-shot relationship to the main airlock.
+
+Canonical relationship:
+- the main airlock remains forward near the bridge / entry node;
+- medbay remains deeper in the ship, close to the primary stair that serves the lower operations / skiff area;
+- movement from the airlock to medbay should require ordinary corridor travel through at least one bend, junction, or offset rather than a clean direct line;
+- a person entering through the main hatch should not immediately see into medbay;
+- this preserves privacy, keeps routine boarding / EVA traffic out of the medical zone, and better matches the Huntress's commercial utility-transport logic;
+- emergency access from the airlock to medbay should still be reasonably short, just not visually or spatially direct.
+
 ### LOCKED DESIGN DECISION — Storage spine is legacy ship fabric
 
 The storage spine should not read as a normal modern hallway lined with identical storage-room doors.
