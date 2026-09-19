@@ -506,6 +506,101 @@ Exact wall geometry, dimensions, and which additional holds/service spaces compl
 ---
 
 
+
+## Observation / informal-use / hidden spaces
+
+### TEXT EVIDENCE — Observation dome
+
+The observation dome is already established in the Roomwright evidence:
+- it sits off primary circulation and is semi-hidden rather than part of routine pathing;
+- its approach curves and the entry arch is low enough that a tall person must duck;
+- it has a real viewport and a sittable ledge / bench-like seating surface at the base;
+- the dome is round enough to walk partway around and sit on opposite sides;
+- interior lighting auto-dims to preserve the external view;
+- it lies on the longer route toward Storage Four and is near the storage-spine geography.
+
+Preserve the dome as a distinct quiet destination rather than converting it into a major traffic space.
+
+### TEXT EVIDENCE — Pocket Three as one of Nova's claimed spaces
+
+Starboard Pocket Three is already established as a small, awkward, semi-private storage pocket reached through a manual hatch off the storage spine.
+
+Existing details include:
+- deeper than a locker but shallower than a staging room;
+- crowded with two people;
+- narrow shelf, low storage box, working clutter, slates, journal, utility lamp, and a crate;
+- hull hum transmitted directly through the structure;
+- enough floor for Nova to sit cross-legged beside an open crate.
+
+Roomwright explicitly interprets this as **Nova's hideout**.
+
+### LOCKED DESIGN DECISION — Nova appropriates unusual ship spaces
+
+Nova has a habit of claiming **odd, overlooked, or inconvenient spaces** aboard the Huntress for herself rather than limiting herself to her cabin.
+
+Design implications:
+- Pocket Three is one such established hideout / nest;
+- at least one additional informal Nova nest should exist elsewhere on the ship;
+- one of these spaces should support her **wave surfing / searching** behavior: listening, scanning, hunting through signal or field activity, or whatever final terminology the story uses;
+- these spaces should feel discovered and appropriated rather than purpose-built for Nova;
+- nests can accumulate portable comfort and working objects over time without becoming conventional rooms;
+- different nests may serve different moods or functions: hiding, listening, tinkering, watching, or searching.
+
+The exact second nest location and the exact mechanics / hardware used for wave surfing remain OPEN.
+
+### LOCKED DESIGN DECISION — Undocumented legacy / smuggler-like spaces exist
+
+The Huntress contains **several undocumented or poorly documented spaces** created by its long service life, repeated refits, questionable records, and prior owners.
+
+These should not all be identical purpose-built contraband lockers. The category includes:
+- obsolete service voids left behind by rerouted systems;
+- false or doubled bulkhead spaces created during refits;
+- sealed or partially forgotten maintenance pockets;
+- former freight-access recesses no longer shown correctly on current plans;
+- one or more spaces that may genuinely have been modified for covert storage by a previous owner.
+
+Design rules:
+- most should be small or awkward rather than adding huge amounts of hidden volume;
+- some may be accessible only through maintenance panels, removable plating, or old manual hatches;
+- some can be closable enough to provide temporary privacy;
+- records may disagree about their original purpose or may omit them entirely;
+- the current crew does not need to know about all of them at once;
+- discoveries can happen gradually and can give Nova, Quenby, or Iri different relationships with the same ship.
+
+These spaces should reinforce the Huntress as an old repeatedly modified freighter without making the vessel comically large or turning it into a purpose-built smuggling ship.
+
+### WORKING — Candidate uses for undocumented spaces
+
+Useful narrative functions include:
+- Nova nest / signal-searching location;
+- secluded repair nook;
+- forgotten parts or obsolete equipment cache;
+- temporary private conversation space;
+- accidental discovery during maintenance;
+- legacy wiring / sensor access;
+- evidence of an earlier refit or owner.
+
+Exact count, placement, and which spaces were intentionally concealed versus merely forgotten remain OPEN.
+
+### OPEN — Long-haul support spaces still needing explicit treatment
+
+Before final geometry, confirm whether and where the Huntress needs dedicated or distributed provisions for:
+- sanitation / toilets;
+- laundry or clothing-cleaning;
+- waste handling / recycling;
+- life-support service equipment;
+- potable / reclaimed water storage beyond the wet-service core;
+- food stores and consumables;
+- emergency equipment / fire suppression / damage-control lockers;
+- power-distribution / battery / auxiliary-generation spaces;
+- communications / sensor hardware separate from nav;
+- B.O.B.'s physical relay / compute infrastructure.
+
+These may be small distributed systems rather than full rooms and should not be added as major compartments unless their function requires it.
+
+
+---
+
 ## Engineering / mechanical architecture
 
 ### LOCKED DESIGN DECISION — Distributed mechanical spaces, not one engineering room
