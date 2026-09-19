@@ -815,6 +815,43 @@ OPEN:
 
 ---
 
+
+## Social / passenger use
+
+### LOCKED DESIGN DECISION — No dedicated lounge
+
+The Huntress does not need a purpose-built lounge or recreation room.
+
+Instead, social use emerges from existing working / domestic spaces:
+- the **galley** is the primary commons and default social room;
+- the **observation dome** is a quieter deliberate retreat;
+- the **main cargo / flex bay** can become a large shared activity space when empty;
+- the future **garden nook** becomes another small place to linger;
+- bridge watch, skiff maintenance, cabin thresholds, engine-bay work, and maintenance nooks may become informal social spaces depending on circumstance.
+
+The Lower Operations Junction remains traffic / work territory rather than a habitual hangout.
+
+### LOCKED DESIGN DECISION — Residential space is graded, not crew-only
+
+The Huntress's interior privacy is social and spatial rather than enforced as a strict crew-only zone.
+
+Canonical gradient:
+- routine commercial traffic remains on the working / public side of the vessel;
+- galley, hygiene facilities, and ordinary corridors are shared human spaces;
+- Cabins One through Four form the more accessible part of the residential area and may house temporary passengers, contractors, or extra crew when needed;
+- the wet-service dogleg, garden nook, Cabins Five and Six, and aft service passage feel progressively quieter / more personal;
+- individual cabins and claimed spaces remain personal regardless of location.
+
+Passengers are not prohibited from deeper areas by architecture alone. Access depends on circumstance, trust, and social permission.
+
+### LOCKED DESIGN PRINCIPLE — Spare cabins support occasional passengers
+
+Because the Huntress was designed for a nominal crew of six but normally carries only three primary occupants, unused cabins can serve as temporary berths for one or two passengers / contractors without requiring dedicated guest quarters.
+
+The exact habitual spare cabin remains OPEN, though one of Cabins One through Four is the most natural candidate because those cabins sit before the quieter Cabin Five / Six run.
+
+---
+
 ## Engineering / mechanical architecture
 
 ### LOCKED DESIGN DECISION — Distributed mechanical spaces, not one engineering room
