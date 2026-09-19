@@ -370,6 +370,25 @@ This topology is LOCKED. Exact wall geometry, distances, compartment dimensions,
 
 ## Lower-deck non-residential inventory
 
+
+### LOCKED DESIGN DECISION — Aft service passage and former-cargo-hold access
+
+The corridor beyond Cabin Six transitions into older freighter service territory and forms part of the secondary circulation loop.
+
+Canonical relationships:
+- the passage beyond Cabin Six is a **secondary service passage**, not another residential corridor;
+- habitation finishes should give way to older wall panels, exposed or accessible conduit, inspection hatches, cargo markings, and more utilitarian lighting;
+- the former cargo hold / current training-flex space is **not** a through-room required for circulation;
+- the hold should have at least two distinct accesses:
+  - a smaller personnel/service access from the quieter aft service passage;
+  - a larger freight-facing access from the primary work spine;
+- ordinary circulation can therefore continue around the hold even when the hold is occupied by cargo or being used for sparring;
+- the primary work spine remains the logical route for cargo carts, equipment, and routine ship business;
+- the aft service passage may include small-scale support functions such as parts storage, equipment lockers, environmental or utility access, and access to the belowdeck engineering crawl;
+- do not add another major destination room on this leg unless later prose or design needs justify one.
+
+This arrangement preserves the quieter character of the residential end while making the secondary route physically useful and believable.
+
 ### TEXT EVIDENCE — Already modeled on the lower deck
 
 - **Skiff / gear bay** — explicit lower-deck functional space with skiff cradle, rig station, loadout grid, rig locker, launch aperture, and a short route to medbay via the stairwell.
