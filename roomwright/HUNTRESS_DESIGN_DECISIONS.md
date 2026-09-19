@@ -477,6 +477,26 @@ Exact dimensions, door width, cargo capacity, and hold number remain OPEN.
 
 ## Cargo / flex-bay operating philosophy
 
+
+### LOCKED DESIGN DECISION — Dedicated lower-deck freight transfer vestibule
+
+The Huntress uses a dedicated **side-loading commercial freight transfer vestibule / cargo lock** on the lower work side rather than relying on the crew airlock or skiff bay for routine freight.
+
+Canonical function:
+- a broad exterior cargo hatch mates with ordinary main-space cargo infrastructure when available;
+- the interface can also operate independently in fringe conditions using shipboard sleds, winches, tugs, portable bridges, or local improvised loading support;
+- the vestibule can serve as a pressure buffer when transferring cargo in vacuum or incompatible atmosphere;
+- flush deck rails / guides and cargo-sled alignment hardware carry loads inward without requiring manual lifting;
+- the inner freight door opens toward the primary large cargo / flex bay and the cargo-rated work spine, allowing loads to be routed either into the main bay or onward to other commercial spaces;
+- the interface is large enough for meaningful palletized / modular freight and awkward equipment but is **not** a hangar;
+- the crew airlock remains a personnel / EVA entry, and the skiff bay remains a separate mission / equipment space.
+
+Preferred placement:
+- near the aft freight / service junction and the primary large cargo bay, so the heaviest routine loads have a short path;
+- the work spine runs forward from this freight node to the secondary flex bay, stores, and lower operations area.
+
+The exact exterior orientation, standard collar geometry, hatch dimensions, and whether the transfer bridge is ship-carried or dock-provided remain OPEN until the exterior hull is designed.
+
 ### LOCKED DESIGN DECISION — Primary large bay is dual-use cargo / training space
 
 The large space commonly used by the current crew for training is not a dedicated gym.
@@ -499,15 +519,27 @@ Design rule:
 - the ship should retain enough cargo / mission capacity to support contract work and generate income;
 - visible domestic adaptation should read as **people living inside a working commercial hull**, not as the ship having become a purpose-built houseboat.
 
-### WORKING — Second substantial flex bay and future garden
+### LOCKED DESIGN DECISION — Future garden is a small isolated converted compartment
 
-The second substantial flex / freight bay is a strong candidate for the future onboard garden, but the conversion should not automatically consume the entire bay.
+The future onboard garden should **not require sacrificing a substantial freight bay**.
 
-Preferred direction:
-- install multiple grow beds and associated lighting / water / thermal support in part of the bay or in a modular section of it;
-- preserve some configurable floor area, storage, access, or cargo capability where practical;
-- garden infrastructure should be designed so the ship still has meaningful commercial utility even after the crew begins making the Huntress more permanently their home;
-- exact percentage of bay converted, bed count, remaining freight capacity, and whether the garden installation is removable or semi-permanent remain OPEN.
+Canonical intent:
+- after leaving Garden Station, the crew converts a small existing storage / utility compartment or modular service nook into a dedicated garden space;
+- the garden is somewhat isolated from ordinary traffic and is entered through its own designated hatch;
+- the hatch can be closed, and its threshold / opening is large enough for a person to stand in while looking or speaking into the space;
+- the room only needs enough floor / wall length for roughly **two or three modest grow beds** plus a narrow working aisle;
+- the beds may be raised on top of sealed side-opening storage crates / lockers so useful ship stores remain accessible below them;
+- those lower stores may hold frequently used general supplies rather than functioning as formal numbered storage;
+- the garden compartment should have controllable lighting, airflow, humidity, drainage, and thermal support so its environmental needs do not spill freely into the rest of the ship;
+- the preferred location is off a quieter service / residential-adjacent route, close enough to an existing wet / thermal service chase to make later plumbing believable without placing the garden in the center of domestic traffic.
+
+The exact compartment, bed dimensions, and final route remain OPEN until lower-deck geometry is resolved.
+
+### WORKING — Second substantial flex bay remains commercially useful
+
+The second substantial flex / freight bay remains available as commercial / project volume rather than being earmarked for the garden.
+
+It may carry separate client cargo, equipment, contract modules, repair projects, overflow stores, or other configurable uses. This preserves the Huntress's ability to earn money even as the crew gradually makes other parts of the ship more permanently their own.
 
 
 ---
