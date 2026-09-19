@@ -539,14 +539,16 @@ Roomwright explicitly interprets this as **Nova's hideout**.
 Nova has a habit of claiming **odd, overlooked, or inconvenient spaces** aboard the Huntress for herself rather than limiting herself to her cabin.
 
 Design implications:
-- Pocket Three is one such established hideout / nest;
-- at least one additional informal Nova nest should exist elsewhere on the ship;
-- one of these spaces should support her **wave surfing / searching** behavior: listening, scanning, hunting through signal or field activity, or whatever final terminology the story uses;
+- Pocket Three is one established hideout / research nest;
+- Book 3 Chapter 6 establishes a second, distinct Nova space: the **port-side equipment crawl in the lower aft spine**, converted into a signal-listening room;
+- that crawl contains a mismatched receiver bank, a cargo panel repurposed as a desk, folded insulation pad, broken-crate side table, improvised lighting/cable hooks, and Nova-labeled frequency slates;
+- the array is explicitly non-broadcast and listens for fragments, carrier tones, distant ship bleed, and signals with no confirmed source;
+- Iri has quietly improved its support, cable management, heat bleed, and filtering;
+- this is the strongest current textual basis for Nova's **wave surfing / searching** space, even though the chapter itself describes it as listening rather than using that exact term;
 - these spaces should feel discovered and appropriated rather than purpose-built for Nova;
-- nests can accumulate portable comfort and working objects over time without becoming conventional rooms;
 - different nests may serve different moods or functions: hiding, listening, tinkering, watching, or searching.
 
-The exact second nest location and the exact mechanics / hardware used for wave surfing remain OPEN.
+The exact final terminology for Nova's signal activity remains OPEN, but the lower-aft-spine nest location is TEXT EVIDENCE, not a new invented room.
 
 ### LOCKED DESIGN DECISION — Undocumented legacy / smuggler-like spaces exist
 
@@ -686,11 +688,14 @@ Exact technology and arrangement remain OPEN and should be reconciled with exist
 
 ## Evidence-corpus note
 
-The full chapter set has already been reviewed for ship-identifying/spatial details before the current Roomwright seed was curated.
+The earlier assumption that chapters omitted from the Roomwright seed contained no useful ship-identifying details is **superseded**.
 
-Chapters not retained in the seed did not contain relevant identifying ship details.
+A direct Google Drive audit of the current Book 3 chapter files (`VH1_B3_01_v2` through `VH1_B3_11v1`) found additional Huntress spatial evidence, especially in Book 3 Chapter 6.
 
-Do not treat the current seed's selective chapter list as evidence that the remaining manuscripts still require a separate completeness pass before layout decisions can be made.
+See:
+- `roomwright/BOOK3_SHIP_SPACE_AUDIT.md`
+
+Most importantly, Chapter 6 explicitly establishes a **port-side equipment crawl in the lower aft spine** that Nova has converted into a signal-listening room / nest. Future Roomwright evidence work should consult the audit before assuming unseeded chapters contain no spatial constraints.
 
 ---
 
