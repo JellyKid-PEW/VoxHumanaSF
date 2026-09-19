@@ -17,9 +17,9 @@ Roomwright's `locked` UI/object flag is not the same thing as **LOCKED** here. S
 
 ## Ship origin / historical role
 
-### LOCKED — Old long-haul freighter
+### SUPERSEDED — Old long-haul freighter framing
 
-The **Wild Huntress is an old long-haul freighter** that has been refitted, repurposed, and modified multiple times over its service life.
+The earlier framing of the **Wild Huntress as fundamentally an old long-haul freighter** is superseded by the commercial long-range utility-transport classification below. She still performs long-haul freight work, especially in Volumes 1–2, but that is not her sole original design role.
 
 Design implications:
 - the ship was built around carrying substantial cargo over long distances, not around its current small crew;
@@ -49,6 +49,46 @@ Design implications:
 
 Exact exterior dimensions, tonnage, and cargo mass remain OPEN.
 
+
+
+## Ship class / modularity
+
+### LOCKED — Commercial long-range utility transport
+
+The Wild Huntress began life as a **commercial-class long-range utility transport** intended for small commercial operators rather than as a private leisure vessel, military craft, or dedicated bulk freighter.
+
+Canonical intent:
+- the class was designed for owner-captains, regional operators, couriers, station suppliers, industrial support crews, survey outfits, and other small organizations working mixed routes;
+- ships of the class are common enough that an aging example can blend into ordinary main-space commercial traffic;
+- the class is also capable of extended independent operation in fringe / low-infrastructure space;
+- the Huntress is privately owned and independently operated in the present story;
+- during Volumes 1–2, Quenby primarily uses her as a long-haul / contract freighter, but freight is an employment pattern rather than the vessel's sole design purpose.
+
+### LOCKED — Modular commercial architecture
+
+The class was deliberately designed with **moderate modularity** so captains and small operators could adapt ships to different contracts and regional needs over a long service life.
+
+Design implications:
+- major structural members, pressure boundaries, propulsion hardware, primary life-support trunks, and core flight systems remain fixed;
+- selected bays, storage areas, service compartments, interior partitions, equipment mounts, utility connection points, and cargo-handling hardware were designed to be reconfigured;
+- standardized attachment rails, service taps, power / data trunks, removable bulkhead panels, and adaptable deck fittings are appropriate;
+- different ships of the same class may have very different internal arrangements after years of refits;
+- converting a freight bay into workshop, passenger, survey, training, garden, or specialist-use space can be plausible without requiring a complete rebuild;
+- this modularity helps explain why the Huntress has accumulated mismatched compartments, inherited hardware, obsolete pockets, rerouted utilities, and spaces whose present use no longer matches original plans.
+
+The ship should still feel structurally coherent: modularity is **not** an excuse for arbitrary room placement or infinite hidden volume.
+
+### WORKING — Original bay philosophy
+
+A plausible original arrangement for the class is:
+- at least **two substantial freight / flex bays**;
+- one **medium equipment / mission bay** suitable for a skiff, EVA gear, awkward equipment, staging, or specialized contract loads;
+- distributed numbered storage, service pockets, lockers, and small freight recesses.
+
+The exact original factory configuration of the Huntress remains OPEN until the deck stack and primary circulation are finalized.
+
+
+---
 
 ## Ship operation
 
