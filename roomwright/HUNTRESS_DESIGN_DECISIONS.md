@@ -722,6 +722,84 @@ This mechanical network should add alternate maintenance movement and secluded c
 
 ---
 
+
+## Main-deck topology
+
+### LOCKED DESIGN DECISION — Main corridor and storage-spine relationship
+
+The main deck uses two distinct circulation characters:
+
+- a **primary commercial circulation route** serving the bridge, galley / wet-service zone, medbay, airlock, and primary stair;
+- an older, narrower **storage / utility spine** branching from that route and leading deeper into legacy storage, observation, and machinery territory.
+
+Canonical relational sequence:
+- the bridge sits forward on the primary route;
+- between bridge and galley, the primary corridor passes a turn into the storage spine;
+- medbay, galley access, airlock access, and the primary stair all connect through the broader main-deck circulation network;
+- the storage spine becomes progressively older, narrower, more manual, and less completely integrated with current automation;
+- Starboard Pocket Three, the observation-dome route, Storage Four, and the walk-in engine bay belong to this storage / service side of the deck;
+- exact wall geometry and distances remain OPEN.
+
+### LOCKED DESIGN DECISION — Storage spine is legacy ship fabric
+
+The storage spine should not read as a normal modern hallway lined with identical storage-room doors.
+
+Design character:
+- variable width, including localized widening / narrowing;
+- multiple bends rather than a perfectly straight run;
+- older panels, manual hardware, legacy markings, service access, and mismatched refit work;
+- automation / sensor confidence decreases compared with the main commercial corridor;
+- the deeper parts of the spine should feel like accumulated ship history rather than a planned public circulation route.
+
+### LOCKED DESIGN DECISION — Pocket One mundane, Pocket Two suspicious
+
+The original ship / class plausibly used numbered starboard storage / service pockets.
+
+Current Huntress interpretation:
+- **Pocket One** once existed but was consumed or converted during a documented, mundane refit. Its disappearance has a legitimate engineering / service explanation.
+- **Pocket Two** is genuinely unresolved. Records and present geometry do not reconcile cleanly enough to explain what happened to its usable volume.
+- **Pocket Three** remains physically accessible and recognizable as a legacy pocket.
+
+Pocket Two should remain unexplained for now. Do not prematurely decide whether it became a smuggler compartment, sealed void, legacy systems space, or something mundane.
+
+### LOCKED DESIGN DECISION — Pocket Three has coarse B.O.B. awareness, limited control
+
+Pocket Three is **not completely invisible to B.O.B.**, but it is poorly integrated into current ship automation.
+
+Canonical behavior:
+- B.O.B. knows Pocket Three exists and can identify its location;
+- B.O.B. can infer or detect coarse occupancy / activation through legacy indicators, local power draw, environmental changes, or similar low-resolution means;
+- B.O.B. can route audio through the old local speaker;
+- the hatch is manual and not remotely actuated by B.O.B.;
+- B.O.B. does not have normal fine-grained interior visibility, reliable item-level inventory awareness, or high-confidence modern geometry for the compartment;
+- Pocket Three therefore functions as a **low-observability compartment**, not a magically invisible one.
+
+This principle may extend selectively into older service spaces and legacy voids: B.O.B.'s certainty should degrade where refits, manual systems, and contradictory records accumulate.
+
+### LOCKED DESIGN DECISION — Observation dome as original / structural feature with evolved use
+
+The observation dome / cupola is likely a structural or factory-era feature of the class rather than a casual later cut into the pressure hull.
+
+Preferred interpretation:
+- originally served a practical inspection, survey, docking, or remote-operations function;
+- its viewport / hull opening is part of the ship's structural design;
+- later refits changed access and surrounding circulation enough that it now feels semi-hidden off the storage route;
+- present crew use is primarily quiet observation / sitting rather than formal survey work;
+- the bench / ledge may be original or later-added; exact history remains OPEN.
+
+### LOCKED DESIGN DECISION — Walk-in engine bay sits at the deep service end
+
+The walk-in engine bay remains at the deeper service / machinery end of the main-deck storage-spine route.
+
+The experiential progression should read roughly:
+**primary corridor → storage / utility territory → legacy pockets / older ship fabric → observation / deep storage → machinery**.
+
+This is a relational and experiential sequence, not an exact linear floor plan.
+
+
+---
+
+
 ## Galley
 
 ### LOCKED — Occupancy target
