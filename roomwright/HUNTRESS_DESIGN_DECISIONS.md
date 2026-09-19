@@ -578,6 +578,24 @@ Canonical relational order:
 
 This is a relational topology only. Exact port/starboard placement, dimensions, wall geometry, and hull cross-section remain OPEN.
 
+
+### LOCKED DESIGN DECISION — Domestic stores / future garden compartment
+
+The future garden compartment begins as a legitimate **domestic / habitation stores room** near the lower residential wet-service core.
+
+Original practical purpose:
+- holds frequently used crew-support supplies that do not belong in formal numbered bulk storage, such as linens, towels, cleaning supplies, hygiene consumables, replacement filters, waste bags, water-testing supplies, and small domestic/environmental spares;
+- sits near the residential / hygiene service zone because those supplies are used there and because the compartment can share convenient power, ventilation, and service access;
+- may contain standardized low side-opening storage lockers / crates rather than freestanding shelving.
+
+Later conversion:
+- after Garden Station, the crew preserves much of that storage function;
+- two or three modest grow beds can be installed on top of the low side-opening storage units;
+- the room retains a narrow working aisle and its own closable hatch;
+- the garden therefore evolves from an existing practical support compartment rather than occupying an arbitrary spare room.
+
+Preferred terminology before conversion: **domestic stores** or **habitation stores**, not merely "storage recess."
+
 ### LOCKED DESIGN DECISION — Garden nook placement and character
 
 The future garden is a **small converted stores / service compartment** associated with the quieter residential-service side of the lower deck, around the wet/service dogleg rather than inside a freight bay.
