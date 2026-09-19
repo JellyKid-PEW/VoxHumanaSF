@@ -505,6 +505,59 @@ Exact wall geometry, dimensions, and which additional holds/service spaces compl
 
 ---
 
+
+## Engineering / mechanical architecture
+
+### LOCKED DESIGN DECISION — Distributed mechanical spaces, not one engineering room
+
+The Huntress has **multiple engineering / mechanical spaces** distributed through the ship rather than a single room containing all ship systems.
+
+Canonical structure:
+- the existing **walk-in engine bay** remains a compact, hot working compartment with a bench, tap, cooling manifold access, and nearby machinery;
+- separate **belowdeck / underdeck engineering spaces** exist beneath and around the main machinery areas, reached by rung ladders and hatches and including crawl-height access;
+- additional mechanical access points, wiring spaces, relay nests, valve / pump recesses, coolant access, and service chases are distributed through the ship;
+- this distributed arrangement is consistent with an old long-haul freighter that has been repeatedly refitted and patched rather than cleanly rebuilt around one modern machinery room.
+
+### LOCKED DESIGN DECISION — Crawl-space network and repair nooks
+
+The Huntress contains **several crawl spaces and small mechanical repair nooks**.
+
+Character / spatial requirements:
+- these are not all full rooms and do not all form one continuous tunnel network;
+- some crawl spaces connect between larger service areas, while others terminate at machinery, manifolds, wiring, tanks, or access panels;
+- some repair nooks are large enough for one person to work comfortably or for two people to occupy closely;
+- many are visually or acoustically secluded from ordinary circulation;
+- where physically appropriate, an access hatch, panel, or service door can be drawn shut, creating temporary privacy without turning the space into a purpose-built private room;
+- these spaces should support scenes where Quenby and Iri deliberately seek one another out, accidentally converge while working, or remain together after a repair is finished;
+- their privacy should arise from being maintenance spaces off normal traffic rather than from secret-room architecture.
+
+Typical examples may include:
+- a cooling-manifold recess behind removable panels;
+- a relay / wiring nest;
+- a valve or pump alcove;
+- a narrow service bay behind tankage;
+- a crawlspace reached through a deck hatch;
+- a maintenance pocket between structural frames;
+- a small machinery recess with a closable access hatch.
+
+Exact count, dimensions, and locations remain OPEN.
+
+### WORKING — Mechanical access along the lower-deck loop
+
+The lower-deck primary work spine and aft service passage should provide **multiple access points** into the ship's mechanical network rather than one single engineering door.
+
+Preferred arrangement:
+- a principal underdeck-engineering hatch / rung access sits along the work-spine or aft freight/service side;
+- at least one secondary mechanical access is reachable from the quieter aft service passage beyond Cabin Six;
+- the wet/service core provides access to habitation plumbing / thermal / environmental systems but is distinct from the hotter propulsion-engineering spaces;
+- crawl spaces may run beneath or alongside parts of the galley, engine bay, cargo areas, and service corridors where supported by the existing prose;
+- the main walk-in engine bay can connect downward into the crawl network through a floor or nearby service hatch, allowing both existing engineering depictions to remain literally true.
+
+This mechanical network should add alternate maintenance movement and secluded character spaces without becoming a convenient substitute for the ship's normal circulation routes.
+
+
+---
+
 ## Galley
 
 ### LOCKED — Occupancy target
