@@ -4,11 +4,15 @@ Source: Google Drive folder `03 Vox Humana: Want`, current chapter files `VH1_B3
 
 Purpose: extract spatial evidence relevant to the Wild Huntress while keeping the **Garden Station** physically separate. The Huntress is docked to / coupled with the station during this material; shared power, conduits, tethers, and support systems do not make station spaces part of the ship.
 
+**Important source-status note:** these Book 3 documents are current working drafts, not finalized prose. Treat every item in this audit as **draft-manuscript evidence**: useful for preserving intended spaces and relationships, but subject to revision. Nothing in this audit becomes immutable canon merely because it appears in the current draft.
+
 Status terms:
-- **SHIP TEXT EVIDENCE** — explicitly aboard / part of the Huntress.
-- **STATION TEXT EVIDENCE** — explicitly Garden Station, not ship geometry.
-- **INTERFACE TEXT EVIDENCE** — ship/station coupling or boundary.
+- **SHIP DRAFT-TEXT EVIDENCE** — explicitly aboard / part of the Huntress in the current Book 3 draft.
+- **STATION DRAFT-TEXT EVIDENCE** — explicitly Garden Station in the current Book 3 draft, not ship geometry.
+- **INTERFACE DRAFT-TEXT EVIDENCE** — ship/station coupling or boundary in the current Book 3 draft.
 - **NO NEW PLACEMENT** — reinforces existence but does not settle deck/topology.
+
+For brevity, older headings below may still say **TEXT EVIDENCE**; throughout this file, read those as **DRAFT-TEXT EVIDENCE** unless the same point is independently locked elsewhere.
 
 ---
 
