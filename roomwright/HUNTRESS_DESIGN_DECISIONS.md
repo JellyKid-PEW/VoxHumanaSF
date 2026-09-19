@@ -831,6 +831,37 @@ The galley is imagined with:
 
 The exact seating type/count is not yet locked.
 
+
+### LOCKED DESIGN DECISION — Galley and hygiene share infrastructure, not experience
+
+The galley and hygiene facilities may occupy the same broader **domestic wet-service zone**, but they should not feel directly adjacent in ordinary use.
+
+Canonical relationships:
+- the galley remains its own closable room off the main corridor;
+- the hygiene area is reached through a separate, offset dry vestibule or short turn;
+- there should be no direct sightline from the galley into shower or toilet spaces;
+- the two areas may share the same fixed wet / thermal service core behind or between them;
+- ventilation, drainage, and ordinary circulation should keep food-prep and hygiene functions experientially separate;
+- the secondary ladder from the lower residential deck should terminate in the dry hygiene / service vestibule rather than directly into the galley, shower, or toilet compartment.
+
+The intended logic is: **adjacent in infrastructure, separate in experience**.
+
+### LOCKED DESIGN DECISION — Domestic wet-service core
+
+The domestic wet-service core is a relatively fixed part of the ship's architecture and helps explain both the main-deck domestic cluster and the lower-deck residential dogleg.
+
+It may carry or provide access to:
+- potable and reclaimed water distribution;
+- wastewater / drainage;
+- domestic hot-water service;
+- habitation thermal loops / heat exchange;
+- local pumps, valves, filters, and service manifolds;
+- environmental ducting and associated power / data runs.
+
+Large primary water tanks and major waste-processing hardware do not need to sit inside this human-facing zone; they may be located lower / more centrally and connect through the service core.
+
+This arrangement also provides a plausible future tie-in point for the onboard garden without requiring the garden itself to be adjacent to the galley or hygiene block.
+
 ### WORKING — Galley equipment
 
 The galley should have enough fixed or semi-fixed utility space for:
