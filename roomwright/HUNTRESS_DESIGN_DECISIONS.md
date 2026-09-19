@@ -119,6 +119,28 @@ Preferred rationale:
 The exact utility core, corridor orientation, and second larger cabin remain OPEN.
 
 
+
+### LOCKED DESIGN DECISION — Residential bend and secluded Cabin Five / Six run
+
+The residential section uses a deliberate dogleg around the wet / service core.
+
+Canonical spatial relationships:
+- Cabins One through Four occupy the main residential approach before the dogleg;
+- the first four cabins should not read as a perfect hotel row; staggered doors and/or cabins on both sides of the passage are appropriate;
+- the corridor bends around the wet / service core, breaking the sightline from the main residential approach;
+- Cabins Five and Six sit together on the quieter short run beyond that bend;
+- Cabin Five is Iri's cabin;
+- Cabin Six is Quenby's cabin;
+- Cabins Five and Six directly share a structural wall;
+- Cabin Six remains the last numbered cabin in the residential sequence;
+- the corridor continues beyond Cabin Six into older / more service-oriented ship territory rather than terminating at her door;
+- the transition beyond Cabin Six should visibly shift away from habitation finishes toward old-freighter service architecture;
+- the secondary ladder is associated with the wet / service core but should open away from the Cabin Five / Six run so ordinary hygiene traffic does not constantly pass their doors.
+
+This seclusion is functional and incidental, created by ship structure and refit history rather than by any purpose-built private alcove.
+
+Exact dimensions, door offsets, and which of Cabins One through Four is larger / assigned to Nova remain OPEN.
+
 ### WORKING — Vertical wet/service core
 
 A promising explanation for the residential dogleg is a vertical wet/service core rather than a solid arbitrary obstruction.
