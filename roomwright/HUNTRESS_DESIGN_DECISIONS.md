@@ -923,6 +923,46 @@ This mechanical network should add alternate maintenance movement and secluded c
 ---
 
 
+
+## Shipwide systems integration / Deck Three
+
+### LOCKED DESIGN PRINCIPLE — Maintenance is integrated into lived-in ship spaces
+
+The Huntress should not separate "people space" from "machine space" too cleanly.
+
+Canonical design behavior:
+- systems that need regular attention should usually expose practical maintenance access from ordinary inhabited or working areas;
+- local thermal, environmental, power, relay, cooling, plumbing, and equipment-service points are distributed through the ship rather than hidden exclusively in one engineering deck;
+- removable panels, service taps, manifolds, utility hatches, workbenches, recessed machinery access, and local system controls should appear naturally in spaces where crew already live and work;
+- local systems can be zoned, such as separate crew-quarters and galley environmental loops, while still tying into larger shipwide trunks;
+- maintenance scenes should plausibly happen in recognizable lived-in places: an engine bay with mugs and tools, a warm service wall near cabins, a utility panel beside a work corridor, a relay nest claimed by Nova.
+
+Design principle: **the crew lives inside the machine, not beside it.**
+
+### LOCKED DESIGN DECISION — Deck Three is a partial reserve / service deck
+
+Deck Three should not function as a centralized "everything mechanical goes here" basement.
+
+Canonical role:
+- Deck Three is a **partial lower service-and-reserve deck**, not necessarily a full-footprint level beneath the whole vessel;
+- it contains deep / reserve stores, selected heavy service equipment, access to major distribution trunks, portions of tankage or tank-service interfaces, and other low-frequency maintenance infrastructure;
+- the established unused Deck Three storage room fits naturally as long-duration / reserve storage;
+- some lower-deck regions may sit directly over tanks, machinery, hull structure, or crawl volume with no walkable Deck Three beneath them;
+- other regions may contain proper service passages or compartments;
+- Deck Three supports the ship's endurance and maintenance capability without stripping the main and lower decks of their mechanical texture.
+
+### LOCKED DESIGN DECISION — Crawl spaces are separate from Deck Three
+
+Underdeck crawls, service voids, relay pockets, and machinery access routes exist throughout the vessel and are not synonymous with Deck Three.
+
+Implications:
+- some crawls connect larger service areas, while others dead-end at specific equipment;
+- some service routes may pass above, below, or beside Deck Three;
+- the main-deck engine bay and lower-deck engineering access can both connect into deeper machinery / crawl geography without requiring all service movement to pass through Deck Three;
+- the ship's maintenance network should feel layered and three-dimensional rather than organized as one neat utility floor.
+
+---
+
 ## Main-deck topology
 
 ### LOCKED DESIGN DECISION — Main corridor and storage-spine relationship
