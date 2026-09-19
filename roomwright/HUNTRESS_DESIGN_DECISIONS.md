@@ -413,6 +413,26 @@ Design implications:
 - the existing short relationship between skiff bay and the main-deck medbay via the primary stair remains preserved.
 
 
+
+### WORKING — Additional active cargo hold on the primary work spine
+
+The Huntress should retain at least one **additional proper active cargo hold** along the primary lower-deck work spine, distinct from both the skiff / gear / cargo-handling area and the former large hold now commonly used for training.
+
+Rationale:
+- this is practical for an old long-haul freighter whose original design favored compartmentalized freight rather than one single cavernous bay;
+- separate holds allow different cargoes to be isolated, secured, balanced, accessed, or left unopened during a job;
+- the active hold does not need to be enormous; it should be clearly larger than a storage room but smaller than the oversized former cargo / training hold;
+- its freight-facing door should open toward the work spine so carts, sleds, and cargo do not enter the residential route;
+- the hold can remain economically useful for current mixed-freight work even when the skiff-adjacent area is used for the bulkiest or most awkward loads.
+
+Current scale direction:
+- treat this as a **medium active hold**, likely in the rough neighborhood of 25–45 m² of usable floor area before exact geometry is fixed;
+- ceiling height may be somewhat higher than ordinary corridors but need not match the largest former hold;
+- cargo-handling hardware, tie-downs, and sled/chute interfaces should reinforce its continuing freight role.
+
+Exact dimensions, door width, cargo capacity, and hold number remain OPEN.
+
+
 ## Lower-deck non-residential inventory
 
 
