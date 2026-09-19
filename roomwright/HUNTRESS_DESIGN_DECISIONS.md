@@ -7,7 +7,8 @@ Use the following status language:
 - **LOCKED** — user-established design/canon; preserve unless explicitly revisited.
 - **WORKING** — preferred direction under discussion; do not silently canonize.
 - **OPEN** — unresolved.
-- **TEXT EVIDENCE** — already supported by prose/Roomwright evidence; may coexist with a user decision.
+- **TEXT EVIDENCE** — already supported by finalized or otherwise accepted prose/Roomwright evidence; may coexist with a user decision.
+- **DRAFT TEXT EVIDENCE** — supported by current working manuscript prose but not yet finalized; preserve as intended evidence while allowing later revision.
 
 Roomwright's `locked` UI/object flag is not the same thing as **LOCKED** here. Structural objects may be locked against accidental movement while still being geometric assumptions.
 
@@ -548,7 +549,7 @@ Design implications:
 - these spaces should feel discovered and appropriated rather than purpose-built for Nova;
 - different nests may serve different moods or functions: hiding, listening, tinkering, watching, or searching.
 
-The exact final terminology for Nova's signal activity remains OPEN, but the lower-aft-spine nest location is TEXT EVIDENCE, not a new invented room.
+The exact final terminology for Nova's signal activity remains OPEN. The lower-aft-spine nest location is **DRAFT TEXT EVIDENCE** from the current Book 3 manuscript, not a newly invented room, but the prose itself is not yet finalized.
 
 ### LOCKED DESIGN DECISION — Undocumented legacy / smuggler-like spaces exist
 
@@ -600,6 +601,32 @@ Before final geometry, confirm whether and where the Huntress needs dedicated or
 
 These may be small distributed systems rather than full rooms and should not be added as major compartments unless their function requires it.
 
+
+---
+
+
+## Future onboard garden
+
+### LOCKED DESIGN INTENT — Small Huntress garden after departure from Garden Station
+
+After the crew eventually leaves Garden Station, they create a **small garden area aboard the Wild Huntress itself**.
+
+Canonical intent:
+- this is a new shipboard garden created later; it is **not** the Garden Station garden moved into the ship and should never retroactively blur the station / ship boundary;
+- the onboard version is compact and practical rather than a full greenhouse or large agricultural bay;
+- it contains **multiple growing beds** so it reads as a real shared growing space rather than a single planter;
+- it should remain modest enough to fit the Huntress's small-to-midsize freighter scale;
+- its existence can carry forward habits, knowledge, or emotional associations developed at Garden Station without reproducing the station room exactly.
+
+OPEN:
+- exact deck / compartment;
+- whether it uses a converted storage or service space versus a newly partitioned corner;
+- number, size, and configuration of beds;
+- lighting, water, nutrient, drainage, and thermal integration;
+- whether Nova claims an adjacent niche or monitoring spot;
+- how much cargo / utility capacity the conversion displaces.
+
+This future garden should be considered when reserving flexible ship volume so later geometry does not accidentally leave no plausible place for it.
 
 ---
 
@@ -695,7 +722,7 @@ A direct Google Drive audit of the current Book 3 chapter files (`VH1_B3_01_v2` 
 See:
 - `roomwright/BOOK3_SHIP_SPACE_AUDIT.md`
 
-Most importantly, Chapter 6 explicitly establishes a **port-side equipment crawl in the lower aft spine** that Nova has converted into a signal-listening room / nest. Future Roomwright evidence work should consult the audit before assuming unseeded chapters contain no spatial constraints.
+Most importantly, the current Chapter 6 draft places a **port-side equipment crawl in the lower aft spine** that Nova has converted into a signal-listening room / nest. Treat this as **DRAFT TEXT EVIDENCE**, not finalized prose. Future Roomwright evidence work should consult the audit before assuming unseeded chapters contain no spatial constraints.
 
 ---
 
