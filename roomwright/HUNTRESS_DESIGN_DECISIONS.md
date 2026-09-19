@@ -474,6 +474,44 @@ Current scale direction:
 Exact dimensions, door width, cargo capacity, and hold number remain OPEN.
 
 
+
+## Cargo / flex-bay operating philosophy
+
+### LOCKED DESIGN DECISION — Primary large bay is dual-use cargo / training space
+
+The large space commonly used by the current crew for training is not a dedicated gym.
+
+Canonical use:
+- when the bay is empty or lightly loaded, Quenby / Iri / Nova can use the open floor for sparring, exercise, projects, temporary staging, or other ordinary-life activity;
+- when the Huntress is carrying a significant paying load, the same compartment returns to its original freight role and functions as the ship's **primary large cargo bay**;
+- freight hardware, tie-downs, rails, scars, markings, and loading clearances should remain visibly present even when the bay is serving as a training / flex room;
+- the crew's domestic use of the space is therefore opportunistic and reversible rather than a permanent conversion.
+
+This keeps the Huntress economically credible: a three-person crew may enjoy a great deal of spare room between jobs, but the ship can reclaim that room for revenue-producing work.
+
+### LOCKED DESIGN PRINCIPLE — The Huntress can feel like a space RV without ceasing to be a working ship
+
+The present crew of three occupies a vessel originally designed for a nominal crew of six and for modular commercial work. As a result, the Huntress can feel unusually spacious, personal, and lived-in when lightly loaded.
+
+Design rule:
+- ordinary-life uses may colonize unused commercial volume;
+- those uses should usually remain removable, foldable, relocatable, or compatible with freight operations;
+- the ship should retain enough cargo / mission capacity to support contract work and generate income;
+- visible domestic adaptation should read as **people living inside a working commercial hull**, not as the ship having become a purpose-built houseboat.
+
+### WORKING — Second substantial flex bay and future garden
+
+The second substantial flex / freight bay is a strong candidate for the future onboard garden, but the conversion should not automatically consume the entire bay.
+
+Preferred direction:
+- install multiple grow beds and associated lighting / water / thermal support in part of the bay or in a modular section of it;
+- preserve some configurable floor area, storage, access, or cargo capability where practical;
+- garden infrastructure should be designed so the ship still has meaningful commercial utility even after the crew begins making the Huntress more permanently their home;
+- exact percentage of bay converted, bed count, remaining freight capacity, and whether the garden installation is removable or semi-permanent remain OPEN.
+
+
+---
+
 ## Lower-deck non-residential inventory
 
 
@@ -788,6 +826,28 @@ Canonical behavior:
 - Pocket Three therefore functions as a **low-observability compartment**, not a magically invisible one.
 
 This principle may extend selectively into older service spaces and legacy voids: B.O.B.'s certainty should degrade where refits, manual systems, and contradictory records accumulate.
+
+
+### LOCKED DESIGN DECISION — Secondary work head
+
+The Huntress has **two toilet locations**:
+- a primary toilet within the domestic hygiene block on the main deck;
+- a compact secondary **work head** on the lower operations / work side.
+
+The secondary work head does not need a shower. It exists for redundancy and so crew working around skiff, cargo, engineering, and freight areas do not need to route through the domestic zone for every use.
+
+Exact placement remains OPEN, but it should be near the lower Operations Junction / work-spine side rather than opening directly into a cargo bay or skiff launch space.
+
+### LOCKED DESIGN DECISION — Observation viewport protective cover
+
+The observation dome / cupola has an external or structural **protective shutter / cover** for its viewport.
+
+Purpose:
+- protects the transparent pressure surface during debris exposure, rough operations, docking hazards, or periods when the view is unnecessary;
+- reinforces the dome's original practical inspection / survey function rather than treating it as a purely decorative panoramic lounge.
+
+Exact mechanism, thickness, and whether the cover is external, layered, or retractable remain OPEN.
+
 
 ### LOCKED DESIGN DECISION — Observation dome as original / structural feature with evolved use
 
