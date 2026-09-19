@@ -368,6 +368,51 @@ Canonical relationships:
 This topology is LOCKED. Exact wall geometry, distances, compartment dimensions, door placement, and the precise order of secondary storage/service spaces remain OPEN.
 
 
+
+### LOCKED DESIGN DECISION — Lower operations junction and aft freight/service junction
+
+The lower deck uses two principal junctions that organize the locked two-route circulation system.
+
+**Lower Operations Junction**
+- sits at the foot of the primary stair from the main deck;
+- connects directly or immediately to the primary work spine;
+- provides access toward the skiff / gear / cargo-handling area without requiring normal through-traffic to pass through the skiff bay itself;
+- sits near the nav / residential branch point;
+- ordinary freight, equipment, and maintenance movement should naturally choose the work-spine side from this junction.
+
+**Aft Freight / Service Junction**
+- sits on the support side of the lower deck near the former cargo hold / current training-flex space;
+- receives the primary work spine from the forward / operations side;
+- receives the quieter aft service passage coming from beyond Cabin Six;
+- provides access to the former cargo hold's larger freight-facing door and to its smaller personnel/service-side access;
+- may also organize nearby engineering-crawl access, parts storage, cargo controls, or other minor service functions;
+- should read as an old freighter intersection / working node rather than as a dedicated room.
+
+**Circulation relationship**
+- the primary work spine runs between the Lower Operations Junction and the Aft Freight / Service Junction;
+- the secondary residential leg also runs between those same broader ends, passing nav, Cabins One through Six, the wet/service core, and the quieter aft service passage;
+- together they form the ship's inconvenient but continuous walking loop;
+- the work spine is the obvious normal route, while the residential leg is a legitimate but less efficient alternative.
+
+### LOCKED DESIGN DECISION — Nav at the residential branch
+
+Nav sits at or immediately adjacent to the point where the residential leg leaves the more practical lower-deck circulation.
+
+Design implications:
+- leaving nav presents a meaningful route choice: continue toward normal working circulation or drift into the quieter cabin route;
+- the cabin approach follows naturally after nav, matching the prose sequence where Quenby is "just past nav" before moving toward the crew cabins;
+- nav should not be buried inside the residential block itself.
+
+### LOCKED DESIGN DECISION — Skiff bay is adjacent to, not part of, through-circulation
+
+The skiff / gear bay should be reached from the Lower Operations Junction / work-spine side but should not be mandatory passage space.
+
+Design implications:
+- the bay can be isolated, opened to space, filled with cargo, or under maintenance without severing ordinary lower-deck circulation;
+- bulky freight can move between the skiff / cargo-handling area and the primary work spine without entering the cabin route;
+- the existing short relationship between skiff bay and the main-deck medbay via the primary stair remains preserved.
+
+
 ## Lower-deck non-residential inventory
 
 
