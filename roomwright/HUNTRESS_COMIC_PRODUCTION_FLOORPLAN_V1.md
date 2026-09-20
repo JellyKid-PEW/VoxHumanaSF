@@ -1,10 +1,30 @@
 # Wild Huntress — Comic Production Floor Plan V1
 
-Status: **ART-PRODUCTION FREEZE — REVISABLE**
+Status: **DRAFT — DO NOT USE AS ART-PRODUCTION FREEZE YET**
 
 Purpose: provide a believable, repeatable spatial baseline for drawing recurring Wild Huntress backgrounds in *Between Ports*.
 
 This is **not** a final engineering blueprint and does not canonize every centimeter. It freezes enough geometry that recurring rooms, doors, furniture, and sightlines can remain consistent from page to page.
+
+
+## Diagram review correction
+
+The first exported V1 diagrams were **not acceptable as production floor plans**. They drew each corridor / landing / junction floor as an independent rectangle, so connected circulation zones visually overlapped and internal boundary lines ran through spaces that should read as one continuous floor area. Dense labels and camera markers compounded the problem.
+
+This is primarily a **drafting / representation error**, not evidence that every underlying room physically occupies the same volume. However, the production freeze is suspended until the plan is redrawn as actual wall / opening geometry and the few threshold-depth assumptions are normalized.
+
+Known problem areas to resolve before re-freezing:
+- main-deck corridor offset intersections;
+- dry domestic-access / service-passage junction;
+- Lower Operations / work-spine connection;
+- residential-turn / work-spine junction;
+- residential approach / dogleg / quiet-run joints;
+- aft-service / aft-reconnection / freight-node convergence;
+- freight-node / main-cargo doorway depth;
+- small work-spine encroachments at engineering / repair recess thresholds;
+- label and camera-marker collisions, especially around the wet core / garden / Cabins Five-Six and the aft freight area.
+
+Do not use the original V1 PNG/SVG exports as visual continuity references.
 
 ## Production rule
 
