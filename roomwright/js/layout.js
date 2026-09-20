@@ -237,6 +237,7 @@ function defs(rulings) {
   const spineZ = 4.35;                        // storage-spine turn before the bend
   const stairZ = 3.65;
   const medHatchZ = 6.00;
+  const hygBranchZ = 7.25;
   const alkZ = 3.15;
 
   const corNote = 'Primary commercial circulation. The forward run is narrow and practical; the offset before medbay prevents a direct airlock-to-medical sightline.';
@@ -362,8 +363,10 @@ function defs(rulings) {
   });
 
   const medHalf = 0.6;
+  const hygHalf = 0.50;
   const aftPortA = (medHatchZ - medHalf) - bendZ;
-  const aftPortB = corEndZ - (medHatchZ + medHalf);
+  const aftPortB = (hygBranchZ - hygHalf) - (medHatchZ + medHalf);
+  const aftPortC = corEndZ - (hygBranchZ + hygHalf);
   if (aftPortA > 0.05) add('corAftWallPort1', {
     room: 'corridor', type: 'wall', name: 'Aft corridor port wall (forward)',
     params: { length: aftPortA, height: COR.H, thickness: 0.12 },
@@ -378,10 +381,23 @@ function defs(rulings) {
     note: 'Medbay opens from the aft run after the corridor offset; routine boarders cannot see directly into it from the airlock.',
   });
   if (aftPortB > 0.05) add('corAftWallPort2', {
-    room: 'corridor', type: 'wall', name: 'Aft corridor port wall (aft)',
+    room: 'corridor', type: 'wall', name: 'Aft corridor port wall (between medical and domestic branch)',
     params: { length: aftPortB, height: COR.H, thickness: 0.12 },
     pos: [aftCx - COR.W / 2, 0, medHatchZ + medHalf + aftPortB / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'assumption', evidenceRefs: ['med-corridor'], note: 'Wall from medbay toward the domestic junction.',
+    evidence: 'assumption', evidenceRefs: ['med-corridor'], note: 'Short wall separating the medbay hatch from the dry domestic branch.',
+  });
+  add('hygBranchDoor', {
+    room: 'hygiene', type: 'doorway', name: 'Dry hygiene branch opening',
+    params: { length: 1.0, height: COR.H, thickness: 0.12, doorWidth: 0.82, doorHeight: 1.92, kind: 'sliding', slideDir: -1, open: 1 },
+    pos: [aftCx - COR.W / 2, 0, hygBranchZ], rotY: Math.PI / 2, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Separate dry access toward hygiene and the secondary ladder. The galley remains a different closable room.',
+  });
+  if (aftPortC > 0.05) add('corAftWallPort3', {
+    room: 'corridor', type: 'wall', name: 'Aft corridor port wall (domestic junction)',
+    params: { length: aftPortC, height: COR.H, thickness: 0.12 },
+    pos: [aftCx - COR.W / 2, 0, hygBranchZ + hygHalf + aftPortC / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Final wall segment before the galley hatch.',
   });
   add('corAftWallStbd', {
     room: 'corridor', type: 'wall', name: 'Aft corridor starboard wall',
@@ -748,8 +764,8 @@ function defs(rulings) {
   // Hygiene is adjacent to the galley in infrastructure but not in ordinary
   // experience. It has its own dry access route, and the ladder from the
   // residential dogleg arrives in that dry zone rather than a shower or galley.
-  const HYGX = -4.50;
-  const HYGZ0 = 7.25, HYGZ1 = 14.25;
+  const HYGX = cx - 6.00;
+  const HYGZ0 = hygBranchZ, HYGZ1 = 14.25;
   const HYGW = 1.10;
   const hygBranchW = (aftCx - COR.W / 2) - HYGX + HYGW / 2;
 
@@ -778,6 +794,54 @@ function defs(rulings) {
     params: { width: HYGW, depth: HYGZ1 - HYGZ0, height: 2.10 },
     pos: [HYGX, 0, (HYGZ0 + HYGZ1) / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+
+  // Enclose the transverse dry branch while leaving its east end open to the
+  // main corridor and west end open into the long service vestibule.
+  const hygBranchEast = aftCx - COR.W / 2;
+  const hygBranchWest = HYGX - HYGW / 2;
+  add('hygBranchWallN', {
+    room: 'hygiene', type: 'wall', name: 'Dry hygiene branch forward wall',
+    params: { length: hygBranchEast - hygBranchWest, height: 2.10, thickness: 0.10 },
+    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 - 0.50], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Dry separation from medbay / adjacent service volume.',
+  });
+  add('hygBranchWallS', {
+    room: 'hygiene', type: 'wall', name: 'Dry hygiene branch aft wall',
+    params: { length: hygBranchEast - hygBranchWest, height: 2.10, thickness: 0.10 },
+    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 + 0.50], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The galley is beyond this wall / junction rather than visible through the hygiene route.',
+  });
+  add('hygVestWallW', {
+    room: 'hygiene', type: 'wall', name: 'Dry hygiene vestibule outer wall',
+    params: { length: HYGZ1 - HYGZ0, height: 2.10, thickness: 0.10 },
+    pos: [HYGX - HYGW / 2, 0, (HYGZ0 + HYGZ1) / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  // East wall is segmented around toilet and shower doors.
+  const hygDoorHalf = 0.50;
+  const toiletZ = 10.15, showerZ = 12.25;
+  const vestSegs = [
+    ['hygVestWallE1', HYGZ0 + 0.50, toiletZ - hygDoorHalf],
+    ['hygVestWallE2', toiletZ + hygDoorHalf, showerZ - hygDoorHalf],
+    ['hygVestWallE3', showerZ + hygDoorHalf, HYGZ1],
+  ];
+  for (const [key, a, b] of vestSegs) {
+    if (b - a < 0.05) continue;
+    add(key, {
+      room: 'hygiene', type: 'wall', name: 'Dry hygiene vestibule service wall',
+      params: { length: b - a, height: 2.10, thickness: 0.10 },
+      pos: [HYGX + HYGW / 2, 0, (a + b) / 2], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: [],
+      note: 'Shared domestic wet-service side; access panels and compartment doors break the wall.',
+    });
+  }
+  add('hygVestEnd', {
+    room: 'hygiene', type: 'wall', name: 'Dry hygiene vestibule aft wall',
+    params: { length: HYGW, height: 2.10, thickness: 0.10 },
+    pos: [HYGX, 0, HYGZ1], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The ladder hatch / landing is just forward of this end wall.',
   });
 
   // Wet/service core lies between galley and hygiene compartments.
@@ -810,6 +874,19 @@ function defs(rulings) {
     pos: [HYGX + HYGW / 2, 0, 10.15], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Opens from the dry vestibule, never directly from the galley.',
   });
+
+  add('hygToiletDoorWallN', {
+    room: 'hygiene', type: 'wall', name: 'Primary toilet doorway wall (forward)',
+    params: { length: HD / 2 - 0.5, height: 2.05, thickness: 0.10 },
+    pos: [HYGX + HYGW / 2, 0, 10.15 - (0.5 + (HD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('hygToiletDoorWallS', {
+    room: 'hygiene', type: 'wall', name: 'Primary toilet doorway wall (aft)',
+    params: { length: HD / 2 - 0.5, height: 2.05, thickness: 0.10 },
+    pos: [HYGX + HYGW / 2, 0, 10.15 + (0.5 + (HD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
   add('hygToiletOuter', {
     room: 'hygiene', type: 'wall', name: 'Primary toilet outer wall',
     params: { length: HD, height: 2.05, thickness: 0.1 },
@@ -835,6 +912,19 @@ function defs(rulings) {
     params: { length: 1.0, height: 2.08, thickness: 0.1, doorWidth: 0.74, doorHeight: 1.92, kind: 'sliding', slideDir: -1, open: 0 },
     pos: [HYGX + HYGW / 2, 0, 12.25], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Separate from the toilet and screened from ordinary domestic circulation.',
+  });
+
+  add('hygShowerDoorWallN', {
+    room: 'hygiene', type: 'wall', name: 'Shower doorway wall (forward)',
+    params: { length: SHD / 2 - 0.5, height: 2.08, thickness: 0.10 },
+    pos: [HYGX + HYGW / 2, 0, 12.25 - (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('hygShowerDoorWallS', {
+    room: 'hygiene', type: 'wall', name: 'Shower doorway wall (aft)',
+    params: { length: SHD / 2 - 0.5, height: 2.08, thickness: 0.10 },
+    pos: [HYGX + HYGW / 2, 0, 12.25 + (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygShowerOuter', {
     room: 'hygiene', type: 'wall', name: 'Shower / wash outer wall',
