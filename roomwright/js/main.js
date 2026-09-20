@@ -64,7 +64,17 @@ function migrateSeed() {
   }
   let addedCons = 0;
   for (const c of SEED_CONSTRAINTS) {
-    if (p.constraints.some(x => x.seedKey === c.key)) continue;
+    const existing = p.constraints.find(x => x.seedKey === c.key);
+    if (existing) {
+      // refresh curated text in place: interpretations, claims, and conflict
+      // cards evolve with the app (user-added constraints are untouched)
+      existing.quote = c.quote;
+      existing.category = c.category;
+      existing.subject = c.subject;
+      existing.interpretation = c.interpretation;
+      existing.claims = c.claims || [];
+      continue;
+    }
     const arc = c.source.startsWith('Next') ? 'Next' : c.source.startsWith('Presence') ? 'Presence' : 'VH1_B3';
     state.addConstraint({
       seedKey: c.key, docId: docByKey[arc]?.id, source: c.source,

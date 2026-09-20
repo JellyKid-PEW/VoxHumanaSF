@@ -70,9 +70,8 @@ Approximate art-facing dimensions:
 
 These should remain spatially consistent:
 - closable forward hatch;
-- long counter + sink along port side;
+- one long integrated counter run + sink along the port side — the "central prep counter" of the prose is the working stretch of this run, **not a free-standing island** (author ruling);
 - tin shelf above / near that work side;
-- compact central prep island in the forward working half;
 - heating / hydration appliance on the opposite side;
 - cooling unit low in the aft half;
 - real table in the aft half;
@@ -82,7 +81,7 @@ These should remain spatially consistent:
 - movable stools / chairs may shift;
 - plants are later continuity, not baseline from the beginning of the series.
 
-The galley should read as **working half forward / eating-lingering half aft**.
+The galley should read as **working half forward / eating-lingering half aft** — a six-crew commercial room. Crowding in prose is staged through clutter and choreography (two people's habits filling the space), never by shrinking the room.
 
 ### Lower deck
 
@@ -130,15 +129,16 @@ These can move or change without violating the floor plan:
 ## Still open
 
 Do not treat these as decided because of V1:
-- Nova's cabin among Cabins One through Four;
+- Nova's cabin among Cabins One through Four (the row is now quirk-differentiated; Cabin Four — coolant pulse in the bulkhead, ceiling cableway plate — is the standing proposal, Cabin Two the runner-up; the author decides);
 - which of Cabins One through Four is the second slightly larger cabin;
-- exact exterior hull silhouette;
-- final hull dimensions / tonnage;
+- exact exterior hull dimensions / tonnage (author direction now exists: ~40–55 m belly-lander, long-backed and broad-bellied on a strong spine, narrow forward quarters, deep working middle, dense aft drive section, low crouch on the ground — massing pass pending);
 - exact propulsion chemistry;
 - exact water / reaction-mass tank count;
-- exact Deck Three footprint;
-- Pocket Two explanation;
+- exact Deck Three footprint (now fixed as a partial ventral service/reserve layer *below* the lower deck);
+- Pocket Two explanation (canonically: genuinely suspicious);
 - exact bridge-door conflict ruling if later prose requires a change.
+
+Hold registry (author ruling): the main cargo/training bay is **Hold One, "the forward hold"** — an old label that no longer matches her position; the flex bay is **Hold Two**; the skiff/gear complex is freight-capable but unnumbered.
 
 ## Recurring background sets — production priority
 

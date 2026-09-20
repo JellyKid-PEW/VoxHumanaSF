@@ -13,13 +13,16 @@ import { bus, status } from './util.js';
 export const BRIDGE = { W: 4.8, D: 4.6, H: 2.25 };
 export const DECK2Y = -3.0;                  // lower deck base height; 3.0 m floor-to-floor leaves real structure/service depth under occupied main-deck spaces
 const COR = { W: 1.1, LEN: 4.6, H: 2.15 };   // corridor: narrow, lower overhead
-const GALLEY_SIZES = { tiny: [2.6, 2.4], compact: [3.0, 2.8], roomy: [3.6, 3.2], lived: [3.4, 4.8] };
+// One galley size: the six-crew commercial scale (author ruling). The
+// galley conflict's rulings are interpretive — they change no geometry.
+const GALLEY_SIZES = { lived: [3.4, 4.8] };
 
 function defs(rulings) {
   const W = BRIDGE.W, D = BRIDGE.D, H = BRIDGE.H;
   const doorRuling = rulings['declared:door-behind~throttle']?.choice || null;
   const railRuling = rulings['declared:knees-touch~rail-between']?.choice || null;
-  const galleyRuling = rulings['declared:galley-island~galley-tiny']?.choice || null;
+  // (the galley conflict is interpretive since the author's sized-for-six
+  // ruling — no geometry reads it)
   const iriRuling = rulings['declared:iri-cabin-lower~iri-quarters-route']?.choice || null;
   const iriProvisional = !iriRuling;
 
@@ -216,6 +219,13 @@ function defs(rulings) {
     pos: [-0.7, 0, 2.16], rotY: Math.PI, locked: false,
     evidence: 'explicit', evidenceRefs: ['aft-panel-cross'],
     note: 'The openable panel Quenby crosses to — "the wires were tired enough to look honest."',
+  });
+  add('navLockBank', {
+    type: 'crate', name: 'Nav lock lever bank',
+    params: { width: 0.3, height: 0.82, depth: 0.24 },
+    pos: [0.48, 0, -1.0], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['nav-locks-helm'],
+    note: 'Physical course-hold levers at the pilot’s right hand — "The nav locks clicked. The forward vector tightened like a belt." Helm hardware; the nav compartment below is the plotting room, not these.',
   });
   add('boltsScatter', {
     type: 'bolts', name: 'Nova’s bolts',
@@ -768,12 +778,12 @@ function defs(rulings) {
   // eating / lingering half. The room can seat / hold five comfortably while
   // seven makes circulation visibly crowded.
   add('galCounter', {
-    room: 'galley', type: 'counter', name: 'Galley counter + sink',
-    params: { width: 2.15, depth: 0.55, height: 0.9, sink: true },
-    pos: rel(-gw / 2 + 0.34, -0.25), rotY: -Math.PI / 2, locked: false,
+    room: 'galley', type: 'counter', name: 'Galley counter run + sink',
+    params: { width: 2.75, depth: 0.58, height: 0.9, sink: true },
+    pos: rel(-gw / 2 + 0.36, -0.35), rotY: -Math.PI / 2, locked: false,
     evidence: 'explicit',
-    evidenceRefs: ['galley-sink-light', 'galley-index-card', 'galley-counter-lean', 'galley-drawer-cabinet'],
-    note: 'Long working counter with sink, status light, taped index card, spoon drawer, and under-sink cabinet.',
+    evidenceRefs: ['galley-sink-light', 'galley-index-card', 'galley-counter-lean', 'galley-drawer-cabinet', 'galley-island'],
+    note: 'One long integrated counter run — sink, status light, taped index card, spoon drawer, under-sink cabinet, and the central prep stretch with the water generator at its working heart (author ruling: prep is part of the counter, not a separate island).',
   });
   add('galShelf', {
     room: 'galley', type: 'shelf', name: 'Tin shelf',
@@ -781,13 +791,6 @@ function defs(rulings) {
     pos: rel(-gw / 2 + 0.15, -0.15), rotY: -Math.PI / 2, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-tins-shelf'],
     note: 'Battered tins in their row: Regret, Dead Reckoning, Victory Speech — later, Sugar.',
-  });
-  add('galIsland', {
-    room: 'galley', type: 'table', name: 'Central prep counter',
-    params: { width: 1.15, depth: 0.62, height: 0.92 },
-    pos: rel(0.15, -1.05), rotY: 0, locked: false,
-    evidence: 'decision', evidenceRefs: ['galley-island', 'galley-tiny'],
-    note: 'Compact central prep island / water-generator position. Working around it is easy for two and noticeably shoulder-tight for three or four.',
   });
   add('galHeatUnit', {
     room: 'galley', type: 'storage', name: 'Heating / hydration unit',
@@ -1668,8 +1671,8 @@ function defs(rulings) {
     room: 'residential', type: 'floor', name: 'Residential approach deck',
     params: { width: RESW, depth: RESZ1 - RESZ0 },
     pos: [RESX, D2, (RESZ0 + RESZ1) / 2], rotY: 0, locked: true,
-    evidence: 'explicit', evidenceRefs: ['lower-corridor', 'cabin-row'],
-    note: 'Coolant lines, forgotten tags, and the first four cabins. Nav sits at the threshold rather than inside the cabin cluster.',
+    evidence: 'explicit', evidenceRefs: ['lower-corridor', 'cabin-row', 'crew-quarters', 'quarters-loop'],
+    note: 'Coolant lines, forgotten tags, and the first four cabins. Nav sits at the threshold rather than inside the cabin cluster. This whole residential area is what B.O.B. began calling "Crew quarters" — a name that arrived with the crew.',
   });
   add('resApproachCeil', {
     room: 'residential', type: 'ceiling', name: 'Residential approach overhead',
@@ -1793,19 +1796,37 @@ function defs(rulings) {
   const resEastDoorX = RESX + RESW / 2;
   addLowerCabin({
     key: 'cab1', name: 'Cabin One', x: resWestDoorX - 1.0, z: 7.65, doorX: resWestDoorX, open: 0,
-    evidence: 'decision', refs: ['cabin-row'], note: 'One of the four accessible approach cabins; suitable for crew, passengers, or contractors as circumstances require.',
+    evidence: 'decision', refs: ['cabin-row'],
+    note: 'The catalog cabin: closest to the residential turn, most traffic noise, utterly standard — the untouched baseline against which the others’ quirks read. Unchosen for a reason.',
   });
   addLowerCabin({
     key: 'cab2', name: 'Cabin Two', x: resEastDoorX + 1.0, z: 9.05, doorX: resEastDoorX, open: 0.35,
-    evidence: 'decision', refs: ['cabin-row'], note: 'Staggered opposite Cabin One; the approach should not read as a hotel corridor.',
+    evidence: 'decision', refs: ['cabin-row'],
+    note: 'The door ajar, the room too orderly — a previous crew member’s habits fossilized. Drawer labels in an unfamiliar hand; a mirror polished by someone else’s routine. Nobody quite wants to overwrite a stranger.',
   });
   addLowerCabin({
     key: 'cab3', name: 'Cabin Three', x: resWestDoorX - 1.0, z: 10.25, doorX: resWestDoorX, open: 0,
-    evidence: 'decision', refs: ['cabin-row'], note: 'Legacy door hardware may stick; exact present occupant remains open.',
+    evidence: 'decision', refs: ['cabin-row'],
+    note: 'Legacy door hardware sticks, and a junction box behind the wall panel clicks whenever the midline bus settles — annoying to anyone who doesn’t love the ship’s voice.',
   });
   addLowerCabin({
     key: 'cab4', name: 'Cabin Four', x: resEastDoorX + 1.0, z: 11.15, doorX: resEastDoorX, open: 0,
-    evidence: 'decision', refs: ['cabin-row'], note: 'Fourth approach cabin. Nova may eventually choose any Cabin One through Four; geometry does not choose for her.',
+    evidence: 'decision', refs: ['cabin-row'],
+    note: 'The cabin where the ship never stops talking: its work-spine bulkhead carries the coolant line’s pulse (lay a palm on it and feel the aft pump run two beats late), and an automation-era cableway cover plate sits in the ceiling. Nova’s cabin choice remains the author’s; this one is the standing proposal.',
+  });
+  add('cab2Drawers', {
+    room: 'cabin', type: 'storage', name: 'Labeled drawer unit (Cabin Two)',
+    params: { width: 0.8, height: 0.9, depth: 0.32 },
+    pos: [resEastDoorX + 1.55, D2, 9.6], rotY: -Math.PI / 2, locked: false,
+    evidence: 'inference', evidenceRefs: ['cabin-row'],
+    note: 'Drawer labels in an unfamiliar hand, contents squared away by someone who is not aboard anymore. Too orderly.',
+  });
+  add('cab4CablewayPlate', {
+    room: 'cabin', type: 'shelf', name: 'Cableway cover plate (Cabin Four ceiling)',
+    params: { width: 0.6, depth: 0.35, mountHeight: 1.92, tins: 0 },
+    pos: [resEastDoorX + 1.1, D2, 11.55], rotY: Math.PI, locked: false,
+    evidence: 'inference', evidenceRefs: ['cabin-row'],
+    note: 'An automation-refit cableway runs through the overhead service volume here; the cover plate opens with four fasteners. Exactly the sort of thing a scavenger with a bolt habit notices on the first visit.',
   });
 
 
@@ -1850,7 +1871,7 @@ function defs(rulings) {
     room: 'residential', type: 'floor', name: 'Quiet cabin run deck',
     params: { width: RESW, depth: 5.4 },
     pos: [QUIETX, D2, 15.1], rotY: 0, locked: true,
-    evidence: 'decision', evidenceRefs: ['cabin-bend', 'cabin-six'],
+    evidence: 'decision', evidenceRefs: ['cabin-bend', 'cabin-six', 'crew-quarters'],
     note: 'Short quiet run beyond the dogleg. Cabins Five and Six share a wall here; the passage continues beyond Cabin Six into service territory.',
   });
   add('quietRunCeil', {
@@ -2009,7 +2030,7 @@ function defs(rulings) {
     key: 'cab6', name: 'Cabin Six — Quenby', x: quietWestDoorX - 1.2, z: 16.45, w: 2.4, d: 2.0,
     doorX: quietWestDoorX, open: 0, evidence: 'decision',
     refs: ['cabin-six', 'cabin-six-room', 'cabin-bunk', 'cabin-mirror', 'cabin-door-catch'],
-    note: 'One of the larger cabins. Plain, quiet, a quarter heavy near the far bulkhead; last numbered cabin, but not the end of the passage.',
+    note: 'One of the larger cabins. Plain, quiet, a quarter heavy near the far bulkhead — ordinary refit-era gravity-calibration drift where the enlarged cabin crosses an old field-plating boundary, not the ship taking an interest. Last numbered cabin, but not the end of the passage.',
   });
   add('cab5Table', {
     room: 'cabin', type: 'table', name: 'Iri’s worktable',
@@ -2076,11 +2097,11 @@ function defs(rulings) {
   const FBW = 5.2, FBD = 6.0;
   const fbx = OPX + WORKW / 2 + FBW / 2, fbz = 10.55;
   add('flexFloor', {
-    room: 'flex-bay', type: 'floor', name: 'Configurable mission / flex bay deck',
+    room: 'flex-bay', type: 'floor', name: 'Hold Two — configurable mission / flex bay deck',
     params: { width: FBW, depth: FBD },
     pos: [fbx, D2, fbz], rotY: 0, locked: true,
-    evidence: 'decision', evidenceRefs: [],
-    note: 'Commercially useful configurable volume: ordinary freight, workshop, survey gear, contract module, secure load, or other operator-specific fit-out.',
+    evidence: 'decision', evidenceRefs: ['hold2-hatch'],
+    note: 'Registry designation Hold Two: commercially useful configurable volume — ordinary freight, workshop, survey gear, contract module, secure load, or other operator-specific fit-out. The skiff/gear complex is a third freight-capable area but was never a numbered hold.',
   });
   add('flexCeil', {
     room: 'flex-bay', type: 'ceiling', name: 'Mission / flex bay overhead',
@@ -2224,11 +2245,11 @@ function defs(rulings) {
   const CBW = 7.0, CBD = 8.0, CBH = 3.2;
   const cbx = OPX, cbz = 25.0;
   add('cargoFloor', {
-    room: 'cargo-bay', type: 'floor', name: 'Main cargo / flex bay deck',
+    room: 'cargo-bay', type: 'floor', name: 'Hold One ("the forward hold") — main cargo / training bay deck',
     params: { width: CBW, depth: CBD },
     pos: [cbx, D2, cbz], rotY: 0, locked: true,
-    evidence: 'decision', evidenceRefs: [],
-    note: 'Primary large paying-cargo volume. When empty or lightly loaded, the same clear floor becomes training, projects, and oversized ordinary-life space.',
+    evidence: 'decision', evidenceRefs: ['forward-hold-route'],
+    note: 'Primary large paying-cargo volume — registry designation Hold One, still called "the forward hold" from an earlier deck plan that no longer matches her position (Hold Two now sits forward of her). When empty or lightly loaded, the same clear floor becomes training, projects, and oversized ordinary-life space. Old labels aboard the Huntress are history, not directions.',
   });
   add('cargoCeil', {
     room: 'cargo-bay', type: 'ceiling', name: 'Main cargo / flex bay overhead',
@@ -2438,7 +2459,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 16;
+export const LAYOUT_VERSION = 17;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2454,4 +2475,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   14: ['hyg*', 'domService*', 'mainWet*'], // distinguish the galley-side service passage from the actual hygiene / ladder vestibule
   15: ['hygShower*', 'hygVestWallE*'], // separate shower and toilet footprints in the final main-deck blockout
   16: ['corBend*', 'corWallPortMid', 'corAftWallStbd', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*', 'resWall*', 'quietWall*', 'galStool*', 'medHatch', 'medChair', 'medShelf', 'medSterilizer', 'sbRig', 'gardenStore*', 'engWall*', 'iriQ*', 'domeFloor'], // open the corridor elbow (live-app validation found it walled), offset cabin doors clear of bunks, clear furniture / clearance-zone collisions, rebuild the aft-room option of the Iri conflict against the new main deck
+  17: ['gal*', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab6*', 'cargoFloor', 'flexFloor', 'resApproachFloor', 'quietRunFloor'], // author-canon session: island folded into the counter run, nav lock levers at the helm, hold registry names, cabin quirks, crew-quarters naming
 };

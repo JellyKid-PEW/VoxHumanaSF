@@ -1115,13 +1115,13 @@ This is a relational and experiential sequence, not an exact linear floor plan.
 
 ## Galley
 
-### LOCKED — Occupancy target
+### LOCKED — Occupancy target (REVISED by author-canon session; see the session note at the end of this log)
 
-The galley must physically accommodate at least five people.
+The galley keeps its six-crew commercial scale: by Volume 3 it must hold five adults and a child semi-comfortably.
 
-Seven people may fit, but seven should feel crowded / like the practical upper limit.
+The author's controlling principle: the ship **feels** crowded when Nova arrives; it is not **actually** crowded. Quenby had the ship alone for months, then a year-plus of two women whose routines expanded to fill the room. The crowding in prose is choreography breaking, not volume running out. Prose describing the galley as too small for three stays true as written under that reading.
 
-This supersedes any Roomwright interpretation that treats the galley as fundamentally a two-person compartment. Existing prose describing it as crowded must be reconciled through furniture arrangement, circulation, and density rather than automatically forcing a tiny room.
+Prep is part of the one long counter run — there is **no separate prep island** (the Next-07 "rounding the counter" phrasing is queued for a light manuscript correction).
 
 ### WORKING — Seating
 
@@ -1396,3 +1396,33 @@ What validation found and fixed (no locked relational topology changed):
 - the Iri's-quarters conflict's "room past the galley" option was rebuilt against the new main deck (in the tank void between the galley's starboard wall and the engine bay, south of Storage Four, entered through the engine bay), and Cabin Five's identity now follows that ruling — the conflict system remains fully two-sided rather than silently locked to the cabin reading.
 
 Roomwright layout version is now 16; existing autosaves migrate in place, preserving user edits and rulings. All 23 habit tests pass in every matrix configuration.
+
+
+
+## AUTHOR CANON — Working session (project reframe + ship brief)
+
+The author has reframed the project: **build the Wild Huntress from the text plus direct author decisions, in more engineering detail than the novel strictly needs** — structural, piping, mechanical — so the model stays believable and future prose can be checked against it early (the nav-compartment/nav-locks near-miss is the motivating example). Decisions from this session are canon at the "author decision" evidence tier.
+
+### Locked this session
+
+- **Crew quarters = the cabin area.** Not a separate room. The cabins became "crew quarters" socially — the designation arrived with the crew (after Nova, and as Iri's presence made the row feel inhabited). Nova sleeps in an ordinary numbered cabin.
+- **Iri's cabin is Cabin Five, beside Quenby's Six.** The manuscript's "third cabin" phrasing is queued for correction (pending text corrections list below).
+- **Nova's cabin: deliberately open** until the cabin row's quirks are developed. The row is now quirk-differentiated (One: untouched catalog baseline; Two: a previous crew member's order fossilized, door ajar; Three: sticking legacy door, junction box that clicks with the midline bus; Four: work-spine bulkhead carrying the coolant pulse, automation-era cableway plate in the ceiling). **Cabin Four is the standing proposal for Nova**; Cabin Two the runner-up. The author chooses.
+- **Galley:** sized for six, crowded by habit (see revised lock above). Island folded into the counter run.
+- **Volume 3 crew: six bodies** — three adult women, two 16–22-year-olds, one three-year-old. Each teen gets a cabin; the toddler sleeps with their parent (child berth / secured nook); Quenby and Iri keep separate adjacent cabins even if they regularly sleep together. Six people, five occupied cabins, one legitimate guest/overflow cabin. The symmetry is six bodies aboard a ship built for six — not six separately occupied rooms.
+- **She lands.** Belly-lander for prepared and rough commercial pads: retractable gear, reinforced ventral structure, ground-loading through the ventral chute / freight lock. The skiff covers reconnaissance, retrieval, hazardous approaches, and places where landing her is impractical — not all surface access.
+- **Silhouette:** long-backed, broad-bellied commercial workhorse — continuous hull on a strong spine, narrower forward quarters, deeper working middle, dense aft drive section. Modularity is internal. On the ground she settles into a low, stable crouch. (Not a lifting wedge, skeletal modular spine, or pure box.)
+- **Deck Three is down:** a partial ventral service/reserve layer beneath the lower deck — deep stores, tank access, heavy-service connections, old freight infrastructure, pieces of the power/thermal backbone. The cold storage room lost its regular environmental loop in a refit while the old power route stayed uncomfortably close. Maintenance crawls cross multiple decks and are **not** synonymous with Deck Three.
+- **Hold registry:** the large cargo/training bay is **Hold One, "the forward hold"** (a label from an earlier deck plan that no longer matches her position — old labels aboard are history, not directions). The configurable flex bay is **Hold Two**. The skiff/gear complex is a third freight-capable area but was never a numbered hold.
+- **Gravity:** distributed through deck plating and local field nodes. Aging plates, moved partitions, overlapping zones, and rerouted power create small variations. Cabin Six's quarter-heavy corner is ordinary refit-era calibration drift where the enlarged cabin crosses an old field boundary — the resonance architecture may manipulate existing systems but did not create this baseline defect.
+- **Nav:** the compartment stays on the lower deck at the operational/residential seam. Presence-02's "nav locks clicked" is **helm hardware** — physical course-hold levers at the pilot's right hand (now modeled). No contradiction; no text change needed.
+- **Hold Two's automated hatch** vs. the manual-doors ethos is now a curated conflict: recommended reading is "automation is an era, not a fixture" — B.O.B. drove the powered assist in the early days; after the Manual-mode order the same hardware waits like every other door.
+
+### Pending text corrections (manuscript changes the author has queued)
+
+1. Iri's cabin: the "third cabin" line → Iri's cabin is Five, directly beside Quenby's Six.
+2. Next-07 galley: the "central prep counter" phrasing that implies a free-standing, roundable island → the prep stretch of the one long counter run.
+
+### Next modeling milestone (agreed direction)
+
+Hull massing and frame grid: model the 40–55 m envelope (working range, not a lock) with drive section, tank bands, ventral gear/chute structure, machinery voids, and the Deck Three partial layer as honest massing volumes; number ring frames from the bow so every space, pocket, and panel gets an address; route the utility trunks the prose already hears (midline power bus, port duct seam, aft pump), plus the older unmapped resonance-era harness as a second visible conduit system. Refit-era material language and pocket archaeology (Pocket One absorbed mundanely; Pocket Two suspiciously unaccounted for; Pocket Three's stale designation) hang off that skeleton.

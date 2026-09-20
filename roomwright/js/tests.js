@@ -529,7 +529,7 @@ export const HABIT_TESTS = [
       const grid = computeNavGrid(0.22);
       const inside = new THREE.Vector3(hatch ? hatch.pos[0] : galley.pos[0], 0, (hatch ? hatch.pos[2] : galley.pos[2]) + 0.6);
       const problems = [];
-      for (const key of ['galCounter', 'galIsland', 'galTable', 'galBench', 'galCabinet', 'galCooler']) {
+      for (const key of ['galCounter', 'galTable', 'galBench', 'galCabinet', 'galCooler']) {
         const t = state.project.objects.find(o => o.layoutKey === key);
         if (!t) { problems.push(`${key} missing`); continue; }
         if (!findPath(grid, inside, new THREE.Vector3(t.pos[0], 0, t.pos[2]), 14)) {
