@@ -1299,3 +1299,22 @@ Design implication for current ship work:
 - magical infrastructure can exist in the broader setting and may explain why some contemporary ships solve the same utility problem differently;
 - future fuel / propulsion decisions may incorporate magical technology, but the present engineering study should continue to model mass, water, heat, power, reaction mass, and service access explicitly unless a later canon decision supersedes that.
 
+
+
+
+### WORKING ENGINEERING NOTE — Water, fuel, and consumable mass
+
+The current preferred engineering direction is:
+
+- water remains a major physical ship mass and is reclaimed through a mature high-recovery loop;
+- the Huntress should carry **multiple water cells / reservoirs rather than one giant tank**, with the main mass low and inboard and smaller domestic / emergency buffers closer to the wet-service stack;
+- exact water quantity remains OPEN; a **5–10 m³** total clean / reclaimed reserve is a current visualization range only, not canon;
+- the propulsion refit replaced an older bulky propulsion-consumable architecture with a system that separates **compact high-energy fuel / feedstock** from **reaction mass / working fluid**;
+- the exact old propellant, new fuel chemistry, fusion species, and normal reaction mass remain OPEN;
+- the refitted drive may plausibly accept water as **emergency reaction mass** at reduced efficiency / increased wear, but this is not yet locked;
+- compact fuel should occupy relatively little volume, while reaction mass uses moderate split tankage aft / inboard;
+- former bulk-propellant volume can explain refit archaeology, obsolete saddles, voids, rerouted trunks, and converted service volume, but should not automatically explain Pocket Two or create large amounts of free hidden-room space;
+- cargo loading and consumable transfer should affect trim / center of mass, giving B.O.B. and the crew a practical reason to care where mass is placed.
+
+See `roomwright/HUNTRESS_MASS_AND_TANK_STUDY.md` for the current noncanonical engineering study.
+
