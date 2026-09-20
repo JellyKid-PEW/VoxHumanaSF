@@ -906,7 +906,7 @@ function defs(rulings) {
   });
   // East wall is segmented around toilet and shower doors.
   const hygDoorHalf = 0.50;
-  const toiletZ = 11.30, showerZ = 12.80;
+  const toiletZ = 11.30, showerZ = 13.00;
   const vestSegs = [
     ['hygVestWallE1', HYGZ0 + 0.50, toiletZ - hygDoorHalf],
     ['hygVestWallE2', toiletZ + hygDoorHalf, showerZ - hygDoorHalf],
@@ -990,38 +990,38 @@ function defs(rulings) {
   add('hygShowerFloor', {
     room: 'hygiene', type: 'floor', name: 'Shower / wash compartment deck',
     params: { width: SHW, depth: SHD },
-    pos: [shx, 0, 12.80], rotY: 0, locked: true,
+    pos: [shx, 0, 13.00], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [], note: 'Separate bathing / wash compartment with its own drainage and ventilation.',
   });
   add('hygShowerDoor', {
     room: 'hygiene', type: 'doorway', name: 'Shower / wash door',
     params: { length: 1.0, height: 2.08, thickness: 0.1, doorWidth: 0.74, doorHeight: 1.92, kind: 'sliding', slideDir: -1, open: 0 },
-    pos: [HYGX + HYGW / 2, 0, 12.80], rotY: Math.PI / 2, locked: false,
+    pos: [HYGX + HYGW / 2, 0, 13.00], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Separate from the toilet and screened from ordinary domestic circulation.',
   });
 
   add('hygShowerDoorWallN', {
     room: 'hygiene', type: 'wall', name: 'Shower doorway wall (forward)',
     params: { length: SHD / 2 - 0.5, height: 2.08, thickness: 0.10 },
-    pos: [HYGX + HYGW / 2, 0, 12.80 - (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    pos: [HYGX + HYGW / 2, 0, 13.00 - (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygShowerDoorWallS', {
     room: 'hygiene', type: 'wall', name: 'Shower doorway wall (aft)',
     params: { length: SHD / 2 - 0.5, height: 2.08, thickness: 0.10 },
-    pos: [HYGX + HYGW / 2, 0, 12.80 + (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    pos: [HYGX + HYGW / 2, 0, 13.00 + (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygShowerOuter', {
     room: 'hygiene', type: 'wall', name: 'Shower / wash outer wall',
     params: { length: SHD, height: 2.08, thickness: 0.1 },
-    pos: [shx + SHW / 2, 0, 12.80], rotY: Math.PI / 2, locked: true,
+    pos: [shx + SHW / 2, 0, 13.00], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   for (const s of [-1,1]) add(s < 0 ? 'hygShowerN' : 'hygShowerS', {
     room: 'hygiene', type: 'wall', name: 'Shower / wash wall',
     params: { length: SHW, height: 2.08, thickness: 0.1 },
-    pos: [shx, 0, 12.80 + s * SHD / 2], rotY: 0, locked: true,
+    pos: [shx, 0, 13.00 + s * SHD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
@@ -2359,7 +2359,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 14;
+export const LAYOUT_VERSION = 15;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2373,4 +2373,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   12: ['corAft*', 'med*', 'hyg*', 's4*', 'spnLeg2W*'], // clear main-deck blockout overlaps found in top-down review
   13: ['galCooler', 'galStool2'], // clear galley furniture overlaps in the lived-in occupancy layout
   14: ['hyg*', 'domService*', 'mainWet*'], // distinguish the galley-side service passage from the actual hygiene / ladder vestibule
+  15: ['hygShower*', 'hygVestWallE*'], // separate shower and toilet footprints in the final main-deck blockout
 };
