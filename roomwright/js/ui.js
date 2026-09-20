@@ -353,7 +353,48 @@ function renderTests() {
     <div class="section-head"><span>Habit tests</span>
       <button class="small primary" id="run-tests">Run all</button>
     </div>
-    <div id="test-list"></div>`;
+    <div id="test-list"></div>
+    <div class="section-head" style="margin-top:14px;"><span>Hearing probe</span></div>
+    <div class="muted" style="font-size:11.5px;margin:2px 0 6px;">Who hears what, from where — for text review. Uses current door states. Best from the Plan view.</div>
+    <div class="row" style="gap:6px;flex-wrap:wrap;">
+      <select id="probe-kind" class="small">
+        <option value="speech" selected>Conversation</option>
+        <option value="intimacy">Intimacy / bunk rhythm</option>
+        <option value="impact">Impact / dropped tool</option>
+        <option value="machinery">Running machinery</option>
+      </select>
+      <select id="probe-mode" class="small">
+        <option value="drift-night" selected>Drift, night (quietest)</option>
+        <option value="drift-day">Drift, day</option>
+        <option value="burn">Under burn</option>
+      </select>
+      <button class="small" id="probe-pick">Pick source…</button>
+    </div>`;
+  root.querySelector('#probe-pick').addEventListener('click', async () => {
+    const kind = root.querySelector('#probe-kind').value;
+    const mode = root.querySelector('#probe-mode').value;
+    status('Click a floor to place the sound source…');
+    const { audibilityReport } = await import('./acoustics.js');
+    editor.pickFloorMode = v => {
+      editor.pickFloorMode = null;
+      const rep = audibilityReport({ x: v.x, z: v.z }, kind, mode);
+      if (!rep.source) { status('No floor near that point.'); return; }
+      const groups = { words: [], tone: [], presence: [], silent: [] };
+      for (const r of rep.rows) groups[r.level].push(r);
+      const sect = (label, arr, showChannel) => arr.length
+        ? `<div style="margin:8px 0 2px;"><b style="font-size:12px;">${label}</b> <span class="muted">(${arr.length})</span></div>` +
+          arr.map(r => `<div style="font-size:11.5px;">${esc(r.name)}${showChannel && r.channel ? ` <span class="muted">— ${esc(r.channel)}</span>` : ''}</div>`).join('')
+        : '';
+      const body = el(`<div>
+        <div class="muted" style="font-size:11.5px;">Source: ${esc(rep.source.floor)} · ${esc(kind)} · ${esc(mode)}. Door states as currently set. Duct results are provisional until the ducting pass.</div>
+        ${sect('Words are intelligible', groups.words, true)}
+        ${sect('Voice / activity tone', groups.tone, true)}
+        ${sect('Presence — rhythm, thud, a maybe', groups.presence, true)}
+        <div style="margin:8px 0 2px;"><b style="font-size:12px;">Hears nothing</b> <span class="muted">(${groups.silent.length} spaces)</span></div>
+      </div>`);
+      showModal('Who hears what', body);
+    };
+  });
   const list = root.querySelector('#test-list');
   const draw = () => {
     list.innerHTML = '';

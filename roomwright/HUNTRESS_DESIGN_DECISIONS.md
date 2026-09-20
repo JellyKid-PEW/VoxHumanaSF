@@ -1426,3 +1426,39 @@ The author has reframed the project: **build the Wild Huntress from the text plu
 ### Next modeling milestone (agreed direction)
 
 Hull massing and frame grid: model the 40–55 m envelope (working range, not a lock) with drive section, tank bands, ventral gear/chute structure, machinery voids, and the Deck Three partial layer as honest massing volumes; number ring frames from the bow so every space, pocket, and panel gets an address; route the utility trunks the prose already hears (midline power bus, port duct seam, aft pump), plus the older unmapped resonance-era harness as a second visible conduit system. Refit-era material language and pocket archaeology (Pocket One absorbed mundanely; Pocket Two suspiciously unaccounted for; Pocket Three's stale designation) hang off that skeleton.
+
+
+
+## SOUNDS AND PRIVACY — Working acoustic reference (series review tool)
+
+Sound and privacy will matter throughout the series: where people are determines what they know or can infer. This is the standing model, now implemented in Roomwright (the **Hearing probe** in the Tests tab answers "who hears what from here" using current door states; the **sound-and-privacy habit test** keeps the canonical facts true as geometry evolves). Duct-branch results are PROVISIONAL until the ducting pass routes real runs.
+
+### The three channels
+
+1. **Airborne** through open volumes. Shut pressure-rated hatches are excellent barriers — a closed door reduces a conversation to at most a murmur of presence just outside. But this crew leaves doors open and ajar, and a corridor is a waveguide: with doors open, galley talk reaches the bridge (Presence-08, canon). **The ajar door, not the wall, is the ship's great privacy leak.**
+2. **Structure-borne** through the frame. Metal carries; insulation is minimal. Words die within arm's reach; rhythm, impacts, and machinery carry rooms away as thud and hum. Anything coupled to structure — a bolted bunk frame above all — broadcasts.
+3. **Duct-borne** (provisional): rooms on a shared vent branch hear faint presence at night in drift. Assumed branches: cabins One–Four + approach; quiet run + wet core + garden; galley + hygiene; operations + bays. The medbay's filtered loop carries nothing.
+
+### The flight-mode rule (make this canon)
+
+Privacy depends on flight mode. **Under burn the ship is deaf** — drive and thermal noise mask nearly everything, even next door. **In drift at night the whole vessel is a listening instrument.** Gravity-plating zones and power segments each carry their own faint note ("the hum changed with each bulkhead"), footsteps are legible by gait on the grated runs, and the midline bus, port duct seam, and aft pump are the ship's audible anatomy.
+
+### The cabin row
+
+- Cabins One–Four are staggered: **no two share a partition** — wall-to-wall they are surprisingly private. Their leaks are the door (ajar = words in the corridor; shut = presence at most) and the shared vent branch at night.
+- Cabins Five and Six trade the other way: superb seclusion from the ship (dogleg + wet-core pump masking + hull void above), but they share the party wall — **and Quenby's bunk is bolted to it.** Anything rhythmic on that bunk arrives in Cabin Five through structure. The two who chose to be neighbors have no secrets from each other and near-perfect secrecy from everyone else. Loop-walkers passing the doors catch presence, nothing more.
+- Nova (wherever she lands in One–Four) hears nothing through walls — but reading the ship through structure is her habit, and in drift she would register that the ship's night sounds have changed.
+- Volume 3: a crying three-year-old defeats every mechanism at once — corridor, vents, and structure. Nothing on the lower deck sleeps through it.
+
+### The rest of the ship
+
+- **True privacy:** the medbay (shut hatch, own loop — the ship's confessional), the skiff (a separate hull), the airlock (two doors), the dome (dead end, hull side), and the center of empty Hold One (distance + reverberant field beat any doorway eavesdropper).
+- **Masked-by-noise privacy:** engine bay, work spine, wet core — normal voices vanish under machinery. Work talk happens there; feelings talk happens in the galley.
+- **Chimneys:** the primary stair (Lower Ops ↔ forward corridor) and the secondary ladder (wet-core dogleg ↔ hygiene vestibule) carry sound between decks.
+- **Reverberant tells:** Hold One booms — sparring or argument is unmistakable at the freight node as sound, unintelligible as words.
+- **Structure listening posts:** the observation passage, Nova's crawl, any hull-side wall — sit against structure and hear the whole ship as weather. Pocket three hums with the engine through its wall (canon).
+- **B.O.B.** hears everything everywhere; his discretion is a choice the crew has to trust — a different axis of privacy entirely.
+
+### Text-review checklist
+
+For any scene: (1) note who is where and the flight mode; (2) run the Hearing probe from the scene's sound source; (3) anything at *words* is known, *tone* is identifiable activity, *presence* is inferable — a character in those zones knows or suspects accordingly, whether or not the scene says so; (4) a character claiming ignorance must be in a *silent* zone, behind a shut hatch, under a burn, or lying.

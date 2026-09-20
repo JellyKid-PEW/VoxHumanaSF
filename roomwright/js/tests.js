@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { state } from './state.js';
 import { editor, objectAABB, collectAABBs, castSight, circleHitsColliders, clearSightLines, drawSightLine } from './editor.js';
 import { CHARACTERS, eyeHeight } from './mannequin.js';
+import { audibilityReport, levelAt } from './acoustics.js';
 import { fmt } from './util.js';
 
 // ---------- navigation grid ----------
@@ -954,6 +955,72 @@ export const HABIT_TESTS = [
       } else problems.push('No skiff in its cradle.');
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
       return { status: 'pass', details: 'Rig station, loadout grid, and rig locker remain reachable inside the isolated side-branch bay; the skiff can be worked from multiple sides and the primary stair keeps the medbay run short.' };
+    },
+  },
+  {
+    id: 'sound-and-privacy',
+    name: 'The ship’s sound map holds (who hears what)',
+    basis: ['galley-sounds', 'cabin-six', 'iri-cabin-lower', 'pocket-hum', 'med-corridor'],
+    run() {
+      // Canonical audibility facts, checked in drift at night (worst case for
+      // privacy). Door states are staged per assertion and restored after.
+      const A = { audibilityReport, levelAt };
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const staged = [];
+      const setOpen = (key, v) => {
+        const d = byKey(key);
+        if (!d) return;
+        staged.push([d, d.params.open ?? 0]);
+        d.params.open = v;
+      };
+      const problems = [];
+      const expect = (desc, actual, ok) => { if (!ok.includes(actual)) problems.push(`${desc}: heard as "${actual}" (expected ${ok.join(' or ')})`); };
+      try {
+        // 1) Intimacy on Quenby's bunk (Cabin Six, door shut): Iri's cabin
+        //    knows through the shared party wall; the quiet run gets rhythm;
+        //    the approach cabins at most a maybe; the rest of the ship nothing.
+        setOpen('cab6Door', 0); setOpen('cab5Door', 0);
+        const bunk = byKey('cab6Bunk');
+        let rep = A.audibilityReport({ x: bunk.pos[0], y: bunk.pos[1], z: bunk.pos[2] }, 'intimacy', 'drift-night');
+        expect('Cabin Five through the party wall', A.levelAt(rep, 'cab5Floor'), ['tone', 'words']);
+        expect('the quiet run outside', A.levelAt(rep, 'quietRunFloor'), ['presence', 'tone']);
+        expect('Cabin Four (staggered row + other vent branch)', A.levelAt(rep, 'cab4Floor'), ['silent', 'presence']);
+        expect('the galley (a deck up, far forward)', A.levelAt(rep, 'galFloor'), ['silent']);
+        expect('the medbay', A.levelAt(rep, 'medFloor'), ['silent']);
+        expect('the bridge', A.levelAt(rep, 'floor'), ['silent']);
+        // 2) Galley conversation with doors open carries to the bridge as
+        //    activity (Presence-08: galley sounds reach the cradle).
+        setOpen('galHatch', 1); setOpen('doorway', 1);
+        const gal = byKey('galFloor');
+        rep = A.audibilityReport({ x: gal.pos[0], y: 0, z: gal.pos[2] }, 'speech', 'drift-night');
+        expect('the bridge from the galley (doors open)', A.levelAt(rep, 'floor'), ['tone', 'presence']);
+        expect('Cabin Six from the galley', A.levelAt(rep, 'cab6Floor'), ['silent']);
+        // 3) The medbay is the confessional: hatch shut, a conversation
+        //    inside reaches the corridor as at most a murmur of presence.
+        setOpen('medHatch', 0);
+        const med = byKey('medFloor');
+        rep = A.audibilityReport({ x: med.pos[0], y: 0, z: med.pos[2] }, 'speech', 'drift-night');
+        expect('the aft corridor outside the shut medbay', A.levelAt(rep, 'corAftFloor'), ['silent', 'presence']);
+        // 4) The stair well is a chimney: talk at the Lower Ops landing is
+        //    audible up in the forward corridor.
+        const op = byKey('opLandingFloor');
+        rep = A.audibilityReport({ x: op.pos[0], y: op.pos[1], z: op.pos[2] }, 'speech', 'drift-night');
+        expect('the forward corridor via the stair chimney', A.levelAt(rep, 'corFloor'), ['presence', 'tone', 'words']);
+        // 5) The engine bay's machinery hums through pocket three's wall.
+        const eng = byKey('engFloor');
+        rep = A.audibilityReport({ x: eng.pos[0], y: 0, z: eng.pos[2] }, 'machinery', 'drift-night');
+        expect('pocket three (the ship hums through this wall)', A.levelAt(rep, 'pktFloor'), ['presence', 'tone', 'words']);
+        // 6) Under burn, the same bunk sounds vanish even next door.
+        rep = A.audibilityReport({ x: bunk.pos[0], y: bunk.pos[1], z: bunk.pos[2] }, 'intimacy', 'burn');
+        expect('Cabin Five during a burn', A.levelAt(rep, 'cab5Floor'), ['silent', 'presence']);
+      } finally {
+        for (const [d, v] of staged) d.params.open = v;
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'The sound map holds: the party wall carries Cabin Six to Cabin Five and nowhere else that matters; galley talk reaches the cradle with doors open; the shut medbay keeps its conversations; the stair well is a chimney; the engine hums through pocket three; and a burn deafens the ship. Duct-branch results stay provisional until the ducting pass.',
+      };
     },
   },
 ];
