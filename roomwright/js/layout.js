@@ -258,8 +258,10 @@ function defs(rulings) {
   });
 
   // Port wall: primary stair only. Medbay belongs beyond the bend.
+  // The port wall stops at the offset's forward edge (bendZ - COR.W/2) so the
+  // jog crosses inboard through the full elbow, not through a wall.
   const fwdPortA = (stairZ - 0.55) - corStartZ;
-  const fwdPortB = bendZ - (stairZ + 0.55);
+  const fwdPortB = (bendZ - COR.W / 2) - (stairZ + 0.55);
   if (fwdPortA > 0.05) add('corWallPort', {
     room: 'corridor', type: 'wall', name: 'Main corridor port wall (forward)',
     params: { length: fwdPortA, height: COR.H, thickness: 0.12 },
@@ -334,17 +336,33 @@ function defs(rulings) {
     pos: [(cx + aftCx) / 2, 0, bendZ], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
+  // The elbow's enclosure: the forward edge closes only where the forward run
+  // is NOT above it (west of the forward run's port wall), and the aft edge
+  // closes only where the aft run is NOT below it (east of the aft run's
+  // starboard wall). Short end caps close the two open edges of the elbow.
   add('corBendN', {
     room: 'corridor', type: 'wall', name: 'Offset forward bulkhead',
     params: { length: Math.abs(cx - aftCx), height: COR.H, thickness: 0.12 },
-    pos: [(cx + aftCx) / 2, 0, bendZ - COR.W / 2], rotY: 0, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: 'Closes the inside of the turn.',
+    pos: [(cx + aftCx) / 2 - COR.W / 2, 0, bendZ - COR.W / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Closes the inside of the turn; the forward run stays open into the elbow.',
   });
   add('corBendS', {
     room: 'corridor', type: 'wall', name: 'Offset aft bulkhead',
     params: { length: Math.abs(cx - aftCx), height: COR.H, thickness: 0.12 },
-    pos: [(cx + aftCx) / 2, 0, bendZ + COR.W / 2], rotY: 0, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: 'The aft run begins on the inboard side of this wall.',
+    pos: [(cx + aftCx) / 2 + COR.W / 2, 0, bendZ + COR.W / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Closes the outside of the turn; the aft run begins on the inboard side.',
+  });
+  add('corBendW', {
+    room: 'corridor', type: 'wall', name: 'Offset port end cap',
+    params: { length: COR.W / 2, height: COR.H, thickness: 0.12 },
+    pos: [aftCx - COR.W / 2, 0, bendZ - COR.W / 4], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Closes the elbow west of the aft run mouth.',
+  });
+  add('corBendE', {
+    room: 'corridor', type: 'wall', name: 'Offset starboard end cap',
+    params: { length: COR.W / 2, height: COR.H, thickness: 0.12 },
+    pos: [cx + COR.W / 2, 0, bendZ + COR.W / 4], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Closes the elbow south of the forward run mouth.',
   });
 
   // ---------- aft corridor run ----------
@@ -375,7 +393,7 @@ function defs(rulings) {
   });
   add('medHatch', {
     room: 'medbay', type: 'doorway', name: 'Medbay hatch',
-    params: { length: 1.2, height: COR.H, thickness: 0.12, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
+    params: { length: 1.2, height: COR.H, thickness: 0.12, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: -1, open: 0 },
     pos: [aftCx - COR.W / 2, 0, medHatchZ], rotY: Math.PI / 2, locked: false,
     evidence: 'explicit', evidenceRefs: ['med-corridor', 'med-deeper', 'doors-wait'],
     note: 'Medbay opens from the aft run after the corridor offset; routine boarders cannot see directly into it from the airlock.',
@@ -401,9 +419,9 @@ function defs(rulings) {
   });
   add('corAftWallStbd', {
     room: 'corridor', type: 'wall', name: 'Aft corridor starboard wall',
-    params: { length: corEndZ - bendZ, height: COR.H, thickness: 0.12 },
-    pos: [aftCx + COR.W / 2, 0, (bendZ + corEndZ) / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: 'The legacy storage spine is already outboard of this shifted run.',
+    params: { length: corEndZ - (bendZ + COR.W / 2), height: COR.H, thickness: 0.12 },
+    pos: [aftCx + COR.W / 2, 0, (bendZ + COR.W / 2 + corEndZ) / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Starts at the elbow’s aft edge; the legacy storage spine is already outboard of this shifted run.',
   });
 
   // ================= STORAGE SPINE =================
@@ -802,13 +820,13 @@ function defs(rulings) {
   add('galStool1', {
     room: 'galley', type: 'seat', name: 'Galley stool one',
     params: { seatHeight: 0.46, width: 0.38, hasArms: false },
-    pos: rel(gw / 2 - 0.62, gd / 2 - 1.0), rotY: Math.PI / 2, locked: false,
+    pos: rel(gw / 2 - 0.55, gd / 2 - 1.38), rotY: Math.PI / 2, locked: false,
     evidence: 'assumption', evidenceRefs: [], note: 'Compact movable seating; exact final chair / stool count remains open.',
   });
   add('galStool2', {
     room: 'galley', type: 'seat', name: 'Galley stool two',
     params: { seatHeight: 0.46, width: 0.38, hasArms: false },
-    pos: rel(1.0, gd / 2 - 1.65), rotY: 0, locked: false,
+    pos: rel(0.7, gd / 2 - 2.02), rotY: 0, locked: false,
     evidence: 'assumption', evidenceRefs: [], note: 'Second movable seat. Can be pulled clear when the galley is being used as a workroom.',
   });
   add('galCabinet', {
@@ -1045,9 +1063,12 @@ function defs(rulings) {
   // Off the spine's outboard wall — "not listed on primary pathing".
   const DR = 1.25;
   const dcx = pktWx + DR + 0.11, dcz = domeZ;
+  // The deck reaches back to overlap the spine floor at the arch, so the
+  // walking surface is one continuous union with no hairline seam (a seam
+  // exactly on a nav-grid column would cut the dome off under some rulings).
   add('domeFloor', {
-    room: 'dome', type: 'floor', name: 'Dome deck', params: { width: DR * 2 + 0.2, depth: DR * 2 + 0.2 },
-    pos: [dcx + 0.01, 0, dcz], rotY: 0, locked: true,
+    room: 'dome', type: 'floor', name: 'Dome deck', params: { width: DR * 2 + 0.4, depth: DR * 2 + 0.2 },
+    pos: [dcx - 0.09, 0, dcz], rotY: 0, locked: true,
     evidence: 'explicit', evidenceRefs: ['dome-hidden', 'dome-curve', 'dome-rim-dust', 'dome-warm-plating'],
     note: 'The dome deck — its plating keeps a little warmth from the outer heat-sink loop; dust gathers at the rim.',
   });
@@ -1116,7 +1137,8 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: 'The drive lives beyond — "a complaining purr."',
   });
   if (iriRuling === 'aft-room') {
-    // door through to Iri's quarters (her ruling puts them past the galley)
+    // door through to Iri's quarters (her ruling puts them past the galley,
+    // in the tank void between the galley's starboard wall and the engine bay)
     const iqDoorZ = ebz - 0.25;
     const wSegA = (iqDoorZ - 0.45) - (ebz - EBD / 2);
     const wSegB = (ebz + EBD / 2) - (iqDoorZ + 0.45);
@@ -1136,6 +1158,52 @@ function defs(rulings) {
       room: 'engine', type: 'wall', name: 'Engine bay wall (port aft)', params: { length: wSegB, height: EBH, thickness: 0.12 },
       pos: [ebx - EBW / 2, 0, ebz + EBD / 2 - wSegB / 2], rotY: Math.PI / 2, locked: true,
       evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    // the room itself: flush between the galley's starboard wall and the
+    // engine bay's port wall, south of Storage Four
+    const iqW = 1.5, iqD = 2.0;
+    const iqx = ebx - EBW / 2 - iqW / 2, iqz = ebz + 0.2;
+    add('iriQFloor', {
+      room: 'quarters', type: 'floor', name: 'Iri’s quarters deck', params: { width: iqW, depth: iqD },
+      pos: [iqx, 0, iqz], rotY: 0, locked: true,
+      evidence: 'decision', evidenceRefs: ['iri-quarters-route', 'eng-behind-tanks'],
+      note: 'Your ruling: her quarters sit past the galley, tucked against the tank space, entered through the engine bay.',
+    });
+    add('iriQCeil', {
+      room: 'quarters', type: 'ceiling', name: 'Iri’s quarters overhead', params: { width: iqW, depth: iqD, height: 2.05 },
+      pos: [iqx, 0, iqz], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add('iriQWallN', {
+      room: 'quarters', type: 'wall', name: 'Iri’s quarters wall', params: { length: iqW, height: 2.05, thickness: 0.1 },
+      pos: [iqx, 0, iqz - iqD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add('iriQWallS', {
+      room: 'quarters', type: 'wall', name: 'Iri’s quarters wall', params: { length: iqW, height: 2.05, thickness: 0.1 },
+      pos: [iqx, 0, iqz + iqD / 2], rotY: 0, locked: true, evidence: 'assumption', evidenceRefs: [], note: '',
+    });
+    add('iriQWallW', {
+      room: 'quarters', type: 'wall', name: 'Iri’s quarters wall (tanks)', params: { length: iqD, height: 2.05, thickness: 0.1 },
+      pos: [iqx - iqW / 2, 0, iqz], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['eng-behind-tanks'], note: 'The galley tanks stand beyond.',
+    });
+    add('iriQBunk', {
+      room: 'quarters', type: 'bench', name: 'Iri’s bunk',
+      params: { width: 0.65, height: 0.4, depth: 1.35 },
+      pos: [iqx - iqW / 2 + 0.38, 0, iqz - 0.2], rotY: 0, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-quarters-route'], note: 'The cabin she keeps and rarely sleeps in.',
+    });
+    add('iriQTable', {
+      room: 'quarters', type: 'table', name: 'Iri’s worktable',
+      params: { width: 0.7, depth: 0.45, height: 0.78 },
+      pos: [iqx + 0.35, 0, iqz + iqD / 2 - 0.28], rotY: Math.PI, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-worktable'], note: 'Where she lays the found pieces out with both hands.',
+    });
+    add('iriQHatch', {
+      room: 'quarters', type: 'shelf', name: 'Sealed storage hatch',
+      params: { width: 0.7, depth: 0.26, mountHeight: 1.2, tins: 0 },
+      pos: [iqx - iqW / 2 + 0.14, 0, iqz - 0.2], rotY: Math.PI / 2, locked: false,
+      evidence: 'decision', evidenceRefs: ['iri-storage-hatch'],
+      note: 'A wall hatch above the bunk — soft-wrapped, layered, sealed.',
     });
   } else {
     add('engWallW', {
@@ -1243,16 +1311,16 @@ function defs(rulings) {
   add('medChair', {
     room: 'medbay', type: 'seat', name: 'Medbay chair',
     params: { seatHeight: 0.45, width: 0.46, hasArms: false },
-    pos: mrel(0.0, -0.15), rotY: Math.PI - 0.4, locked: false,
+    pos: mrel(0.0, -0.06), rotY: Math.PI - 0.4, locked: false,
     evidence: 'explicit', evidenceRefs: ['med-chair', 'med-chair-hook'],
     note: 'The one chair — hooked into position beside the console, within reach of the tea, angled toward both telemetry and cot.',
   });
   add('medShelf', {
     room: 'medbay', type: 'storage', name: 'Storage shelf',
-    params: { width: 0.8, height: 1.5, depth: 0.34 },
-    pos: mrel(0.35, MD / 2 - 0.15), rotY: Math.PI, locked: false,
+    params: { width: 0.7, height: 1.5, depth: 0.34 },
+    pos: mrel(0.95, -MD / 2 + 0.17), rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['med-shelf', 'med-reach'],
-    note: 'Where Nova stands with her borrowed blanket — supplies within blind reach of the door.',
+    note: 'Where Nova stands with her borrowed blanket — supplies within blind reach of the door, beside the console.',
   });
   add('medSideConsole', {
     room: 'medbay', type: 'console', name: 'Side console',
@@ -1264,9 +1332,9 @@ function defs(rulings) {
   add('medSterilizer', {
     room: 'medbay', type: 'crate', name: 'Sterilizer unit',
     params: { width: 0.38, height: 0.95, depth: 0.4 },
-    pos: mrel(0.8, -MD / 2 + 0.35), rotY: 0, locked: false,
+    pos: mrel(0.95, MD / 2 - 0.2), rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['med-two-beds'],
-    note: 'Sterilizer unit with its blinking diagnostic loop.',
+    note: 'Sterilizer unit with its blinking diagnostic loop, in the aft corner clear of the door lane.',
   });
 
   // ================= LOWER DECK =================
@@ -1438,7 +1506,7 @@ function defs(rulings) {
   add('sbRig', {
     room: 'skiffbay', type: 'console', name: 'Rig station',
     params: { width: 1.05, depth: 0.58, height: 0.95, screens: 1, lit: true },
-    pos: [sbx - 0.7, D2, sbz + SBD / 2 - 0.38], rotY: Math.PI, locked: false,
+    pos: [sbx - 1.15, D2, sbz + SBD / 2 - 0.38], rotY: Math.PI, locked: false,
     evidence: 'explicit', evidenceRefs: ['rig-station'], note: 'Clamps aligned. Seals checked.',
   });
   add('sbGrid', {
@@ -1678,7 +1746,9 @@ function defs(rulings) {
   });
 
   // ---------- cabin helper ----------
-  function addLowerCabin({ key, name, x, z, w = 2.0, d = 1.85, doorX, doorZ = z, open = 0, evidence = 'assumption', refs = [], note = '' }) {
+  // Doors sit 0.3 m aft of each cabin's centre so the bunk wall (forward)
+  // keeps a clear person-width beside the doorway clearance zone.
+  function addLowerCabin({ key, name, x, z, w = 2.0, d = 1.85, doorX, doorZ = z + 0.3, open = 0, evidence = 'assumption', refs = [], note = '' }) {
     add(key + 'Floor', {
       room: 'cabin', type: 'floor', name: name + ' deck',
       params: { width: w, depth: d }, pos: [x, D2, z], rotY: 0, locked: true,
@@ -1750,12 +1820,12 @@ function defs(rulings) {
       note: 'Staggered cabin-facing wall; door rhythm is intentionally irregular.',
     });
   };
-  addResWallSeg('resWallW1', resWestDoorX, RESZ0, 7.15);
-  addResWallSeg('resWallW2', resWestDoorX, 8.15, 9.75);
-  addResWallSeg('resWallW3', resWestDoorX, 10.75, RESZ1);
-  addResWallSeg('resWallE1', resEastDoorX, RESZ0, 8.55);
-  addResWallSeg('resWallE2', resEastDoorX, 9.55, 10.65);
-  addResWallSeg('resWallE3', resEastDoorX, 11.65, RESZ1);
+  addResWallSeg('resWallW1', resWestDoorX, RESZ0, 7.45);
+  addResWallSeg('resWallW2', resWestDoorX, 8.45, 10.05);
+  addResWallSeg('resWallW3', resWestDoorX, 11.05, RESZ1);
+  addResWallSeg('resWallE1', resEastDoorX, RESZ0, 8.85);
+  addResWallSeg('resWallE2', resEastDoorX, 9.85, 10.95);
+  addResWallSeg('resWallE3', resEastDoorX, 11.95, RESZ1);
 
   // ---------- wet/service core + dogleg ----------
   const QUIETX = RESX - 2.0;
@@ -1855,9 +1925,9 @@ function defs(rulings) {
       note: 'The quiet run is enclosed enough to feel residential while preserving ordinary ship-service texture.',
     });
   };
-  addQuietWallSeg('quietWallW1', 'west', quietWallStart, 13.95);
-  addQuietWallSeg('quietWallW2', 'west', 14.95, 15.95);
-  addQuietWallSeg('quietWallW3', 'west', 16.95, quietWallEnd);
+  addQuietWallSeg('quietWallW1', 'west', quietWallStart, 14.25);
+  addQuietWallSeg('quietWallW2', 'west', 15.25, 16.25);
+  addQuietWallSeg('quietWallW3', 'west', 17.25, quietWallEnd);
   addQuietWallSeg('quietWallE', 'east', quietWallStart, quietWallEnd);
 
   // ---------- domestic / habitation stores; later garden nook ----------
@@ -1912,10 +1982,12 @@ function defs(rulings) {
     pos: [gardx + (gardenDoorHalf + (GARDW / 2 - gardenDoorHalf) / 2), D2, gardz - GARDD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-  [-0.78, 0, 0.78].forEach((dz, i) => add('gardenStore' + (i + 1), {
+  // Two stores along the port wall aft of the hatch clearance, one on the
+  // starboard wall — the threshold itself stays clear for someone leaning in.
+  [[-0.55, 0.10, Math.PI / 2], [-0.55, 0.85, Math.PI / 2], [0.55, 0.40, -Math.PI / 2]].forEach(([dx, dz, ry], i) => add('gardenStore' + (i + 1), {
     room: 'domestic-stores', type: 'storage', name: 'Low side-opening domestic store ' + (i + 1),
     params: { width: 0.72, height: 0.72, depth: 0.72 },
-    pos: [gardx - 0.55, D2, gardz + dz], rotY: Math.PI / 2, locked: false,
+    pos: [gardx + dx, D2, gardz + dz], rotY: ry, locked: false,
     evidence: 'decision', evidenceRefs: [],
     note: 'Frequently used linens, cleaning / hygiene consumables, filters, waste bags, water-test supplies, or small environmental spares. Future grow beds can sit above these stores.',
   }));
@@ -1923,9 +1995,15 @@ function defs(rulings) {
   // ---------- Cabins Five and Six: quiet run ----------
   const quietWestDoorX = QUIETX - RESW / 2;
   addLowerCabin({
-    key: 'cab5', name: 'Cabin Five — Iri', x: quietWestDoorX - 1.05, z: 14.45, w: 2.1, d: 2.0,
-    doorX: quietWestDoorX, open: 0.45, evidence: 'decision', refs: ['iri-cabin-lower'],
-    note: 'Iri’s cabin. Door often held at a half-angle. Shares a structural wall with Cabin Six.',
+    key: 'cab5',
+    name: iriRuling === 'aft-room' ? 'Cabin Five (blank)' : 'Cabin Five — Iri',
+    x: quietWestDoorX - 1.05, z: 14.45, w: 2.1, d: 2.0,
+    doorX: quietWestDoorX, open: iriRuling === 'aft-room' ? 0 : 0.45,
+    evidence: iriRuling ? 'decision' : 'assumption', refs: ['iri-cabin-lower'],
+    note: iriRuling === 'aft-room'
+      ? 'Your ruling: Iri’s quarters are the aft room past the galley; this cabin stands blank.'
+      : (iriRuling ? '' : '⚠ Provisional — the Iri’s-quarters conflict is unresolved. ') +
+        'Iri’s cabin. Door often held at a half-angle. Shares a structural wall with Cabin Six.',
   });
   addLowerCabin({
     key: 'cab6', name: 'Cabin Six — Quenby', x: quietWestDoorX - 1.2, z: 16.45, w: 2.4, d: 2.0,
@@ -2354,12 +2432,13 @@ export const CONFLICT_LAYOUT_KEYS = {
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
   'declared:eng-belowdeck~eng-walkin': ['engFloor', 'engCeil', 'engWall*', 'engFloorHatch'],
+  'declared:iri-cabin-lower~iri-quarters-route': ['cab5*', 'iriQ*', 'engWall*'],
 };
 
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 15;
+export const LAYOUT_VERSION = 16;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2374,4 +2453,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   13: ['galCooler', 'galStool2'], // clear galley furniture overlaps in the lived-in occupancy layout
   14: ['hyg*', 'domService*', 'mainWet*'], // distinguish the galley-side service passage from the actual hygiene / ladder vestibule
   15: ['hygShower*', 'hygVestWallE*'], // separate shower and toilet footprints in the final main-deck blockout
+  16: ['corBend*', 'corWallPortMid', 'corAftWallStbd', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*', 'resWall*', 'quietWall*', 'galStool*', 'medHatch', 'medChair', 'medShelf', 'medSterilizer', 'sbRig', 'gardenStore*', 'engWall*', 'iriQ*', 'domeFloor'], // open the corridor elbow (live-app validation found it walled), offset cabin doors clear of bunks, clear furniture / clearance-zone collisions, rebuild the aft-room option of the Iri conflict against the new main deck
 };

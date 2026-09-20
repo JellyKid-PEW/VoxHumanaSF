@@ -1213,8 +1213,8 @@ export const SEED_CONSTRAINTS = [
       { kind: 'clashes-with', target: 'iri-quarters-route',
         explanation: 'Walking the LOWER corridor’s cabin row, Quenby passes Iri’s door held at half-angle. But when Iri carries the found pieces home, her route runs "back through the upper corridor, past the galley, past the junction lights, into her own quarters" — an upper-deck room aft. One set of quarters cannot be both a cabin down the lower row and a room past the galley on the upper corridor.',
         options: [
-          { id: 'cabin-row', label: 'Cabin on the lower row (recommended)', detail: 'Her quarters are the third cabin on the lower corridor, worktable and sealed storage hatch inside. The Next-09 route is read loosely — she took the long way home.' },
-          { id: 'aft-room', label: 'Room past the galley', detail: 'Her quarters sit on the main deck, tucked behind the galley tanks and entered through the engine bay — the Next-09 route taken literally. The third lower cabin stands blank.' },
+          { id: 'cabin-row', label: 'Cabin on the lower deck (recommended)', detail: 'Her quarters are Cabin Five on the quiet run past the wet-core dogleg, sharing a wall with Cabin Six. The Next-09 route is read loosely — she took the long way home.' },
+          { id: 'aft-room', label: 'Room past the galley', detail: 'Her quarters sit on the main deck, tucked behind the galley tanks and entered through the engine bay — the Next-09 route taken literally. Cabin Five stands blank.' },
         ] },
     ],
   },

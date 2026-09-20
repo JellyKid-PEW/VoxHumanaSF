@@ -1,30 +1,27 @@
 # Wild Huntress — Comic Production Floor Plan V1
 
-Status: **DRAFT — DO NOT USE AS ART-PRODUCTION FREEZE YET**
+Status: **ART-PRODUCTION FREEZE — REVISABLE** (geometry live-app validated; diagrams must be re-exported)
 
 Purpose: provide a believable, repeatable spatial baseline for drawing recurring Wild Huntress backgrounds in *Between Ports*.
 
 This is **not** a final engineering blueprint and does not canonize every centimeter. It freezes enough geometry that recurring rooms, doors, furniture, and sightlines can remain consistent from page to page.
 
 
-## Diagram review correction
+## Diagram review correction — RESOLVED by live-app validation
 
 The first exported V1 diagrams were **not acceptable as production floor plans**. They drew each corridor / landing / junction floor as an independent rectangle, so connected circulation zones visually overlapped and internal boundary lines ran through spaces that should read as one continuous floor area. Dense labels and camera markers compounded the problem.
 
-This is primarily a **drafting / representation error**, not evidence that every underlying room physically occupies the same volume. However, the production freeze is suspended until the plan is redrawn as actual wall / opening geometry and the few threshold-depth assumptions are normalized.
+The full geometry has since been validated in the live Roomwright app (navigation-grid walk tests, door sweep / clearance tests, and furniture-overlap tests, across all rulings of the six evidence conflicts). Results, junction by junction:
 
-Known problem areas to resolve before re-freezing:
-- main-deck corridor offset intersections;
-- dry domestic-access / service-passage junction;
-- Lower Operations / work-spine connection;
-- residential-turn / work-spine junction;
-- residential approach / dogleg / quiet-run joints;
-- aft-service / aft-reconnection / freight-node convergence;
-- freight-node / main-cargo doorway depth;
-- small work-spine encroachments at engineering / repair recess thresholds;
-- label and camera-marker collisions, especially around the wet core / garden / Cabins Five-Six and the aft freight area.
+- Most of the flagged junctions were **representation-only** problems: the Lower Operations / work-spine connection, residential-turn / work-spine junction, dogleg / quiet-run joints, aft-service / aft-reconnection / freight-node convergence, and freight-node / main-cargo doorway all check out walkable and non-overlapping in the model.
+- The **main-deck corridor offset**, however, was a real defect: its bulkheads were mis-centered by half a corridor width, sealing the elbow — there was no walkable route from the bridge to the galley, medbay, or hygiene wing at all. The elbow has been rebuilt as an open jog with proper end caps.
+- Every **cabin bunk crowded its own door clearance**; all six cabin doors now sit 0.3 m aft of the cabin centerline, clear of the bunk wall. Door positions in art should follow this (door slightly aft of center, bunk forward).
+- Assorted furniture collisions were cleared: galley stools vs. table / cooling unit, the domestic-stores hatch, the skiff-bay rig station, and the medbay — whose shelf now stands beside the console on the forward wall and whose sterilizer holds the aft corner, so both the console face and the cot stay reachable in a genuinely tight 2.6 × 2.0 m room.
+- A hairline floor seam at the observation-dome arch could cut the dome off under the side-door bridge ruling; the dome deck now overlaps the spine floor at the arch.
 
-Do not use the original V1 PNG/SVG exports as visual continuity references.
+All 23 habit tests pass across a 21-configuration ruling matrix. The freeze is restored on that verified geometry.
+
+Do not use the original V1 PNG/SVG exports as visual continuity references — future plans should be re-exported from the corrected geometry as actual wall / opening drawings.
 
 ## Production rule
 

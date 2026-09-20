@@ -2,16 +2,25 @@
 
 Roomwright converts prose descriptions into evidence-backed, editable 3D
 environments for fiction writers. It currently models the **Wild Huntress**
-from the Vox Humana series across two decks — fifteen connected spaces, one
-continuous walkable interior. Main deck: the bridge, the corridor, the
-two-stage airlock ("two steps past the bridge"), the medbay, the storage
-spine with its two turns down to starboard pocket three, the half-hidden
-observation dome with its scrape-your-head arch, the galley, and the engine
-bay at the heat's center aft. Down the stairwell whose lights blink in
-pairs: the lower corridor with its coolant lines, the cabin row (one blank,
-one ajar, Iri's at half-angle, and Cabin Six at the end), Nova's crew
-quarters, and the skiff/gear bay. First-person walking descends the actual
-stairs; a Deck filter shows one level at a time in editing views.
+from the Vox Humana series — an old long-haul freighter across two decks,
+thirty connected spaces, one continuous walkable interior. Main deck: the
+bridge; the primary corridor that offsets before medbay so boarding traffic
+never looks straight into the medical zone; the two-stage airlock ("two
+steps past the bridge"); the legacy storage spine with starboard pocket
+three, Storage Four, the half-hidden observation dome with its
+scrape-your-head arch, and the deep walk-in engine bay; the lived-in galley
+at the domestic junction; and a separate dry hygiene branch with its own
+toilet and shower compartments and the secondary ladder. Down the primary
+stair: Lower Operations and the skiff/mission bay, the commercial work
+spine (work head, configurable flex bay, repair recesses, underdeck
+engineering access), and the residential route that turns away early —
+nav at the seam, Cabins One through Four staggered on the approach, the
+wet-core dogleg with the domestic stores/future garden, the quiet run
+where Cabin Five (Iri) and Cabin Six (Quenby) share a wall, and beyond it
+the old aft-service fabric: the freight lock, the main cargo/training bay,
+the lower aft spine, and Nova's port-side equipment crawl. First-person
+walking descends the actual stairs; a Deck filter shows one level at a
+time in editing views.
 
 **Run it:** serve this folder over HTTP (any static server) and open
 `index.html` — e.g. `python3 -m http.server` then
@@ -56,19 +65,23 @@ it and falls back to WebGL2 automatically.
    her bolts, record movement paths by clicking the floor, save named scenes,
    and ghost-compare two arrangements in the same room. *Walk as* any character
    at their eye height (WASD + drag to look, C to crouch).
-7. **Tests tab** — reusable habit tests, green/amber/red:
+7. **Tests tab** — twenty-three reusable habit tests, green/amber/red:
    three seats occupiable, Nova's floor play doesn't block routes, feet reach a
    rail, passage behind the seats, doors open fully, consoles reachable,
    prose sightlines hold (drawn live in the viewport), no illegal overlaps,
-   the bridge–corridor–galley route stays walkable, the galley stays
-   *tight but usable* (amber if roomier than the prose), pocket three keeps
-   making you choose where to stand, medbay supplies stay within blind
-   reach of the door, the dome arch keeps scraping anyone who walks too
-   proud, the airlock stays a true two-stage lock cramped for two, two
-   steps still cross the engine bay to the bench, the stairwell honestly
-   connects the decks, the lower corridor passes the cabin row in the
-   prose's order with a bunk that fits Quenby, and the gear bay stages the
-   skiff and the rigs.
+   the bridge–corridor–galley route stays walkable, the airlock stays close
+   to medical without sharing a sightline (the corridor offset does real
+   privacy work), the galley holds five comfortably and seven crowded, the
+   hygiene compartments stay separate from food space, pocket three keeps
+   making you choose where to stand, the legacy spine keeps its narrow old
+   depth, medbay supplies stay within blind reach of the door, the dome arch
+   keeps scraping anyone who walks too proud, the airlock stays a true
+   two-stage lock cramped for two, two steps still cross the engine bay to
+   the bench, the decks keep believable structure between them, the
+   stairwell honestly connects the decks, the residential approach passes
+   the staggered cabins with bunks that fit their sleepers, the commercial
+   route runs stair → work spine → freight node → cargo bay without cutting
+   through anyone's bedroom, and the skiff bay stages the rigs.
 8. **Check new writing** (Docs tab) — paste a new passage; it's checked
    against the constraint database and your rulings.
 9. **Save/Export** — autosave to the browser, named versions, JSON project
@@ -98,13 +111,20 @@ vendor/               three.js r0.185 (webgpu build) + control addons
 The layout generator keys every generated object with a `layoutKey`, so ruling
 changes regenerate only the affected geometry and manual edits survive (and
 deliberately deleted objects stay deleted). The door-position ruling
-re-anchors the whole aft wing (corridor, medbay, spine, pocket, galley) to
-wherever the bridge hatch lands — including an L-bend corridor for the
-side-door option. Older autosaved projects are migrated in place: new
-constraints, rooms, and scenes are added, and a layout-version system
-force-regenerates only the generated pieces whose definitions changed,
-without disturbing user edits or rulings. What remains of the ship is its
-attic and basement clutter: the underdeck engineering crawls, the numbered
-holds and storage rooms (Deck Three's unused one included), the paneled-over
-observation passage, nav as its own compartment, and the wiring nest under
-B.O.B.'s tertiary relay stack — all mined and waiting in the same pattern.
+re-anchors both entire decks to wherever the bridge hatch lands — including
+an L-bend corridor for the side-door option. Older autosaved projects are
+migrated in place: new constraints, rooms, and scenes are added, and a
+layout-version system force-regenerates only the generated pieces whose
+definitions changed, without disturbing user edits or rulings.
+
+The ship itself is now developed well beyond the app's seed evidence: see
+`HUNTRESS_DESIGN_DECISIONS.md` (the running log of locked and open design
+decisions), the engineering studies (`HUNTRESS_MASS_AND_TANK_STUDY.md`,
+`HUNTRESS_THERMAL_PROPULSION_STUDY.md`, `HUNTRESS_VERTICAL_HULL_STUDY.md`,
+`BOOK3_SHIP_SPACE_AUDIT.md`), and the art-facing
+`HUNTRESS_COMIC_PRODUCTION_FLOORPLAN_V1.md`, whose freeze now rests on
+geometry validated in the live app — every habit test green across all
+rulings of the six evidence conflicts. Still waiting in the prose for a
+future pass: the paneled-over observation passage, the wiring nest under
+B.O.B.'s tertiary relay stack, Deck Three's exact footprint, and the deeper
+underdeck crawl network.

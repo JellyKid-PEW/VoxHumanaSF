@@ -1237,9 +1237,9 @@ These are **geometry implementation refinements**, not new narrative canon. Exac
 
 ## Current unresolved design questions
 
-- Validate the revised main-deck Roomwright geometry in the live app and adjust assumed clearances / dimensions without changing the locked relational topology.
+- ~~Validate the revised main-deck Roomwright geometry in the live app~~ — DONE; see the live-app validation note at the end of this log. The corridor offset needed real repair; clearances were adjusted without changing the locked relational topology.
 
-- Validate the new lower-deck relational geometry in Roomwright and adjust assumed dimensions / clearances before treating them as final.
+- ~~Validate the new lower-deck relational geometry in Roomwright~~ — DONE; see the same note. Cabin door positions shifted 0.3 m aft of each cabin's centerline; no relational change.
 
 - Assign Nova to one of Cabins One through Four.
 - Exact dimensions of standard vs. larger cabins.
@@ -1379,3 +1379,20 @@ The first recurring background set to develop from this baseline is the **galley
 
 See `roomwright/HUNTRESS_COMIC_PRODUCTION_FLOORPLAN_V1.md`.
 
+
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Live-app validation of the rebuilt decks
+
+The rebuilt main-deck and lower-deck geometry has now been validated in the running app: navigation-grid walk tests, door sweep and clearance-zone tests, furniture-overlap tests, and the full habit-test suite, run across a 21-configuration matrix covering every ruling of the six evidence conflicts.
+
+What validation found and fixed (no locked relational topology changed):
+
+- the main-corridor offset's bulkheads were mis-centered by half a corridor width, walling the elbow solid — the bridge had no walkable route to the galley, medbay, or hygiene wing. The elbow is now an open jog with port / starboard end caps, and the forward port wall stops at the elbow's forward edge;
+- all six cabin doors were centered on their cabins, so every bunk crowded its own door clearance. Doors now sit 0.3 m aft of each cabin's centerline (bunk wall forward), with corridor wall segments re-cut to match;
+- the medbay at 2.6 × 2.0 m could not hold its furniture and its walk lanes at once: the shelf now stands on the forward wall beside the console, the sterilizer holds the aft corner, the chair tucks at the console with clearance, and the hatch leaf parks aft — console face, cot, and side console all stay reachable from the hatch;
+- galley stools, the skiff-bay rig station, and the domestic-stores bins were repositioned clear of tables, hatch clearance zones, and each other;
+- the dome deck now overlaps the spine floor at the arch — a 2 cm floor seam there could land exactly on a navigation-grid column and cut the dome off under the side-door bridge ruling;
+- the Iri's-quarters conflict's "room past the galley" option was rebuilt against the new main deck (in the tank void between the galley's starboard wall and the engine bay, south of Storage Four, entered through the engine bay), and Cabin Five's identity now follows that ruling — the conflict system remains fully two-sided rather than silently locked to the cabin reading.
+
+Roomwright layout version is now 16; existing autosaves migrate in place, preserving user edits and rulings. All 23 habit tests pass in every matrix configuration.
