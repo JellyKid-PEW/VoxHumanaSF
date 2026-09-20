@@ -940,7 +940,7 @@ function defs(rulings) {
 
   // ---------- skiff / mission bay: immediate side branch ----------
   const SBW = 5.0, SBD = 4.4;
-  const sbx = OPX + 3.0, sbz = OPZ;
+  const sbx = OPX + 4.0, sbz = OPZ;
   add('sbFloor', {
     room: 'skiffbay', type: 'floor', name: 'Skiff / mission bay deck',
     params: { width: SBW, depth: SBD },
@@ -1037,7 +1037,7 @@ function defs(rulings) {
 
   // ---------- secondary work head ----------
   const WHW = 1.5, WHD = 1.55;
-  const whx = OPX + WORKW / 2 + WHW / 2, whz = 6.35;
+  const whx = OPX + WORKW / 2 + WHW / 2, whz = 6.75;
   add('workHeadFloor', {
     room: 'work-head', type: 'floor', name: 'Secondary work head deck',
     params: { width: WHW, depth: WHD },
@@ -1077,7 +1077,7 @@ function defs(rulings) {
   });
 
   // ---------- residential turn + nav threshold ----------
-  const RESX = OPX - 2.8;
+  const RESX = OPX - 3.6;
   const RESW = 1.15;
   const RESZ0 = 5.95, RESZ1 = 12.05;
   add('resTurnFloor', {
@@ -1102,13 +1102,13 @@ function defs(rulings) {
   });
 
   const NAVW = 2.35, NAVD = 1.9;
-  const navx = RESX + RESW / 2 + NAVW / 2, navz = 6.95;
+  const navx = RESX, navz = 4.35;
   add('navFloor', {
     room: 'nav', type: 'floor', name: 'Nav compartment deck',
     params: { width: NAVW, depth: NAVD },
     pos: [navx, D2, navz], rotY: 0, locked: true,
     evidence: 'explicit', evidenceRefs: ['lower-corridor'],
-    note: 'Dedicated long-range plotting / route-analysis compartment on the seam between operations and habitation. The bridge remains fully capable of solo flight.',
+    note: 'Dedicated long-range plotting / route-analysis compartment on the seam between operations and habitation. It sits just off the residential turn rather than occupying the work spine.',
   });
   add('navCeil', {
     room: 'nav', type: 'ceiling', name: 'Nav compartment overhead',
@@ -1119,32 +1119,52 @@ function defs(rulings) {
   add('navDoor', {
     room: 'nav', type: 'doorway', name: 'Nav hatch',
     params: { length: 1.0, height: 2.1, thickness: 0.1, doorWidth: 0.75, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
-    pos: [RESX + RESW / 2, D2, navz], rotY: Math.PI / 2, locked: false,
-    evidence: 'inference', evidenceRefs: [], note: 'The corridor passes nav; crew do not walk through nav to reach the cabins.',
+    pos: [navx, D2, navz + NAVD / 2], rotY: 0, locked: false,
+    evidence: 'inference', evidenceRefs: [],
+    note: 'The residential turn passes nav before the cabin approach; crew do not walk through nav to reach the cabins.',
   });
-  add('navOuter', {
-    room: 'nav', type: 'wall', name: 'Nav outer wall',
+  add('navWallN', {
+    room: 'nav', type: 'wall', name: 'Nav forward wall',
+    params: { length: NAVW, height: 2.1, thickness: 0.1 },
+    pos: [navx, D2, navz - NAVD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('navWallW', {
+    room: 'nav', type: 'wall', name: 'Nav port wall',
+    params: { length: NAVD, height: 2.1, thickness: 0.1 },
+    pos: [navx - NAVW / 2, D2, navz], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('navWallE', {
+    room: 'nav', type: 'wall', name: 'Nav starboard wall',
     params: { length: NAVD, height: 2.1, thickness: 0.1 },
     pos: [navx + NAVW / 2, D2, navz], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-  for (const s of [-1, 1]) add(s < 0 ? 'navWallN' : 'navWallS', {
-    room: 'nav', type: 'wall', name: 'Nav wall',
-    params: { length: NAVW, height: 2.1, thickness: 0.1 },
-    pos: [navx, D2, navz + s * NAVD / 2], rotY: 0, locked: true,
+  const navDoorHalf = 0.5;
+  add('navWallS1', {
+    room: 'nav', type: 'wall', name: 'Nav aft wall (port)',
+    params: { length: NAVW / 2 - navDoorHalf, height: 2.1, thickness: 0.1 },
+    pos: [navx - (navDoorHalf + (NAVW / 2 - navDoorHalf) / 2), D2, navz + NAVD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('navWallS2', {
+    room: 'nav', type: 'wall', name: 'Nav aft wall (starboard)',
+    params: { length: NAVW / 2 - navDoorHalf, height: 2.1, thickness: 0.1 },
+    pos: [navx + (navDoorHalf + (NAVW / 2 - navDoorHalf) / 2), D2, navz + NAVD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('navConsole', {
     room: 'nav', type: 'console', name: 'Long-range nav console',
     params: { width: 1.25, depth: 0.58, height: 0.92, screens: 3, lit: true },
-    pos: [navx + 0.25, D2, navz - 0.65], rotY: 0, locked: false,
+    pos: [navx, D2, navz - 0.58], rotY: 0, locked: false,
     evidence: 'inference', evidenceRefs: [],
     note: 'Slow-route work, fringe navigation, sensor comparison, and the sort of place Quenby once chose to sleep rather than use a cabin.',
   });
   add('navPerch', {
     room: 'nav', type: 'bench', name: 'Nav fold-down perch',
     params: { width: 1.0, height: 0.43, depth: 0.42 },
-    pos: [navx + 0.35, D2, navz + 0.7], rotY: Math.PI, locked: false,
+    pos: [navx - 0.55, D2, navz + 0.28], rotY: Math.PI / 2, locked: false,
     evidence: 'assumption', evidenceRefs: [], note: 'Useful enough to become a bad sleeping choice.',
   });
 
@@ -1439,21 +1459,21 @@ function defs(rulings) {
   add('engAccessFloor', {
     room: 'engineering-access', type: 'floor', name: 'Underdeck engineering access recess',
     params: { width: 1.9, depth: 2.1 },
-    pos: [OPX - 1.55, D2, 15.55], rotY: 0, locked: true,
+    pos: [OPX - 1.55, D2, 16.65], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: ['eng-belowdeck'],
     note: 'Principal lower-deck engineering access, deliberately recessed so an open hatch and tools do not block cargo movement.',
   });
   add('engAccessHatch', {
     room: 'engineering-access', type: 'step', name: 'Engineering hatch + rungs',
     params: { width: 0.72, rise: 0.24, run: 0.16, steps: 6 },
-    pos: [OPX - 1.55, D2 - 1.44, 15.55], rotY: 0, locked: true,
+    pos: [OPX - 1.55, D2 - 1.44, 16.65], rotY: 0, locked: true,
     evidence: 'explicit', evidenceRefs: ['eng-belowdeck'],
     note: 'Rung access down into layered underdeck machinery / crawl geography. Not a public stair.',
   });
   add('engAccessPanel', {
     room: 'engineering-access', type: 'storage', name: 'Local isolation / service panel',
     params: { width: 0.85, height: 1.25, depth: 0.18 },
-    pos: [OPX - 2.35, D2, 15.7], rotY: Math.PI / 2, locked: false,
+    pos: [OPX - 2.35, D2, 16.8], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [],
     note: 'Distributed maintenance: local isolation, power, coolant, and service access where the work happens.',
   });
