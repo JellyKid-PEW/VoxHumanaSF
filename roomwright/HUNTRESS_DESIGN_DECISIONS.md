@@ -1189,6 +1189,32 @@ Most importantly, the current Chapter 6 draft places a **port-side equipment cra
 ---
 
 
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Main-deck walk-path review
+
+The main deck has now received the same relational / circulation review as the lower deck.
+
+The revised Roomwright pass uses:
+- a **forward primary corridor run** serving the bridge-adjacent personnel airlock, primary stair, and storage-spine branch;
+- a deliberate **corridor offset / bend** before the medical / domestic end of the deck;
+- medbay on the aft run after that offset, preserving a short emergency route while preventing a direct boarding sightline from the airlock;
+- the galley as a longer lived-in compartment with a forward working half and an aft eating / lingering half, sized as an implementation assumption around the locked five-comfortable / seven-crowded target;
+- a **separate dry domestic-service route** leaving the main corridor independently of the galley;
+- that route runs beside the galley wet-service zone and then becomes the actual dry hygiene / ladder vestibule farther aft;
+- primary toilet and shower / wash remain separate compartments opening from the dry vestibule;
+- the secondary ladder from the lower residential wet-service core aligns with an upper hatch in the dry service / hygiene zone rather than opening into the galley or a wet compartment;
+- the old storage spine now includes a localized widened service shoulder and an explicit **Storage Four**, in addition to Pocket Three, the observation dome, and the walk-in engine bay;
+- the observation dome now includes the modeled housing for its protective shutter / cover.
+
+Top-down review caught and corrected:
+- the former straight airlock-to-medbay relationship;
+- overlap between the first hygiene-access pass and medbay;
+- overlap between Storage Four and the engine-bay footprint;
+- galley furniture collisions created by the larger lived-in arrangement;
+- an initial duplicate secondary-ladder implementation.
+
+Exact dimensions, hull-side placement, and detailed wall construction remain implementation assumptions rather than canonical geometry.
+
 ### ROOMWRIGHT IMPLEMENTATION NOTE — Lower-deck walk-path review
 
 The first relational lower-deck blockout exposed one important implementation conflict: the original skiff-bay placement occupied the same side of the Lower Operations landing as the primary stair.
@@ -1210,6 +1236,8 @@ These are **geometry implementation refinements**, not new narrative canon. Exac
 ---
 
 ## Current unresolved design questions
+
+- Validate the revised main-deck Roomwright geometry in the live app and adjust assumed clearances / dimensions without changing the locked relational topology.
 
 - Validate the new lower-deck relational geometry in Roomwright and adjust assumed dimensions / clearances before treating them as final.
 
