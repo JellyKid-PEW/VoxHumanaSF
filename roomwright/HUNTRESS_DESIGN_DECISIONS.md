@@ -1318,3 +1318,27 @@ The current preferred engineering direction is:
 
 See `roomwright/HUNTRESS_MASS_AND_TANK_STUDY.md` for the current noncanonical engineering study.
 
+
+
+
+### ROOMWRIGHT ENGINEERING NOTE — Propulsion and heat rejection
+
+A dedicated working study now treats the Huntress's propulsion and thermal systems as **distributed machinery plus aft drive structure**, not one self-contained engine room.
+
+Current noncanonical engineering direction:
+- the walk-in engine bay is a frequent-service access room, not the full propulsion plant;
+- the modern drive uses compact high-energy feedstock plus separate reaction mass;
+- the effective thrust line should follow the ship's loaded center-of-mass corridor rather than the bridge centerline;
+- ordinary habitation / electronics heat uses body-mounted radiator area;
+- major drive / power waste heat uses hotter aft radiator hardware;
+- short high-power events can load a thermal accumulator / phase-change buffer and create temporary "thermal debt";
+- radiator banks may be retractable / shuttered for docking, debris, or rough operations;
+- emergency open-cycle heat dumping using reaction mass or water is a possible last-resort mode, not yet locked;
+- magical utility systems are not assumed to remove the need for physical heat rejection aboard the Huntress.
+
+The present preferred exterior direction is **hybrid body-mounted radiators + several narrow aft high-temperature radiator vanes**, with the aft drive / nozzle structure extending beyond the currently modeled occupied rooms.
+
+Exact power, radiator area, coolant, radiator count, nozzle geometry, drive chemistry, and emergency heat-dump behavior remain OPEN.
+
+See `roomwright/HUNTRESS_THERMAL_PROPULSION_STUDY.md`.
+
