@@ -1101,8 +1101,8 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: 'Utility lines remain visible enough that habitation never fully hides the ship.',
   });
 
-  const NAVW = 2.35, NAVD = 2.3;
-  const navx = RESX + RESW / 2 + NAVW / 2, navz = 7.25;
+  const NAVW = 2.35, NAVD = 1.9;
+  const navx = RESX + RESW / 2 + NAVW / 2, navz = 6.95;
   add('navFloor', {
     room: 'nav', type: 'floor', name: 'Nav compartment deck',
     params: { width: NAVW, depth: NAVD },
@@ -1221,20 +1221,20 @@ function defs(rulings) {
   });
   add('quietRunFloor', {
     room: 'residential', type: 'floor', name: 'Quiet cabin run deck',
-    params: { width: RESW, depth: 7.0 },
-    pos: [QUIETX, D2, 15.9], rotY: 0, locked: true,
+    params: { width: RESW, depth: 5.4 },
+    pos: [QUIETX, D2, 15.1], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: ['cabin-bend', 'cabin-six'],
     note: 'Short quiet run beyond the dogleg. Cabins Five and Six share a wall here; the passage continues beyond Cabin Six into service territory.',
   });
   add('quietRunCeil', {
     room: 'residential', type: 'ceiling', name: 'Quiet cabin run overhead',
-    params: { width: RESW, depth: 7.0, height: 2.08 },
-    pos: [QUIETX, D2, 15.9], rotY: 0, locked: true,
+    params: { width: RESW, depth: 5.4, height: 2.08 },
+    pos: [QUIETX, D2, 15.1], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
   const COREW = 1.8, CORED = 2.5;
-  const corex = RESX + 1.45, corez = 12.85;
+  const corex = RESX + 1.5, corez = 13.45;
   add('wetCoreFloor', {
     room: 'wet-service', type: 'floor', name: 'Residential wet / service core deck',
     params: { width: COREW, depth: CORED },
