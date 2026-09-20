@@ -782,6 +782,28 @@ export const HABIT_TESTS = [
     },
   },
   {
+    id: 'interdeck-clearance',
+    name: 'Occupied decks leave real structural / service depth between them',
+    basis: [],
+    run() {
+      const lowerFloorY = state.project.objects.find(o => o.layoutKey === 'workSpineFloor')?.pos?.[1];
+      const skiffCeil = state.project.objects.find(o => o.layoutKey === 'sbCeil');
+      const flexCeil = state.project.objects.find(o => o.layoutKey === 'flexCeil');
+      if (lowerFloorY == null || !skiffCeil || !flexCeil) {
+        return { status: 'warn', details: 'Lower-deck reference geometry is incomplete.' };
+      }
+      const skiffTop = lowerFloorY + (skiffCeil.params.height ?? 0);
+      const flexTop = lowerFloorY + (flexCeil.params.height ?? 0);
+      const skiffGap = 0 - skiffTop;
+      const flexGap = 0 - flexTop;
+      const problems = [];
+      if (skiffGap < 0.35) problems.push(`Skiff bay leaves only ${fmt(skiffGap, 2)} m below the main-deck floor plane.`);
+      if (flexGap < 0.35) problems.push(`Mission / flex bay leaves only ${fmt(flexGap, 2)} m below the main-deck floor plane.`);
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return { status: 'pass', details: `Skiff bay leaves ${fmt(skiffGap, 2)} m and mission / flex bay leaves ${fmt(flexGap, 2)} m of interdeck structural / service depth beneath occupied main-deck areas. The aft main cargo bay is allowed to rise higher because no full main deck continues above it.` };
+    },
+  },
+  {
     id: 'stairwell-decks',
     name: 'The primary stair lands in working ship and reaches both skiff and habitation',
     basis: ['stair-lights', 'lower-corridor', 'bay-medbay-near'],
