@@ -1269,3 +1269,33 @@ Exterior hull shape, beam, length, centerline, propulsion-body shape, and Deck T
 
 See `roomwright/HUNTRESS_VERTICAL_HULL_STUDY.md` for the current noncanonical envelope study.
 
+
+
+
+### WORKING WORLD-SYSTEM NOTE — Magic and ordinary ship utilities
+
+This is a **working setting constraint**, not a finalized magic-system specification.
+
+Current direction:
+- magic is real and technologically / culturally integrated enough that ordinary ships may use magical infrastructure for mundane functions;
+- **runes** are an important magical component or interface, though their exact theory is still open;
+- blood-derived and soul-derived magic are important categories, especially in more ornate or specialized applications;
+- most ships may plausibly use a dedicated magical **heating room / heat-service space** for domestic hot water, general thermal service, or similar low-level utility work;
+- the Wild Huntress is unusual in relying heavily on **conventional physical heating elements** for ordinary domestic uses such as kettles, water heating, and galley appliances rather than casually invoking magic.
+
+Reason:
+- ordinary magic use is currently imagined as **uniquely traceable**: an individual magical signature can potentially identify or locate the user;
+- Quenby, Iri, and the Huntress crew have strong reasons not to advertise identity or location, so routine ship operations avoid magical activation where conventional technology will work;
+- this should make the Huntress's apparently mundane electrical / thermal hardware an intentional privacy adaptation rather than evidence that magic is absent from the setting.
+
+Important unresolved exception:
+- **bloodline-specific magic may not be traceable in the same way** as ordinary personal magic. This remains OPEN.
+- Nova's Conscript-derived bloodline was deliberately bred for foresight ability; its relationship to magical traceability is not yet locked.
+- do not infer that Nova is currently using foresight magic aboard the Huntress, or that the crew understands the full trace behavior of her bloodline, without later story decisions.
+
+Design implication for current ship work:
+- do not replace the Huntress's water reclamation, heating, propulsion, or ordinary environmental systems with magic by default;
+- physical systems should remain mechanically believable on their own;
+- magical infrastructure can exist in the broader setting and may explain why some contemporary ships solve the same utility problem differently;
+- future fuel / propulsion decisions may incorporate magical technology, but the present engineering study should continue to model mass, water, heat, power, reaction mass, and service access explicitly unless a later canon decision supersedes that.
+
