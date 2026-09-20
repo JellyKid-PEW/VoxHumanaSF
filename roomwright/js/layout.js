@@ -11,6 +11,27 @@ import { bus, status } from './util.js';
 // Bridge shell parameters. Width/depth are assumptions chosen inside the
 // evidenced bounds (narrow-space max, crossable-room min, aft-panel-cross).
 export const BRIDGE = { W: 4.8, D: 4.6, H: 2.25 };
+
+// ---- frame grid: ring frames every 1.2 m, numbered from the bow ----
+// Frame 1 sits at the nose (z0); every space, pocket, and panel aboard can
+// be addressed as "frame N, port/starboard". Working numbers, not canon.
+export const FRAME = { z0: -4.2, spacing: 1.2, count: 38 };
+export const frameOf = z => Math.max(1, Math.min(FRAME.count, 1 + Math.round((z - FRAME.z0) / FRAME.spacing)));
+export const frameSpan = (zMin, zMax) => {
+  const a = frameOf(zMin), b = frameOf(zMax);
+  return a === b ? `F${String(a).padStart(2, '0')}` : `F${String(a).padStart(2, '0')}–F${String(b).padStart(2, '0')}`;
+};
+
+// ---- hull envelope sketch (default door ruling; visual test only) ----
+// ~44.5 m long, ~18.8 m max beam, hull centerline near x = -2. Levels are
+// drawn as outline loops in the editor's Hull overlay; the massing objects
+// below reserve the honest masses inside it. NOT a locked exterior.
+export const HULL_LEVELS = [
+  { y: -6.2, pts: [[-7, 2], [3, 2], [5.2, 6], [5.2, 26], [3, 32], [-1, 36], [-3.5, 36], [-7.5, 32], [-9.5, 26], [-9.5, 6]] },
+  { y: -3.05, pts: [[-4.5, -3.6], [0.5, -3.6], [2.6, -1], [7.2, 4.5], [7.2, 14], [5.5, 20], [4.6, 29.5], [2.5, 36], [-1, 40.3], [-3.6, 40.3], [-7.5, 36], [-9, 29.5], [-11.6, 20], [-11.6, 8], [-8, -0.5]] },
+  { y: 0.05, pts: [[-3.2, -4.2], [1.2, -4.2], [3, -1.5], [7.2, 5], [7.2, 13], [5, 19], [4, 27], [1.5, 31], [-4.5, 31], [-6.8, 27], [-8, 19], [-6.5, 8], [-5.5, 2], [-4.2, -2.5]] },
+  { y: 3.1, pts: [[-2.6, -1], [1.4, -1], [2.2, 4], [2.2, 26], [0, 30], [-3.5, 30], [-4.5, 26], [-4.5, 4]] },
+];
 export const DECK2Y = -3.0;                  // lower deck base height; 3.0 m floor-to-floor leaves real structure/service depth under occupied main-deck spaces
 const COR = { W: 1.1, LEN: 4.6, H: 2.15 };   // corridor: narrow, lower overhead
 // One galley size: the six-crew commercial scale (author ruling). The
@@ -2409,6 +2430,118 @@ function defs(rulings) {
     note: 'Secondary access into deeper machinery / crawl geography. Not every service route connects through.',
   });
 
+  // ================= HULL MASSING & FRAME-ERA SYSTEMS =================
+  // The honest masses around the walkable interior: drive section, tankage,
+  // gear bays, the Deck Three ventral layer, the ventral chute trunk — plus
+  // the utility trunks the prose can hear and the older unmapped harness.
+  // Massing volumes are translucent, non-colliding, and shown only when the
+  // Hull overlay is on. Working geometry per the vertical-hull study; the
+  // exterior remains OPEN. Everything shifts with the bridge-door ruling.
+  const HX = cx - 1.5;                    // hull anchor follows the interior
+  const hm = (key, name, x, baseY, z, w, d, h, note, extra = {}) => add(key, {
+    room: 'hull', type: 'massing', name,
+    params: { width: w, depth: d, height: h, lift: 0, ...extra },
+    pos: [x + HX, baseY, z], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note,
+  });
+  hm('mhNose', 'Nose — sensor & avionics bay', -1.0, -0.6, -3.3, 3.6, 1.85, 2.6,
+    'Forward of the bridge glass: sensors, avionics, docking hardware in the narrow forward quarters.');
+  hm('mhDorsal', 'Dorsal spine girder', -1.0, 2.35, 14.0, 3.4, 30, 0.9,
+    'The long back: the primary longitudinal structure the whole ship hangs from. Frame rings tie into it.');
+  hm('mhTankW1', 'Water cells (forward band)', 0.8, -5.3, 8.0, 3.4, 6, 1.9,
+    'Multiple water cells rather than one great tank — main reclaimed-water mass low and inboard (mass study).');
+  hm('mhTankW2', 'Water cells (aft band)', 0.8, -5.3, 16.0, 3.4, 6, 1.9,
+    'Second inboard water band. Domestic day-buffers live nearer the wet-service stack.');
+  hm('mhDeck3', 'Deck Three — ventral service / reserve layer', -4.4, -5.5, 12.5, 6.4, 15, 2.2,
+    'The partial third level, down: deep stores, tank access, heavy-service connections, old freight infrastructure, pieces of the power/thermal backbone. Walkable in some regions, crawl and tank volume in others. The cold unused storage room lost its environmental loop in a refit while the old power route stayed uncomfortably close. Footprint OPEN.');
+  hm('mhGearNose', 'Nose gear bay', -2.6, -5.3, 0.2, 2.2, 2.6, 1.9,
+    'Retractable nose gear. She lands on her belly structure — prepared pads and rough commercial ground alike.');
+  hm('mhGearPort', 'Main gear bay (port)', -9.2, -5.6, 17.5, 2.2, 3.2, 2.2,
+    'Port main gear. On the ground the Huntress settles into a low, stable crouch.');
+  hm('mhGearStbd', 'Main gear bay (starboard)', 3.4, -5.6, 17.5, 2.2, 3.2, 2.2,
+    'Starboard main gear.');
+  hm('mhChute', 'Ventral cargo chute trunk', 0.6, -5.4, 19.6, 2.6, 2.2, 2.3,
+    'The belly drop path under the freight lock: sled-aligned ground loading, and the "low clunk from the underdeck" of a cargo sled meeting its chute.');
+  hm('mhDrive', 'Drive core & power plant', -2.2, -3.4, 33.4, 5.4, 7.2, 5.2,
+    'The dense aft third begins here: compact high-energy feedstock plant and drive core. The walk-in engine bay forward of it is a frequent-service room, not the whole plant.');
+  hm('mhRmTankP', 'Reaction-mass tankage (port)', -7.2, -4.2, 32.5, 3.6, 6, 4.2,
+    'Split reaction-mass tankage, aft and inboard. Loading here moves the center of mass — B.O.B. cares where you put things.');
+  hm('mhRmTankS', 'Reaction-mass tankage (starboard)', 2.8, -4.2, 32.5, 3.6, 6, 4.2,
+    'Starboard reaction-mass tankage.');
+  hm('mhAccum', 'Thermal accumulator / phase-change buffer', -2.2, 1.9, 34.5, 3.0, 4.0, 1.6,
+    'Short high-power events bank heat here as "thermal debt", shed later through the radiator vanes on a long drift.');
+  hm('mhVaneP', 'Aft radiator vane (port)', -5.2, 2.0, 38.2, 0.3, 3.6, 3.4,
+    'High-temperature radiator vane — retractable/shutterable for docking, debris, and rough work.');
+  hm('mhVaneC', 'Aft radiator vane (center)', -2.2, 2.0, 38.2, 0.3, 3.6, 3.4,
+    'Center radiator vane, rooted to the dorsal girder.');
+  hm('mhVaneS', 'Aft radiator vane (starboard)', 0.8, 2.0, 38.2, 0.3, 3.6, 3.4,
+    'Starboard radiator vane.');
+  hm('mhNozzle', 'Drive nozzle assembly', -2.2, -2.4, 38.6, 3.6, 3.4, 3.6,
+    'The stern: nozzle and thrust structure. The effective thrust line follows the loaded center-of-mass corridor, not the bridge centerline.');
+  hm('mhVoidP2', 'Unaccounted volume — "Pocket Two?"', -3.4, 0, 5.8, 1.0, 2.0, 2.05,
+    'The schematic says a service pocket exists behind the medbay’s port bulkhead. Walking the deck finds a doubled bulkhead and about two cubic meters that cannot be reached from anywhere. Pocket One was absorbed for a mundane reason; this absence is genuinely suspicious.', { tint: 'anomaly' });
+
+  // ---------- the systems the prose can hear ----------
+  add('cdMidlineBus', {
+    room: 'hull', type: 'conduit', name: 'Midline power bus',
+    params: { length: 10.4, lines: 3, gauge: 0.07, mountHeight: 2.0, era: 'modern' },
+    pos: [-0.5 + HX, 0, 7.5], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['sys-midline-bus'],
+    note: '"Midline bus settled." The main power spine along the overheads — its note changes as segments load and shed.',
+  });
+  add('cdPortDuct', {
+    room: 'hull', type: 'conduit', name: 'Port air trunk (the duct seam)',
+    params: { length: 9.4, lines: 1, gauge: 0.24, mountHeight: 1.92, era: 'modern' },
+    pos: [-4.5 + HX, 0, 9.1], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['sys-port-duct'],
+    note: '"Port duct seam whispered its lie." The port-side air trunk; its seam gasket has never quite told the truth.',
+  });
+  add('cdCoolLower', {
+    room: 'lower-corridor', type: 'conduit', name: 'Coolant lines (residential approach)',
+    params: { length: 6.0, lines: 2, gauge: 0.09, mountHeight: 1.95, era: 'modern' },
+    pos: [-6.55 + HX, DECK2Y, 9.0], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['lower-corridor'],
+    note: '"Lower corridor. Coolant lines, forgotten tags." Exposed runs along the approach overhead — Cabin Four’s bulkhead carries their pulse.',
+  });
+  add('aftPump', {
+    room: 'lower-aft-spine', type: 'crate', name: 'Aft transfer pump',
+    params: { width: 0.55, height: 0.75, depth: 0.5 },
+    pos: [LASX + 0.25, D2, 21.9], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['sys-aft-pump'],
+    note: '"Aft pump ran two beats late." The coolant/water transfer pump in the old aft service fabric — its lag is the ship’s heartbeat murmur.',
+  });
+
+  // ---------- the older harness (not on B.O.B.'s schematics) ----------
+  const oldNote = 'Dark, verdigrised conduit in pre-refit lay. It appears on no schematic B.O.B. holds, and it is older than every legible refit era. It does not seem to do anything. It is not disconnected.';
+  add('oldHz1', {
+    room: 'hull', type: 'conduit', name: 'Unmapped harness (bridge run)',
+    params: { length: 4.2, lines: 2, gauge: 0.05, mountHeight: 0.1, era: 'ancient' },
+    pos: [0.5 + HX, 0, 0.2], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [], note: oldNote + ' This run passes beneath the helm console’s access panel.',
+  });
+  add('oldHz2', {
+    room: 'spine', type: 'conduit', name: 'Unmapped harness (spine run)',
+    params: { length: 6.0, lines: 2, gauge: 0.05, mountHeight: 0.14, era: 'ancient' },
+    pos: [3.35 + HX, 0, 7.2], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [], note: oldNote,
+  });
+  add('oldHz3', {
+    room: 'lower-aft-spine', type: 'conduit', name: 'Unmapped harness (lower aft run)',
+    params: { length: 8.0, lines: 2, gauge: 0.05, mountHeight: 0.12, era: 'ancient' },
+    pos: [LASX - 0.42, D2, 24.5], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [], note: oldNote + ' Nova’s crawl sits against this run; her receivers face it.',
+  });
+
+  // ---------- pocket archaeology ----------
+  add('p1Panel', {
+    room: 'hygiene', type: 'storage', name: 'Blanked panel — painted-over stencil "P-1"',
+    params: { width: 0.8, height: 1.1, depth: 0.08 },
+    pos: [-3.4 + HX, 0, 6.92], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Pocket One, absorbed: when the domestic wet zone was partitioned in, the old service pocket behind this wall was consumed. The stencil is half under paint. Mundane refit archaeology — unlike Pocket Two.',
+  });
+
   return list;
 }
 
@@ -2448,7 +2581,7 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
@@ -2459,7 +2592,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 17;
+export const LAYOUT_VERSION = 18;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay

@@ -5,6 +5,7 @@ import { state } from './state.js';
 import { editor, objectAABB, collectAABBs, castSight, circleHitsColliders, clearSightLines, drawSightLine } from './editor.js';
 import { CHARACTERS, eyeHeight } from './mannequin.js';
 import { audibilityReport, levelAt } from './acoustics.js';
+import { FRAME } from './layout.js';
 import { fmt } from './util.js';
 
 // ---------- navigation grid ----------
@@ -955,6 +956,60 @@ export const HABIT_TESTS = [
       } else problems.push('No skiff in its cradle.');
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
       return { status: 'pass', details: 'Rig station, loadout grid, and rig locker remain reachable inside the isolated side-branch bay; the skiff can be worked from multiple sides and the primary stair keeps the medbay run short.' };
+    },
+  },
+  {
+    id: 'hull-envelope',
+    name: 'The interior fits her hull; the masses stay out of the rooms',
+    basis: ['deck-three', 'pocket-inbetween'],
+    run() {
+      const problems = [];
+      const floors = state.project.objects.filter(o => o.type === 'floor');
+      const cor = state.project.objects.find(o => o.layoutKey === 'corFloor');
+      const HX = (cor?.pos[0] ?? 1.5) - 1.5;
+      // per-deck plan bounds of the working envelope (generous, not shrink-wrap)
+      const bounds = { 0: { x: [-8.2 + HX, 7.6 + HX], z: [-4.4, 31.6] }, '-3': { x: [-11.9 + HX, 7.6 + HX], z: [-4.1, 33.1] } };
+      const rectOf = f => {
+        const fw = f.params.width ?? 6, fd = f.params.depth ?? 5;
+        const rot = Math.abs(Math.sin(f.rotY || 0)) > 0.5;
+        const hw = (rot ? fd : fw) / 2, hd = (rot ? fw : fd) / 2;
+        return { minX: f.pos[0] - hw, maxX: f.pos[0] + hw, minZ: f.pos[2] - hd, maxZ: f.pos[2] + hd };
+      };
+      for (const f of floors) {
+        const b = bounds[String(Math.round((f.pos[1] || 0)))] || bounds[0];
+        const r = rectOf(f);
+        if (r.minX < b.x[0] || r.maxX > b.x[1] || r.minZ < b.z[0] || r.maxZ > b.z[1]) {
+          problems.push(`${f.name} pokes out of the working hull envelope`);
+        }
+        if (r.minZ > 29.5 + 0.01 && f.room !== 'hull') problems.push(`${f.name} sits inside the aft drive section`);
+      }
+      // frame grid must address everything aboard
+      const zs = state.project.objects.map(o => o.pos[2]);
+      if (Math.min(...zs) < FRAME.z0 - 0.6) problems.push('Objects forward of frame 1 — the frame grid no longer covers the bow.');
+      if (Math.max(...zs) > FRAME.z0 + (FRAME.count - 1) * FRAME.spacing + 0.6) problems.push('Objects aft of the last frame — extend the frame grid.');
+      // massing volumes must not intrude into any walkable band
+      const massing = state.project.objects.filter(o => o.type === 'massing');
+      for (const m of massing) {
+        const lift = m.params.lift ?? 0;
+        const y0 = (m.pos[1] || 0) + lift, y1 = y0 + (m.params.height ?? 1);
+        const mr = { minX: m.pos[0] - (m.params.width ?? 1) / 2, maxX: m.pos[0] + (m.params.width ?? 1) / 2, minZ: m.pos[2] - (m.params.depth ?? 1) / 2, maxZ: m.pos[2] + (m.params.depth ?? 1) / 2 };
+        for (const f of floors) {
+          if (f.room === 'hull') continue;
+          const deckY = f.pos[1] || 0;
+          if (y1 < deckY + 0.2 || y0 > deckY + 1.9) continue;
+          const r = rectOf(f);
+          const ox = Math.min(mr.maxX, r.maxX) - Math.max(mr.minX, r.minX);
+          const oz = Math.min(mr.maxZ, r.maxZ) - Math.max(mr.minZ, r.minZ);
+          if (ox > 0.05 && oz > 0.05 && !(m.layoutKey === 'mhVoidP2')) {
+            problems.push(`${m.name} intrudes into the walkable band of ${f.name}`);
+          }
+        }
+      }
+      if (problems.length) return { status: 'fail', details: [...new Set(problems)].join('\n') };
+      return {
+        status: 'pass',
+        details: `Every walkable space sits inside the ~44.5 m working envelope; the drive section aft of frame ${'F' + String(Math.round((29.5 - FRAME.z0) / FRAME.spacing) + 1)} holds no rooms; tanks, gear bays, the chute trunk, and the Deck Three layer all stay below or beside the walkable bands; the frame grid (${FRAME.count} frames at ${FRAME.spacing} m) addresses everything aboard.`,
+      };
     },
   },
   {

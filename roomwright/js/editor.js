@@ -6,6 +6,7 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { state } from './state.js';
 import { bus, status, fmt } from './util.js';
 import { buildObject } from './objects.js';
+import { FRAME, HULL_LEVELS } from './layout.js';
 import { buildMannequin, applyPose, CHARACTERS, eyeHeight, getEyeWorld } from './mannequin.js';
 
 export const editor = {
@@ -204,6 +205,7 @@ function applyCeilingVisibility() {
     if (!rec) continue;
     let v = deckOK(rec.pos[1] || 0);
     if (rec.type === 'ceiling' && !showCeil) v = false;
+    if (rec.type === 'massing' && !editor.showHull) v = false;
     g.visible = v;
   }
   for (const g of editor.mannGroup.children) {
@@ -216,6 +218,77 @@ function applyCeilingVisibility() {
 export function setDeckFilter(v) {
   editor.deckFilter = v;
   applyCeilingVisibility();
+}
+
+// ---------- hull envelope + frame grid overlays ----------
+function buildHullOverlay() {
+  const g = new THREE.Group();
+  g.name = 'hullOverlay';
+  const mat = new THREE.LineBasicMaterial({ color: 0x6f93b4, transparent: true, opacity: 0.5 });
+  const loops = [];
+  for (const lvl of HULL_LEVELS) {
+    const pts = lvl.pts.map(([x, z]) => new THREE.Vector3(x, lvl.y, z));
+    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+    const loop = new THREE.LineLoop(geo, mat);
+    g.add(loop);
+    loops.push(lvl);
+  }
+  // vertical connectors at a few stations, joining the levels' interpolated edges
+  const stations = [0, 8, 16, 24, 30];
+  const conn = [];
+  const edgeAt = (lvl, z) => {
+    // port/starboard extreme x of the level polygon near station z
+    let lo = Infinity, hi = -Infinity;
+    for (const [x, pz] of lvl.pts) if (Math.abs(pz - z) < 6) { lo = Math.min(lo, x); hi = Math.max(hi, x); }
+    return (lo === Infinity) ? null : [lo, hi];
+  };
+  for (const z of stations) {
+    for (const side of [0, 1]) {
+      const pts = [];
+      for (const lvl of loops) {
+        const e = edgeAt(lvl, z);
+        if (e) pts.push(new THREE.Vector3(e[side], lvl.y, z));
+      }
+      if (pts.length > 1) conn.push(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
+    }
+  }
+  conn.forEach(c => g.add(c));
+  g.visible = false;
+  editor.scene.add(g);
+  return g;
+}
+
+function buildFramesOverlay() {
+  const g = new THREE.Group();
+  g.name = 'framesOverlay';
+  const mat = new THREE.LineBasicMaterial({ color: 0x3f88c5, transparent: true, opacity: 0.28 });
+  const segs = [];
+  for (let n = 1; n <= FRAME.count; n++) {
+    const z = FRAME.z0 + (n - 1) * FRAME.spacing;
+    segs.push(new THREE.Vector3(-8, 0.03, z), new THREE.Vector3(7.5, 0.03, z));
+    segs.push(new THREE.Vector3(-11.7, -2.97, z), new THREE.Vector3(7.5, -2.97, z));
+  }
+  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs), mat));
+  for (let n = 5; n <= FRAME.count; n += 5) {
+    const z = FRAME.z0 + (n - 1) * FRAME.spacing;
+    g.add(makeLabel(`F${String(n).padStart(2, '0')}`, new THREE.Vector3(7.9, 0.12, z), 0.9));
+    g.add(makeLabel(`F${String(n).padStart(2, '0')}`, new THREE.Vector3(-12.1, -2.85, z), 0.9));
+  }
+  g.visible = false;
+  editor.scene.add(g);
+  return g;
+}
+
+export function setHullVisible(v) {
+  editor.showHull = v;
+  if (!editor.hullOverlay) editor.hullOverlay = buildHullOverlay();
+  editor.hullOverlay.visible = v;
+  applyCeilingVisibility();
+}
+
+export function setFramesVisible(v) {
+  if (!editor.framesOverlay) editor.framesOverlay = buildFramesOverlay();
+  editor.framesOverlay.visible = v;
 }
 
 export function rebuildMannequins() {

@@ -1462,3 +1462,19 @@ Privacy depends on flight mode. **Under burn the ship is deaf** — drive and th
 ### Text-review checklist
 
 For any scene: (1) note who is where and the flight mode; (2) run the Hearing probe from the scene's sound source; (3) anything at *words* is known, *tone* is identifiable activity, *presence* is inferable — a character in those zones knows or suspects accordingly, whether or not the scene says so; (4) a character claiming ignorance must be in a *silent* zone, behind a shut hatch, under a burn, or lying.
+
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Hull massing, frame grid, and audible systems
+
+The working hull envelope and its honest masses are now modeled (all WORKING geometry per the vertical-hull study — the exterior remains OPEN):
+
+- **Envelope:** ~44.5 m overall (nose at frame 1 to nozzle), ~18.8 m max beam at the working middle, hull centerline offset ~2 m port of the bridge centerline. Drawn as a four-level outline sketch (belly, lower deck, main deck, dorsal ridge) in the editor's new **Hull** overlay; the silhouette follows the author's lock — long-backed, broad-bellied, narrow forward quarters, deep working middle, dense aft drive section.
+- **Frame grid:** 38 ring frames at 1.2 m spacing, frame 1 at the bow — the editor's **Frames** overlay draws them on both decks with labels every fifth frame, and the inspector now shows every object's frame address (e.g. "F14–F16 · port"). Everything aboard is addressable.
+- **Honest masses** (translucent, non-colliding, visible under the Hull toggle): nose sensor/avionics bay; the dorsal spine girder; two inboard water-cell bands (mass study: multiple cells, low and inboard); the **Deck Three ventral service/reserve layer** (partial, footprint open); nose and main **gear bays** (belly-lander crouch); the **ventral cargo chute trunk** under the freight lock; and the aft third — drive core and power plant, split reaction-mass tankage, thermal accumulator, three retractable radiator vanes, and the nozzle assembly.
+- **The audible anatomy is physical now:** the midline power bus, the port air trunk with its lying seam, and the aft transfer pump are modeled and seeded as constraints (Next-05's three sounds); the coolant lines run exposed along the residential approach where Cabin Four can feel them.
+- **The older harness:** three runs of dark, verdigrised pre-refit conduit — under the helm's access panel, along the spine, and through the lower aft spine past Nova's crawl — on no schematic B.O.B. holds. It does not seem to do anything. It is not disconnected.
+- **Pocket archaeology:** Pocket One survives as a painted-over blanked panel ("P-1") where the domestic wet zone consumed its volume — mundane. **Pocket Two is modeled as a red-tinted unaccounted volume behind the medbay's port bulkhead**: the schematic says it exists; the walkable deck finds a doubled bulkhead and ~2 m³ reachable from nowhere. Pocket Three keeps its stale designation.
+- A new **hull-envelope habit test** (25 total) holds it honest: every walkable space inside the envelope, no rooms in the drive section, no massing volume intruding into a walkable band, and the frame grid covering everything aboard. (Its first run caught the nose bay clipping the bridge deck by 10 cm.)
+
+Everything translates with the bridge-door ruling, so the hull follows the interior under every conflict configuration. Layout version 18; migration verified (26 hull objects arrive in old saves, edits and rulings untouched).

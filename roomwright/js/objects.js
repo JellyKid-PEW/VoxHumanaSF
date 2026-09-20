@@ -20,6 +20,12 @@ export const MATS = {
   rail: new THREE.MeshStandardMaterial({ color: 0x707a88, roughness: 0.4, metalness: 0.85 }),
   warn: new THREE.MeshStandardMaterial({ color: 0x9a7524, roughness: 0.7, metalness: 0.3 }),
   bolt: new THREE.MeshStandardMaterial({ color: 0x9aa4b0, roughness: 0.35, metalness: 0.95 }),
+  massing: new THREE.MeshStandardMaterial({ color: 0x5b7a99, roughness: 0.9, metalness: 0.1, transparent: true, opacity: 0.16, depthWrite: false }),
+  massingBad: new THREE.MeshStandardMaterial({ color: 0x9a4a4a, roughness: 0.9, metalness: 0.1, transparent: true, opacity: 0.24, depthWrite: false }),
+  massingEdge: new THREE.LineBasicMaterial({ color: 0x7fa0c0, transparent: true, opacity: 0.45 }),
+  massingEdgeBad: new THREE.LineBasicMaterial({ color: 0xcc7070, transparent: true, opacity: 0.6 }),
+  conduit: new THREE.MeshStandardMaterial({ color: 0x6a7280, roughness: 0.45, metalness: 0.8 }),
+  conduitOld: new THREE.MeshStandardMaterial({ color: 0x4e4436, roughness: 0.55, metalness: 0.65, emissive: 0x0d1f14, emissiveIntensity: 0.35 }),
 };
 
 function box(w, h, d, mat, collidable = true) {
@@ -499,7 +505,74 @@ function buildDomeShell(p) {
 }
 
 // ---------- registry ----------
+// Hull massing volume: a translucent honest-mass box (tankage, machinery,
+// gear bays, unbuilt deck volume). Never collides, never blocks walking —
+// it reserves believable hull volume around the walkable interior.
+// params: width, depth, height, lift (base offset above the record's deck y)
+function buildMassing(p) {
+  const g = new THREE.Group();
+  const bad = p.tint === 'anomaly';
+  const geo = new THREE.BoxGeometry(p.width, p.height, p.depth);
+  const m = new THREE.Mesh(geo, bad ? MATS.massingBad : MATS.massing);
+  m.castShadow = false; m.receiveShadow = false;
+  m.userData.collidable = false;
+  m.position.y = (p.lift ?? 0) + p.height / 2;
+  g.add(m);
+  const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), bad ? MATS.massingEdgeBad : MATS.massingEdge);
+  edges.position.copy(m.position);
+  g.add(edges);
+  return g;
+}
+
+// Conduit run: a bundle of parallel lines along local z at a mount height.
+// era 'ancient' renders the unmapped pre-refit harness. Never collides.
+// params: length, lines, gauge, mountHeight, era
+function buildConduit(p) {
+  const g = new THREE.Group();
+  const n = Math.max(1, Math.round(p.lines ?? 2));
+  const gauge = p.gauge ?? 0.07;
+  const mat = p.era === 'ancient' ? MATS.conduitOld : MATS.conduit;
+  const pitch = gauge * 1.7;
+  for (let i = 0; i < n; i++) {
+    const line = box(gauge, gauge, p.length, mat, false);
+    line.position.set((i - (n - 1) / 2) * pitch, (p.mountHeight ?? 1.9) + gauge / 2, 0);
+    g.add(line);
+  }
+  // clamps every ~1.6 m
+  const clamps = Math.max(1, Math.floor(p.length / 1.6));
+  for (let c = 0; c < clamps; c++) {
+    const cl = box(n * pitch + gauge, 0.03, 0.06, mat, false);
+    cl.position.set(0, (p.mountHeight ?? 1.9) + gauge + 0.015, -p.length / 2 + (c + 0.5) * (p.length / clamps));
+    g.add(cl);
+  }
+  return g;
+}
+
 export const OBJECT_TYPES = {
+  massing: {
+    label: 'Hull massing',
+    build: buildMassing,
+    defaults: { width: 2, depth: 2, height: 2, lift: 0 },
+    schema: [
+      { key: 'width', label: 'Width (m)', min: 0.2, max: 20, step: 0.1 },
+      { key: 'depth', label: 'Depth (m)', min: 0.2, max: 20, step: 0.1 },
+      { key: 'height', label: 'Height (m)', min: 0.2, max: 12, step: 0.1 },
+      { key: 'lift', label: 'Base offset (m)', min: -8, max: 8, step: 0.1 },
+      { key: 'tint', label: 'Tint', options: ['normal', 'anomaly'] },
+    ],
+  },
+  conduit: {
+    label: 'Conduit run',
+    build: buildConduit,
+    defaults: { length: 4, lines: 2, gauge: 0.07, mountHeight: 1.9, era: 'modern' },
+    schema: [
+      { key: 'length', label: 'Length (m)', min: 0.5, max: 30, step: 0.1 },
+      { key: 'lines', label: 'Lines', min: 1, max: 6, step: 1 },
+      { key: 'gauge', label: 'Gauge (m)', min: 0.03, max: 0.4, step: 0.01 },
+      { key: 'mountHeight', label: 'Mount height (m)', min: 0, max: 3, step: 0.05 },
+      { key: 'era', label: 'Era', options: ['modern', 'ancient'] },
+    ],
+  },
   floor: {
     label: 'Floor',
     build: buildFloor,

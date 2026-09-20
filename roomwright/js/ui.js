@@ -7,7 +7,7 @@ import { editor, rebuildMannequins, makeLabel, clearSightLines } from './editor.
 import { OBJECT_TYPES } from './objects.js';
 import { CHARACTERS, POSES } from './mannequin.js';
 import { detectConflicts, openConflicts, evidenceForObject, objectsForConstraint, checkProseAgainstLayout, conflictBadgeRefresh } from './constraints.js';
-import { generateLayout, CONFLICT_LAYOUT_KEYS } from './layout.js';
+import { generateLayout, CONFLICT_LAYOUT_KEYS, frameSpan } from './layout.js';
 import { HABIT_TESTS, runAllTests, computeNavGrid } from './tests.js';
 import { extractCandidates } from './extract.js';
 import { listVersions, saveVersion, restoreVersion, deleteVersion } from './persist.js';
@@ -699,16 +699,21 @@ function renderObjects() {
   }
   const list = root.querySelector('#obj-list');
   const ROOM_LABEL = {
-    bridge: 'Bridge', corridor: 'Corridor', airlock: 'Airlock', spine: 'Storage spine',
-    pocket: 'Pocket three', dome: 'Observation dome', medbay: 'Medbay', galley: 'Galley',
-    engine: 'Engine bay', stairwell: 'Stairwell', 'lower-corridor': 'Lower corridor',
-    cabin: 'Cabin row', quarters: 'Quarters', skiffbay: 'Skiff / gear bay', other: 'Custom',
+    bridge: 'Bridge', corridor: 'Main corridor', airlock: 'Airlock', spine: 'Storage spine',
+    'storage-four': 'Storage Four', pocket: 'Pocket three', dome: 'Observation dome',
+    medbay: 'Medbay', galley: 'Galley', hygiene: 'Hygiene', 'domestic-service': 'Domestic service',
+    'wet-service': 'Wet-service core', engine: 'Engine bay', stairwell: 'Stairwell',
+    'lower-corridor': 'Lower corridor', operations: 'Lower Operations', skiffbay: 'Skiff / mission bay',
+    'work-spine': 'Work spine', 'work-head': 'Work head', residential: 'Residential route',
+    nav: 'Nav compartment', cabin: 'Cabin row', quarters: 'Quarters',
+    'domestic-stores': 'Domestic stores / garden', 'aft-service': 'Aft service passage',
+    'flex-bay': 'Hold Two (flex bay)', 'engineering-access': 'Engineering access',
+    'aft-freight': 'Aft freight node', 'freight-lock': 'Freight lock',
+    'cargo-bay': 'Hold One (cargo / training)', 'lower-aft-spine': 'Lower aft spine',
+    'equipment-crawl': 'Equipment crawl (Nova)', hull: 'Hull & massing', other: 'Custom',
   };
-  const groups = {
-    bridge: [], corridor: [], airlock: [], spine: [], pocket: [], dome: [], medbay: [],
-    galley: [], engine: [], stairwell: [], 'lower-corridor': [], cabin: [], quarters: [],
-    skiffbay: [], other: [],
-  };
+  const groups = {};
+  for (const k of Object.keys(ROOM_LABEL)) groups[k] = [];
   for (const o of state.project.objects) (groups[o.room] || groups.other).push(o);
   for (const [room, objs] of Object.entries(groups)) {
     if (!objs.length) continue;
@@ -728,6 +733,21 @@ function renderObjects() {
 }
 
 // ================= inspector =================
+// Ring-frame address for an object: frame span from its z extent, plus its
+// side of the hull centerline (which follows the interior under rulings).
+function frameAddressOf(o) {
+  const rot = Math.abs(Math.sin(o.rotY || 0)) > 0.5;
+  const wallish = ['wall', 'doorway', 'viewport', 'rail', 'shelf', 'counter'].includes(o.type);
+  const d = (wallish
+    ? (rot ? (o.params.length ?? o.params.width ?? 1) : (o.params.thickness ?? o.params.depth ?? 0.2))
+    : (rot ? (o.params.width ?? o.params.length ?? 1) : (o.params.depth ?? o.params.length ?? 1))) || 1;
+  const z = o.pos[2];
+  const cor = state.project.objects.find(x => x.layoutKey === 'corFloor');
+  const centerX = ((cor?.pos[0] ?? 1.5) - 1.5) - 2.2;
+  const side = o.pos[0] < centerX - 0.6 ? 'port' : o.pos[0] > centerX + 0.6 ? 'stbd' : 'ctrline';
+  return `${frameSpan(z - d / 2, z + d / 2)} · ${side}`;
+}
+
 export function renderInspector() {
   const title = document.getElementById('insp-title');
   const body = document.getElementById('insp-body');
@@ -788,6 +808,7 @@ export function renderInspector() {
     <span class="pill ${esc(o.evidence)}">${esc(EV_LABEL[o.evidence] || o.evidence)}</span>
     <span class="pill category">${esc(def?.label || o.type)}</span>
     ${o.room ? `<span class="pill category">${esc(o.room)}</span>` : ''}
+    <span class="pill" style="font-size:9px;" title="Ring-frame address (frame 1 at the bow, 1.2 m spacing)">${esc(frameAddressOf(o))}</span>
   </div>`));
 
   if (o.note) body.appendChild(el(`<p style="font-size:12px;color:var(--muted);margin:6px 0;">${esc(o.note)}</p>`));

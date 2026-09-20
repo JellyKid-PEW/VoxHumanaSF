@@ -152,6 +152,16 @@ function wireToolbar() {
   document.getElementById('lighting-select').addEventListener('change', e => setLightingMode(e.target.value));
   document.getElementById('btn-cutaway').addEventListener('click', () => setCutaway(!editor.cutaway));
   document.getElementById('btn-nav').addEventListener('click', () => toggleNavOverlay());
+  document.getElementById('btn-hull').addEventListener('click', e => {
+    const on = !e.currentTarget.classList.contains('active');
+    e.currentTarget.classList.toggle('active', on);
+    import('./editor.js').then(m => m.setHullVisible(on));
+  });
+  document.getElementById('btn-frames').addEventListener('click', e => {
+    const on = !e.currentTarget.classList.contains('active');
+    e.currentTarget.classList.toggle('active', on);
+    import('./editor.js').then(m => m.setFramesVisible(on));
+  });
   document.getElementById('btn-sound').addEventListener('click', () => toggleSound());
   document.getElementById('btn-screenshot').addEventListener('click', () => screenshot(3));
   document.getElementById('btn-save').addEventListener('click', () => {
