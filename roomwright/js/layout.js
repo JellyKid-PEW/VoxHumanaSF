@@ -1479,7 +1479,7 @@ function defs(rulings) {
   // Cabin Five or Cabin Six. This keeps it close to the wet-service core while
   // making the later garden feel like a small place deliberately entered.
   const GARDW = 2.0, GARDD = 2.55;
-  const gardx = RESX - 0.5;
+  const gardx = ((QUIETX + RESW / 2) + (corex - COREW / 2)) / 2;
   const gardz = DOGZ + 1.15 / 2 + GARDD / 2;
   add('gardenFloor', {
     room: 'domestic-stores', type: 'floor', name: 'Domestic stores deck',
@@ -1717,7 +1717,7 @@ function defs(rulings) {
 
   // ---------- dedicated freight transfer vestibule / cargo lock ----------
   const FTW = 3.4, FTD = 2.8;
-  const ftx = OPX + 3.2, ftz = AFZ;
+  const ftx = OPX + 3.2, ftz = AFZ - 0.4;
   add('freightLockFloor', {
     room: 'freight-lock', type: 'floor', name: 'Freight transfer lock deck',
     params: { width: FTW, depth: FTD },
@@ -1973,7 +1973,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 8;
+export const LAYOUT_VERSION = 9;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -1981,4 +1981,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   6: ['stw*', 'low*', 'qtr*', 'sb*', 'cab*', 'iriQ*', 'op*', 'work*', 'res*', 'nav*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*'], // lower deck rebuilt around commercial + residential dual routes
   7: ['sb*', 'op*', 'workWall*', 'resWall*', 'quietWall*', 'aftServiceWall*', 'lowerAft*', 'novaCrawl*'], // enclose lower corridors and separate stair / skiff traffic after walk-path review
   8: ['resTurn*', 'dogleg*', 'wetCoreW', 'aftReconnect*'], // complete the residential bend and aft reconnection architecture
+  9: ['garden*', 'freight*'], // clear final blockout overlaps found in top-down spatial review
 };
