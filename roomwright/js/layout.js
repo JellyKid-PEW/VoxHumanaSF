@@ -1180,11 +1180,36 @@ function defs(rulings) {
   const RESZ0 = 5.95, RESZ1 = 12.05;
   add('resTurnFloor', {
     room: 'residential', type: 'floor', name: 'Residential turn deck',
-    params: { width: OPX - RESX, depth: RESW },
-    pos: [(OPX + RESX) / 2, D2, RESZ0], rotY: 0, locked: true,
+    params: { width: OPX - (RESX - RESW / 2), depth: RESW },
+    pos: [(OPX + (RESX - RESW / 2)) / 2, D2, RESZ0], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: ['lower-corridor', 'cabin-row'],
     note: 'A conscious turn away from the work spine. Standing at the stair foot does not give a direct sightline down the cabin hall.',
   });
+
+  const resTurnWest = RESX - RESW / 2;
+  const resTurnEast = OPX;
+  add('resTurnCeil', {
+    room: 'residential', type: 'ceiling', name: 'Residential turn overhead',
+    params: { width: resTurnEast - resTurnWest, depth: RESW, height: 2.1 },
+    pos: [(resTurnEast + resTurnWest) / 2, D2, RESZ0], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'A compact transverse passage, not another room.',
+  });
+  // North wall is interrupted by nav; east end remains open to the work spine.
+  add('resTurnWallN', {
+    room: 'residential', type: 'wall', name: 'Residential turn forward bulkhead',
+    params: { length: (OPX - WORKW / 2) - (RESX + 0.5), height: 2.1, thickness: 0.1 },
+    pos: [((RESX + 0.5) + (OPX - WORKW / 2)) / 2, D2, RESZ0 - RESW / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Runs between the nav opening and the work-spine opening; the west end remains open into the cabin approach.',
+  });
+  add('resTurnWallS', {
+    room: 'residential', type: 'wall', name: 'Residential turn aft bulkhead',
+    params: { length: 2.3, height: 2.1, thickness: 0.1 },
+    pos: [(RESX + RESW / 2 + (OPX - WORKW / 2)) / 2, D2, RESZ0 + RESW / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Leaves the full residential-approach opening clear at the port end and the work-spine opening clear at the starboard end.',
+  });
+
   add('resApproachFloor', {
     room: 'residential', type: 'floor', name: 'Residential approach deck',
     params: { width: RESW, depth: RESZ1 - RESZ0 },
@@ -1356,6 +1381,15 @@ function defs(rulings) {
     evidence: 'decision', evidenceRefs: ['cabin-bend'],
     note: 'The residential corridor bends around the fixed wet / service core, breaking sightlines before the Cabin Five / Six run.',
   });
+
+  add('doglegCeil', {
+    room: 'residential', type: 'ceiling', name: 'Wet-core dogleg overhead',
+    params: { width: RESX - QUIETX + RESW, depth: 1.15, height: 2.08 },
+    pos: [(RESX + QUIETX) / 2, D2, DOGZ], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: ['cabin-bend'],
+    note: 'The ceiling follows the bend rather than opening into a larger hall.',
+  });
+
   add('quietRunFloor', {
     room: 'residential', type: 'floor', name: 'Quiet cabin run deck',
     params: { width: RESW, depth: 5.4 },
@@ -1390,6 +1424,13 @@ function defs(rulings) {
     params: { length: COREW, height: 2.15, thickness: 0.12 },
     pos: [corex, D2, corez + s * CORED / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('wetCoreW', {
+    room: 'wet-service', type: 'wall', name: 'Wet / service core corridor wall',
+    params: { length: CORED, height: 2.15, thickness: 0.12 },
+    pos: [corex - COREW / 2, D2, corez], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Service-facing wall beside the dogleg; routine maintenance panels remain reachable from lived-in circulation.',
   });
   add('wetCoreE', {
     room: 'wet-service', type: 'wall', name: 'Wet / service core outer wall',
@@ -1556,6 +1597,15 @@ function defs(rulings) {
     pos: [(OPX + QUIETX) / 2, D2, 20.0], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [],
     note: 'The quiet route reconnects with the commercial / freight side without passing through the main cargo bay.',
+  });
+
+
+  add('aftReconnectCeil', {
+    room: 'aft-service', type: 'ceiling', name: 'Aft reconnection overhead',
+    params: { width: OPX - QUIETX, depth: 1.2, height: 2.1 },
+    pos: [(OPX + QUIETX) / 2, D2, 20.0], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Low working passage joining the quiet aft route to freight/service circulation.',
   });
 
   // ---------- configurable commercial mission / flex bay ----------
@@ -1923,11 +1973,12 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 7;
+export const LAYOUT_VERSION = 8;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
   5: ['corWallPort'],                 // port wall split again for the stairwell down to the lower deck
   6: ['stw*', 'low*', 'qtr*', 'sb*', 'cab*', 'iriQ*', 'op*', 'work*', 'res*', 'nav*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*'], // lower deck rebuilt around commercial + residential dual routes
   7: ['sb*', 'op*', 'workWall*', 'resWall*', 'quietWall*', 'aftServiceWall*', 'lowerAft*', 'novaCrawl*'], // enclose lower corridors and separate stair / skiff traffic after walk-path review
+  8: ['resTurn*', 'dogleg*', 'wetCoreW', 'aftReconnect*'], // complete the residential bend and aft reconnection architecture
 };
