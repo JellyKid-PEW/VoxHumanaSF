@@ -1102,7 +1102,7 @@ function defs(rulings) {
   });
 
   const NAVW = 2.35, NAVD = 1.9;
-  const navx = RESX, navz = 4.35;
+  const navx = RESX, navz = 4.425;
   add('navFloor', {
     room: 'nav', type: 'floor', name: 'Nav compartment deck',
     params: { width: NAVW, depth: NAVD },
@@ -1296,8 +1296,12 @@ function defs(rulings) {
   });
 
   // ---------- domestic / habitation stores; later garden nook ----------
+  // The compartment opens from the dogleg itself rather than facing either
+  // Cabin Five or Cabin Six. This keeps it close to the wet-service core while
+  // making the later garden feel like a small place deliberately entered.
   const GARDW = 2.0, GARDD = 2.55;
-  const gardx = (QUIETX + RESW / 2) + GARDW / 2, gardz = 13.25;
+  const gardx = RESX - 0.5;
+  const gardz = DOGZ + 1.15 / 2 + GARDD / 2;
   add('gardenFloor', {
     room: 'domestic-stores', type: 'floor', name: 'Domestic stores deck',
     params: { width: GARDW, depth: GARDD },
@@ -1314,20 +1318,33 @@ function defs(rulings) {
   add('gardenHatch', {
     room: 'domestic-stores', type: 'doorway', name: 'Domestic stores hatch / future garden hatch',
     params: { length: 1.15, height: 2.1, thickness: 0.1, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: -1, open: 0 },
-    pos: [QUIETX + RESW / 2, D2, gardz], rotY: Math.PI / 2, locked: false,
+    pos: [gardx, D2, gardz - GARDD / 2], rotY: 0, locked: false,
     evidence: 'decision', evidenceRefs: [],
-    note: 'Closable dedicated hatch with enough threshold presence for someone to stand or lean there while speaking into the room.',
+    note: 'Dedicated hatch opening from the dogleg, not directly opposite a cabin door. Someone can stand or lean in the threshold while speaking into the room.',
   });
-  add('gardenOuter', {
-    room: 'domestic-stores', type: 'wall', name: 'Domestic stores outer wall',
-    params: { length: GARDD, height: 2.1, thickness: 0.1 },
-    pos: [gardx + GARDW / 2, D2, gardz], rotY: Math.PI / 2, locked: true,
+  add('gardenWallS', {
+    room: 'domestic-stores', type: 'wall', name: 'Domestic stores aft wall',
+    params: { length: GARDW, height: 2.1, thickness: 0.1 },
+    pos: [gardx, D2, gardz + GARDD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-  for (const s of [-1, 1]) add(s < 0 ? 'gardenWallN' : 'gardenWallS', {
-    room: 'domestic-stores', type: 'wall', name: 'Domestic stores wall',
-    params: { length: GARDW, height: 2.1, thickness: 0.1 },
-    pos: [gardx, D2, gardz + s * GARDD / 2], rotY: 0, locked: true,
+  for (const s of [-1, 1]) add(s < 0 ? 'gardenWallW' : 'gardenWallE', {
+    room: 'domestic-stores', type: 'wall', name: 'Domestic stores side wall',
+    params: { length: GARDD, height: 2.1, thickness: 0.1 },
+    pos: [gardx + s * GARDW / 2, D2, gardz], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  const gardenDoorHalf = 0.575;
+  add('gardenWallN1', {
+    room: 'domestic-stores', type: 'wall', name: 'Domestic stores forward wall (port)',
+    params: { length: GARDW / 2 - gardenDoorHalf, height: 2.1, thickness: 0.1 },
+    pos: [gardx - (gardenDoorHalf + (GARDW / 2 - gardenDoorHalf) / 2), D2, gardz - GARDD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('gardenWallN2', {
+    room: 'domestic-stores', type: 'wall', name: 'Domestic stores forward wall (starboard)',
+    params: { length: GARDW / 2 - gardenDoorHalf, height: 2.1, thickness: 0.1 },
+    pos: [gardx + (gardenDoorHalf + (GARDW / 2 - gardenDoorHalf) / 2), D2, gardz - GARDD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   [-0.78, 0, 0.78].forEach((dz, i) => add('gardenStore' + (i + 1), {
