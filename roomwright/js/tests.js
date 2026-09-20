@@ -781,6 +781,39 @@ export const HABIT_TESTS = [
     },
   },
   {
+    id: 'lower-commercial-route',
+    name: 'The lower commercial route stays continuous from Operations to the freight spaces',
+    basis: ['lower-corridor', 'bay-medbay-near'],
+    run() {
+      const startObj = state.project.objects.find(o => o.layoutKey === 'opLandingFloor');
+      const flex = state.project.objects.find(o => o.layoutKey === 'flexFloor');
+      const aft = state.project.objects.find(o => o.layoutKey === 'aftFreightFloor');
+      const cargo = state.project.objects.find(o => o.layoutKey === 'cargoFloor');
+      const freight = state.project.objects.find(o => o.layoutKey === 'freightLockFloor');
+      if (!startObj || !flex || !aft || !cargo || !freight) {
+        return { status: 'warn', details: 'One or more lower commercial-route spaces are missing from the generated layout.' };
+      }
+
+      const deckY = startObj.pos[1] || 0;
+      const grid = computeNavGrid(0.22, [], deckY);
+      const start = new THREE.Vector3(startObj.pos[0], 0, startObj.pos[2]);
+      const checks = [
+        ['mission / flex bay', flex, 18],
+        ['aft freight node', aft, 30],
+        ['main cargo bay', cargo, 40],
+        ['freight transfer lock', freight, 36],
+      ];
+      const problems = [];
+      for (const [label, obj, max] of checks) {
+        if (!findPath(grid, start, new THREE.Vector3(obj.pos[0], 0, obj.pos[2]), max)) {
+          problems.push(`No continuous cargo-capable circulation from Lower Operations to the ${label}.`);
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return { status: 'pass', details: 'Lower Operations connects continuously to the configurable bay, aft freight node, main cargo bay, and freight transfer lock without using the residential corridor.' };
+    },
+  },
+  {
     id: 'skiff-bay-staging',
     name: 'The gear bay stages the skiff and the rigs',
     basis: ['skiff-cradle', 'rig-station', 'loadout-grid', 'rig-locker', 'bay-medbay-near'],
