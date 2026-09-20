@@ -415,7 +415,8 @@ function defs(rulings) {
   const leg2x = leg1x0 + leg1Len + SPW / 2;         // centerline of the aft leg
   const leg2z0 = spineZ - SPW / 2, leg2z1 = spineZ + 5.7;  // runs aft to the engine bay
   const pktHatchZ = spineZ + 1.7;
-  const domeZ = spineZ + 4.1;                        // dome arch, off the outboard wall
+  const domeZ = spineZ + 4.1;
+  const s4HatchZ = domeZ + 0.85;                        // dome arch, off the outboard wall
 
   add('spnLeg1Floor', {
     room: 'spine', type: 'floor', name: 'Storage spine deck (first turn)', params: { width: leg1Len, depth: SPW },
@@ -461,11 +462,46 @@ function defs(rulings) {
     evidence: 'explicit', evidenceRefs: ['eng-walkin', 'eng-spat-heat', 'doors-wait'],
     note: 'The frame Quenby leans on, mug set on the deck plate within reach. The spine ends at the heat’s center.',
   });
-  add('spnLeg2W', {
-    room: 'spine', type: 'wall', name: 'Spine wall (inboard)', params: { length: leg2z1 - (spineZ + SPW / 2), height: SPH, thickness: 0.1 },
-    pos: [leg1x0 + leg1Len, 0, (spineZ + SPW / 2 + leg2z1) / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: '',
+  const spineInboardX = leg1x0 + leg1Len;
+  const s4Half = 0.45;
+  const spineInStart = spineZ + SPW / 2;
+  const spineInA = (s4HatchZ - s4Half) - spineInStart;
+  const spineInB = leg2z1 - (s4HatchZ + s4Half);
+  if (spineInA > 0.05) add('spnLeg2W1', {
+    room: 'spine', type: 'wall', name: 'Spine wall (inboard forward)',
+    params: { length: spineInA, height: SPH, thickness: 0.1 },
+    pos: [spineInboardX, 0, spineInStart + spineInA / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Legacy wall broken by old storage access.',
   });
+  add('s4Hatch', {
+    room: 'storage-four', type: 'doorway', name: 'Storage Four hatch',
+    params: { length: 0.9, height: SPH, thickness: 0.1, doorWidth: 0.66, doorHeight: 1.82, kind: 'hinged', hinge: 'right', swing: 'in', open: 0 },
+    pos: [spineInboardX, 0, s4HatchZ], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Older manual storage hatch on the longer legacy route beyond Pocket Three and near the observation-dome geography.',
+  });
+  if (spineInB > 0.05) add('spnLeg2W2', {
+    room: 'spine', type: 'wall', name: 'Spine wall (inboard aft)',
+    params: { length: spineInB, height: SPH, thickness: 0.1 },
+    pos: [spineInboardX, 0, s4HatchZ + s4Half + spineInB / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Deep storage / machinery end of the spine.',
+  });
+
+  add('spnShoulderFloor', {
+    room: 'spine', type: 'floor', name: 'Legacy service shoulder',
+    params: { width: 0.62, depth: 1.45 },
+    pos: [spineInboardX - 0.31, 0, spineZ + 3.05], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Localized widening in the old utility spine: enough to step around an open panel or let someone pass, not a destination room.',
+  });
+  add('spnShoulderPanel', {
+    room: 'spine', type: 'storage', name: 'Legacy utility panel',
+    params: { width: 0.72, height: 1.25, depth: 0.16 },
+    pos: [spineInboardX - 0.56, 0, spineZ + 3.05], rotY: Math.PI / 2, locked: false,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Old manual service access and refit archaeology make the spine change width rather than read as a uniform hallway.',
+  });
+
   // pocket three hatch splits the outboard wall of the aft leg
   const pktWx = leg2x + SPW / 2;
   const segA = (pktHatchZ - 0.45) - leg2z0;
@@ -548,6 +584,43 @@ function defs(rulings) {
     evidence: 'explicit', evidenceRefs: ['pocket-slates', 'pocket-nova-crate'],
     note: 'The crate from starboard pocket three — stills, the throat-pickup case, pause-notation pages. Slates spread across the floor around it; a utility lamp angled away from the door.',
   });
+
+  // ---------- Storage Four ----------
+  const S4W = 1.55, S4D = 1.85;
+  const s4x = spineInboardX - S4W / 2, s4z = s4HatchZ;
+  add('s4Floor', {
+    room: 'storage-four', type: 'floor', name: 'Storage Four deck',
+    params: { width: S4W, depth: S4D },
+    pos: [s4x, 0, s4z], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Established numbered storage room on the deeper legacy route. More ordinary and useful than Pocket Three, but still part of older ship fabric.',
+  });
+  add('s4Ceil', {
+    room: 'storage-four', type: 'ceiling', name: 'Storage Four overhead',
+    params: { width: S4W, depth: S4D, height: SPH },
+    pos: [s4x, 0, s4z], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('s4WallW', {
+    room: 'storage-four', type: 'wall', name: 'Storage Four inboard wall',
+    params: { length: S4D, height: SPH, thickness: 0.1 },
+    pos: [s4x - S4W / 2, 0, s4z], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Older pressure / structural wall.',
+  });
+  for (const s of [-1, 1]) add(s < 0 ? 's4WallN' : 's4WallS', {
+    room: 'storage-four', type: 'wall', name: 'Storage Four wall',
+    params: { length: S4W, height: SPH, thickness: 0.1 },
+    pos: [s4x, 0, s4z + s * S4D / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('s4Rack', {
+    room: 'storage-four', type: 'storage', name: 'Storage Four rack',
+    params: { width: 0.92, height: 1.55, depth: 0.38 },
+    pos: [s4x - 0.45, 0, s4z - 0.2], rotY: Math.PI / 2, locked: false,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Ordinary ship stores: bulky enough to justify a room, mundane enough not to become a mystery.',
+  });
+
   // ---------- airlock chamber (starboard of the corridor) ----------
   const AKW = 1.4, AKD = 1.3;                       // chamber width (x) × depth (z)
   const akx = cx + COR.W / 2 + AKW / 2, akz = alkZ; // centered on the inner door
@@ -972,6 +1045,15 @@ function defs(rulings) {
     evidence: 'explicit',
     evidenceRefs: ['dome-hidden', 'dome-arch', 'dome-ledge', 'dome-curve', 'dome-autodim', 'dome-rim-dust'],
     note: 'Round observation dome with real glass and its own starfield view. The entry arch dips to 1.78 m — low enough to scrape anyone who walks too proud. Interior lighting auto-dims to keep the stars sharp.',
+  });
+
+
+  add('domeShutterHousing', {
+    room: 'dome', type: 'storage', name: 'Observation viewport shutter housing',
+    params: { width: 0.34, height: 1.35, depth: 0.86 },
+    pos: [dcx + DR + 0.08, 0, dcz], rotY: Math.PI / 2, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Structural housing for the cupola’s protective cover / shutter. Exact deployment mechanism remains open.',
   });
 
   // ================= ENGINE BAY =================
