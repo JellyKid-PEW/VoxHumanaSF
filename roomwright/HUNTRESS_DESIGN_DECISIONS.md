@@ -1342,3 +1342,22 @@ Exact power, radiator area, coolant, radiator count, nozzle geometry, drive chem
 
 See `roomwright/HUNTRESS_THERMAL_PROPULSION_STUDY.md`.
 
+
+
+
+### WORKING ENGINEERING NOTE — Mixed burn / drift travel profile
+
+The Huntress normally uses a **mixture of hard burns, sustained low-thrust pushes, and long drift / coast periods** rather than one universal propulsion mode.
+
+Current working interpretation:
+- high-power burns handle departure, insertion, major vector changes, urgent acceleration / braking, and hazard avoidance;
+- sustained low-thrust operation is available for routes where continuous acceleration is worth the thermal / reaction-mass cost;
+- long **drift** periods are common and normal;
+- during drift, the main drive is largely idle while attitude / trim corrections, ship-service power, reclamation, environmental systems, maintenance, and ordinary domestic life continue;
+- drift lets the Huntress conserve reaction mass, reduce drive wear, lower thermal stress, and shed thermal debt through its radiator system;
+- a common route can therefore resemble **burn → push → drift → correction → drift → braking burn**, but exact profiles vary by route.
+
+This helps explain why the crew spends so much story time in drift without implying that the vessel is disabled or simply coasting because nothing else is possible.
+
+Exact thrust, acceleration, burn duration, specific impulse, and transit times remain OPEN.
+
