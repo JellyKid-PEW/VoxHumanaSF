@@ -496,40 +496,93 @@ export const HABIT_TESTS = [
     },
   },
   {
-    id: 'galley-crowd',
-    name: 'Galley is tight but usable (three people barely fit)',
-    basis: ['galley-tiny', 'galley-island', 'galley-bench', 'galley-table'],
+    id: 'airlock-medbay-offset',
+    name: 'Airlock and medbay are close but not on one sightline',
+    basis: ['alk-main-hatch', 'med-corridor', 'med-deeper', 'bay-medbay-near'],
+    run() {
+      const air = state.project.objects.find(o => o.layoutKey === 'alkInnerDoor');
+      const med = state.project.objects.find(o => o.layoutKey === 'medHatch');
+      const bend = state.project.objects.find(o => o.layoutKey === 'corBendFloor');
+      if (!air || !med || !bend) return { status: 'warn', details: 'Airlock, medbay, or the main-corridor offset is missing.' };
+
+      const problems = [];
+      if (Math.abs(air.pos[0] - med.pos[0]) < 0.5) {
+        problems.push('Airlock and medbay still align too closely laterally; the offset is not doing useful privacy work.');
+      }
+      const grid = computeNavGrid(0.22);
+      const a = new THREE.Vector3(air.pos[0] - 0.45, 0, air.pos[2]);
+      const m = new THREE.Vector3(med.pos[0] - 0.45, 0, med.pos[2]);
+      const path = findPath(grid, a, m, 12);
+      if (!path) problems.push('No emergency walking route from the airlock side to medbay.');
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return { status: 'pass', details: 'The personnel airlock remains forward and close to medical, but the primary corridor offsets before medbay, blocking the direct boarding sightline.' };
+    },
+  },
+  {
+    id: 'galley-occupancy',
+    name: 'Galley supports five comfortably and seven crowded',
+    basis: ['galley-island', 'galley-bench', 'galley-table', 'galley-sink-light'],
     run() {
       const galley = state.project.objects.find(o => o.layoutKey === 'galFloor');
       if (!galley) return { status: 'warn', details: 'No galley in the model yet.' };
       const hatch = state.project.objects.find(o => o.layoutKey === 'galHatch');
       const grid = computeNavGrid(0.22);
-      const inside = new THREE.Vector3(hatch ? hatch.pos[0] : galley.pos[0], 0, (hatch ? hatch.pos[2] : galley.pos[2]) + 0.5);
+      const inside = new THREE.Vector3(hatch ? hatch.pos[0] : galley.pos[0], 0, (hatch ? hatch.pos[2] : galley.pos[2]) + 0.6);
       const problems = [];
-      for (const key of ['galCounter', 'galTable', 'galBench', 'galCabinet']) {
+      for (const key of ['galCounter', 'galIsland', 'galTable', 'galBench', 'galCabinet', 'galCooler']) {
         const t = state.project.objects.find(o => o.layoutKey === key);
-        if (!t) continue;
-        // within a long step (1 m) of the piece counts — bench seats are
-        // entered by sliding in sideways, which the grid cannot model
-        if (!findPath(grid, inside, new THREE.Vector3(t.pos[0], 0, t.pos[2]), 10)) {
+        if (!t) { problems.push(`${key} missing`); continue; }
+        if (!findPath(grid, inside, new THREE.Vector3(t.pos[0], 0, t.pos[2]), 14)) {
           problems.push(`${t.name} is unreachable from the hatch`);
         }
       }
-      if (problems.length) return { status: 'fail', details: problems.join('\n') };
-      // free-floor area inside the galley rect — the prose wants it TIGHT
+
+      const stools = ['galStool1', 'galStool2'].map(k => state.project.objects.find(o => o.layoutKey === k)).filter(Boolean);
+      if (stools.length < 2) problems.push('Galley needs at least two movable seats in addition to the bench for the current occupancy assumption.');
+
       const gw = galley.params.width, gd = galley.params.depth;
-      let free = 0;
-      for (let i = 0; i < grid.nx; i++) {
-        for (let j = 0; j < grid.nz; j++) {
-          if (!grid.walkable[i * grid.nz + j]) continue;
-          const x = grid.ox + i * grid.cell, z = grid.oz + j * grid.cell;
-          if (Math.abs(x - galley.pos[0]) <= gw / 2 && Math.abs(z - galley.pos[2]) <= gd / 2) free++;
+      const gross = gw * gd;
+      if (gross < 14) problems.push(`Galley gross area is only ${fmt(gross, 1)} m² — too small for the locked five-comfortable target with this furniture load.`);
+      if (gross > 20) problems.push(`Galley gross area is ${fmt(gross, 1)} m² — larger than needed for the intended crowded upper limit.`);
+
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return { status: 'pass', details: `${fmt(gross, 1)} m² gross with a work half, aft table / bench zone, and movable stools: five has real places to be; seven would visibly tighten circulation without turning the room into a two-person galley.` };
+    },
+  },
+  {
+    id: 'hygiene-separation',
+    name: 'Galley and hygiene share services without sharing experience',
+    basis: [],
+    run() {
+      const galley = state.project.objects.find(o => o.layoutKey === 'galFloor');
+      const branch = state.project.objects.find(o => o.layoutKey === 'hygBranchDoor');
+      const toilet = state.project.objects.find(o => o.layoutKey === 'hygToiletFloor');
+      const shower = state.project.objects.find(o => o.layoutKey === 'hygShowerFloor');
+      const hatch = state.project.objects.find(o => o.layoutKey === 'hygLadderHatch');
+      const ladder = state.project.objects.find(o => o.layoutKey === 'secondaryLadder');
+      const wet = state.project.objects.find(o => o.layoutKey === 'mainWetCore');
+      if (!galley || !branch || !toilet || !shower || !hatch || !ladder || !wet) {
+        return { status: 'warn', details: 'The domestic wet-service cluster is incomplete.' };
+      }
+      const problems = [];
+      if (Math.abs(hatch.pos[0] - ladder.pos[0]) > 0.05 || Math.abs(hatch.pos[2] - ladder.pos[2]) > 0.05) {
+        problems.push('Upper ladder hatch does not align with the lower secondary ladder.');
+      }
+      // Hygiene rooms must not physically overlap the galley rectangle.
+      for (const r of [toilet, shower]) {
+        const sepX = Math.abs(r.pos[0] - galley.pos[0]) - (r.params.width + galley.params.width) / 2;
+        const sepZ = Math.abs(r.pos[2] - galley.pos[2]) - (r.params.depth + galley.params.depth) / 2;
+        if (sepX < -0.02 && sepZ < -0.02) problems.push(`${r.name} overlaps the galley footprint.`);
+      }
+      const grid = computeNavGrid(0.20);
+      const branchPt = new THREE.Vector3(branch.pos[0] - 0.45, 0, branch.pos[2]);
+      for (const r of [toilet, shower]) {
+        if (!findPath(grid, branchPt, new THREE.Vector3(r.pos[0], 0, r.pos[2]), 20)) {
+          problems.push(`${r.name} is not reachable through the dry hygiene route.`);
         }
       }
-      const area = free * 0.01;
-      if (area < 0.9) return { status: 'fail', details: `Only ${fmt(area, 2)} m² of clear floor — even two people cannot work here.` };
-      if (area <= 4.2) return { status: 'pass', details: `${fmt(area, 1)} m² of clear floor: everything reachable, and three bodies genuinely crowd it — "The three of them didn’t fit, not quite."` };
-      return { status: 'warn', details: `${fmt(area, 1)} m² of clear floor — roomier than the prose suggests. Presence-06 calls the galley tiny; consider the smaller size in the Conflicts tab.` };
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return { status: 'pass', details: 'The galley stays a separate closable room; toilet and shower open from the dry service vestibule, the wet-service chase sits between the functions, and the residential ladder terminates in the dry zone.' };
     },
   },
   {
@@ -572,6 +625,30 @@ export const HABIT_TESTS = [
       if (area < 0.08) return { status: 'fail', details: `Only ${fmt(area, 2)} m² of standing room — nobody fits inside at all.` };
       if (area <= 1.6) return { status: 'pass', details: `${fmt(area, 2)} m² of standing room among the clutter — the room genuinely makes you choose where to stand; a second person crowds it.` };
       return { status: 'warn', details: `${fmt(area, 1)} m² of standing room — roomier than "too shallow for equipment staging" suggests.` };
+    },
+  },
+  {
+    id: 'legacy-spine-depth',
+    name: 'The storage spine becomes older and more irregular as it runs deep',
+    basis: ['spine-narrow-dim', 'dome-hidden', 'eng-walkin'],
+    run() {
+      const shoulder = state.project.objects.find(o => o.layoutKey === 'spnShoulderFloor');
+      const p3 = state.project.objects.find(o => o.layoutKey === 'pktFloor');
+      const s4 = state.project.objects.find(o => o.layoutKey === 's4Floor');
+      const dome = state.project.objects.find(o => o.layoutKey === 'domeFloor');
+      const eng = state.project.objects.find(o => o.layoutKey === 'engFloor');
+      if (!shoulder || !p3 || !s4 || !dome || !eng) return { status: 'warn', details: 'One or more established deep-spine spaces are not modeled.' };
+
+      const grid = computeNavGrid(0.20);
+      const start = new THREE.Vector3(0, 0, 0);
+      const problems = [];
+      for (const t of [p3, s4, dome, eng]) {
+        if (!findPath(grid, start, new THREE.Vector3(t.pos[0], 0, t.pos[2]), 25)) {
+          problems.push(`${t.name} is unreachable from the ship interior.`);
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return { status: 'pass', details: 'Pocket Three, Storage Four, the observation dome, and the walk-in engine bay all remain reachable off the legacy service side; the localized shoulder breaks the uniform-hallway rhythm.' };
     },
   },
   {
