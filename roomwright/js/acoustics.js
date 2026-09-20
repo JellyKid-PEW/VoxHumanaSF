@@ -29,14 +29,10 @@ const DOOR_CLOSED_COST = 15;   // a shut pressure-rated hatch (leak only)
 const DOOR_OPEN_COST = 1;      // an open doorway still funnels
 const DOOR_AJAR_COST = 6;      // half-angle / drifted-open
 
-// PROVISIONAL vent branches (by layoutKey of the room's floor) — replace
-// when the ducting pass routes real runs. Medbay's filtered loop is silent.
-const DUCT_BRANCHES = [
-  ['residential A (cabins 1–4)', ['cab1Floor', 'cab2Floor', 'cab3Floor', 'cab4Floor', 'resApproachFloor']],
-  ['residential B (quiet run / wet core)', ['cab5Floor', 'cab6Floor', 'quietRunFloor', 'gardenFloor', 'wetCoreFloor']],
-  ['domestic (galley / hygiene)', ['galFloor', 'hygBranchFloor', 'hygVestFloor', 'hygToiletFloor', 'hygShowerFloor', 'domServiceFloor']],
-  ['operations (bay / spine)', ['opLandingFloor', 'sbFloor', 'workSpineFloor', 'workHeadFloor', 'flexFloor']],
-];
+// Vent branches are DERIVED FROM ROUTED GEOMETRY: every conduit object
+// with a params.branch tag is a duct run, and a room is on a branch when
+// that branch's ducting passes over its floor. Move a duct, and who
+// overhears whom through the vents changes with it.
 
 const deckOf = rec => Math.round(((rec.pos[1] || 0)) * 10) / 10;
 
@@ -200,6 +196,31 @@ export function propagate(source) {
 const LEVEL_ORDER = ['silent', 'presence', 'tone', 'words'];
 const maxLevel = (a, b) => LEVEL_ORDER.indexOf(a) >= LEVEL_ORDER.indexOf(b) ? a : b;
 
+// Which vent branches serve each floor, from the routed duct geometry.
+export function ductBranchesByFloor() {
+  const ducts = state.project.objects.filter(o => o.type === 'conduit' && o.params.branch);
+  const floors = state.project.objects.filter(o => o.type === 'floor');
+  const map = new Map();
+  for (const f of floors) {
+    const r = floorRect(f), fy = deckOf(f);
+    for (const d of ducts) {
+      if (Math.abs(deckOf(d) - fy) > 0.6) continue;
+      const rot = Math.abs(Math.sin(d.rotY || 0)) > 0.5;
+      const half = (d.params.length ?? 2) / 2, w = 0.3;
+      const dr = rot
+        ? { minX: d.pos[0] - half, maxX: d.pos[0] + half, minZ: d.pos[2] - w, maxZ: d.pos[2] + w }
+        : { minX: d.pos[0] - w, maxX: d.pos[0] + w, minZ: d.pos[2] - half, maxZ: d.pos[2] + half };
+      const ox = Math.min(dr.maxX, r.maxX) - Math.max(dr.minX, r.minX);
+      const oz = Math.min(dr.maxZ, r.maxZ) - Math.max(dr.minZ, r.minZ);
+      if (ox > 0.08 && oz > 0.08) {
+        if (!map.has(f.id)) map.set(f.id, new Set());
+        map.get(f.id).add(d.params.branch);
+      }
+    }
+  }
+  return map;
+}
+
 // The report: for a source point + kind + flight mode, what does every
 // room hear? Source deck is snapped to the nearest floor under the point.
 export function audibilityReport(pt, kind = 'speech', mode = 'drift-night') {
@@ -221,8 +242,8 @@ export function audibilityReport(pt, kind = 'speech', mode = 'drift-night') {
   const { fields, dist } = propagate(source);
   const srcMasked = MASKING_ROOMS.has(src.room) ? 4 : 0;
 
-  const branchOf = f => DUCT_BRANCHES.find(([, keys]) => keys.includes(f.layoutKey))?.[0] || null;
-  const srcBranch = branchOf(src);
+  const branchMap = ductBranchesByFloor();
+  const srcBranches = branchMap.get(src.id) || new Set();
 
   const rows = [];
   for (const f of floors) {
@@ -243,15 +264,21 @@ export function audibilityReport(pt, kind = 'speech', mode = 'drift-night') {
         if (air !== 'silent') { level = air; channel = 'air'; }
       }
     }
-    // structure-borne (mode softens it less: halve the penalty)
-    const d3 = Math.hypot(f.pos[0] - pt.x, deck - srcDeck, f.pos[2] - pt.z);
-    const sPen = (modePen + (MASKING_ROOMS.has(f.room) ? 6 : 0)) * 0.5;
-    const sLevel = d3 <= Math.max(0, K.structTone - sPen * 0.2) ? 'tone'
-      : d3 <= Math.max(0, K.structPresence - sPen) ? 'presence' : 'silent';
+    // structure-borne: frame distance plus a real cost per deck junction
+    // crossed; flight-mode vibration drowns structure fully (a burn
+    // silences even the party wall)
+    const crossings = Math.abs(deck - srcDeck) / 3;
+    const d3 = Math.hypot(f.pos[0] - pt.x, deck - srcDeck, f.pos[2] - pt.z) + 4 * crossings;
+    const maskPen = MASKING_ROOMS.has(f.room) ? 3 : 0;
+    const sLevel = d3 <= Math.max(0, K.structTone - modePen * 0.4 - maskPen * 0.2) ? 'tone'
+      : d3 <= Math.max(0, K.structPresence - modePen - maskPen) ? 'presence' : 'silent';
     if (LEVEL_ORDER.indexOf(sLevel) > LEVEL_ORDER.indexOf(level)) { level = sLevel; channel = 'structure'; }
-    // duct (provisional): same branch, only in quiet drift
-    if (srcBranch && branchOf(f) === srcBranch && f.id !== src.id && mode === 'drift-night') {
-      if (LEVEL_ORDER.indexOf('presence') > LEVEL_ORDER.indexOf(level)) { level = 'presence'; channel = 'duct (provisional)'; }
+    // duct: rooms whose routed vent branches intersect, only in quiet drift
+    if (srcBranches.size && f.id !== src.id && mode === 'drift-night') {
+      const fb = branchMap.get(f.id);
+      if (fb && [...srcBranches].some(b => fb.has(b))) {
+        if (LEVEL_ORDER.indexOf('presence') > LEVEL_ORDER.indexOf(level)) { level = 'presence'; channel = 'duct'; }
+      }
     }
     if (f.id === src.id) { level = 'words'; channel = 'source room'; }
     rows.push({ name: f.name, room: f.room, layoutKey: f.layoutKey, deck, level, channel });

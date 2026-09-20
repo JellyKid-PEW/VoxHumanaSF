@@ -2492,7 +2492,7 @@ function defs(rulings) {
   });
   add('cdPortDuct', {
     room: 'hull', type: 'conduit', name: 'Port air trunk (the duct seam)',
-    params: { length: 9.4, lines: 1, gauge: 0.24, mountHeight: 1.92, era: 'modern' },
+    params: { length: 9.4, lines: 1, gauge: 0.24, mountHeight: 1.92, era: 'modern', branch: 'domestic' },
     pos: [-4.5 + HX, 0, 9.1], rotY: 0, locked: true,
     evidence: 'explicit', evidenceRefs: ['sys-port-duct'],
     note: '"Port duct seam whispered its lie." The port-side air trunk; its seam gasket has never quite told the truth.',
@@ -2532,6 +2532,101 @@ function defs(rulings) {
     pos: [LASX - 0.42, D2, 24.5], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [], note: oldNote + ' Nova’s crawl sits against this run; her receivers face it.',
   });
+
+  // ================= AIR SYSTEM (the ducting pass) =================
+  // Four loops, per canon: a DOMESTIC loop on the main deck (bridge,
+  // corridor, galley, hygiene); a HABITATION loop on the lower residential
+  // side ("Crew quarters loop at minimal" — it has its own loop to downshift);
+  // an OPERATIONS loop through the work deck and bays; and the medbay's own
+  // small filtered loop, isolated from everything. The engine bay breathes
+  // through its own thermal ventilation and is on no comfort loop; the
+  // airlock has its cycle system; pocket three and the dome are poorly
+  // served — old spaces off the primary pathing. Duct runs are real routed
+  // geometry: the acoustics duct channel derives its branches from these
+  // objects, so moving a duct changes who overhears whom.
+  const duct = (key, name, branch, x, deckY, z, rotY, length, gauge, mount, note = '') => add(key, {
+    room: 'hull', type: 'conduit', name,
+    params: { length, lines: 1, gauge, mountHeight: mount, era: 'modern', branch },
+    pos: [x + HX, deckY, z], rotY, locked: true,
+    evidence: 'decision', evidenceRefs: branch === 'habitation' ? ['quarters-loop'] : [],
+    note: note || `${branch} air loop.`,
+  });
+  // domestic loop (the port air trunk is its supply spine — tagged below)
+  duct('ductDomCorridor', 'Domestic loop — corridor header', 'domestic', -1.5, 0, 4.5, Math.PI / 2, 6.0, 0.2, 1.98,
+    'Domestic supply header crossing to the forward run, clear of the medbay bulkhead.');
+  // (anchored to the bridge itself, which never moves with the door ruling)
+  duct('ductDomBridge', 'Domestic loop — bridge run', 'domestic', 1.2 - HX, 0, 0.8, 0, 2.8, 0.16, 2.05,
+    'The bridge breathes off the domestic loop — which is why galley air (and galley sounds) reach the cradle when doors stand open.');
+  duct('ductDomGalley', 'Domestic loop — galley run', 'domestic', -2.65, 0, 10.2, Math.PI / 2, 3.7, 0.2, 1.98);
+  duct('ductDomToilet', 'Domestic loop — toilet extract', 'domestic', -3.5, 0, 11.9, Math.PI / 2, 2.0, 0.14, 1.95);
+  duct('ductDomShower', 'Domestic loop — shower extract', 'domestic', -3.75, 0, 13.0, Math.PI / 2, 1.5, 0.14, 1.95);
+  // habitation loop (lower residential; its own loop, canon)
+  duct('ductHabTrunk', 'Habitation loop — approach trunk', 'habitation', -6.0, D2, 8.75, 0, 7.7, 0.22, 1.95,
+    'The crew-quarters loop trunk. Nav sits on this loop too — the plotting room breathes with the cabins.');
+  duct('ductHabCore', 'Habitation loop — wet-core tie', 'habitation', -5.2, D2, 12.45, Math.PI / 2, 1.6, 0.22, 1.95,
+    'The loop plant lives in the wet-service core; this is its supply tie.');
+  duct('ductHabWest', 'Habitation loop — west cabin header', 'habitation', -7.9, D2, 9.0, 0, 4.4, 0.16, 1.8,
+    'Serves Cabins One and Three. At night in drift, the header carries more than air.');
+  duct('ductHabEast', 'Habitation loop — east cabin header', 'habitation', -4.0, D2, 10.1, 0, 4.6, 0.16, 1.8,
+    'Serves Cabins Two and Four, running beside the old cableway.');
+  duct('ductHabDogleg', 'Habitation loop — dogleg crossing', 'habitation', -8.0, D2, 12.45, Math.PI / 2, 2.6, 0.18, 1.9);
+  duct('ductHabElbow', 'Habitation loop — quiet-run elbow', 'habitation', -9.4, D2, 12.9, 0, 1.2, 0.18, 1.85);
+  duct('ductHabQuiet', 'Habitation loop — quiet-run header', 'habitation', -9.4, D2, 15.4, 0, 4.0, 0.16, 1.8,
+    'Serves Cabins Five and Six. The pump noise of the wet core rides this branch as masking — part of why the quiet run is quiet.');
+  duct('ductHabGarden', 'Habitation loop — stores spur', 'habitation', -6.6, D2, 14.2, 0, 1.6, 0.14, 1.9,
+    'A generous spur for a stores room — sized, perhaps, for the day the room grows things.');
+  // operations loop (work deck and bays)
+  duct('ductOpsTrunk', 'Operations loop — work-spine trunk', 'ops', -2.6, D2, 11.8, 0, 14.4, 0.26, 1.95,
+    'The big commercial air run, Lower Operations to the aft freight node.');
+  duct('ductOpsSkiff', 'Operations loop — skiff bay spur', 'ops', -3.6, D2, 2.6, 0, 2.4, 0.18, 1.95);
+  duct('ductOpsHead', 'Operations loop — work-head spur', 'ops', -1.5, D2, 6.75, Math.PI / 2, 1.8, 0.14, 1.95);
+  duct('ductOpsFlex', 'Operations loop — Hold Two spur', 'ops', -0.9, D2, 10.55, Math.PI / 2, 2.4, 0.18, 1.98);
+  duct('ductOpsCargo', 'Operations loop — Hold One run', 'ops', -2.6, D2, 22.5, 0, 5.0, 0.22, 2.1);
+  duct('ductOpsLock', 'Operations loop — freight lock spur', 'ops', 0.3, D2, 19.8, Math.PI / 2, 2.2, 0.16, 2.1);
+  duct('ductOpsCrawl', 'Operations loop — crawl tap (Iri’s)', 'ops', -7.9, D2, 25.75, Math.PI / 2, 1.6, 0.1, 1.35,
+    'The small filtered tap Iri ran when she made Nova’s nest safe: support, filtering, thermal management, proper power routing.');
+  // medbay isolated loop
+  duct('ductMedLoop', 'Medbay filtered loop', 'med-iso', -1.5, 0, 5.8, Math.PI / 2, 1.4, 0.14, 1.95,
+    'A closed, filtered medical loop. It shares air — and sound — with nothing.');
+  // plant / distribution units
+  add('ahuDomestic', {
+    room: 'domestic-service', type: 'shelf', name: 'Domestic air-handling unit',
+    params: { width: 1.2, depth: 0.42, mountHeight: 1.78, tins: 0 },
+    pos: [-4.84 + HX, 0, 9.9], rotY: -Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Overhead AHU in the domestic service passage — filters, fans, and the click the galley heater makes when its cycle ends.',
+  });
+  add('ahuHabitation', {
+    room: 'domestic-stores', type: 'shelf', name: 'Habitation-loop filter / distribution unit',
+    params: { width: 1.1, depth: 0.45, mountHeight: 1.78, tins: 0 },
+    pos: [-6.6 + HX, D2, 15.3], rotY: Math.PI, locked: false,
+    evidence: 'explicit', evidenceRefs: ['quarters-loop'],
+    note: '"Crew quarters loop at minimal." The residential loop’s filter and distribution stage; the plant proper sits in the wet-service core next door.',
+  });
+  add('ahuOps', {
+    room: 'aft-freight', type: 'shelf', name: 'Operations air-handling unit',
+    params: { width: 1.2, depth: 0.45, mountHeight: 1.78, tins: 0 },
+    pos: [-4.0 + HX, D2, 20.9], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Overhead AHU at the freight junction, where the commercial loop’s air is dustiest and its filters earn their keep.',
+  });
+  add('medAirUnit', {
+    room: 'medbay', type: 'shelf', name: 'Medbay filter unit',
+    params: { width: 0.5, depth: 0.3, mountHeight: 1.79, tins: 0 },
+    pos: [-2.0 + HX, 0, 6.63], rotY: Math.PI, locked: false,
+    evidence: 'decision', evidenceRefs: ['med-reach'],
+    note: 'The medbay’s own small filtered loop unit — recovery air, and the room’s acoustic isolation.',
+  });
+  // the secondary vent grid — and what runs behind it
+  add('ventGridPanel', {
+    room: 'cargo-bay', type: 'storage', name: 'Secondary vent grid',
+    params: { width: 1.3, height: 1.5, depth: 0.08 },
+    pos: [0.84 + HX, D2, 24.0], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['vent-grid'],
+    note: 'The secondary vent grid on Hold One’s starboard wall. Something runs behind it that B.O.B. never mapped.',
+  });
+  hm('mhUnlisted', 'Unlisted service corridor (unmapped)', 1.4, -3.0, 25.15, 0.6, 7.7, 2.0,
+    'The narrow passage behind the secondary vent grid — too narrow for B.O.B.’s standard access routines, absent from every schematic. The underfloor cache is somewhere along it. Reserved as massing; walkable modeling is future work.', { tint: 'anomaly' });
 
   // ---------- pocket archaeology ----------
   add('p1Panel', {
@@ -2581,7 +2676,7 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
@@ -2592,7 +2687,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 18;
+export const LAYOUT_VERSION = 19;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2609,4 +2704,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   15: ['hygShower*', 'hygVestWallE*'], // separate shower and toilet footprints in the final main-deck blockout
   16: ['corBend*', 'corWallPortMid', 'corAftWallStbd', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*', 'resWall*', 'quietWall*', 'galStool*', 'medHatch', 'medChair', 'medShelf', 'medSterilizer', 'sbRig', 'gardenStore*', 'engWall*', 'iriQ*', 'domeFloor'], // open the corridor elbow (live-app validation found it walled), offset cabin doors clear of bunks, clear furniture / clearance-zone collisions, rebuild the aft-room option of the Iri conflict against the new main deck
   17: ['gal*', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab6*', 'cargoFloor', 'flexFloor', 'resApproachFloor', 'quietRunFloor'], // author-canon session: island folded into the counter run, nav lock levers at the helm, hold registry names, cabin quirks, crew-quarters naming
+  19: ['cdPortDuct'], // the port air trunk becomes the domestic loop's tagged supply spine (ducting pass)
 };

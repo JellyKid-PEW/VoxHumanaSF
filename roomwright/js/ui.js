@@ -386,7 +386,7 @@ function renderTests() {
           arr.map(r => `<div style="font-size:11.5px;">${esc(r.name)}${showChannel && r.channel ? ` <span class="muted">— ${esc(r.channel)}</span>` : ''}</div>`).join('')
         : '';
       const body = el(`<div>
-        <div class="muted" style="font-size:11.5px;">Source: ${esc(rep.source.floor)} · ${esc(kind)} · ${esc(mode)}. Door states as currently set. Duct results are provisional until the ducting pass.</div>
+        <div class="muted" style="font-size:11.5px;">Source: ${esc(rep.source.floor)} · ${esc(kind)} · ${esc(mode)}. Door states as currently set; vent-branch results derive from the routed air loops.</div>
         ${sect('Words are intelligible', groups.words, true)}
         ${sect('Voice / activity tone', groups.tone, true)}
         ${sect('Presence — rhythm, thud, a maybe', groups.presence, true)}

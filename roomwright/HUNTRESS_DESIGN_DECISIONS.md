@@ -1478,3 +1478,22 @@ The working hull envelope and its honest masses are now modeled (all WORKING geo
 - A new **hull-envelope habit test** (25 total) holds it honest: every walkable space inside the envelope, no rooms in the drive section, no massing volume intruding into a walkable band, and the frame grid covering everything aboard. (Its first run caught the nose bay clipping the bridge deck by 10 cm.)
 
 Everything translates with the bridge-door ruling, so the hull follows the interior under every conflict configuration. Layout version 18; migration verified (26 hull objects arrive in old saves, edits and rulings untouched).
+
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The ducting pass (air loops routed)
+
+The ship's air system is now routed geometry, and the acoustics duct channel derives from it — the provisional vent-branch table is gone. Move a duct in the model and who overhears whom through the vents changes with it.
+
+**Four loops, each where canon puts it:**
+- **Domestic loop** (main deck): the port air trunk is its supply spine; headers serve the bridge (why galley air and galley sounds reach the cradle), the corridor, the galley, and separate toilet/shower extracts. Overhead AHU in the domestic service passage.
+- **Habitation loop** (lower residential): "Crew quarters loop at minimal" — its own loop, plant in the wet-service core with the filter/distribution unit in the stores room next door. Trunk up the residential approach (nav breathes with the cabins — the plotting room Quenby sleeps in is on the crew-quarters loop), cabin headers both sides of the approach, a dogleg crossing to the quiet-run header serving Five and Six, and a generous spur to the stores room — sized, perhaps, for the day the room grows things.
+- **Operations loop** (work deck): trunk from Lower Operations down the work spine to the freight node; spurs to the skiff bay, work head, Hold Two, Hold One, and the freight lock; AHU at the freight junction. Plus **Iri's filtered tap into Nova's crawl** — the canonical "filtering, thermal management, proper power routing" she added.
+- **Medbay filtered loop**: a small closed unit and loop that shares air — and sound — with nothing.
+- The engine bay breathes its own thermal ventilation; the airlock has its cycle system; pocket three and the dome are poorly served, as befits old spaces off the primary pathing.
+
+**The secondary vent grid is placed** (Next-09, now seeded as a constraint): on Hold One's starboard wall, with the **unlisted service corridor** reserved behind it as red-tinted unmapped massing — too narrow for B.O.B.'s standard access routines, absent from every schematic, the underfloor cache somewhere along it. Walkable modeling is future work.
+
+**Acoustics refinements from live probing:** structure-borne sound now pays a real cost per deck junction crossed (a cabin bunk no longer murmurs into the galley one deck up), and flight-mode vibration damps the structure channel fully — under burn, even the party wall goes silent, which makes the earlier canon phrase literal. Vent-talk verified: intimacy in Cabin Two at night reads as duct presence in Cabin Six down the shared habitation loop, structure presence next door, and nothing anywhere else.
+
+A new **air-loops habit test** (26 total) locks the architecture: every cabin, nav, the wet core, and the stores room on the habitation loop; bridge/corridor/galley/hygiene on domestic; the work deck and both holds on ops with the crawl tap present; the medbay's loop leaking into nothing; the engine bay on no comfort loop; all four plant units present. Layout version 19; migration verified.

@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { state } from './state.js';
 import { editor, objectAABB, collectAABBs, castSight, circleHitsColliders, clearSightLines, drawSightLine } from './editor.js';
 import { CHARACTERS, eyeHeight } from './mannequin.js';
-import { audibilityReport, levelAt } from './acoustics.js';
+import { audibilityReport, levelAt, ductBranchesByFloor } from './acoustics.js';
 import { FRAME } from './layout.js';
 import { fmt } from './util.js';
 
@@ -1013,6 +1013,55 @@ export const HABIT_TESTS = [
     },
   },
   {
+    id: 'air-loops',
+    name: 'Four air loops, each where canon puts it',
+    basis: ['quarters-loop', 'med-corridor', 'vent-grid'],
+    run() {
+      const map = ductBranchesByFloor();
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const branchesOf = k => { const f = byKey(k); return (f && map.get(f.id)) || new Set(); };
+      const problems = [];
+      const wants = [
+        ['floor', 'domestic', 'the bridge'], ['corFloor', 'domestic', 'the corridor'],
+        ['galFloor', 'domestic', 'the galley'], ['hygToiletFloor', 'domestic', 'the toilet'],
+        ['hygShowerFloor', 'domestic', 'the shower'],
+        ['cab1Floor', 'habitation', 'Cabin One'], ['cab2Floor', 'habitation', 'Cabin Two'],
+        ['cab3Floor', 'habitation', 'Cabin Three'], ['cab4Floor', 'habitation', 'Cabin Four'],
+        ['cab5Floor', 'habitation', 'Cabin Five'], ['cab6Floor', 'habitation', 'Cabin Six'],
+        ['navFloor', 'habitation', 'nav (Quenby sleeps on the crew-quarters loop)'],
+        ['wetCoreFloor', 'habitation', 'the wet-service core'],
+        ['gardenFloor', 'habitation', 'the domestic stores / future garden'],
+        ['opLandingFloor', 'ops', 'Lower Operations'], ['sbFloor', 'ops', 'the skiff bay'],
+        ['workSpineFloor', 'ops', 'the work spine'], ['flexFloor', 'ops', 'Hold Two'],
+        ['cargoFloor', 'ops', 'Hold One'], ['freightLockFloor', 'ops', 'the freight lock'],
+        ['novaCrawlFloor', 'ops', 'Nova’s crawl (Iri’s filtered tap)'],
+        ['medFloor', 'med-iso', 'the medbay'],
+      ];
+      for (const [key, branch, label] of wants) {
+        if (!branchesOf(key).has(branch)) problems.push(`${label} is not served by the ${branch} loop`);
+      }
+      // the medbay shares its loop with nothing
+      const med = byKey('medFloor');
+      for (const [fid, set] of map) {
+        if (med && fid !== med.id && set.has('med-iso')) {
+          const f = state.project.objects.find(o => o.id === fid);
+          problems.push(`The medbay’s filtered loop leaks into ${f?.name || fid}`);
+        }
+      }
+      // the engine bay is on no comfort loop (its own thermal ventilation)
+      if (branchesOf('engFloor').size) problems.push('The engine bay should breathe through its own thermal ventilation, not a comfort loop.');
+      // plant exists
+      for (const [k, label] of [['ahuDomestic', 'domestic AHU'], ['ahuHabitation', 'habitation filter unit'], ['ahuOps', 'operations AHU'], ['medAirUnit', 'medbay filter unit'], ['ventGridPanel', 'the secondary vent grid']]) {
+        if (!byKey(k)) problems.push(`Missing plant: ${label}`);
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'Domestic loop breathes the bridge, corridor, galley, and hygiene; the habitation loop serves every cabin, nav, the wet core, and the stores room ("Crew quarters loop at minimal"); the operations loop runs the work deck, both holds, the lock, and Iri’s filtered tap into Nova’s crawl; the medbay’s small loop shares air — and sound — with nothing; the engine bay breathes its own heat.',
+      };
+    },
+  },
+  {
     id: 'sound-and-privacy',
     name: 'The ship’s sound map holds (who hears what)',
     basis: ['galley-sounds', 'cabin-six', 'iri-cabin-lower', 'pocket-hum', 'med-corridor'],
@@ -1039,7 +1088,7 @@ export const HABIT_TESTS = [
         let rep = A.audibilityReport({ x: bunk.pos[0], y: bunk.pos[1], z: bunk.pos[2] }, 'intimacy', 'drift-night');
         expect('Cabin Five through the party wall', A.levelAt(rep, 'cab5Floor'), ['tone', 'words']);
         expect('the quiet run outside', A.levelAt(rep, 'quietRunFloor'), ['presence', 'tone']);
-        expect('Cabin Four (staggered row + other vent branch)', A.levelAt(rep, 'cab4Floor'), ['silent', 'presence']);
+        expect('Cabin Four (staggered row; shared habitation loop at most a murmur)', A.levelAt(rep, 'cab4Floor'), ['silent', 'presence']);
         expect('the galley (a deck up, far forward)', A.levelAt(rep, 'galFloor'), ['silent']);
         expect('the medbay', A.levelAt(rep, 'medFloor'), ['silent']);
         expect('the bridge', A.levelAt(rep, 'floor'), ['silent']);
@@ -1074,7 +1123,7 @@ export const HABIT_TESTS = [
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
       return {
         status: 'pass',
-        details: 'The sound map holds: the party wall carries Cabin Six to Cabin Five and nowhere else that matters; galley talk reaches the cradle with doors open; the shut medbay keeps its conversations; the stair well is a chimney; the engine hums through pocket three; and a burn deafens the ship. Duct-branch results stay provisional until the ducting pass.',
+        details: 'The sound map holds: the party wall carries Cabin Six to Cabin Five and nowhere else that matters; galley talk reaches the cradle with doors open; the shut medbay keeps its conversations; the stair well is a chimney; the engine hums through pocket three; and a burn deafens the ship. ',
       };
     },
   },

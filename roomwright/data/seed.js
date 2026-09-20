@@ -82,6 +82,14 @@ export const SEED_CONSTRAINTS = [
     claims: [{ kind: 'relation', a: 'pilotCradle', b: 'viewport', rel: 'facing' }],
   },
   {
+    key: 'vent-grid', source: 'Next-09',
+    quote: 'It ran behind the secondary vent grid, narrow enough that B.O.B. hadn’t mapped it into standard access routines.',
+    category: 'adjacency', subject: 'the secondary vent grid / unlisted corridor',
+    interpretation: 'A secondary vent grid covers a narrow, unmapped service passage — a corridor B.O.B.’s standard access routines have never held. The grid is placed on Hold One’s starboard wall; the passage behind it is reserved as unmapped volume until it is modeled.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'ventGrid' }],
+  },
+  {
     key: 'sys-midline-bus', source: 'Next-05',
     quote: 'Midline bus settled.',
     category: 'sound', subject: 'midline power bus',
