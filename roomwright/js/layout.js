@@ -838,7 +838,7 @@ function defs(rulings) {
   // experience. It has its own dry access route, and the ladder from the
   // residential dogleg arrives in that dry zone rather than a shower or galley.
   const HYGX = cx - 6.00;
-  const HYGZ0 = hygBranchZ, HYGZ1 = 14.25;
+  const HYGZ0 = hygBranchZ, HYGSTART = 10.65, HYGZ1 = 14.25;
   const HYGW = 1.10;
   const hygBranchW = (aftCx - COR.W / 2) - HYGX + HYGW / 2;
 
@@ -855,20 +855,32 @@ function defs(rulings) {
     pos: [(aftCx - COR.W / 2 + (HYGX - HYGW / 2)) / 2, 0, HYGZ0], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-  add('hygVestFloor', {
-    room: 'hygiene', type: 'floor', name: 'Dry hygiene / service vestibule deck',
-    params: { width: HYGW, depth: HYGZ1 - HYGZ0 },
-    pos: [HYGX, 0, (HYGZ0 + HYGZ1) / 2], rotY: 0, locked: true,
+  add('domServiceFloor', {
+    room: 'domestic-service', type: 'floor', name: 'Domestic service passage deck',
+    params: { width: HYGW, depth: HYGSTART - HYGZ0 },
+    pos: [HYGX, 0, (HYGZ0 + HYGSTART) / 2], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [],
-    note: 'Long dry service vestibule along the domestic wet zone. It separates circulation from shower / toilet functions and ends at the secondary ladder.',
+    note: 'Dry service passage running beside the galley wet zone. It carries ordinary maintenance access rather than reading as part of the bathroom.',
   });
-  add('hygVestCeil', {
-    room: 'hygiene', type: 'ceiling', name: 'Dry hygiene / service vestibule overhead',
-    params: { width: HYGW, depth: HYGZ1 - HYGZ0, height: 2.10 },
-    pos: [HYGX, 0, (HYGZ0 + HYGZ1) / 2], rotY: 0, locked: true,
+  add('domServiceCeil', {
+    room: 'domestic-service', type: 'ceiling', name: 'Domestic service passage overhead',
+    params: { width: HYGW, depth: HYGSTART - HYGZ0, height: 2.10 },
+    pos: [HYGX, 0, (HYGZ0 + HYGSTART) / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-
+  add('hygVestFloor', {
+    room: 'hygiene', type: 'floor', name: 'Dry hygiene / ladder vestibule deck',
+    params: { width: HYGW, depth: HYGZ1 - HYGSTART },
+    pos: [HYGX, 0, (HYGSTART + HYGZ1) / 2], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'The actual hygiene vestibule begins aft of the galley-service passage and contains the toilet / shower doors and secondary-ladder landing.',
+  });
+  add('hygVestCeil', {
+    room: 'hygiene', type: 'ceiling', name: 'Dry hygiene / ladder vestibule overhead',
+    params: { width: HYGW, depth: HYGZ1 - HYGSTART, height: 2.10 },
+    pos: [HYGX, 0, (HYGSTART + HYGZ1) / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
 
   // Enclose the transverse dry branch while leaving its east end open to the
   // main corridor and west end open into the long service vestibule.
@@ -887,14 +899,14 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: 'The galley is beyond this wall / junction rather than visible through the hygiene route.',
   });
   add('hygVestWallW', {
-    room: 'hygiene', type: 'wall', name: 'Dry hygiene vestibule outer wall',
+    room: 'hygiene', type: 'wall', name: 'Domestic service / hygiene outer wall',
     params: { length: HYGZ1 - HYGZ0, height: 2.10, thickness: 0.10 },
     pos: [HYGX - HYGW / 2, 0, (HYGZ0 + HYGZ1) / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   // East wall is segmented around toilet and shower doors.
   const hygDoorHalf = 0.50;
-  const toiletZ = 10.15, showerZ = 12.25;
+  const toiletZ = 11.30, showerZ = 12.80;
   const vestSegs = [
     ['hygVestWallE1', HYGZ0 + 0.50, toiletZ - hygDoorHalf],
     ['hygVestWallE2', toiletZ + hygDoorHalf, showerZ - hygDoorHalf],
@@ -930,7 +942,7 @@ function defs(rulings) {
   add('mainWetPanel', {
     room: 'wet-service', type: 'storage', name: 'Domestic service manifold',
     params: { width: 0.82, height: 1.35, depth: 0.18 },
-    pos: [HYGX + HYGW / 2 - 0.08, 0, 10.95], rotY: Math.PI / 2, locked: false,
+    pos: [HYGX + HYGW / 2 - 0.08, 0, 9.65], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [],
     note: 'Routine-access panel in lived-in circulation: filters, isolation valves, thermal trim, and service diagnostics.',
   });
@@ -939,38 +951,38 @@ function defs(rulings) {
   add('hygToiletFloor', {
     room: 'hygiene', type: 'floor', name: 'Primary toilet deck',
     params: { width: HW, depth: HD },
-    pos: [hx, 0, 10.15], rotY: 0, locked: true,
+    pos: [hx, 0, 11.30], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [], note: 'Primary domestic toilet, separate from shower / wash compartment.',
   });
   add('hygToiletDoor', {
     room: 'hygiene', type: 'doorway', name: 'Primary toilet door',
     params: { length: 1.0, height: 2.05, thickness: 0.1, doorWidth: 0.72, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
-    pos: [HYGX + HYGW / 2, 0, 10.15], rotY: Math.PI / 2, locked: false,
+    pos: [HYGX + HYGW / 2, 0, 11.30], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Opens from the dry vestibule, never directly from the galley.',
   });
 
   add('hygToiletDoorWallN', {
     room: 'hygiene', type: 'wall', name: 'Primary toilet doorway wall (forward)',
     params: { length: HD / 2 - 0.5, height: 2.05, thickness: 0.10 },
-    pos: [HYGX + HYGW / 2, 0, 10.15 - (0.5 + (HD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    pos: [HYGX + HYGW / 2, 0, 11.30 - (0.5 + (HD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygToiletDoorWallS', {
     room: 'hygiene', type: 'wall', name: 'Primary toilet doorway wall (aft)',
     params: { length: HD / 2 - 0.5, height: 2.05, thickness: 0.10 },
-    pos: [HYGX + HYGW / 2, 0, 10.15 + (0.5 + (HD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    pos: [HYGX + HYGW / 2, 0, 11.30 + (0.5 + (HD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygToiletOuter', {
     room: 'hygiene', type: 'wall', name: 'Primary toilet outer wall',
     params: { length: HD, height: 2.05, thickness: 0.1 },
-    pos: [hx + HW / 2, 0, 10.15], rotY: Math.PI / 2, locked: true,
+    pos: [hx + HW / 2, 0, 11.30], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   for (const s of [-1,1]) add(s < 0 ? 'hygToiletN' : 'hygToiletS', {
     room: 'hygiene', type: 'wall', name: 'Primary toilet wall',
     params: { length: HW, height: 2.05, thickness: 0.1 },
-    pos: [hx, 0, 10.15 + s * HD / 2], rotY: 0, locked: true,
+    pos: [hx, 0, 11.30 + s * HD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
@@ -978,38 +990,38 @@ function defs(rulings) {
   add('hygShowerFloor', {
     room: 'hygiene', type: 'floor', name: 'Shower / wash compartment deck',
     params: { width: SHW, depth: SHD },
-    pos: [shx, 0, 12.25], rotY: 0, locked: true,
+    pos: [shx, 0, 12.80], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [], note: 'Separate bathing / wash compartment with its own drainage and ventilation.',
   });
   add('hygShowerDoor', {
     room: 'hygiene', type: 'doorway', name: 'Shower / wash door',
     params: { length: 1.0, height: 2.08, thickness: 0.1, doorWidth: 0.74, doorHeight: 1.92, kind: 'sliding', slideDir: -1, open: 0 },
-    pos: [HYGX + HYGW / 2, 0, 12.25], rotY: Math.PI / 2, locked: false,
+    pos: [HYGX + HYGW / 2, 0, 12.80], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Separate from the toilet and screened from ordinary domestic circulation.',
   });
 
   add('hygShowerDoorWallN', {
     room: 'hygiene', type: 'wall', name: 'Shower doorway wall (forward)',
     params: { length: SHD / 2 - 0.5, height: 2.08, thickness: 0.10 },
-    pos: [HYGX + HYGW / 2, 0, 12.25 - (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    pos: [HYGX + HYGW / 2, 0, 12.80 - (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygShowerDoorWallS', {
     room: 'hygiene', type: 'wall', name: 'Shower doorway wall (aft)',
     params: { length: SHD / 2 - 0.5, height: 2.08, thickness: 0.10 },
-    pos: [HYGX + HYGW / 2, 0, 12.25 + (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
+    pos: [HYGX + HYGW / 2, 0, 12.80 + (0.5 + (SHD / 2 - 0.5) / 2)], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('hygShowerOuter', {
     room: 'hygiene', type: 'wall', name: 'Shower / wash outer wall',
     params: { length: SHD, height: 2.08, thickness: 0.1 },
-    pos: [shx + SHW / 2, 0, 12.25], rotY: Math.PI / 2, locked: true,
+    pos: [shx + SHW / 2, 0, 12.80], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   for (const s of [-1,1]) add(s < 0 ? 'hygShowerN' : 'hygShowerS', {
     room: 'hygiene', type: 'wall', name: 'Shower / wash wall',
     params: { length: SHW, height: 2.08, thickness: 0.1 },
-    pos: [shx, 0, 12.25 + s * SHD / 2], rotY: 0, locked: true,
+    pos: [shx, 0, 12.80 + s * SHD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
@@ -1025,7 +1037,7 @@ function defs(rulings) {
   add('hygWash', {
     room: 'hygiene', type: 'counter', name: 'Vestibule wash / utility sink',
     params: { width: 0.72, depth: 0.38, height: 0.86, sink: true },
-    pos: [HYGX - 0.28, 0, 9.0], rotY: -Math.PI / 2, locked: false,
+    pos: [HYGX - 0.28, 0, 11.05], rotY: -Math.PI / 2, locked: false,
     evidence: 'assumption', evidenceRefs: [], note: 'Dry-zone handwash / utility point outside the shower and toilet rooms.',
   });
 
@@ -2347,7 +2359,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 13;
+export const LAYOUT_VERSION = 14;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2360,4 +2372,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   11: ['hyg*', 'mainWet*', 'upperSecondaryLadder'], // refine hygiene clearances and use a single secondary ladder with upper hatch
   12: ['corAft*', 'med*', 'hyg*', 's4*', 'spnLeg2W*'], // clear main-deck blockout overlaps found in top-down review
   13: ['galCooler', 'galStool2'], // clear galley furniture overlaps in the lived-in occupancy layout
+  14: ['hyg*', 'domService*', 'mainWet*'], // distinguish the galley-side service passage from the actual hygiene / ladder vestibule
 };
