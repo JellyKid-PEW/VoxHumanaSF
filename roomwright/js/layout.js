@@ -938,9 +938,58 @@ function defs(rulings) {
     note: 'A practical use of the landing wall: emergency and damage-control gear rather than social furniture.',
   });
 
+
+  // Bulkheads make the landing read as a compact working intersection rather
+  // than an unbounded patch of deck.
+  add('opWallW', {
+    room: 'operations', type: 'wall', name: 'Lower Operations port bulkhead',
+    params: { length: 2.7, height: LH, thickness: 0.12 },
+    pos: [OPX - 1.5, D2, OPZ], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Solid working bulkhead; habitation is reached farther aft via the residential turn.',
+  });
+  const opStairHalf = 0.58;
+  add('opWallE1', {
+    room: 'operations', type: 'wall', name: 'Lower Operations starboard bulkhead (forward)',
+    params: { length: (2.7 / 2) - opStairHalf, height: LH, thickness: 0.12 },
+    pos: [OPX + 1.5, D2, OPZ - (opStairHalf + ((2.7 / 2) - opStairHalf) / 2)], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Flanks the primary-stair mouth.',
+  });
+  add('opWallE2', {
+    room: 'operations', type: 'wall', name: 'Lower Operations starboard bulkhead (aft)',
+    params: { length: (2.7 / 2) - opStairHalf, height: LH, thickness: 0.12 },
+    pos: [OPX + 1.5, D2, OPZ + (opStairHalf + ((2.7 / 2) - opStairHalf) / 2)], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Flanks the primary-stair mouth.',
+  });
+  const opSkiffHalf = 0.6;
+  add('opWallN1', {
+    room: 'operations', type: 'wall', name: 'Lower Operations forward bulkhead (port)',
+    params: { length: 1.5 - opSkiffHalf, height: LH, thickness: 0.12 },
+    pos: [OPX - (opSkiffHalf + (1.5 - opSkiffHalf) / 2), D2, OPZ - 1.35], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Flanks the skiff-bay branch.',
+  });
+  add('opWallN2', {
+    room: 'operations', type: 'wall', name: 'Lower Operations forward bulkhead (starboard)',
+    params: { length: 1.5 - opSkiffHalf, height: LH, thickness: 0.12 },
+    pos: [OPX + (opSkiffHalf + (1.5 - opSkiffHalf) / 2), D2, OPZ - 1.35], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Flanks the skiff-bay branch.',
+  });
+  const opWorkHalf = WORKW / 2;
+  add('opWallS1', {
+    room: 'operations', type: 'wall', name: 'Lower Operations aft bulkhead (port)',
+    params: { length: 1.5 - opWorkHalf, height: LH, thickness: 0.12 },
+    pos: [OPX - (opWorkHalf + (1.5 - opWorkHalf) / 2), D2, OPZ + 1.35], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Flanks the cargo-rated work-spine continuation.',
+  });
+  add('opWallS2', {
+    room: 'operations', type: 'wall', name: 'Lower Operations aft bulkhead (starboard)',
+    params: { length: 1.5 - opWorkHalf, height: LH, thickness: 0.12 },
+    pos: [OPX + (opWorkHalf + (1.5 - opWorkHalf) / 2), D2, OPZ + 1.35], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Flanks the cargo-rated work-spine continuation.',
+  });
+
   // ---------- skiff / mission bay: immediate side branch ----------
   const SBW = 5.0, SBD = 4.4;
-  const sbx = OPX + 4.0, sbz = OPZ;
+  const sbx = OPX, sbz = OPZ - 3.55;
   add('sbFloor', {
     room: 'skiffbay', type: 'floor', name: 'Skiff / mission bay deck',
     params: { width: SBW, depth: SBD },
@@ -960,10 +1009,23 @@ function defs(rulings) {
     pos: [sbx, D2, sbz - SBD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-  add('sbWallS', {
-    room: 'skiffbay', type: 'wall', name: 'Skiff bay aft wall',
-    params: { length: SBW, height: 2.55, thickness: 0.14 },
-    pos: [sbx, D2, sbz + SBD / 2], rotY: 0, locked: true,
+  const sbHatchHalf = 0.6;
+  add('sbWallS1', {
+    room: 'skiffbay', type: 'wall', name: 'Skiff bay aft wall (port)',
+    params: { length: SBW / 2 - sbHatchHalf, height: 2.55, thickness: 0.14 },
+    pos: [sbx - (sbHatchHalf + (SBW / 2 - sbHatchHalf) / 2), D2, sbz + SBD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('sbWallS2', {
+    room: 'skiffbay', type: 'wall', name: 'Skiff bay aft wall (starboard)',
+    params: { length: SBW / 2 - sbHatchHalf, height: 2.55, thickness: 0.14 },
+    pos: [sbx + (sbHatchHalf + (SBW / 2 - sbHatchHalf) / 2), D2, sbz + SBD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('sbWallW', {
+    room: 'skiffbay', type: 'wall', name: 'Skiff bay port wall',
+    params: { length: SBD, height: 2.55, thickness: 0.14 },
+    pos: [sbx - SBW / 2, D2, sbz], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
   add('sbLaunchDoor', {
@@ -976,9 +1038,9 @@ function defs(rulings) {
   add('sbHatch', {
     room: 'skiffbay', type: 'doorway', name: 'Skiff bay hatch',
     params: { length: 1.2, height: 2.55, thickness: 0.14, doorWidth: 0.9, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 0 },
-    pos: [sbx - SBW / 2, D2, sbz], rotY: Math.PI / 2, locked: false,
+    pos: [sbx, D2, sbz + SBD / 2], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['bay-palm-hatch', 'bay-medbay-near', 'doors-wait'],
-    note: 'Palm-activated hatch opening directly off Lower Operations. The primary stair makes the medbay run short.',
+    note: 'Palm-activated hatch opening directly off the forward side of Lower Operations. The stair approaches from starboard, so skiff traffic and stair traffic do not occupy the same opening.',
   });
   add('sbSkiff', {
     room: 'skiffbay', type: 'crate', name: 'Skiff in its cradle',
@@ -1021,6 +1083,39 @@ function defs(rulings) {
     pos: [OPX, D2, (WORKZ0 + WORKZ1) / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
+
+  const workE = OPX + WORKW / 2;
+  const workW = OPX - WORKW / 2;
+  const workHeadGap = [whz - 0.5, whz + 0.5];
+  const resGap = [RESZ0 - RESW / 2, RESZ0 + RESW / 2];
+  const flexGap = [fbz - 0.775, fbz + 0.775];
+  const partsGap = [14.4, 16.4];
+  const engGap = [15.6, 17.7];
+  const nodeGapStart = 18.6;
+
+  const addWorkWallSeg = (key, side, a, b) => {
+    if (b - a < 0.05) return;
+    add(key, {
+      room: 'work-spine', type: 'wall', name: `Work spine ${side} bulkhead`,
+      params: { length: b - a, height: 2.25, thickness: 0.12 },
+      pos: [side === 'starboard' ? workE : workW, D2, (a + b) / 2],
+      rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: [],
+      note: 'Segmented around functional openings so the work spine remains a real corridor rather than an unbounded floor strip.',
+    });
+  };
+
+  // Starboard / commercial side.
+  addWorkWallSeg('workWallE1', 'starboard', WORKZ0, workHeadGap[0]);
+  addWorkWallSeg('workWallE2', 'starboard', workHeadGap[1], flexGap[0]);
+  addWorkWallSeg('workWallE3', 'starboard', flexGap[1], partsGap[0]);
+  addWorkWallSeg('workWallE4', 'starboard', partsGap[1], nodeGapStart);
+
+  // Port / service-residential side.
+  addWorkWallSeg('workWallW1', 'port', WORKZ0, resGap[0]);
+  addWorkWallSeg('workWallW2', 'port', resGap[1], engGap[0]);
+  addWorkWallSeg('workWallW3', 'port', engGap[1], nodeGapStart);
+
   add('workGuideA', {
     room: 'work-spine', type: 'rail', name: 'Cargo floor guide (port)',
     params: { length: 10.5, height: 0.045, midRail: false },
@@ -1229,6 +1324,25 @@ function defs(rulings) {
     evidence: 'decision', refs: ['cabin-row'], note: 'Fourth approach cabin. Nova may eventually choose any Cabin One through Four; geometry does not choose for her.',
   });
 
+
+  // Corridor-side walls between the staggered Cabin One–Four doors.
+  const addResWallSeg = (key, x, a, b) => {
+    if (b - a < 0.05) return;
+    add(key, {
+      room: 'residential', type: 'wall', name: 'Residential approach bulkhead',
+      params: { length: b - a, height: 2.1, thickness: 0.1 },
+      pos: [x, D2, (a + b) / 2], rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['cabin-row'],
+      note: 'Staggered cabin-facing wall; door rhythm is intentionally irregular.',
+    });
+  };
+  addResWallSeg('resWallW1', resWestDoorX, RESZ0, 7.15);
+  addResWallSeg('resWallW2', resWestDoorX, 8.15, 9.75);
+  addResWallSeg('resWallW3', resWestDoorX, 10.75, RESZ1);
+  addResWallSeg('resWallE1', resEastDoorX, RESZ0, 8.55);
+  addResWallSeg('resWallE2', resEastDoorX, 9.55, 10.65);
+  addResWallSeg('resWallE3', resEastDoorX, 11.65, RESZ1);
+
   // ---------- wet/service core + dogleg ----------
   const QUIETX = RESX - 2.0;
   const DOGZ = 12.45;
@@ -1294,6 +1408,27 @@ function defs(rulings) {
     evidence: 'decision', evidenceRefs: [],
     note: 'Steep crew shortcut beside the service chase, rising to the dry hygiene / service vestibule on the main deck.',
   });
+
+
+  const quietW = QUIETX - RESW / 2;
+  const quietE = QUIETX + RESW / 2;
+  const quietWallStart = DOGZ + 1.15 / 2;
+  const quietWallEnd = 17.8;
+  const addQuietWallSeg = (key, side, a, b) => {
+    if (b - a < 0.05) return;
+    add(key, {
+      room: 'residential', type: 'wall', name: `Quiet run ${side} bulkhead`,
+      params: { length: b - a, height: 2.08, thickness: 0.1 },
+      pos: [side === 'east' ? quietE : quietW, D2, (a + b) / 2],
+      rotY: Math.PI / 2, locked: true,
+      evidence: 'assumption', evidenceRefs: ['cabin-bend', 'cabin-six'],
+      note: 'The quiet run is enclosed enough to feel residential while preserving ordinary ship-service texture.',
+    });
+  };
+  addQuietWallSeg('quietWallW1', 'west', quietWallStart, 13.95);
+  addQuietWallSeg('quietWallW2', 'west', 14.95, 15.95);
+  addQuietWallSeg('quietWallW3', 'west', 16.95, quietWallEnd);
+  addQuietWallSeg('quietWallE', 'east', quietWallStart, quietWallEnd);
 
   // ---------- domestic / habitation stores; later garden nook ----------
   // The compartment opens from the dogleg itself rather than facing either
@@ -1396,6 +1531,22 @@ function defs(rulings) {
     pos: [QUIETX, D2, 19.0], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
+
+  add('aftServiceWallW', {
+    room: 'aft-service', type: 'wall', name: 'Aft service passage port bulkhead',
+    params: { length: 2.8, height: 2.05, thickness: 0.1 },
+    pos: [QUIETX - RESW / 2, D2, 19.2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Older service fabric begins to dominate beyond Cabin Six.',
+  });
+  add('aftServiceWallE', {
+    room: 'aft-service', type: 'wall', name: 'Aft service passage starboard bulkhead',
+    params: { length: 1.6, height: 2.05, thickness: 0.1 },
+    pos: [QUIETX + RESW / 2, D2, 18.6], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Stops before the aft reconnection opens toward the commercial / freight side.',
+  });
+
   add('aftReconnectFloor', {
     room: 'aft-service', type: 'floor', name: 'Aft reconnection deck',
     params: { width: OPX - QUIETX, depth: 1.2 },
@@ -1629,7 +1780,7 @@ function defs(rulings) {
   });
 
   // ---------- lower aft spine: older service geography ----------
-  const LASX = cbx - CBW / 2 - 0.7;
+  const LASX = cbx - CBW / 2 - 0.575;
   const LASZ0 = 20.0, LASZ1 = 29.4;
   add('lowerAftFloor', {
     room: 'lower-aft-spine', type: 'floor', name: 'Lower aft spine deck',
@@ -1644,6 +1795,31 @@ function defs(rulings) {
     pos: [LASX, D2, (LASZ0 + LASZ1) / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Lower, older, more manual service fabric.',
   });
+
+  const lowerAftW = LASX - 1.15 / 2;
+  const lowerAftE = LASX + 1.15 / 2;
+  add('lowerAftWallW1', {
+    room: 'lower-aft-spine', type: 'wall', name: 'Lower aft spine port bulkhead (forward)',
+    params: { length: 5.3, height: 2.0, thickness: 0.1 },
+    pos: [lowerAftW, D2, (20.0 + 25.3) / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Old service bulkhead; manual and refitted rather than polished commercial finish.',
+  });
+  add('lowerAftWallW2', {
+    room: 'lower-aft-spine', type: 'wall', name: 'Lower aft spine port bulkhead (aft)',
+    params: { length: 3.2, height: 2.0, thickness: 0.1 },
+    pos: [lowerAftW, D2, (26.2 + 29.4) / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Gap between wall segments is Nova’s manual equipment-crawl hatch.',
+  });
+  add('lowerAftEnd', {
+    room: 'lower-aft-spine', type: 'wall', name: 'Lower aft spine end bulkhead',
+    params: { length: 1.15, height: 2.0, thickness: 0.1 },
+    pos: [LASX, D2, LASZ1], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'The formal passage ends here; deeper machinery access continues through hatches / crawls rather than another public corridor.',
+  });
+
   add('lowerAftPanel', {
     room: 'lower-aft-spine', type: 'storage', name: 'Legacy service panel',
     params: { width: 0.85, height: 1.25, depth: 0.15 },
@@ -1744,10 +1920,11 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 6;
+export const LAYOUT_VERSION = 7;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
   5: ['corWallPort'],                 // port wall split again for the stairwell down to the lower deck
   6: ['stw*', 'low*', 'qtr*', 'sb*', 'cab*', 'iriQ*', 'op*', 'work*', 'res*', 'nav*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*'], // lower deck rebuilt around commercial + residential dual routes
+  7: ['sb*', 'op*', 'workWall*', 'resWall*', 'quietWall*', 'aftServiceWall*', 'lowerAft*', 'novaCrawl*'], // enclose lower corridors and separate stair / skiff traffic after walk-path review
 };
