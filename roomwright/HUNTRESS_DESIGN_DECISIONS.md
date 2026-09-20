@@ -535,7 +535,7 @@ Canonical intent:
 
 The exact compartment, bed dimensions, and final route remain OPEN until lower-deck geometry is resolved.
 
-### WORKING — Second substantial flex bay remains commercially useful
+### LOCKED DESIGN DECISION — Second substantial flex bay remains commercially useful
 
 The second substantial flex / freight bay remains available as commercial / project volume rather than being earmarked for the garden.
 
@@ -544,6 +544,44 @@ It may carry separate client cargo, equipment, contract modules, repair projects
 
 ---
 
+
+
+### LOCKED DESIGN DECISION — Lower Operations branching order
+
+The primary stair lands in **working ship first**, at a compact Lower Operations landing rather than directly in the cabin corridor.
+
+Canonical relational order:
+- the **skiff / mission bay** is an immediate side branch from the landing and can be isolated without severing circulation;
+- the **primary work spine** is the visually natural continuation from the stair;
+- the **secondary work head** is tucked off the forward work side rather than opening into a cargo bay;
+- the **residential / nav turn** peels away shortly afterward and requires a deliberate turn, so cabin doors are not visible directly from the stair foot;
+- **nav** sits at the threshold between operations and habitation, accessed from the residential approach rather than used as a through-room;
+- routine commercial traffic can therefore move among stair, skiff, work spine, bays, and freight handling without entering the cabin corridor.
+
+Exact port / starboard geometry remains an implementation assumption until hull shape is resolved.
+
+### LOCKED DESIGN DECISION — Second substantial bay is a configurable commercial mission / flex bay
+
+The second substantial lower-deck bay is not merely a duplicate "Cargo Bay Two."
+
+Canonical role:
+- it is fully cargo-capable but intentionally more configurable than the main large bay;
+- factory modularity may include standardized mounting rails, power / data tie-ins, environmental hookups, partition anchors, and equipment attachment points;
+- operators of sister ships could configure the volume for survey work, workshop use, specialist equipment, secure freight, temporary passenger / crew modules, medical support, or ordinary cargo;
+- the Huntress currently keeps the bay comparatively generic so it can accept changing contracts;
+- the **main aft cargo / flex bay** remains the simplest large clear-span freight volume and the crew's training space when empty.
+
+### LOCKED DESIGN DECISION — Aft freight node and layered service transition
+
+The primary work spine becomes progressively more service-heavy as it runs aft.
+
+Canonical relationships:
+- distributed parts lockers, utility panels, repair surfaces, and local maintenance access appear along the work route;
+- the principal underdeck engineering hatch is recessed off the freight lane so repair work can occur without blocking cargo traffic;
+- the work spine terminates at an **Aft Freight / Service Junction**;
+- that junction connects the dedicated freight-transfer lock, the main large cargo / flex bay, the forward work spine, and the older lower-aft service geography;
+- the main bay has a large freight-facing access from this node and a smaller personnel / service hatch from the quieter aft-service side;
+- beyond / around the commercial node, architecture transitions into the **lower aft spine**, where older service fabric, crawlspaces, Nova's port-side equipment crawl, and secondary machinery access belong.
 
 ### LOCKED DESIGN DECISION — Lower-deck commercial / residential dual-route arrangement
 
@@ -1152,12 +1190,12 @@ Most importantly, the current Chapter 6 draft places a **port-side equipment cra
 
 ## Current unresolved design questions
 
-- Confirm whether the preferred six-cabin arrangement should become LOCKED.
+- Validate the new lower-deck relational geometry in Roomwright and adjust assumed dimensions / clearances before treating them as final.
+
 - Assign Nova to one of Cabins One through Four.
 - Exact dimensions of standard vs. larger cabins.
 - Exact door order / numbering through the bent residential corridor.
 - Exact geometry of the wet/service core and secondary ladder well.
-- Exact geometry of the Cabin Five / Cabin Six run and the low-traffic aft reconnection.
 - Which cabin is the second larger cabin, and whether its size comes from role or hull geometry.
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
 - Seating type/count in galley.
