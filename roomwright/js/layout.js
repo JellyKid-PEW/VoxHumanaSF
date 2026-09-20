@@ -973,7 +973,7 @@ function defs(rulings) {
     pos: [OPX + (opSkiffHalf + (1.5 - opSkiffHalf) / 2), D2, OPZ - 1.35], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Flanks the skiff-bay branch.',
   });
-  const opWorkHalf = WORKW / 2;
+  const opWorkHalf = 0.725; // matches the current 1.45 m work-spine width
   add('opWallS1', {
     room: 'operations', type: 'wall', name: 'Lower Operations aft bulkhead (port)',
     params: { length: 1.5 - opWorkHalf, height: LH, thickness: 0.12 },
@@ -1086,9 +1086,12 @@ function defs(rulings) {
 
   const workE = OPX + WORKW / 2;
   const workW = OPX - WORKW / 2;
-  const workHeadGap = [whz - 0.5, whz + 0.5];
-  const resGap = [RESZ0 - RESW / 2, RESZ0 + RESW / 2];
-  const flexGap = [fbz - 0.775, fbz + 0.775];
+  // Opening extents mirror the currently assumed downstream room geometry.
+  // They are literals here because these corridor walls are generated before
+  // the individual side rooms are declared below.
+  const workHeadGap = [6.25, 7.25];
+  const resGap = [5.375, 6.525];
+  const flexGap = [9.775, 11.325];
   const partsGap = [14.4, 16.4];
   const engGap = [15.6, 17.7];
   const nodeGapStart = 18.6;
