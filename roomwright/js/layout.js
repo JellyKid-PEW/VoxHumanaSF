@@ -225,74 +225,70 @@ function defs(rulings) {
     note: 'Stripped bolts and washers from the galley mug, strewn where Nova sits cross-legged on the deck.',
   });
 
-  // ================= CORRIDOR =================
-  // The corridor runs aft from the bridge hatch. With the side-door ruling it
-  // first runs a short leg to starboard, then bends aft.
-  const cx = doorOnSideWall ? 3.05 : doorX;   // centerline x of the aft run
+  // ================= MAIN COMMERCIAL CORRIDOR =================
+  // The primary route is deliberately not one straight sightline from the
+  // personnel airlock to medbay. It runs aft from the bridge, then offsets
+  // inboard before reaching the medical / domestic end of the deck.
+  const cx = doorOnSideWall ? 3.05 : doorX;   // forward-run centerline
   const corStartZ = doorOnSideWall ? 1.45 : D / 2;
-  const corEndZ = D / 2 + COR.LEN;            // galley face
-  const corLen = corEndZ - corStartZ;
-  const corCz = (corStartZ + corEndZ) / 2;
-  const spineZ = D / 2 + COR.LEN / 2;         // "halfway to the galley"
-
-  const corNote = 'Narrow ship corridor — "the corridor pressed narrow". The port wall carries the widened leaning section with Quenby’s pencil marks (VH1_B3_04).';
-  add('corFloor', {
-    room: 'corridor', type: 'floor', name: 'Corridor deck', params: { width: COR.W, depth: corLen },
-    pos: [cx, 0, corCz], rotY: 0, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-route', 'corridor-narrow'],
-    note: `Corridor ${COR.W} m wide — inside the "pressed narrow" bound. Runs bridge → galley.`,
-  });
-  add('corCeiling', {
-    room: 'corridor', type: 'ceiling', name: 'Corridor overhead', params: { width: COR.W, depth: corLen, height: COR.H },
-    pos: [cx, 0, corCz], rotY: 0, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: 'Lower than the bridge overhead (assumption).',
-  });
-  // port wall split by the stairwell opening and the medbay hatch
-  const medHatchZ = 5.75;
+  const bendZ = 5.05;
+  const aftCx = cx - 1.15;                    // aft run shifts port/inboard
+  const corEndZ = 7.80;                       // galley face / domestic junction
+  const spineZ = 4.35;                        // storage-spine turn before the bend
   const stairZ = 3.65;
-  const portSeg0 = (stairZ - 0.55) - corStartZ;
-  const portSeg1 = (medHatchZ - 0.6) - (stairZ + 0.55);
-  const portSeg2 = corEndZ - (medHatchZ + 0.6);
-  add('corWallPort', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (port fwd)', params: { length: portSeg0, height: COR.H, thickness: 0.12 },
-    pos: [cx - COR.W / 2, 0, corStartZ + portSeg0 / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'corridor-widened', 'corridor-smell'],
+  const medHatchZ = 6.00;
+  const alkZ = 3.15;
+
+  const corNote = 'Primary commercial circulation. The forward run is narrow and practical; the offset before medbay prevents a direct airlock-to-medical sightline.';
+
+  // ---------- forward corridor run ----------
+  add('corFloor', {
+    room: 'corridor', type: 'floor', name: 'Main corridor deck (forward run)',
+    params: { width: COR.W, depth: bendZ - corStartZ },
+    pos: [cx, 0, (corStartZ + bendZ) / 2], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route', 'corridor-narrow'],
     note: corNote,
   });
+  add('corCeiling', {
+    room: 'corridor', type: 'ceiling', name: 'Main corridor overhead (forward run)',
+    params: { width: COR.W, depth: bendZ - corStartZ, height: COR.H },
+    pos: [cx, 0, (corStartZ + bendZ) / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Low working overhead.',
+  });
+
+  // Port wall: primary stair only. Medbay belongs beyond the bend.
+  const fwdPortA = (stairZ - 0.55) - corStartZ;
+  const fwdPortB = bendZ - (stairZ + 0.55);
+  if (fwdPortA > 0.05) add('corWallPort', {
+    room: 'corridor', type: 'wall', name: 'Main corridor port wall (forward)',
+    params: { length: fwdPortA, height: COR.H, thickness: 0.12 },
+    pos: [cx - COR.W / 2, 0, corStartZ + fwdPortA / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'corridor-widened', 'corridor-smell'], note: corNote,
+  });
   add('stairDoor', {
-    room: 'stairwell', type: 'doorway', name: 'Stairwell opening',
+    room: 'stairwell', type: 'doorway', name: 'Primary stair opening',
     params: { length: 1.1, height: COR.H, thickness: 0.12, doorWidth: 0.9, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 1 },
     pos: [cx - COR.W / 2, 0, stairZ], rotY: Math.PI / 2, locked: true,
     evidence: 'explicit', evidenceRefs: ['stair-lights', 'deck-three'],
-    note: 'The stairwell down to the lower deck — its lights blink in pairs. The opening stands open; the door stays parked in its pocket.',
+    note: 'Primary stair down to Lower Operations. Its opening stays parked clear of routine corridor traffic.',
   });
-  add('corWallPortMid', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (port mid)', params: { length: portSeg1, height: COR.H, thickness: 0.12 },
-    pos: [cx - COR.W / 2, 0, (stairZ + 0.55) + portSeg1 / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-narrow'], note: 'Corridor wall between the stairwell and the medbay.',
+  if (fwdPortB > 0.05) add('corWallPortMid', {
+    room: 'corridor', type: 'wall', name: 'Main corridor port wall (to bend)',
+    params: { length: fwdPortB, height: COR.H, thickness: 0.12 },
+    pos: [cx - COR.W / 2, 0, stairZ + 0.55 + fwdPortB / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-narrow'], note: 'Forward-run wall after the stair.',
   });
-  add('medHatch', {
-    room: 'medbay', type: 'doorway', name: 'Medbay hatch',
-    params: { length: 1.2, height: COR.H, thickness: 0.12, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
-    pos: [cx - COR.W / 2, 0, medHatchZ], rotY: Math.PI / 2, locked: false,
-    evidence: 'explicit', evidenceRefs: ['med-corridor', 'med-deeper', 'doors-wait'],
-    note: 'The cycling medbay door — its soft confirm is audible from the bridge. Opens off the main corridor.',
-  });
-  add('corWallPort2', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (port aft)', params: { length: portSeg2, height: COR.H, thickness: 0.12 },
-    pos: [cx - COR.W / 2, 0, corEndZ - portSeg2 / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-narrow', 'med-corridor'], note: 'Corridor wall between the medbay and the galley junction.',
-  });
-  // starboard wall: split first by the airlock inner door ("two steps past
-  // the bridge"), then by the storage-spine hatch at the midpoint
-  const alkZ = 3.2;
-  const seg1aLen = (alkZ - 0.45) - corStartZ;
-  const seg1bLen = (spineZ - 0.5) - (alkZ + 0.45);
-  const seg2Len = corEndZ - (spineZ + 0.5);
-  add('corWallStbd1', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (starboard fwd)', params: { length: seg1aLen, height: COR.H, thickness: 0.12 },
-    pos: [cx + COR.W / 2, 0, corStartZ + seg1aLen / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall up to the main hatch.',
+
+  // Starboard wall: airlock, then legacy storage-spine branch.
+  const airHalf = 0.45, spineHalf = 0.50;
+  const eastA = (alkZ - airHalf) - corStartZ;
+  const eastB = (spineZ - spineHalf) - (alkZ + airHalf);
+  const eastC = bendZ - (spineZ + spineHalf);
+  if (eastA > 0.05) add('corWallStbd1', {
+    room: 'corridor', type: 'wall', name: 'Main corridor starboard wall (forward)',
+    params: { length: eastA, height: COR.H, thickness: 0.12 },
+    pos: [cx + COR.W / 2, 0, corStartZ + eastA / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Forward corridor wall up to the personnel airlock.',
   });
   add('alkInnerDoor', {
     room: 'airlock', type: 'doorway', name: 'Airlock inner hatch',
@@ -300,25 +296,100 @@ function defs(rulings) {
     pos: [cx + COR.W / 2, 0, alkZ], rotY: Math.PI / 2, locked: false,
     evidence: 'explicit',
     evidenceRefs: ['alk-main-hatch', 'alk-two-steps', 'alk-two-stage', 'alk-inner-release', 'doors-wait'],
-    note: 'The inner lock of the main hatch — powered, opened by a wall-mounted release, two steps past the bridge.',
+    note: 'The personnel / EVA airlock remains near the bridge. The corridor bend farther aft blocks a direct view into medbay.',
   });
-  add('corWallStbd1b', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (starboard mid)', params: { length: seg1bLen, height: COR.H, thickness: 0.12 },
-    pos: [cx + COR.W / 2, 0, (alkZ + 0.45) + seg1bLen / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall between the main hatch and the storage-spine turn.',
+  if (eastB > 0.05) add('corWallStbd1b', {
+    room: 'corridor', type: 'wall', name: 'Main corridor starboard wall (mid)',
+    params: { length: eastB, height: COR.H, thickness: 0.12 },
+    pos: [cx + COR.W / 2, 0, alkZ + airHalf + eastB / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Between the airlock and storage-spine turn.',
   });
   add('spineHatch', {
     room: 'corridor', type: 'doorway', name: 'Storage spine hatch',
     params: { length: 1.0, height: COR.H, thickness: 0.12, doorWidth: 0.62, doorHeight: 1.85, kind: 'hinged', hinge: 'left', swing: 'out', open: 0 },
     pos: [cx + COR.W / 2, 0, spineZ], rotY: Math.PI / 2, locked: false,
     evidence: 'explicit', evidenceRefs: ['corridor-route', 'spine-hatch', 'galley-junction-cup'],
-    note: '“Halfway to the galley, she passed the turn toward the storage spine.” Narrow manual hatch with a recessed grip; starboard pocket three lies two turns beyond (future rooms).',
+    note: 'The old storage / utility spine leaves the primary route before the corridor offset.',
   });
-  add('corWallStbd2', {
-    room: 'corridor', type: 'wall', name: 'Corridor wall (starboard aft)', params: { length: seg2Len, height: COR.H, thickness: 0.12 },
-    pos: [cx + COR.W / 2, 0, corEndZ - seg2Len / 2], rotY: Math.PI / 2, locked: true,
-    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Corridor wall from the spine turn to the galley.',
+  if (eastC > 0.05) add('corWallStbd2', {
+    room: 'corridor', type: 'wall', name: 'Main corridor starboard wall (to bend)',
+    params: { length: eastC, height: COR.H, thickness: 0.12 },
+    pos: [cx + COR.W / 2, 0, spineZ + spineHalf + eastC / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['corridor-route'], note: 'Forward run ends at the offset.',
   });
+
+  // ---------- offset / bend ----------
+  const bendW = Math.abs(cx - aftCx) + COR.W;
+  add('corBendFloor', {
+    room: 'corridor', type: 'floor', name: 'Main corridor offset deck',
+    params: { width: bendW, depth: COR.W },
+    pos: [(cx + aftCx) / 2, 0, bendZ], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: ['med-corridor', 'med-deeper'],
+    note: 'A deliberate offset in ordinary circulation. It keeps boarding traffic from looking directly into the medical zone.',
+  });
+  add('corBendCeil', {
+    room: 'corridor', type: 'ceiling', name: 'Main corridor offset overhead',
+    params: { width: bendW, depth: COR.W, height: COR.H },
+    pos: [(cx + aftCx) / 2, 0, bendZ], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('corBendN', {
+    room: 'corridor', type: 'wall', name: 'Offset forward bulkhead',
+    params: { length: Math.abs(cx - aftCx), height: COR.H, thickness: 0.12 },
+    pos: [(cx + aftCx) / 2, 0, bendZ - COR.W / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Closes the inside of the turn.',
+  });
+  add('corBendS', {
+    room: 'corridor', type: 'wall', name: 'Offset aft bulkhead',
+    params: { length: Math.abs(cx - aftCx), height: COR.H, thickness: 0.12 },
+    pos: [(cx + aftCx) / 2, 0, bendZ + COR.W / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The aft run begins on the inboard side of this wall.',
+  });
+
+  // ---------- aft corridor run ----------
+  add('corAftFloor', {
+    room: 'corridor', type: 'floor', name: 'Main corridor deck (aft run)',
+    params: { width: COR.W, depth: corEndZ - bendZ },
+    pos: [aftCx, 0, (bendZ + corEndZ) / 2], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: ['med-corridor', 'med-deeper', 'galley-junction-cup'],
+    note: 'Aft run serving medbay and the domestic junction.',
+  });
+  add('corAftCeil', {
+    room: 'corridor', type: 'ceiling', name: 'Main corridor overhead (aft run)',
+    params: { width: COR.W, depth: corEndZ - bendZ, height: COR.H },
+    pos: [aftCx, 0, (bendZ + corEndZ) / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+  const medHalf = 0.6;
+  const aftPortA = (medHatchZ - medHalf) - bendZ;
+  const aftPortB = corEndZ - (medHatchZ + medHalf);
+  if (aftPortA > 0.05) add('corAftWallPort1', {
+    room: 'corridor', type: 'wall', name: 'Aft corridor port wall (forward)',
+    params: { length: aftPortA, height: COR.H, thickness: 0.12 },
+    pos: [aftCx - COR.W / 2, 0, bendZ + aftPortA / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: ['med-corridor'], note: 'Wall before the medical hatch.',
+  });
+  add('medHatch', {
+    room: 'medbay', type: 'doorway', name: 'Medbay hatch',
+    params: { length: 1.2, height: COR.H, thickness: 0.12, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [aftCx - COR.W / 2, 0, medHatchZ], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-corridor', 'med-deeper', 'doors-wait'],
+    note: 'Medbay opens from the aft run after the corridor offset; routine boarders cannot see directly into it from the airlock.',
+  });
+  if (aftPortB > 0.05) add('corAftWallPort2', {
+    room: 'corridor', type: 'wall', name: 'Aft corridor port wall (aft)',
+    params: { length: aftPortB, height: COR.H, thickness: 0.12 },
+    pos: [aftCx - COR.W / 2, 0, medHatchZ + medHalf + aftPortB / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: ['med-corridor'], note: 'Wall from medbay toward the domestic junction.',
+  });
+  add('corAftWallStbd', {
+    room: 'corridor', type: 'wall', name: 'Aft corridor starboard wall',
+    params: { length: corEndZ - bendZ, height: COR.H, thickness: 0.12 },
+    pos: [aftCx + COR.W / 2, 0, (bendZ + corEndZ) / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The legacy storage spine is already outboard of this shifted run.',
+  });
+
   // ================= STORAGE SPINE =================
   // "Two turns down": turn one off the main corridor at the spine hatch,
   // turn two where the spine bends aft. Pocket three opens off the aft leg.
