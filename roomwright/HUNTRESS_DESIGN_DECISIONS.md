@@ -1249,3 +1249,23 @@ These are **geometry implementation refinements**, not new narrative canon. Exac
 - Exact galley dimensions and furniture arrangement for five comfortable / seven crowded.
 - Seating type/count in galley.
 - Exact food-prep, hydration/synthesis, cold-storage, and hot-storage systems.
+
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Vertical stack / hull-envelope review
+
+A combined main-deck / lower-deck review found the previous 2.7 m floor-to-floor spacing too shallow beneath the taller lower-deck skiff and configurable mission / flex spaces.
+
+Roomwright now uses a **3.0 m main-to-lower floor spacing** as implementation geometry. This is not an exterior-hull dimension lock; it exists to preserve believable structural / service depth between occupied decks.
+
+The current stack confirms:
+- the primary stair aligns cleanly between main-deck circulation and Lower Operations;
+- the secondary domestic ladder aligns the lower residential wet-service core with the main-deck dry hygiene / service vestibule;
+- the galley / hygiene wet zone can feed the lower domestic-service region through short interdeck utility runs;
+- the large aft cargo bay can rise higher because the full occupied main deck does not continue above that aft volume;
+- the main engine bay and lower engineering access should remain connected through distributed service / crawl geography rather than being forced into direct vertical alignment.
+
+Exterior hull shape, beam, length, centerline, propulsion-body shape, and Deck Three footprint remain OPEN.
+
+See `roomwright/HUNTRESS_VERTICAL_HULL_STUDY.md` for the current noncanonical envelope study.
+
