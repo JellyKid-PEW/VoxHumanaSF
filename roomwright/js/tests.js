@@ -706,62 +706,78 @@ export const HABIT_TESTS = [
   },
   {
     id: 'stairwell-decks',
-    name: 'The stairwell honestly connects the decks',
-    basis: ['stair-lights', 'lower-corridor', 'deck-three'],
+    name: 'The primary stair lands in working ship and reaches both skiff and habitation',
+    basis: ['stair-lights', 'lower-corridor', 'bay-medbay-near'],
     run() {
       const steps = state.project.objects.find(o => o.layoutKey === 'stwSteps');
-      if (!steps) return { status: 'warn', details: 'No stairwell in the model yet.' };
+      if (!steps) return { status: 'warn', details: 'No primary stairwell in the model yet.' };
       const p = steps.params;
       const topY = (steps.pos[1] || 0) + p.rise * p.steps;
       const deckGap = 0 - (steps.pos[1] || 0);
       const problems = [];
       if (p.rise > 0.2) problems.push(`Riser ${fmt(p.rise * 100, 0)} cm is over a comfortable 20 cm.`);
       if (Math.abs(topY - 0) > 0.03) problems.push(`Top tread lands at ${fmt(topY, 2)} m — not flush with the main deck.`);
-      // both ends must open onto walkable deck
-      const lowGrid = computeNavGrid(0.22, [], steps.pos[1] || 0);
-      const lc = state.project.objects.find(o => o.layoutKey === 'lowFloor');
+
+      const landing = state.project.objects.find(o => o.layoutKey === 'opLandingFloor');
       const bay = state.project.objects.find(o => o.layoutKey === 'sbFloor');
       const cab6 = state.project.objects.find(o => o.layoutKey === 'cab6Floor');
-      if (lc && bay && !findPath(lowGrid, new THREE.Vector3(lc.pos[0], 0, 3.65), new THREE.Vector3(bay.pos[0], 0, bay.pos[2]), 8)) {
-        problems.push('No route from the stair foot to the gear bay.');
+      if (!landing) problems.push('Lower Operations landing is missing.');
+      const lowGrid = computeNavGrid(0.22, [], steps.pos[1] || 0);
+      const start = landing ? new THREE.Vector3(landing.pos[0], 0, landing.pos[2]) : new THREE.Vector3(steps.pos[0], 0, steps.pos[2]);
+
+      if (bay && !findPath(lowGrid, start, new THREE.Vector3(bay.pos[0], 0, bay.pos[2]), 12)) {
+        problems.push('No practical route from the stair landing to the skiff / mission bay.');
       }
-      if (lc && cab6 && !findPath(lowGrid, new THREE.Vector3(lc.pos[0], 0, 3.65), new THREE.Vector3(cab6.pos[0], 0, cab6.pos[2]), 10)) {
-        problems.push('No route from the stair foot to Cabin Six.');
+      if (cab6 && !findPath(lowGrid, start, new THREE.Vector3(cab6.pos[0], 0, cab6.pos[2]), 35)) {
+        problems.push('No continuous lower-deck route from the stair landing to Cabin Six.');
       }
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
-      return { status: 'pass', details: `${p.steps} treads at ${fmt(p.rise * 100, 0)} cm drop ${fmt(deckGap, 1)} m to the lower deck; the stair foot reaches the gear bay and the cabin row. Its lights blink in pairs.` };
+      return { status: 'pass', details: `${p.steps} treads at ${fmt(p.rise * 100, 0)} cm drop ${fmt(deckGap, 1)} m into Lower Operations; the skiff bay is immediate while habitation requires a deliberate turn.` };
     },
   },
   {
     id: 'cabin-row-walk',
-    name: 'The lower corridor passes the cabin row to Cabin Six',
+    name: 'Six cabins form an accessible approach and a quieter Cabin Five / Six run',
     basis: ['cabin-row', 'cabin-six', 'cabin-bunk', 'iri-cabin-lower'],
     run() {
-      const doors = ['cab1Door', 'cab2Door', 'cab3Door', 'cab6Door']
-        .map(k => state.project.objects.find(o => o.layoutKey === k)).filter(Boolean);
-      if (doors.length < 4) return { status: 'warn', details: `Only ${doors.length} of the four cabin doors exist.` };
-      const ordered = [...doors].sort((a, b) => a.pos[2] - b.pos[2]);
-      if (ordered[3].layoutKey !== 'cab6Door') {
-        return { status: 'fail', details: 'Cabin Six is not at the end of the row — Next-07 walks past three cabins before stopping at it.' };
-      }
-      // the bunk must fit the tallest sleeper (Quenby, 1.73 m)
+      const keys = ['cab1', 'cab2', 'cab3', 'cab4', 'cab5', 'cab6'];
+      const doors = keys.map(k => state.project.objects.find(o => o.layoutKey === k + 'Door')).filter(Boolean);
+      if (doors.length < 6) return { status: 'warn', details: `Only ${doors.length} of the six cabin doors exist.` };
+
+      const cab5 = state.project.objects.find(o => o.layoutKey === 'cab5Floor');
+      const cab6 = state.project.objects.find(o => o.layoutKey === 'cab6Floor');
       const bunk = state.project.objects.find(o => o.layoutKey === 'cab6Bunk');
       const bunkLen = bunk ? Math.max(bunk.params.width, bunk.params.depth) : 0;
       const tallest = Math.max(...Object.values(CHARACTERS).map(c => c.height));
       const problems = [];
-      if (!bunk) problems.push('Cabin Six has no bunk.');
-      else if (bunkLen < tallest + 0.02) problems.push(`Bunk is ${fmt(bunkLen, 2)} m — shorter than Quenby at ${fmt(tallest, 2)} m ("low, tight-cornered" still has to fit her).`);
-      // every cabin reachable from the corridor (deck-2 grid)
-      const deckY = ordered[0].pos[1] || 0;
-      const grid = computeNavGrid(0.22, [], deckY);
-      for (const d of ordered) {
-        const v = new THREE.Vector3(0, 0, 0.5).applyAxisAngle(new THREE.Vector3(0, 1, 0), d.rotY || 0);
-        let inPt = new THREE.Vector3(d.pos[0] - v.x, 0, d.pos[2] - v.z);   // cabin side (local -z = west)
-        const out = new THREE.Vector3(d.pos[0] + v.x, 0, d.pos[2] + v.z);  // corridor side
-        if (!findPath(grid, out, inPt, 8)) problems.push(`${state.getObject(d.id)?.name || d.layoutKey}: no way through its own door.`);
+
+      if (!cab5 || !cab6) problems.push('Cabin Five / Six geometry is incomplete.');
+      else {
+        const dz = Math.abs(cab6.pos[2] - cab5.pos[2]);
+        const halfDepth = (cab5.params.depth + cab6.params.depth) / 2;
+        if (Math.abs(dz - halfDepth) > 0.2) problems.push('Cabin Five and Cabin Six do not read as directly adjacent / wall-sharing.');
       }
+
+      if (!bunk) problems.push('Cabin Six has no bunk.');
+      else if (bunkLen < tallest + 0.02) problems.push(`Cabin Six bunk is ${fmt(bunkLen, 2)} m — shorter than the tallest sleeper at ${fmt(tallest, 2)} m.`);
+
+      const deckY = doors[0].pos[1] || 0;
+      const grid = computeNavGrid(0.22, [], deckY);
+      for (const key of keys) {
+        const d = state.project.objects.find(o => o.layoutKey === key + 'Door');
+        const floor = state.project.objects.find(o => o.layoutKey === key + 'Floor');
+        if (!d || !floor) { problems.push(`${key}: missing door or floor.`); continue; }
+        const normal = new THREE.Vector3(0, 0, 0.55).applyAxisAngle(new THREE.Vector3(0, 1, 0), d.rotY || 0);
+        const a = new THREE.Vector3(d.pos[0] + normal.x, 0, d.pos[2] + normal.z);
+        const b = new THREE.Vector3(d.pos[0] - normal.x, 0, d.pos[2] - normal.z);
+        const fc = new THREE.Vector3(floor.pos[0], 0, floor.pos[2]);
+        const inPt = a.distanceTo(fc) < b.distanceTo(fc) ? a : b;
+        const outPt = inPt === a ? b : a;
+        if (!findPath(grid, outPt, inPt, 8)) problems.push(`${floor.name || key}: no way through its own door.`);
+      }
+
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
-      return { status: 'pass', details: 'Four doors in order — blank, ajar, the half-angle third, then Cabin Six at the end. Every cabin walkable through its door; the taut-sheeted bunk fits Quenby.' };
+      return { status: 'pass', details: 'Cabins One through Four sit on the accessible approach; the wet-core dogleg breaks the sightline before Iri in Cabin Five and Quenby in Cabin Six. Cabin Six remains the last numbered cabin while circulation continues aft.' };
     },
   },
   {
@@ -775,7 +791,11 @@ export const HABIT_TESTS = [
       const hatch = state.project.objects.find(o => o.layoutKey === 'sbHatch');
       if (!hatch) return { status: 'fail', details: 'The bay has no palm hatch.' };
       const grid = computeNavGrid(0.22, [], deckY);
-      const inPt = new THREE.Vector3(hatch.pos[0], 0, hatch.pos[2] - 0.55);
+      const n = new THREE.Vector3(0, 0, 0.65).applyAxisAngle(new THREE.Vector3(0, 1, 0), hatch.rotY || 0);
+      const ha = new THREE.Vector3(hatch.pos[0] + n.x, 0, hatch.pos[2] + n.z);
+      const hb = new THREE.Vector3(hatch.pos[0] - n.x, 0, hatch.pos[2] - n.z);
+      const bc = new THREE.Vector3(bay.pos[0], 0, bay.pos[2]);
+      const inPt = ha.distanceTo(bc) < hb.distanceTo(bc) ? ha : hb;
       const problems = [];
       for (const key of ['sbRig', 'sbGrid', 'sbLocker']) {
         const t = state.project.objects.find(o => o.layoutKey === key);
@@ -801,7 +821,7 @@ export const HABIT_TESTS = [
         }
       } else problems.push('No skiff in its cradle.');
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
-      return { status: 'pass', details: 'Rig station, loadout grid, and rig locker all reachable from the palm hatch; the skiff can be worked from multiple sides. The stairwell up makes the medbay run short (Presence-04).' };
+      return { status: 'pass', details: 'Rig station, loadout grid, and rig locker remain reachable inside the isolated side-branch bay; the skiff can be worked from multiple sides and the primary stair keeps the medbay run short.' };
     },
   },
 ];
