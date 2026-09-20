@@ -228,6 +228,95 @@ Implication:
 - major drive waste heat should be rejected at much higher temperature;
 - brief peak loads are better buffered than forcing the ship to carry enormous low-temperature radiator area.
 
+
+## Travel profile — mixed burn / drift operation
+
+The Huntress should not use one single propulsion rhythm for every route.
+
+The preferred operational model is a **mixed burn / drift profile**:
+
+### High-power burns
+
+Used for:
+- departure and insertion;
+- climbing out of wells;
+- major vector changes;
+- urgent acceleration / deceleration;
+- hazard avoidance;
+- short periods where time matters more than thermal or reaction-mass efficiency.
+
+During these events:
+- drive output rises sharply;
+- reaction-mass consumption is concentrated;
+- the high-temperature thermal loop and accumulator take the greatest load;
+- radiator deployment may be limited by debris, maneuvering, docking geometry, or tactical conditions;
+- the ship can accumulate thermal debt that must be paid down later.
+
+### Sustained low-thrust push
+
+Used when:
+- the route benefits from continuous acceleration;
+- there is no reason to spend reaction mass on a hard burn;
+- the crew wants a faster transit than pure coast;
+- thermal conditions allow continuous radiator operation.
+
+This is lower-power than a hard burn but can continue for hours or longer.
+
+### Drift / coast
+
+A common normal state for the Huntress.
+
+"Drift" does **not** mean every system is off.
+
+During drift:
+- the main drive is not producing meaningful continuous thrust;
+- attitude / trim systems make occasional small corrections;
+- the power plant runs at housekeeping / ship-service output;
+- radiators can remain deployed and the ship can shed heat accumulated during the previous burn;
+- water reclamation, charging, maintenance, cooking, sleep, and ordinary domestic life continue;
+- the crew can accept slower travel in exchange for reduced reaction-mass use, lower thermal stress, and less wear.
+
+This makes long drift periods an expected consequence of how the ship is operated rather than narrative dead time.
+
+### Why the Huntress drifts often
+
+The current crew's operating priorities favor:
+- conserving reaction mass;
+- avoiding unnecessary drive wear;
+- reducing thermal load;
+- keeping the ship mechanically quiet;
+- reducing detectable high-power activity where practical;
+- using time rather than consumables when the contract permits.
+
+This is especially appropriate for an aging independently operated utility vessel whose crew would rather arrive later than create a new repair bill.
+
+### Route shape
+
+A common long-range transit can therefore look like:
+
+**departure burn → lower-power push → long drift / thermal recovery → correction burn → drift → arrival / braking burn**
+
+Other routes can be:
+- mostly low-thrust continuous push;
+- mostly burn-and-coast;
+- repeated short burns through complicated gravity or hazard geography.
+
+No single profile is universal.
+
+### Narrative implication
+
+"Drift" is the ship's natural ordinary-life interval.
+
+It is when:
+- engine noise changes character;
+- the thermal system catches up;
+- radiators do most of their quiet work;
+- deferred maintenance becomes possible;
+- people eat, sleep, argue, repair things, and occupy the Huntress as a home rather than as a maneuvering vehicle.
+
+This matches the established Between Ports rhythm without requiring drift to be a special emergency condition.
+
+
 ## Refit history — recommended consequence
 
 The modern propulsion refit should have changed **both tankage and thermal architecture**.
