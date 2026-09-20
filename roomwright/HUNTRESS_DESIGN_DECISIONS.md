@@ -1361,3 +1361,21 @@ This helps explain why the crew spends so much story time in drift without imply
 
 Exact thrust, acceleration, burn duration, specific impulse, and transit times remain OPEN.
 
+
+
+
+### ART-PRODUCTION NOTE — Comic Production Floor Plan V1
+
+The current main-deck and lower-deck geometry is now frozen as a **revisable art-production baseline** for recurring webcomic backgrounds.
+
+This does **not** convert every Roomwright measurement into permanent canon. It means:
+- recurring rooms, corridor turns, hatch relationships, stairs / ladder, and major fixed furniture should remain spatially consistent in comic art;
+- approximate dimensions may be adjusted later if a visual test exposes a real problem;
+- composition may omit information, but should not contradict established geography;
+- movable props and clutter remain flexible;
+- unresolved items such as Nova's cabin, the second larger cabin, exact exterior hull, Deck Three footprint, and exact engineering capacities remain open.
+
+The first recurring background set to develop from this baseline is the **galley**, using repeatable views from the hatch, aft corner, table / bench side, and work half.
+
+See `roomwright/HUNTRESS_COMIC_PRODUCTION_FLOORPLAN_V1.md`.
+
