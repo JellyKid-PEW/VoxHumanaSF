@@ -11,7 +11,7 @@ import { bus, status } from './util.js';
 // Bridge shell parameters. Width/depth are assumptions chosen inside the
 // evidenced bounds (narrow-space max, crossable-room min, aft-panel-cross).
 export const BRIDGE = { W: 4.8, D: 4.6, H: 2.25 };
-export const DECK2Y = -2.7;                  // lower deck base height
+export const DECK2Y = -3.0;                  // lower deck base height; 3.0 m floor-to-floor leaves real structure/service depth under occupied main-deck spaces
 const COR = { W: 1.1, LEN: 4.6, H: 2.15 };   // corridor: narrow, lower overhead
 const GALLEY_SIZES = { tiny: [2.6, 2.4], compact: [3.0, 2.8], roomy: [3.6, 3.2], lived: [3.4, 4.8] };
 
@@ -1281,10 +1281,10 @@ function defs(rulings) {
   // ---------- primary stair + lower operations landing ----------
   add('stwSteps', {
     room: 'stairwell', type: 'step', name: 'Primary stairwell',
-    params: { width: 1.05, rise: 0.18, run: 0.2, steps: 15 },
+    params: { width: 1.05, rise: 3 / 17, run: 0.2, steps: 17 },
     pos: [mEp - 1.5, D2, stairZ], rotY: Math.PI / 2, locked: true,
     evidence: 'explicit', evidenceRefs: ['stair-lights', 'deck-three', 'lower-corridor'],
-    note: 'Fifteen treads down to the lower operations deck. The stairwell lights blink in pairs.',
+    note: 'Seventeen compact treads down to the lower operations deck. The 3.0 m floor-to-floor gap leaves real structure / service depth between occupied decks.',
   });
   for (const s of [-1, 1]) {
     add(s < 0 ? 'stwWallN' : 'stwWallS', {
@@ -1833,7 +1833,7 @@ function defs(rulings) {
   });
   add('secondaryLadder', {
     room: 'wet-service', type: 'step', name: 'Secondary ship ladder',
-    params: { width: 0.68, rise: 0.18, run: 0.10, steps: 15 },
+    params: { width: 0.68, rise: 3 / 17, run: 0.10, steps: 17 },
     pos: [corex + 0.2, D2, corez + 0.25], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [],
     note: 'Steep crew shortcut beside the service chase, rising to the dry hygiene / service vestibule on the main deck.',
