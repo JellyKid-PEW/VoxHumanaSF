@@ -13,7 +13,7 @@ import { bus, status } from './util.js';
 export const BRIDGE = { W: 4.8, D: 4.6, H: 2.25 };
 export const DECK2Y = -2.7;                  // lower deck base height
 const COR = { W: 1.1, LEN: 4.6, H: 2.15 };   // corridor: narrow, lower overhead
-const GALLEY_SIZES = { tiny: [2.6, 2.4], compact: [3.0, 2.8], roomy: [3.6, 3.2] };
+const GALLEY_SIZES = { tiny: [2.6, 2.4], compact: [3.0, 2.8], roomy: [3.6, 3.2], lived: [3.4, 4.8] };
 
 function defs(rulings) {
   const W = BRIDGE.W, D = BRIDGE.D, H = BRIDGE.H;
@@ -604,21 +604,19 @@ function defs(rulings) {
   }
 
   // ================= GALLEY =================
-  const galleyProvisional = !galleyRuling;
-  const gSize = GALLEY_SIZES[galleyRuling] || GALLEY_SIZES.compact;
+  const galleyProvisional = false;
+  const gSize = GALLEY_SIZES.lived;
   const [gw, gd] = gSize;
   const GH = 2.15;
-  const gx = cx + 0.55 - gw / 2;            // starboard galley wall flush with the corridor wall
+  const gx = aftCx + 0.55 - gw / 2;         // starboard galley wall flush with the aft corridor wall
   const gz = corEndZ + gd / 2;
   const rel = (dx, dz) => [gx + dx, 0, gz + dz];
 
-  const galleyShellNote = galleyProvisional
-    ? `⚠ Provisional ${gw} × ${gd} m — the galley-size conflict ("tiny galley" vs. central prep island) is unresolved. Compact compromise shown.`
-    : `${gw} × ${gd} m per your ruling (${galleyRuling}).`;
+  const galleyShellNote = `${gw} × ${gd} m implementation assumption serving the locked occupancy target: five comfortable, seven crowded. Longitudinal proportions create a working half and a sitting / lingering half.`;
   add('galFloor', {
     room: 'galley', type: 'floor', name: 'Galley deck', params: { width: gw, depth: gd },
     pos: [gx, 0, gz], rotY: 0, locked: true,
-    evidence: galleyProvisional ? 'assumption' : 'decision',
+    evidence: 'decision',
     evidenceRefs: ['galley-tiny', 'galley-island', 'galley-grates'],
     note: galleyShellNote + ' Deck plating with open grates; Iri’s sprout grows at the warm wall vent.',
   });
@@ -633,7 +631,7 @@ function defs(rulings) {
   add('galHatch', {
     room: 'galley', type: 'doorway', name: 'Galley hatch',
     params: { length: hatchSegLen, height: GH, thickness: 0.14, doorWidth: 0.8, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
-    pos: [cx, 0, corEndZ], rotY: 0, locked: false,
+    pos: [aftCx, 0, corEndZ], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-hatch-quiet', 'galley-hatch-sticks', 'doors-wait'],
     note: 'Quiet sliding hatch that sticks and doesn’t hurry. Manual, like every door on the ship.',
   });
@@ -659,81 +657,213 @@ function defs(rulings) {
     evidence: 'inference', evidenceRefs: ['galley-tiny'], note: 'Starboard galley wall.',
   });
 
-  // galley furniture — placed to keep a walkable lane from the hatch (which
-  // sits at the starboard end of the forward wall) down the starboard side
-  // and along the counter on the port side.
-  const tiny = galleyRuling === 'tiny';
-  const tableX = tiny ? -0.05 : 0.3;        // table/bench cluster, south side
+  // Galley furniture: a longitudinal work half near the hatch and an aft
+  // eating / lingering half. The room can seat / hold five comfortably while
+  // seven makes circulation visibly crowded.
   add('galCounter', {
     room: 'galley', type: 'counter', name: 'Galley counter + sink',
-    params: { width: tiny ? 1.2 : Math.min(1.6, gd - 0.7), depth: 0.55, height: 0.9, sink: true },
-    pos: rel(-gw / 2 + 0.36, 0.05), rotY: -Math.PI / 2, locked: false,
+    params: { width: 2.15, depth: 0.55, height: 0.9, sink: true },
+    pos: rel(-gw / 2 + 0.34, -0.25), rotY: -Math.PI / 2, locked: false,
     evidence: 'explicit',
     evidenceRefs: ['galley-sink-light', 'galley-index-card', 'galley-counter-lean', 'galley-drawer-cabinet'],
-    note: 'Sink with the blinking status light; the index card taped above it; the spoon drawer; the under-sink cabinet with its badly folded rag.',
+    note: 'Long working counter with sink, status light, taped index card, spoon drawer, and under-sink cabinet.',
   });
   add('galShelf', {
     room: 'galley', type: 'shelf', name: 'Tin shelf',
-    params: { width: 1.0, depth: 0.24, mountHeight: 1.32, tins: 3 },
-    pos: rel(-gw / 2 + 0.16, 0.05), rotY: -Math.PI / 2, locked: false,
+    params: { width: 1.1, depth: 0.24, mountHeight: 1.32, tins: 3 },
+    pos: rel(-gw / 2 + 0.15, -0.15), rotY: -Math.PI / 2, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-tins-shelf'],
-    note: 'Three battered tins in their row: Regret, Dead Reckoning, Victory Speech — later, Sugar.',
+    note: 'Battered tins in their row: Regret, Dead Reckoning, Victory Speech — later, Sugar.',
+  });
+  add('galIsland', {
+    room: 'galley', type: 'table', name: 'Central prep counter',
+    params: { width: 1.15, depth: 0.62, height: 0.92 },
+    pos: rel(0.15, -1.05), rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: ['galley-island', 'galley-tiny'],
+    note: 'Compact central prep island / water-generator position. Working around it is easy for two and noticeably shoulder-tight for three or four.',
+  });
+  add('galHeatUnit', {
+    room: 'galley', type: 'storage', name: 'Heating / hydration unit',
+    params: { width: 0.72, height: 1.45, depth: 0.42 },
+    pos: rel(gw / 2 - 0.24, -1.15), rotY: Math.PI / 2, locked: false,
+    evidence: 'assumption', evidenceRefs: [],
+    note: 'Food heating / hydration / synthesis hardware grouped into the working half. Exact technology remains open.',
+  });
+  add('galCooler', {
+    room: 'galley', type: 'crate', name: 'Cooling unit',
+    params: { width: 0.58, height: 0.62, depth: 0.5 },
+    pos: rel(gw / 2 - 0.34, 0.35), rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['galley-across'],
+    note: 'Floor-level cooling unit across the room from the working counter.',
   });
   add('galTable', {
     room: 'galley', type: 'table', name: 'Galley table',
-    params: { width: 0.85, depth: 0.6, height: 0.74 },
-    pos: rel(tableX, gd / 2 - 0.85), rotY: 0, locked: false,
+    params: { width: 1.25, depth: 0.78, height: 0.74 },
+    pos: rel(0.15, gd / 2 - 1.15), rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-table', 'galley-tabletop-nova'],
-    note: 'Where the medkit sat for the stitching; Nova watches from here, chin on folded arms.',
+    note: 'The everyday table: stitching, slates, meals, waiting, and arguments that are not called arguments.',
   });
   add('galBench', {
     room: 'galley', type: 'bench', name: 'Galley bench',
-    params: { width: 1.2, height: 0.42, depth: 0.42 },
-    pos: rel(tableX, gd / 2 - 0.3), rotY: 0, locked: false,
+    params: { width: 1.85, height: 0.42, depth: 0.44 },
+    pos: rel(-0.15, gd / 2 - 0.28), rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-bench', 'galley-bench-wall'],
-    note: '“Bench too narrow. Edges that caught.” Leather-covered, creaks; set against the aft wall.',
+    note: 'Leather-covered bench against the aft wall. Long enough to seat several, still too narrow to be a good bed.',
+  });
+  add('galStool1', {
+    room: 'galley', type: 'seat', name: 'Galley stool one',
+    params: { seatHeight: 0.46, width: 0.38, hasArms: false },
+    pos: rel(gw / 2 - 0.62, gd / 2 - 1.0), rotY: Math.PI / 2, locked: false,
+    evidence: 'assumption', evidenceRefs: [], note: 'Compact movable seating; exact final chair / stool count remains open.',
+  });
+  add('galStool2', {
+    room: 'galley', type: 'seat', name: 'Galley stool two',
+    params: { seatHeight: 0.46, width: 0.38, hasArms: false },
+    pos: rel(-0.2, gd / 2 - 1.65), rotY: 0, locked: false,
+    evidence: 'assumption', evidenceRefs: [], note: 'Second movable seat. Can be pulled clear when the galley is being used as a workroom.',
   });
   add('galCabinet', {
     room: 'galley', type: 'storage', name: 'Galley cabinet',
-    params: { width: tiny ? 0.7 : 0.8, height: 1.6, depth: 0.36 },
-    pos: tiny ? rel(-0.75, -gd / 2 + 0.26) : rel(gw / 2 - 0.25, -0.15),
-    rotY: tiny ? 0 : -Math.PI / 2, locked: false,
+    params: { width: 0.82, height: 1.6, depth: 0.36 },
+    pos: rel(gw / 2 - 0.23, -0.05), rotY: -Math.PI / 2, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-drawer-cabinet', 'bolts-source'],
-    note: 'The cabinet where bolts live in a mug that should’ve held tea.',
+    note: 'The cabinet where bolts live in a mug that should have held tea.',
   });
   add('galFan', {
     room: 'galley', type: 'crate', name: 'Corner fan',
     params: { width: 0.24, height: 0.3, depth: 0.24 },
-    pos: tiny ? rel(gw / 2 - 0.2, gd / 2 - 0.2) : rel(-gw / 2 + 0.24, -gd / 2 + 0.24),
-    rotY: 0.4, locked: false,
+    pos: rel(-gw / 2 + 0.25, -gd / 2 + 0.28), rotY: 0.4, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-fan'],
-    note: '“The fan in the corner ticked once, then went patient.”',
+    note: 'The fan in the corner ticks once, then goes patient.',
   });
   add('galPlants', {
     room: 'galley', type: 'crate', name: 'Potted plants',
     params: { width: 0.45, height: 0.34, depth: 0.4 },
-    pos: rel(-gw / 2 + 0.35, gd / 2 - 0.32), rotY: 0.15, locked: false,
+    pos: rel(-gw / 2 + 0.38, gd / 2 - 0.35), rotY: 0.15, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-plants'],
-    note: 'The new plants from the garden, soil still damp, in the corner.',
+    note: 'Later plants from the garden, soil still damp, occupying one corner without becoming the room’s purpose.',
   });
-  if (!tiny) {
-    add('galIsland', {
-      room: 'galley', type: 'table', name: 'Central prep counter',
-      params: { width: galleyRuling === 'roomy' ? 1.1 : 0.7, depth: galleyRuling === 'roomy' ? 0.6 : 0.45, height: 0.92 },
-      pos: rel(0.1, -0.35), rotY: 0, locked: false,
-      evidence: galleyProvisional ? 'assumption' : 'decision',
-      evidenceRefs: ['galley-island', 'galley-tiny'],
-      note: (galleyProvisional ? '⚠ Provisional — part of the unresolved galley-size conflict. ' : '') +
-        'The central prep counter Quenby leans an elbow on; the water generator sits here. Rounding it is deliberately shoulder-tight.',
-    });
-    add('galCooler', {
-      room: 'galley', type: 'crate', name: 'Cooling unit',
-      params: { width: 0.5, height: 0.55, depth: 0.45 },
-      pos: rel(gw / 2 - 0.33, gd / 2 - 0.35), rotY: 0, locked: false,
-      evidence: 'explicit', evidenceRefs: ['galley-across'],
-      note: 'Floor-level cooling unit across the room from the prep counter.',
-    });
-  }
+
+  // ================= DOMESTIC HYGIENE / WET-SERVICE ZONE =================
+  // Hygiene is adjacent to the galley in infrastructure but not in ordinary
+  // experience. It has its own dry access route, and the ladder from the
+  // residential dogleg arrives in that dry zone rather than a shower or galley.
+  const HYGX = -4.50;
+  const HYGZ0 = 7.25, HYGZ1 = 14.25;
+  const HYGW = 1.10;
+  const hygBranchW = (aftCx - COR.W / 2) - HYGX + HYGW / 2;
+
+  add('hygBranchFloor', {
+    room: 'hygiene', type: 'floor', name: 'Dry hygiene access deck',
+    params: { width: hygBranchW, depth: 1.0 },
+    pos: [(aftCx - COR.W / 2 + (HYGX - HYGW / 2)) / 2, 0, HYGZ0], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'A dry offset route leaving the domestic junction separately from the galley. No toilet or shower is visible from the galley hatch.',
+  });
+  add('hygBranchCeil', {
+    room: 'hygiene', type: 'ceiling', name: 'Dry hygiene access overhead',
+    params: { width: hygBranchW, depth: 1.0, height: 2.10 },
+    pos: [(aftCx - COR.W / 2 + (HYGX - HYGW / 2)) / 2, 0, HYGZ0], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('hygVestFloor', {
+    room: 'hygiene', type: 'floor', name: 'Dry hygiene / service vestibule deck',
+    params: { width: HYGW, depth: HYGZ1 - HYGZ0 },
+    pos: [HYGX, 0, (HYGZ0 + HYGZ1) / 2], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Long dry service vestibule along the domestic wet zone. It separates circulation from shower / toilet functions and ends at the secondary ladder.',
+  });
+  add('hygVestCeil', {
+    room: 'hygiene', type: 'ceiling', name: 'Dry hygiene / service vestibule overhead',
+    params: { width: HYGW, depth: HYGZ1 - HYGZ0, height: 2.10 },
+    pos: [HYGX, 0, (HYGZ0 + HYGZ1) / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+  // Wet/service core lies between galley and hygiene compartments.
+  const WETX = -3.15, WETW = 0.52, WETZ = 11.45, WETD = 4.55;
+  add('mainWetCore', {
+    room: 'wet-service', type: 'storage', name: 'Main-deck domestic wet-service core',
+    params: { width: WETW, height: 1.8, depth: WETD },
+    pos: [WETX, 0, WETZ], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Service volume carrying domestic water, drainage, thermal loops, pumps, valves, filters, and environmental distribution between galley and hygiene spaces.',
+  });
+  add('mainWetPanel', {
+    room: 'wet-service', type: 'storage', name: 'Domestic service manifold',
+    params: { width: 0.82, height: 1.35, depth: 0.18 },
+    pos: [HYGX + HYGW / 2 - 0.08, 0, 10.95], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Routine-access panel in lived-in circulation: filters, isolation valves, thermal trim, and service diagnostics.',
+  });
+
+  const HW = 1.65, HD = 1.55, hx = HYGX + HYGW / 2 + HW / 2;
+  add('hygToiletFloor', {
+    room: 'hygiene', type: 'floor', name: 'Primary toilet deck',
+    params: { width: HW, depth: HD },
+    pos: [hx, 0, 10.15], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [], note: 'Primary domestic toilet, separate from shower / wash compartment.',
+  });
+  add('hygToiletDoor', {
+    room: 'hygiene', type: 'doorway', name: 'Primary toilet door',
+    params: { length: 1.0, height: 2.05, thickness: 0.1, doorWidth: 0.72, doorHeight: 1.9, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [HYGX + HYGW / 2, 0, 10.15], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: [], note: 'Opens from the dry vestibule, never directly from the galley.',
+  });
+  add('hygToiletOuter', {
+    room: 'hygiene', type: 'wall', name: 'Primary toilet outer wall',
+    params: { length: HD, height: 2.05, thickness: 0.1 },
+    pos: [hx + HW / 2, 0, 10.15], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  for (const s of [-1,1]) add(s < 0 ? 'hygToiletN' : 'hygToiletS', {
+    room: 'hygiene', type: 'wall', name: 'Primary toilet wall',
+    params: { length: HW, height: 2.05, thickness: 0.1 },
+    pos: [hx, 0, 10.15 + s * HD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+  const SHW = 1.85, SHD = 1.75, shx = HYGX + HYGW / 2 + SHW / 2;
+  add('hygShowerFloor', {
+    room: 'hygiene', type: 'floor', name: 'Shower / wash compartment deck',
+    params: { width: SHW, depth: SHD },
+    pos: [shx, 0, 12.25], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [], note: 'Separate bathing / wash compartment with its own drainage and ventilation.',
+  });
+  add('hygShowerDoor', {
+    room: 'hygiene', type: 'doorway', name: 'Shower / wash door',
+    params: { length: 1.0, height: 2.08, thickness: 0.1, doorWidth: 0.74, doorHeight: 1.92, kind: 'sliding', slideDir: -1, open: 0 },
+    pos: [HYGX + HYGW / 2, 0, 12.25], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: [], note: 'Separate from the toilet and screened from ordinary domestic circulation.',
+  });
+  add('hygShowerOuter', {
+    room: 'hygiene', type: 'wall', name: 'Shower / wash outer wall',
+    params: { length: SHD, height: 2.08, thickness: 0.1 },
+    pos: [shx + SHW / 2, 0, 12.25], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  for (const s of [-1,1]) add(s < 0 ? 'hygShowerN' : 'hygShowerS', {
+    room: 'hygiene', type: 'wall', name: 'Shower / wash wall',
+    params: { length: SHW, height: 2.08, thickness: 0.1 },
+    pos: [shx, 0, 12.25 + s * SHD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+
+  // Upper end of the secondary ladder. Coordinates align with the current
+  // lower wet-core implementation for the default bridge-door geometry.
+  add('upperSecondaryLadder', {
+    room: 'hygiene', type: 'step', name: 'Secondary ladder — upper landing',
+    params: { width: 0.68, rise: 0.18, run: 0.10, steps: 15 },
+    pos: [HYGX, DECK2Y, 13.70], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Steep secondary crew ladder from the lower residential wet-service core. It terminates in the dry hygiene / service vestibule, not in a wet compartment.',
+  });
+  add('hygWash', {
+    room: 'hygiene', type: 'counter', name: 'Vestibule wash / utility sink',
+    params: { width: 0.72, depth: 0.38, height: 0.86, sink: true },
+    pos: [HYGX - 0.28, 0, 9.0], rotY: -Math.PI / 2, locked: false,
+    evidence: 'assumption', evidenceRefs: [], note: 'Dry-zone handwash / utility point outside the shower and toilet rooms.',
+  });
 
   // ================= OBSERVATION DOME =================
   // Off the spine's outboard wall — "not listed on primary pathing".
@@ -862,9 +992,9 @@ function defs(rulings) {
   // its hatch just forward of the galley junction.
   const bedsRuling = rulings['declared:med-cot~med-two-beds']?.choice || null;
   const bedsProvisional = !bedsRuling;
-  const MW = 2.6, MD = 2.4, MH = 2.1;
-  const mE = cx - COR.W / 2;             // shared wall with the corridor
-  const mx = mE - MW / 2, mz = medHatchZ; // room centered on its hatch (z 4.7–6.8 for default)
+  const MW = 2.6, MD = 2.2, MH = 2.1;
+  const mE = aftCx - COR.W / 2;          // shared wall with the offset aft corridor
+  const mx = mE - MW / 2, mz = medHatchZ;
   const mrel = (dx, dz) => [mx + dx, 0, mz + dz];
 
   add('medFloor', {
