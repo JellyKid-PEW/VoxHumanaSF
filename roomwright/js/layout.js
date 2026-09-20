@@ -918,7 +918,8 @@ function defs(rulings) {
   });
 
   // Wet/service core lies between galley and hygiene compartments.
-  const WETX = -3.15, WETW = 0.52, WETZ = 11.45, WETD = 4.55;
+  const galleyPortX = gx - gw / 2;
+  const WETW = 0.24, WETX = galleyPortX - WETW / 2, WETZ = 11.45, WETD = 4.55;
   add('mainWetCore', {
     room: 'wet-service', type: 'storage', name: 'Main-deck domestic wet-service core',
     params: { width: WETW, height: 1.8, depth: WETD },
@@ -934,7 +935,7 @@ function defs(rulings) {
     note: 'Routine-access panel in lived-in circulation: filters, isolation valves, thermal trim, and service diagnostics.',
   });
 
-  const HW = 1.65, HD = 1.55, hx = HYGX + HYGW / 2 + HW / 2;
+  const HW = 1.20, HD = 1.55, hx = HYGX + HYGW / 2 + HW / 2;
   add('hygToiletFloor', {
     room: 'hygiene', type: 'floor', name: 'Primary toilet deck',
     params: { width: HW, depth: HD },
@@ -973,7 +974,7 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
-  const SHW = 1.85, SHD = 1.75, shx = HYGX + HYGW / 2 + SHW / 2;
+  const SHW = 1.30, SHD = 1.75, shx = HYGX + HYGW / 2 + SHW / 2;
   add('hygShowerFloor', {
     room: 'hygiene', type: 'floor', name: 'Shower / wash compartment deck',
     params: { width: SHW, depth: SHD },
@@ -1012,14 +1013,14 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
-  // Upper end of the secondary ladder. Coordinates align with the current
-  // lower wet-core implementation for the default bridge-door geometry.
-  add('upperSecondaryLadder', {
-    room: 'hygiene', type: 'step', name: 'Secondary ladder — upper landing',
-    params: { width: 0.68, rise: 0.18, run: 0.10, steps: 15 },
-    pos: [HYGX, DECK2Y, 13.70], rotY: 0, locked: true,
+  // Upper landing for the single ladder generated from the lower wet-service
+  // core. Do not duplicate the stair geometry here.
+  add('hygLadderHatch', {
+    room: 'hygiene', type: 'crate', name: 'Secondary ladder upper hatch',
+    params: { width: 0.78, height: 0.035, depth: 0.78 },
+    pos: [HYGX, 0, 13.70], rotY: 0, locked: false,
     evidence: 'decision', evidenceRefs: [],
-    note: 'Steep secondary crew ladder from the lower residential wet-service core. It terminates in the dry hygiene / service vestibule, not in a wet compartment.',
+    note: 'Upper hatch / landing of the steep secondary ladder. It opens into the dry hygiene / service vestibule, not into the galley, toilet, or shower.',
   });
   add('hygWash', {
     room: 'hygiene', type: 'counter', name: 'Vestibule wash / utility sink',
@@ -2336,7 +2337,7 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'upperSecondaryLadder', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
@@ -2346,7 +2347,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 10;
+export const LAYOUT_VERSION = 11;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2356,4 +2357,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   8: ['resTurn*', 'dogleg*', 'wetCoreW', 'aftReconnect*'], // complete the residential bend and aft reconnection architecture
   9: ['garden*', 'freight*'], // clear final blockout overlaps found in top-down spatial review
   10: ['cor*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'upperSecondaryLadder', 'spn*', 's4*', 'domeShutterHousing'], // main deck rebuilt around bent corridor, domestic wet zone, and complete legacy storage geography
+  11: ['hyg*', 'mainWet*', 'upperSecondaryLadder'], // refine hygiene clearances and use a single secondary ladder with upper hatch
 };
