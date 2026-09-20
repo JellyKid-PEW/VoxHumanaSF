@@ -1188,6 +1188,27 @@ Most importantly, the current Chapter 6 draft places a **port-side equipment cra
 
 ---
 
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Lower-deck walk-path review
+
+The first relational lower-deck blockout exposed one important implementation conflict: the original skiff-bay placement occupied the same side of the Lower Operations landing as the primary stair.
+
+The corrected Roomwright pass now uses:
+- primary stair approaching the landing from the starboard side;
+- skiff / mission bay branching from the forward side of Lower Operations;
+- work spine continuing aft;
+- residential / nav route peeling away shortly aft of the landing.
+
+Additional implementation refinements:
+- the residential turn, cabin approach, quiet run, aft-service passage, and lower-aft spine now have explicit corridor / bulkhead architecture rather than only floor plates;
+- the domestic-stores / future-garden compartment fits between the quiet residential run and wet-service core and opens from the dogleg, not toward either Cabin Five or Cabin Six;
+- the freight-transfer lock is offset slightly forward so it does not overlap the main cargo bay footprint;
+- the lower-aft spine now shares the main cargo bay's service-side boundary cleanly.
+
+These are **geometry implementation refinements**, not new narrative canon. Exact dimensions and hull-side placement remain provisional until full 3D / hull integration is reviewed.
+
+---
+
 ## Current unresolved design questions
 
 - Validate the new lower-deck relational geometry in Roomwright and adjust assumed dimensions / clearances before treating them as final.
