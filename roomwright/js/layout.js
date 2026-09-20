@@ -781,7 +781,7 @@ function defs(rulings) {
   add('galCooler', {
     room: 'galley', type: 'crate', name: 'Cooling unit',
     params: { width: 0.58, height: 0.62, depth: 0.5 },
-    pos: rel(gw / 2 - 0.34, 0.35), rotY: 0, locked: false,
+    pos: rel(gw / 2 - 0.34, gd / 2 - 0.50), rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['galley-across'],
     note: 'Floor-level cooling unit across the room from the working counter.',
   });
@@ -808,7 +808,7 @@ function defs(rulings) {
   add('galStool2', {
     room: 'galley', type: 'seat', name: 'Galley stool two',
     params: { seatHeight: 0.46, width: 0.38, hasArms: false },
-    pos: rel(-0.2, gd / 2 - 1.65), rotY: 0, locked: false,
+    pos: rel(1.0, gd / 2 - 1.65), rotY: 0, locked: false,
     evidence: 'assumption', evidenceRefs: [], note: 'Second movable seat. Can be pulled clear when the galley is being used as a workroom.',
   });
   add('galCabinet', {
@@ -2347,7 +2347,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 12;
+export const LAYOUT_VERSION = 13;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2359,4 +2359,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   10: ['cor*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'upperSecondaryLadder', 'spn*', 's4*', 'domeShutterHousing'], // main deck rebuilt around bent corridor, domestic wet zone, and complete legacy storage geography
   11: ['hyg*', 'mainWet*', 'upperSecondaryLadder'], // refine hygiene clearances and use a single secondary ladder with upper hatch
   12: ['corAft*', 'med*', 'hyg*', 's4*', 'spnLeg2W*'], // clear main-deck blockout overlaps found in top-down review
+  13: ['galCooler', 'galStool2'], // clear galley furniture overlaps in the lived-in occupancy layout
 };
