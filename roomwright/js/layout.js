@@ -1276,8 +1276,8 @@ function defs(rulings) {
   });
 
   // ---------- domestic / habitation stores; later garden nook ----------
-  const GARDW = 2.4, GARDD = 2.55;
-  const gardx = RESX - 0.8, gardz = 13.25;
+  const GARDW = 2.0, GARDD = 2.55;
+  const gardx = (QUIETX + RESW / 2) + GARDW / 2, gardz = 13.25;
   add('gardenFloor', {
     room: 'domestic-stores', type: 'floor', name: 'Domestic stores deck',
     params: { width: GARDW, depth: GARDD },
@@ -1544,11 +1544,33 @@ function defs(rulings) {
     pos: [cbx + CBW / 2, D2, cbz], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
-  add('cargoWallW', {
-    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay port wall',
-    params: { length: CBD, height: CBH, thickness: 0.16 },
-    pos: [cbx - CBW / 2, D2, cbz], rotY: Math.PI / 2, locked: true,
-    evidence: 'assumption', evidenceRefs: [], note: 'A small personnel hatch from the old aft-service route interrupts this wall.',
+  const cargoPersonnelZ = 24.65;
+  const cargoWestNLen = (cargoPersonnelZ - 0.5) - (cbz - CBD / 2);
+  const cargoWestSLen = (cbz + CBD / 2) - (cargoPersonnelZ + 0.5);
+  add('cargoWallW1', {
+    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay port wall (forward)',
+    params: { length: cargoWestNLen, height: CBH, thickness: 0.16 },
+    pos: [cbx - CBW / 2, D2, cbz - CBD / 2 + cargoWestNLen / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Old freight structure along the lower-aft service side.',
+  });
+  add('cargoWallW2', {
+    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay port wall (aft)',
+    params: { length: cargoWestSLen, height: CBH, thickness: 0.16 },
+    pos: [cbx - CBW / 2, D2, cbz + CBD / 2 - cargoWestSLen / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Old freight structure along the lower-aft service side.',
+  });
+  const cargoDoorHalf = 1.4;
+  add('cargoWallN1', {
+    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay forward wall (port)',
+    params: { length: CBW / 2 - cargoDoorHalf, height: CBH, thickness: 0.16 },
+    pos: [cbx - (cargoDoorHalf + (CBW / 2 - cargoDoorHalf) / 2), D2, cbz - CBD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Forward freight wall flanking the large bay door.',
+  });
+  add('cargoWallN2', {
+    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay forward wall (starboard)',
+    params: { length: CBW / 2 - cargoDoorHalf, height: CBH, thickness: 0.16 },
+    pos: [cbx + (cargoDoorHalf + (CBW / 2 - cargoDoorHalf) / 2), D2, cbz - CBD / 2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Forward freight wall flanking the large bay door.',
   });
   add('cargoFreightDoor', {
     room: 'cargo-bay', type: 'doorway', name: 'Main bay freight door',
@@ -1559,7 +1581,7 @@ function defs(rulings) {
   add('cargoPersonnelDoor', {
     room: 'cargo-bay', type: 'doorway', name: 'Main bay personnel / service hatch',
     params: { length: 1.0, height: 2.2, thickness: 0.12, doorWidth: 0.75, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 0 },
-    pos: [cbx - CBW / 2, D2, 24.65], rotY: Math.PI / 2, locked: false,
+    pos: [cbx - CBW / 2, D2, cargoPersonnelZ], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Quieter access from the lower-aft service route; training use does not require walking through the freight interface.',
   });
   for (const xoff of [-2.4, 0, 2.4]) add('cargoTie' + String(xoff).replace('-', 'm').replace('.', '_'), {
