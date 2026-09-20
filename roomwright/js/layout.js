@@ -236,7 +236,7 @@ function defs(rulings) {
   const corEndZ = 7.80;                       // galley face / domestic junction
   const spineZ = 4.35;                        // storage-spine turn before the bend
   const stairZ = 3.65;
-  const medHatchZ = 6.00;
+  const medHatchZ = 5.80;
   const hygBranchZ = 7.25;
   const alkZ = 3.15;
 
@@ -416,7 +416,7 @@ function defs(rulings) {
   const leg2z0 = spineZ - SPW / 2, leg2z1 = spineZ + 5.7;  // runs aft to the engine bay
   const pktHatchZ = spineZ + 1.7;
   const domeZ = spineZ + 4.1;
-  const s4HatchZ = domeZ + 0.85;                        // dome arch, off the outboard wall
+  const s4HatchZ = domeZ + 0.55;                        // dome arch, off the outboard wall
 
   add('spnLeg1Floor', {
     room: 'spine', type: 'floor', name: 'Storage spine deck (first turn)', params: { width: leg1Len, depth: SPW },
@@ -844,14 +844,14 @@ function defs(rulings) {
 
   add('hygBranchFloor', {
     room: 'hygiene', type: 'floor', name: 'Dry hygiene access deck',
-    params: { width: hygBranchW, depth: 1.0 },
+    params: { width: hygBranchW, depth: 0.8 },
     pos: [(aftCx - COR.W / 2 + (HYGX - HYGW / 2)) / 2, 0, HYGZ0], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [],
     note: 'A dry offset route leaving the domestic junction separately from the galley. No toilet or shower is visible from the galley hatch.',
   });
   add('hygBranchCeil', {
     room: 'hygiene', type: 'ceiling', name: 'Dry hygiene access overhead',
-    params: { width: hygBranchW, depth: 1.0, height: 2.10 },
+    params: { width: hygBranchW, depth: 0.8, height: 2.10 },
     pos: [(aftCx - COR.W / 2 + (HYGX - HYGW / 2)) / 2, 0, HYGZ0], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
@@ -877,13 +877,13 @@ function defs(rulings) {
   add('hygBranchWallN', {
     room: 'hygiene', type: 'wall', name: 'Dry hygiene branch forward wall',
     params: { length: hygBranchEast - hygBranchWest, height: 2.10, thickness: 0.10 },
-    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 - 0.50], rotY: 0, locked: true,
+    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 - 0.40], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Dry separation from medbay / adjacent service volume.',
   });
   add('hygBranchWallS', {
     room: 'hygiene', type: 'wall', name: 'Dry hygiene branch aft wall',
     params: { length: hygBranchEast - hygBranchWest, height: 2.10, thickness: 0.10 },
-    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 + 0.50], rotY: 0, locked: true,
+    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 + 0.40], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'The galley is beyond this wall / junction rather than visible through the hygiene route.',
   });
   add('hygVestWallW', {
@@ -974,7 +974,7 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
-  const SHW = 1.30, SHD = 1.75, shx = HYGX + HYGW / 2 + SHW / 2;
+  const SHW = 1.10, SHD = 1.75, shx = HYGX + HYGW / 2 + SHW / 2;
   add('hygShowerFloor', {
     room: 'hygiene', type: 'floor', name: 'Shower / wash compartment deck',
     params: { width: SHW, depth: SHD },
@@ -1165,7 +1165,7 @@ function defs(rulings) {
   // its hatch just forward of the galley junction.
   const bedsRuling = rulings['declared:med-cot~med-two-beds']?.choice || null;
   const bedsProvisional = !bedsRuling;
-  const MW = 2.6, MD = 2.2, MH = 2.1;
+  const MW = 2.6, MD = 2.0, MH = 2.1;
   const mE = aftCx - COR.W / 2;          // shared wall with the offset aft corridor
   const mx = mE - MW / 2, mz = medHatchZ;
   const mrel = (dx, dz) => [mx + dx, 0, mz + dz];
@@ -2347,7 +2347,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 11;
+export const LAYOUT_VERSION = 12;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2358,4 +2358,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   9: ['garden*', 'freight*'], // clear final blockout overlaps found in top-down spatial review
   10: ['cor*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'upperSecondaryLadder', 'spn*', 's4*', 'domeShutterHousing'], // main deck rebuilt around bent corridor, domestic wet zone, and complete legacy storage geography
   11: ['hyg*', 'mainWet*', 'upperSecondaryLadder'], // refine hygiene clearances and use a single secondary ladder with upper hatch
+  12: ['corAft*', 'med*', 'hyg*', 's4*', 'spnLeg2W*'], // clear main-deck blockout overlaps found in top-down review
 };
