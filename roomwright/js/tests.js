@@ -1062,6 +1062,101 @@ export const HABIT_TESTS = [
     },
   },
   {
+    id: 'service-reach',
+    name: 'Important equipment is reachable — and the release panels suit small hands',
+    basis: ['console-kneehole', 'aft-panel-cross', 'quarters-loop', 'spine-support-rail'],
+    run() {
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const problems = [];
+      const wants = [
+        ['the bridge', ['svcKneehole', 'aftPanel']],
+        ['the main corridor', ['svcCorMidline', 'svcCorBend']],
+        ['the galley', ['svcGalleyHeater']],
+        ['the residential approach', ['svcLowerCool']],
+        ['the quiet run', ['svcQuietJunction']],
+        ['the cabin row', ['cab3JunctionBox']],
+        ['the storage spine', ['svcSpineBracket']],
+        ['Lower Operations', ['svcOpsLanding', 'opDamageLocker']],
+        ['the work spine', ['svcOpsTrunk', 'partsLockers']],
+        ['Hold One', ['svcHoldOne']],
+        ['the wet-service core', ['wetCorePanel']],
+        ['the dogleg (habitation isolation)', ['svcDoglegManifold']],
+        ['the freight junction', ['freightLockPanel']],
+        ['the lower aft spine', ['lowerAftPanel']],
+        ['the medbay', ['medAirUnit']],
+        ['the engineering access', ['engAccessPanel']],
+      ];
+      for (const [label, keys] of wants) {
+        if (!keys.some(k => byKey(k))) problems.push(`No reachable service point in ${label}`);
+      }
+      // the interlock release panels must work at a twelve-year-old's height
+      for (const key of ['svcDoglegManifold', 'engAccessPanel', 'freightLockPanel']) {
+        const p = byKey(key);
+        if (!p) { problems.push(`Release panel ${key} is missing`); continue; }
+        const h = p.params.height ?? 1;
+        const base = (p.params.mountHeight ?? 0);
+        if (base > 1.1) problems.push(`${p.name}: controls mounted above a child's reach`);
+        if (base + h < 0.9) problems.push(`${p.name}: controls too low to be a working panel`);
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'Every working space keeps an openable panel where its systems pass — distributed maintenance, physically present. All three interlock release panels (dogleg, engineering access, freight junction) sit within a twelve-year-old’s reach. Nobody thought about that when they mounted them. Somebody noticed.',
+      };
+    },
+  },
+  {
+    id: 'stolen-moments',
+    name: 'Three corners stay private enough for three minutes',
+    basis: ['med-corridor', 'quarters-loop', 'cabin-bend'],
+    run() {
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const cor = byKey('corFloor');
+      const HX = (cor?.pos[0] ?? 1.5) - 1.5;
+      const problems = [];
+      const nooks = [
+        {
+          name: 'the elbow blind corner', rail: 'nookElbowRail', deck: 0,
+          spot: [1.78 + HX, 5.33],
+          hiddenFrom: [['the galley', [0.35 + HX, 8.5]], ['the medbay', [-1.5 + HX, 5.8]]],
+          exposedTo: ['the forward corridor', [1.5 + HX, 3.0]],
+        },
+        {
+          name: 'the dogleg warm wall', rail: 'nookDoglegRail', deck: -3,
+          spot: [-7.9 + HX, 12.45],
+          hiddenFrom: [['the residential approach', [-6.2 + HX, 6.4]], ['Lower Operations', [-2.6 + HX, 3.65]]],
+          exposedTo: ['the quiet run', [-8.2 + HX, 16.0]],
+        },
+        {
+          name: 'the spine turn', rail: 'spnSupportRail', deck: 0,
+          spot: [3.75 + HX, 5.0],
+          hiddenFrom: [['the main corridor', [1.5 + HX, 3.2]], ['the galley', [0.35 + HX, 8.5]]],
+          exposedTo: ['the engine bay approach', [3.75 + HX, 10.0]],
+        },
+      ];
+      for (const n of nooks) {
+        if (!byKey(n.rail)) problems.push(`${n.name}: its handhold is gone`);
+        // standing room: a walkable cell at the spot
+        const grid = computeNavGrid(0.24, [], n.deck);
+        const path = findPath(grid, new THREE.Vector3(n.spot[0], 0, n.spot[1]), new THREE.Vector3(n.spot[0], 0, n.spot[1]), 3);
+        if (!path) problems.push(`${n.name}: no standing room at the spot`);
+        const eye = n.deck + 1.55;
+        for (const [label, v] of n.hiddenFrom) {
+          const res = castSight(new THREE.Vector3(v[0], eye, v[1]), new THREE.Vector3(n.spot[0], eye, n.spot[1]));
+          if (res.clear) problems.push(`${n.name} is visible from ${label} — the corner no longer hides it`);
+        }
+        const [elabel, ev] = n.exposedTo;
+        const res = castSight(new THREE.Vector3(ev[0], eye, ev[1]), new THREE.Vector3(n.spot[0], eye, n.spot[1]));
+        if (!res.clear) problems.push(`${n.name} became fully sealed from ${elabel} — it should stay honest: private enough, not private`);
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'The elbow corner hides from the galley and medbay but not the forward run; the dogleg’s warm wall hides from the approach and the work deck but not the quiet run; the spine turn hides from the corridor and galley but not the engine bay. Each keeps exactly one watched approach — enough warning for three minutes, never the illusion of a locked door.',
+      };
+    },
+  },
+  {
     id: 'sound-and-privacy',
     name: 'The ship’s sound map holds (who hears what)',
     basis: ['galley-sounds', 'cabin-six', 'iri-cabin-lower', 'pocket-hum', 'med-corridor'],

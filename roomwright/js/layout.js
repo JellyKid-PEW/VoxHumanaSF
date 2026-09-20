@@ -509,7 +509,7 @@ function defs(rulings) {
     params: { length: SPW, height: SPH, thickness: 0.1, doorWidth: 0.72, doorHeight: 1.9, kind: 'hinged', hinge: 'left', swing: 'in', open: 0.35 },
     pos: [leg2x, 0, leg2z1], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['eng-walkin', 'eng-spat-heat', 'doors-wait'],
-    note: 'The frame Quenby leans on, mug set on the deck plate within reach. The spine ends at the heat’s center.',
+    note: 'The frame Quenby leans on, mug set on the deck plate within reach. The spine ends at the heat’s center. THERMAL BIND: while the manifold is open and the bay runs hot, this door’s frame sits in the thermal break — it physically binds until the seals cool. Nobody locks anyone in; the ship does it, every time. The crew knows to sit down.',
   });
   const spineInboardX = leg1x0 + leg1Len;
   const s4Half = 0.45;
@@ -1254,7 +1254,7 @@ function defs(rulings) {
     params: { width: 1.2, height: 1.5, depth: 0.3 },
     pos: erel(EBW / 2 - 0.22, -0.1), rotY: -Math.PI / 2, locked: false,
     evidence: 'explicit', evidenceRefs: ['eng-manifold'],
-    note: 'Where Iri works waist-deep, half the paneling stripped — "like ribs laid open."',
+    note: 'Where Iri works waist-deep, half the paneling stripped — "like ribs laid open." (AUTHOR CHOICE PENDING: the Presence-01 scene may live here, or at the coolant riser in the corridor elbow — the cooling system is distributed, and both access points are real.)',
   });
   add('engPanels', {
     room: 'engine', type: 'crate', name: 'Stripped paneling, stacked',
@@ -1909,7 +1909,7 @@ function defs(rulings) {
     params: { width: COREW, depth: CORED },
     pos: [corex, D2, corez], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: ['quarters-loop'],
-    note: 'Pumps, filters, valves, heat exchange, environmental and habitation-loop service access. The corridor bends because this fixed utility volume is in the way.',
+    note: 'Pumps, filters, valves, heat exchange, environmental and habitation-loop service access. The corridor bends because this fixed utility volume is in the way. Two adults fit inside — barely, deliberately: wet-compartment work is a two-body job in an arm’s-length room, and while the loop is open the hatch holds shut until reseat.',
   });
   add('wetCoreCeil', {
     room: 'wet-service', type: 'ceiling', name: 'Wet / service core overhead',
@@ -1941,7 +1941,7 @@ function defs(rulings) {
     params: { width: 0.95, height: 1.35, depth: 0.18 },
     pos: [corex - COREW / 2 + 0.1, D2, corez], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: ['quarters-loop'],
-    note: 'Accessible from lived-in space: thermal / water / environmental service rather than machinery hidden on a remote engineering deck.',
+    note: 'Accessible from lived-in space: thermal / water / environmental service rather than machinery hidden on a remote engineering deck. INTERLOCK: when the loop is opened for work, the core seals for drain-down and reseat — twenty to forty minutes, hatch held shut, released only from the isolation panel out on the dogleg. Two-person rule: one inside, one at the panel. Choose your panel-watcher carefully.',
   });
   add('secondaryLadder', {
     room: 'wet-service', type: 'step', name: 'Secondary ship ladder',
@@ -2202,7 +2202,7 @@ function defs(rulings) {
     params: { width: 0.85, height: 1.25, depth: 0.18 },
     pos: [OPX - 2.35, D2, 16.8], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [],
-    note: 'Distributed maintenance: local isolation, power, coolant, and service access where the work happens.',
+    note: 'Distributed maintenance: local isolation, power, coolant, and service access where the work happens. TWO-PERSON RULE: with the crawl below isolated for live work, the hatch interlock releases from this panel only — one crew below, one standing here, and the one standing here owns the clock. The controls sit low. A twelve-year-old can work them.',
   });
 
   // ---------- aft freight / service junction ----------
@@ -2229,7 +2229,7 @@ function defs(rulings) {
     params: { width: FTW, depth: FTD },
     pos: [ftx, D2, ftz], rotY: 0, locked: true,
     evidence: 'decision', evidenceRefs: [],
-    note: 'Side-loading commercial cargo lock. Major ports can mate cargo infrastructure here; fringe loading can use sleds, tugs, winches, or improvised support.',
+    note: 'Side-loading commercial cargo lock. Major ports can mate cargo infrastructure here; fringe loading can use sleds, tugs, winches, or improvised support. SEAL-TEST CYCLE: during an integrity test both lock doors dog shut for the duration, released from the panel at the freight junction when the cycle completes. With cargo staged, it is a close room to share for the length of a test.',
   });
   add('freightLockCeil', {
     room: 'freight-lock', type: 'ceiling', name: 'Freight transfer lock overhead',
@@ -2615,7 +2615,7 @@ function defs(rulings) {
     params: { width: 0.5, depth: 0.3, mountHeight: 1.79, tins: 0 },
     pos: [-2.0 + HX, 0, 6.63], rotY: Math.PI, locked: false,
     evidence: 'decision', evidenceRefs: ['med-reach'],
-    note: 'The medbay’s own small filtered loop unit — recovery air, and the room’s acoustic isolation.',
+    note: 'The medbay’s own small filtered loop unit — recovery air, and the room’s acoustic isolation. A filter swap runs a purge cycle, and the hatch holds until it completes: the one room aboard where a locked-in conversation is also a soundproof one.',
   });
   // the secondary vent grid — and what runs behind it
   add('ventGridPanel', {
@@ -2635,6 +2635,93 @@ function defs(rulings) {
     pos: [-3.4 + HX, 0, 6.92], rotY: 0, locked: false,
     evidence: 'decision', evidenceRefs: [],
     note: 'Pocket One, absorbed: when the domestic wet zone was partitioned in, the old service pocket behind this wall was consumed. The stencil is half under paint. Mundane refit archaeology — unlike Pocket Two.',
+  });
+
+  // ================= SERVICE POINTS, RIBS & STOLEN CORNERS =================
+  // Distributed maintenance made physical: opened-and-reclosed panels
+  // wherever the routed runs detour through lived space ("Important
+  // equipment is reachable. Panels can be opened."). Exposed ring-frame
+  // ribs break the long sightlines in working corridors. And three
+  // corners of the ship earn their second purpose: not private — private
+  // ENOUGH for three minutes.
+  const svc = (key, room, name, x, deckY, z, rotY, w, h, d, note, refs = []) => add(key, {
+    room, type: 'storage', name,
+    params: { width: w, height: h, depth: d },
+    pos: [x + HX, deckY, z], rotY, locked: false,
+    evidence: 'decision', evidenceRefs: refs, note,
+  });
+  add('svcKneehole', {
+    // anchored to the bridge, which never moves with the door ruling
+    room: 'bridge', type: 'storage', name: 'Helm kneehole access panel (open)',
+    params: { width: 0.7, height: 0.45, depth: 0.05 },
+    pos: [0.1, 0, -1.11], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['console-kneehole'],
+    note: 'The panel beneath the helm console, more often off than on — wire casing peeled back with the confidence of someone who stopped asking permission. The old harness passes right beneath it.',
+  });
+  svc('svcCorMidline', 'corridor', 'Corridor service panel — power distribution', 1.0, 0, 2.75, Math.PI / 2, 0.6, 1.0, 0.09,
+    'A distribution pull-panel where the midline bus taps down into the forward run. Opened and reclosed by three generations of owners; the fasteners no longer match.');
+  svc('svcCorBend', 'corridor', 'Coolant riser access (elbow corner)', 2.0, 0, 5.32, Math.PI / 2, 0.5, 1.3, 0.1,
+    'A coolant riser rides the elbow’s dead corner, where the run detours around the offset. Paneling comes off in sheets and stacks like ribs — a standing candidate for where the Presence-01 manifold scene lives (author’s choice pending).');
+  svc('svcGalleyHeater', 'galley', 'Galley heater service panel', 0.84, 0, 8.35, -Math.PI / 2, 0.7, 1.2, 0.08,
+    'The heater’s working guts, one panel deep into a lived-in room — the click at the end of its cycle is audible belowdeck through the frame.');
+  svc('svcLowerCool', 'residential', 'Coolant valve set (residential approach)', -6.73, DECK2Y, 6.3, Math.PI / 2, 0.6, 1.1, 0.09,
+    '"Coolant lines, forgotten tags." The tags hang here, on a valve set the residential run was never supposed to need — a refit rerouted the lines through habitation and nobody rerouted them back.', ['lower-corridor']);
+  svc('svcOpsTrunk', 'work-spine', 'Work-spine service panel', -1.92, DECK2Y, 8.6, -Math.PI / 2, 0.7, 1.2, 0.09,
+    'Air-trunk and power access on the commercial run, placed where a cart can stand beside open paneling without blocking the spine.');
+  svc('svcOpsLanding', 'operations', 'Lower Operations junction panel', -4.04, DECK2Y, 4.4, Math.PI / 2, 0.8, 1.3, 0.1,
+    'Where the operations loop, the stair chase, and the bay circuits meet — the busiest junction box on the lower deck.');
+  svc('svcQuietJunction', 'residential', 'Quiet-run junction box', -7.67, DECK2Y, 13.55, -Math.PI / 2, 0.5, 0.9, 0.09,
+    'A small junction on the quiet run’s east wall. Its indicator blinks once when the habitation loop cycles — the cabins’ own heartbeat.');
+  svc('svcHoldOne', 'cargo-bay', 'Old freight-handling junction (Hold One)', -4.55, DECK2Y, 21.12, 0, 0.8, 1.4, 0.08,
+    'Freight-era power and control junction from the hold’s cargo days — kept live because the tie-down tracks still draw from it.');
+  add('cab3JunctionBox', {
+    room: 'cabin', type: 'shelf', name: 'Junction box (Cabin Three)',
+    params: { width: 0.35, depth: 0.22, mountHeight: 1.5, tins: 0 },
+    pos: [-7.4 + HX, DECK2Y, 9.42], rotY: 0, locked: false,
+    evidence: 'inference', evidenceRefs: ['cabin-row', 'sys-midline-bus'],
+    note: 'The box behind Cabin Three’s wall panel that clicks whenever the midline bus settles. Maddening, unless you love the ship’s voice.',
+  });
+  svc('svcDoglegManifold', 'residential', 'Habitation-loop isolation panel (dogleg)', -5.72, DECK2Y, 12.6, Math.PI / 2, 0.7, 1.25, 0.1,
+    'THE two-person-rule panel: when the wet-service core is opened for work, the loop isolates from here, and the core hatch releases from here — from OUTSIDE, when the person at this panel confirms the reseat. Its controls sit low enough for a twelve-year-old to work them. Nobody thought about that when they mounted it. Somebody noticed.', ['quarters-loop']);
+  svc('freightLockPanel', 'aft-freight', 'Freight lock seal-test panel', -3.0, DECK2Y, 18.68, 0, 0.55, 1.15, 0.12,
+    'Runs the lock’s seal-integrity cycle: both lock doors dog shut for the duration of the test, and this panel — outside the lock — releases them when the cycle completes.');
+  // the support rail and its too-deep bracket (VH1_B3_02)
+  add('spnSupportRail', {
+    room: 'spine', type: 'rail', name: 'Spine support rail',
+    params: { length: 1.6, height: 0.95, midRail: false },
+    pos: [3.32 + HX, 0, 6.4], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['spine-support-rail'],
+    note: 'The support rail along the spine wall — a handhold in the narrow dark, and Quenby’s old lean spot two turns from anywhere.',
+  });
+  svc('svcSpineBracket', 'spine', 'Recessed equipment bracket (behind the rail line)', 3.31, 0, 7.7, Math.PI / 2, 0.6, 0.9, 0.1,
+    '"The access angle forced her elbow high. The lower bracket sat too deep behind the support rail." Refit archaeology: the rail came later than the bracket, and no one has ever moved either.', ['spine-support-rail']);
+  // exposed ring-frame ribs: the frame grid, felt in the corridors
+  const rib = (key, room, x, deckY, z, note) => add(key, {
+    room, type: 'strut', name: 'Exposed ring-frame rib',
+    params: { width: 0.24, height: 2.05, depth: 0.2 },
+    pos: [x + HX, deckY, z], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: note || 'A ring frame the corridor lining was never rebuilt to hide. Long halls aboard the Huntress are never one straight sightline — the structure keeps interrupting.',
+  });
+  rib('ribCorAft', 'corridor', 0.78, 0, 6.55);
+  rib('ribSpine1', 'work-spine', -3.2, DECK2Y, 9.0);
+  rib('ribSpine2', 'work-spine', -3.2, DECK2Y, 14.6);
+  rib('ribApproach', 'residential', -6.66, DECK2Y, 6.9,
+    'The rib you learn to angle your shoulder past on the way to your own door. It breaks the corridor’s sightline at chest height — you hear someone on the approach before you see them.');
+  // the stolen corners: handholds where three minutes happen
+  add('nookElbowRail', {
+    room: 'corridor', type: 'rail', name: 'Grab rail (elbow blind corner)',
+    params: { length: 0.5, height: 1.02, midRail: false },
+    pos: [1.55 + HX, 0, 5.52], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: ['med-corridor'],
+    note: 'The offset’s outside corner: invisible from the galley, the medbay, and the whole aft run — only the forward corridor can see in, and boots on the deck give ten seconds’ warning. Not private. Private enough.',
+  });
+  add('nookDoglegRail', {
+    room: 'residential', type: 'rail', name: 'Grab rail (dogleg, warm wall)',
+    params: { length: 0.6, height: 1.02, midRail: false },
+    pos: [-8.5 + HX, DECK2Y, 11.93], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: ['quarters-loop'],
+    note: 'The dogleg’s north wall, warm off the wet-service core, pump-masked, sight-broken from the approach and the work deck both. Only the quiet run can see in — and the quiet run is family. The ship’s best three minutes.',
   });
 
   return list;
@@ -2676,7 +2763,7 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel', 'svc*', 'rib*', 'nook*'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
@@ -2687,7 +2774,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 19;
+export const LAYOUT_VERSION = 20;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2705,4 +2792,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   16: ['corBend*', 'corWallPortMid', 'corAftWallStbd', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*', 'resWall*', 'quietWall*', 'galStool*', 'medHatch', 'medChair', 'medShelf', 'medSterilizer', 'sbRig', 'gardenStore*', 'engWall*', 'iriQ*', 'domeFloor'], // open the corridor elbow (live-app validation found it walled), offset cabin doors clear of bunks, clear furniture / clearance-zone collisions, rebuild the aft-room option of the Iri conflict against the new main deck
   17: ['gal*', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab6*', 'cargoFloor', 'flexFloor', 'resApproachFloor', 'quietRunFloor'], // author-canon session: island folded into the counter run, nav lock levers at the helm, hold registry names, cabin quirks, crew-quarters naming
   19: ['cdPortDuct'], // the port air trunk becomes the domestic loop's tagged supply spine (ducting pass)
+  20: ['wetCorePanel', 'wetCoreFloor', 'spnLeg2S', 'engAccessPanel', 'medAirUnit', 'freightLockFloor', 'engManifold'], // interlock and lock-in canon written onto the five maintenance venues (service-points pass)
 };

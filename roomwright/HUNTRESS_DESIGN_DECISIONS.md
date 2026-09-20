@@ -1497,3 +1497,29 @@ The ship's air system is now routed geometry, and the acoustics duct channel der
 **Acoustics refinements from live probing:** structure-borne sound now pays a real cost per deck junction crossed (a cabin bunk no longer murmurs into the galley one deck up), and flight-mode vibration damps the structure channel fully — under burn, even the party wall goes silent, which makes the earlier canon phrase literal. Vent-talk verified: intimacy in Cabin Two at night reads as duct presence in Cabin Six down the shared habitation loop, structure presence next door, and nothing anywhere else.
 
 A new **air-loops habit test** (26 total) locks the architecture: every cabin, nav, the wet core, and the stores room on the habitation loop; bridge/corridor/galley/hygiene on domestic; the work deck and both holds on ops with the crawl tap present; the medbay's loop leaking into nothing; the engine bay on no comfort loop; all four plant units present. Layout version 19; migration verified.
+
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Service points, ribs, and the stolen corners
+
+The distributed-maintenance principle is now physical, and the ship has learned to shelter three minutes of privacy.
+
+**Service points (a dozen new, joining the existing plant):** the helm kneehole panel (Next-01, the old harness beneath it), a corridor power pull-panel, the coolant riser in the elbow's dead corner, the galley heater's service panel, the approach's coolant valve set with its forgotten tags, work-spine and Lower Operations junction panels, the quiet-run junction box that blinks with the loop, the old freight junction in Hold One, Cabin Three's clicking box made physical, and the spine's support rail with its too-deep bracket (VH1_B3_02, newly seeded). Every working space now keeps an openable panel where its systems pass — maintenance can erupt into lived space anywhere the runs go.
+
+**Lock-in canon written onto the five venues** (mundane physics, no contrivance):
+- **Wet-service core** — drain-down and reseat, 20–40 minutes, hatch held shut, released only from the new **habitation-loop isolation panel out on the dogleg**. Two-person rule: one inside, one at the panel — and the panel's controls sit at a twelve-year-old's height. Nobody thought about that when they mounted it. Somebody noticed.
+- **Engine bay** — thermal bind: with the manifold open and the bay hot, the spine door's frame sits in the thermal break and physically binds until the seals cool. The ship locks the door; the crew knows to sit down.
+- **Engineering access crawl** — two-person rule at the existing isolation panel: the one standing at the panel owns the clock.
+- **Freight lock** — seal-integrity cycle dogs both doors, released from the new panel at the freight junction, outside.
+- **Medbay** — filter purge cycle: the one room where a locked-in conversation is also soundproof.
+
+**Presence-01 anchoring (author choice pending):** the waist-deep manifold scene can live in the engine bay (current placement) or at the **elbow coolant riser**, where stripped paneling stacks in a lived corridor. Both access points now exist; the log records the choice as open.
+
+**Halls that aren't straight shots:** exposed ring-frame ribs now interrupt the aft corridor, the work spine (twice), and the residential approach — the frame grid felt at shoulder height. You hear someone coming before you see them, everywhere aboard.
+
+**The stolen corners** (grab rails mark them; "not private — private enough"):
+- **The elbow blind corner** (main deck): invisible from the galley, medbay, and aft run; only the forward corridor sees in, and boots on deck give ten seconds' warning.
+- **The dogleg warm wall** (lower deck): warm off the wet core, pump-masked, hidden from the approach and the work deck; only the quiet run sees in — and the quiet run is family. The ship's best three minutes.
+- **The spine turn**: two turns from anywhere, Quenby's old lean spot at the support rail; only the engine-bay approach sees in.
+
+Two new habit tests (28 total) hold all of it: **service-reach** (every working space keeps a service point; all three interlock release panels stay within a child's reach) and **stolen-moments** (each corner stays hidden from its listed vantages AND stays honestly exposed to exactly one approach — the tests fail if a corner ever becomes fully sealed, because the point is three minutes, not a locked door). Layout version 20; migration verified.

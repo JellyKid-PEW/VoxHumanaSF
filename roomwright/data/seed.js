@@ -82,6 +82,14 @@ export const SEED_CONSTRAINTS = [
     claims: [{ kind: 'relation', a: 'pilotCradle', b: 'viewport', rel: 'facing' }],
   },
   {
+    key: 'spine-support-rail', source: 'VH1_B3_02',
+    quote: 'The access angle forced her elbow high. The lower bracket sat too deep behind the support rail.',
+    category: 'railing', subject: 'spine support rail and recessed bracket',
+    interpretation: 'Support rails run along the spine walls with equipment brackets recessed behind them — refit layers installed at different times, creating awkward reach angles. (Draft-manuscript evidence.)',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'spineSupportRail' }],
+  },
+  {
     key: 'vent-grid', source: 'Next-09',
     quote: 'It ran behind the secondary vent grid, narrow enough that B.O.B. hadn’t mapped it into standard access routines.',
     category: 'adjacency', subject: 'the secondary vent grid / unlisted corridor',
