@@ -1864,12 +1864,34 @@
    "type": "wall",
    "name": "Dry hygiene branch aft wall",
    "params": {
-    "length": 4.85,
+    "length": 3.8,
     "height": 2.1,
     "thickness": 0.1
    },
    "pos": [
-    -2.625,
+    -2.1,
+    0,
+    7.65
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "domRunDoor",
+   "room": "domestic-service",
+   "type": "doorway",
+   "name": "Domestic service run door",
+   "params": {
+    "length": 1,
+    "height": 2.05,
+    "thickness": 0.1,
+    "doorWidth": 0.7,
+    "doorHeight": 1.92,
+    "kind": "sliding",
+    "slideDir": -1,
+    "open": 0
+   },
+   "pos": [
+    -4.5,
     0,
     7.65
    ],
@@ -8418,5 +8440,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 27
+ "version": 28
 }

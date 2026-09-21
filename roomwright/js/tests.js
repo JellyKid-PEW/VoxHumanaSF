@@ -582,10 +582,17 @@ export const HABIT_TESTS = [
       }
       const grid = computeNavGrid(0.20);
       const branchPt = new THREE.Vector3(branch.pos[0] - 0.45, 0, branch.pos[2]);
+      // snap radius stays TIGHT (0.6 m): a 2 m radius once let the pathfinder
+      // snap the toilet endpoint into the galley and pass while the entire
+      // hygiene wing was sealed off (caught by the Next-10 scene review)
       for (const r of [toilet, shower]) {
-        if (!findPath(grid, branchPt, new THREE.Vector3(r.pos[0], 0, r.pos[2]), 20)) {
+        if (!findPath(grid, branchPt, new THREE.Vector3(r.pos[0], 0, r.pos[2]), 6)) {
           problems.push(`${r.name} is not reachable through the dry hygiene route.`);
         }
+      }
+      const hooks = state.project.objects.find(o => o.layoutKey === 'coatRow');
+      if (hooks && !findPath(grid, branchPt, new THREE.Vector3(hooks.pos[0] - 0.35, 0, hooks.pos[2]), 6)) {
+        problems.push('The locker row (coat hooks) is not reachable through the dry hygiene route — Next-10 walks this.');
       }
       if (problems.length) return { status: 'fail', details: problems.join('\n') };
       return { status: 'pass', details: 'The galley stays a separate closable room; toilet and shower open from the dry service vestibule, the wet-service chase sits between the functions, and the residential ladder terminates in the dry zone.' };

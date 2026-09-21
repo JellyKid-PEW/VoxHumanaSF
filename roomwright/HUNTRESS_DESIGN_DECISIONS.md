@@ -1630,3 +1630,19 @@ Next-09 cashed in the deferred item, and the author said build it. The corridor 
 **Re-staging Next-09 on the real geometry:** both figures stand on true floor; the conversation over the open cache stays in the corridor at drift-night — nothing above a presence-level murmur escapes — so the discovery scene is exactly as private as the chapter needs; and fifteen of the chapter's spatial statements now match the evidence base. The journal, medallion, and crate marker remain loose props by design: they travel to the bridge in the same chapter.
 
 All 32 tests green; v26→v27 migration verified (massing retired, wall split, corridor and cache appear, user objects preserved). Maps re-exported — the lower deck plan now shows the UNLISTED slot behind Hold One's wall.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Next-10 on the workbench: the sealed wing (v28)
+
+Third field test, biggest catch yet. Next-10 (the inventory chapter — Manual mode's origin: "Two. Manual. Emergency overrides stay. And stop greeting me.") was staged as three scenes. Quenby's walk from the bridge to the locker row would not validate — and the diagnosis went deeper than a bad waypoint: **the dry hygiene branch's aft wall ran straight across the mouth of the domestic-service run.** The entire wing — locker row, vestibule, toilet, shower, secondary ladder head — was sealed off from its own deck, reachable only by ladder from below. The hygiene-separation habit test had never noticed because its 2-meter endpoint snap let the pathfinder step around the wall into the galley and call the toilet "reached."
+
+Fixes: the wall now splits around a real **domestic service run door** (0.7 m, sliding, pressure-sensor keyed — the door of Next-10 that "opened before she reached it," because doors remember weight, which is not the same as anticipating it). The route test's snap radius tightened from 2 m to 0.6 m, and it now also walks to the locker row. Quenby's full route — bridge, corridor, junction, branch, run door, coat hooks — validates at 11.2 m.
+
+Findings for the author, recorded here:
+- **"Turned left at the galley"**: character-relative (walking aft), the locker row is a RIGHT turn — left leads into the storage spine. Ship-frame (port = left, nautically), the line is correct. The model can honor either; the prose might prefer "turned to port" if ambiguity ever bites.
+- **"From the bridge, Iri watched the mug pass through the door's peripheral frame"**: true only from the open bridge hatch itself — the sight probes show the corridor elbow threads visible down to the galley junction from the threshold, but from anywhere deeper in the bridge (her station), the aft bulkhead blocks it. Defensible as written; half a step sells it.
+- **The era check flagged "the next door opened before she reached it"** in a Manual-mode scene — and the chapter itself spends a paragraph on exactly that tension. The flag is the ruling working; the text already owns it. Canon nuance recorded: manual mode stops anticipation, not memory.
+- **Storage Two does not exist in the model.** The registry holds Storage Four, Pockets One–Three. Next-10 establishes a Storage Two with a sealed box in it. Where it lives is an open author decision (candidates: the storage spine's unnumbered bins, the lower-deck operations side, or old fabric off the work spine).
+- "Nav bench" (the meal tray's perch) vs. the model's "nav fold-down perch" — same object, loose phrasing; noted, not queued.
+
+All 32 tests green (the hygiene route test now has teeth); v27→v28 migration verified. Maps re-exported with the run door.

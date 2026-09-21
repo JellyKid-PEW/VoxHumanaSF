@@ -942,11 +942,25 @@ function defs(rulings) {
     pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 - 0.40], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Dry separation from medbay / adjacent service volume.',
   });
+  // The branch's aft wall carries the doorway into the domestic-service run
+  // (the locker row and hygiene wing). Next-10 walks this door — and its
+  // review exposed that the wall used to run straight across the run's
+  // mouth, sealing the entire wing off from the deck. The old
+  // hygiene-separation route test never noticed because its 2 m endpoint
+  // snap radius let the pathfinder step around the wall into the galley.
+  const domRunDoorX = HYGX;   // centered on the domestic-service run
   add('hygBranchWallS', {
     room: 'hygiene', type: 'wall', name: 'Dry hygiene branch aft wall',
-    params: { length: hygBranchEast - hygBranchWest, height: 2.10, thickness: 0.10 },
-    pos: [(hygBranchEast + hygBranchWest) / 2, 0, HYGZ0 + 0.40], rotY: 0, locked: true,
+    params: { length: hygBranchEast - (domRunDoorX + 0.5), height: 2.10, thickness: 0.10 },
+    pos: [(hygBranchEast + domRunDoorX + 0.5) / 2, 0, HYGZ0 + 0.40], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'The galley is beyond this wall / junction rather than visible through the hygiene route.',
+  });
+  add('domRunDoor', {
+    room: 'domestic-service', type: 'doorway', name: 'Domestic service run door',
+    params: { length: 1.0, height: 2.05, thickness: 0.10, doorWidth: 0.7, doorHeight: 1.92, kind: 'sliding', slideDir: -1, open: 0 },
+    pos: [domRunDoorX, 0, HYGZ0 + 0.40], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['locker-row-hooks'],
+    note: 'The door at the mouth of the domestic-service run — the locker row hangs just inside. Pressure sensors keyed from traffic: it remembers weight, which is not the same as anticipating it (Next-10).',
   });
   add('hygVestWallW', {
     room: 'hygiene', type: 'wall', name: 'Domestic service / hygiene outer wall',
@@ -3020,7 +3034,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 27;
+export const LAYOUT_VERSION = 28;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3046,4 +3060,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   25: ['medFloor', 'medCot', 'medChair', 'medRailHead', 'medRailFoot', 'medBoom'], // author ruling: the cot is a rated procedure bed on recessed deployment rails, umbilical boom overhead
   26: ['engBench', 'engToolbox'], // the dented toolbox + cracked datapad promoted from a bench note to a real object (found by the scene-review workbench on Presence-01)
   27: ['unl*', 'mhUnlisted', 'cargoWallE*', 'ventGridPanel'], // Next-09 un-defers the unlisted corridor: real walkable geometry, access plate in the split hold wall, underfloor cache; the anomaly massing retires
+  28: ['hygBranchWallS', 'domRunDoor'], // Next-10 review found the domestic-service run sealed at its mouth: the branch aft wall now splits around a real door (the one that "remembers weight")
 };
