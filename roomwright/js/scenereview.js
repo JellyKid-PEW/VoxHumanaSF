@@ -20,7 +20,14 @@ function floorRect(f) {
   return { minX: f.pos[0] - hw, maxX: f.pos[0] + hw, minZ: f.pos[2] - hd, maxZ: f.pos[2] + hd, area: fw * fd };
 }
 const deckOf = o => Math.abs((o.pos[1] || 0) - DECK2Y) < 0.4 ? DECK2Y : 0;
-export const nearestDeck = y => Math.abs((y || 0) - DECK2Y) < 1.5 ? DECK2Y : 0;
+// snap to a known deck only when actually near one; a figure at Deck Three
+// depth (y ≈ -5.5) keeps its own level, so roomAt honestly finds no floor
+export const nearestDeck = y => {
+  const v = y || 0;
+  if (Math.abs(v) < 1.5) return 0;
+  if (Math.abs(v - DECK2Y) < 1.5) return DECK2Y;
+  return v;
+};
 
 // The most specific floor under a point (smallest containing rect on the point's deck).
 export function roomAt(pos) {
@@ -111,7 +118,13 @@ export function reviewScene(scene) {
       add('placement', 'issue', `${label} stands outside any floor`, `At (${m.pos[0].toFixed(1)}, ${m.pos[2].toFixed(1)}) — no deck underfoot. Move the figure onto the ship.`);
       return { m, label, floor: null };
     }
-    if (SIT_POSES.has(m.pose)) {
+    if (m.pose === 'sitFloor') {
+      // sitting on the deck needs deck, not furniture
+      const v = new THREE.Vector3(m.pos[0], 0, m.pos[2]);
+      const ok = gridFor(nearestDeck(m.pos[1])) && findPath(gridFor(nearestDeck(m.pos[1])), v, v, 4);
+      if (!ok) add('placement', 'issue', `${label} has nowhere to sit on the deck`, `In ${floor.name}, but the spot is inside furniture or a wall clearance.`);
+      else add('placement', 'ok', `${label} — sitting on the deck in ${floor.name}`);
+    } else if (SIT_POSES.has(m.pose)) {
       const near = state.project.objects.some(o => ['seat', 'bench'].includes(o.type) &&
         Math.hypot(o.pos[0] - m.pos[0], o.pos[2] - m.pos[2]) < 0.7);
       if (!near) add('placement', 'issue', `${label} sits on nothing`, `Seated pose in ${floor.name}, but no seat or bench within reach. Move them to a seat or change the pose.`);
