@@ -1287,7 +1287,7 @@ function defs(rulings) {
     room: 'medbay', type: 'floor', name: 'Medbay deck', params: { width: MW, depth: MD },
     pos: [mx, 0, mz], rotY: 0, locked: true,
     evidence: 'explicit', evidenceRefs: ['med-two-beds', 'med-reach', 'med-corridor'],
-    note: `Medbay ${MW} × ${MD} m — compact enough that supplies are within blind arm’s reach one step inside the door.`,
+    note: `Medbay ${MW} × ${MD} m — compact enough that supplies are within blind arm’s reach one step inside the door. In procedure mode the bed deploys off the wall on its rails and the room converts: chair on its wall hook, upper cot latched flat, two people working shoulder to shoulder around the patient.`,
   });
   add('medCeil', {
     room: 'medbay', type: 'ceiling', name: 'Medbay overhead', params: { width: MW, depth: MD, height: MH },
@@ -1307,14 +1307,36 @@ function defs(rulings) {
     pos: [mx - MW / 2, 0, mz], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'The cot wall.',
   });
-  // the real bed — "the cot" of Presence and Book 3
+  // the real bed — "the cot" of Presence and Book 3, and secretly the most
+  // over-spec piece of hardware aboard: a rated procedure bed on rails
   add('medCot', {
-    room: 'medbay', type: 'bench', name: 'Medbay bed — "the cot"',
+    room: 'medbay', type: 'bench', name: 'Procedure bed — "the cot" (stowed)',
     params: { width: 0.72, height: 0.52, depth: 1.5 },
     pos: mrel(-MW / 2 + 0.43, 0), rotY: 0, locked: false,
     evidence: 'decision',
     evidenceRefs: ['med-cot', 'med-two-beds', 'med-telemetry'],
-    note: 'The real bed (author ruling: one real bed plus one cot). Everyone aboard calls it the cot anyway. Reclines "at an angle designed by someone who believed recovery worked better if the body had nowhere useful to go." The telemetry projection hovers past its foot.',
+    note: 'The real bed (author ruling): a certified medical procedure bed on recessed deployment rails — unlatch it and it slides clear of the wall, casters lock, and the medic gets both sides of the patient; the umbilical boom follows from overhead. Stowed against the wall it is simply "the cot," reclined "at an angle designed by someone who believed recovery worked better if the body had nowhere useful to go." Probably the single most over-spec fitting aboard — from whichever refit era certified her for crewed long-haul work — which is exactly why a century of owners who sold everything else never sold this. The telemetry projection hovers past its foot.',
+  });
+  add('medRailHead', {
+    room: 'medbay', type: 'rail', name: 'Bed deployment track (head)',
+    params: { length: 1.15, height: 0.015, midRail: false },
+    pos: mrel(-MW / 2 + 0.645, -0.55), rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['med-two-beds'],
+    note: 'Recessed channel track flush with the deck — the head-end rail the procedure bed rides when it deploys. Collects grit; cleaning it out is a one-knee, ten-minute job nobody schedules alone.',
+  });
+  add('medRailFoot', {
+    room: 'medbay', type: 'rail', name: 'Bed deployment track (foot)',
+    params: { length: 1.15, height: 0.015, midRail: false },
+    pos: mrel(-MW / 2 + 0.645, 0.55), rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['med-two-beds'],
+    note: 'Foot-end deployment track, recessed flush. The deploy latch lives at this end, at knee height on the bed frame.',
+  });
+  add('medBoom', {
+    room: 'medbay', type: 'shelf', name: 'Umbilical boom (power / med-gas / telemetry)',
+    params: { width: 0.9, depth: 0.28, mountHeight: 1.95, tins: 0 },
+    pos: mrel(-MW / 2 + 0.16, -0.45), rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['med-two-beds', 'med-telemetry'],
+    note: 'Articulated overhead boom above the bed head: power, med-gas, and telemetry umbilicals that follow the bed out on deployment and fold flat against the wall when it stows. The joint creaks on the first pull — always the first pull.',
   });
   // the second recessed wall bed of Next-01: a lighter fold-down cot above it
   add('medUpperBed', {
@@ -1336,7 +1358,7 @@ function defs(rulings) {
     params: { seatHeight: 0.45, width: 0.46, hasArms: false },
     pos: mrel(0.0, -0.06), rotY: Math.PI - 0.4, locked: false,
     evidence: 'explicit', evidenceRefs: ['med-chair', 'med-chair-hook'],
-    note: 'The one chair — hooked into position beside the console, within reach of the tea, angled toward both telemetry and cot.',
+    note: 'The one chair — hooked into position beside the console, within reach of the tea, angled toward both telemetry and cot. It unhooks and hangs on the aft wall when the bed deploys; its floor position sits astride the recessed rails.',
   });
   add('medShelf', {
     room: 'medbay', type: 'storage', name: 'Storage shelf',
@@ -2903,7 +2925,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 24;
+export const LAYOUT_VERSION = 25;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2926,4 +2948,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   22: ['cab4*', 'engManifold', 'svcCorBend'], // author locks: Cabin Four is Nova's; Presence-01 lives at the elbow coolant riser
   23: ['medCot', 'medUpperBed', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*'], // author rulings: medbay = one real bed + one fold-down cot (conflict resolved); every cabin gets locker / fold-down desk / stool
   24: [...DOOR_WING_KEYS, 'stationRail', 'iriQ*'], // all six declared conflicts resolved by author ruling and baked in — regenerate everything a contrary stored ruling could have moved (door wing, station rail, Iri's aft-room variant), plus the new engine-bay floor hatch
+  25: ['medFloor', 'medCot', 'medChair', 'medRailHead', 'medRailFoot', 'medBoom'], // author ruling: the cot is a rated procedure bed on recessed deployment rails, umbilical boom overhead
 };

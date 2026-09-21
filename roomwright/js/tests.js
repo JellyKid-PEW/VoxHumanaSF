@@ -431,11 +431,15 @@ export const HABIT_TESTS = [
     basis: ['standing-behind-chair', 'door-behind'],
     run() {
       const problems = [];
-      // furniture–furniture overlap
+      // furniture–furniture overlap. Floor-flush hardware (recessed tracks,
+      // cargo guides, sill trim — anything under 8 cm tall) is exempt: things
+      // stand ON it by design, so it cannot meaningfully collide.
+      const flush = it => (it.bb.max.y - it.bb.min.y) < 0.08;
       const items = furnitureAABBs();
       for (let i = 0; i < items.length; i++) {
         for (let j = i + 1; j < items.length; j++) {
           const a = items[i], b = items[j];
+          if (flush(a) || flush(b)) continue;
           if (a.bb.intersectsBox(b.bb)) {
             const inter = a.bb.clone().intersect(b.bb);
             const pen = Math.min(inter.max.x - inter.min.x, inter.max.z - inter.min.z);
@@ -1289,6 +1293,70 @@ export const HABIT_TESTS = [
       return {
         status: 'pass',
         details: 'The sound map holds: the party wall carries Cabin Six to Cabin Five and nowhere else that matters; galley talk reaches the cradle with doors open; the shut medbay keeps its conversations; the stair well is a chimney; the engine hums through pocket three; and a burn deafens the ship. ',
+      };
+    },
+  },
+  {
+    id: 'procedure-bed-deploy',
+    name: 'The procedure bed deploys off its rails with walk-around access on both flanks',
+    basis: ['med-two-beds', 'med-cot', 'med-reach'],
+    run() {
+      const floor = state.project.objects.find(o => o.layoutKey === 'medFloor');
+      const bed = state.project.objects.find(o => o.layoutKey === 'medCot');
+      const railH = state.project.objects.find(o => o.layoutKey === 'medRailHead');
+      const railF = state.project.objects.find(o => o.layoutKey === 'medRailFoot');
+      const boom = state.project.objects.find(o => o.layoutKey === 'medBoom');
+      if (!floor || !bed) return { status: 'fail', details: 'Medbay floor or procedure bed missing.' };
+      const missing = [];
+      if (!railH || !railF) missing.push('deployment track(s)');
+      if (!boom) missing.push('umbilical boom');
+      if (missing.length) return { status: 'fail', details: `Procedure-mode hardware missing: ${missing.join(', ')}.` };
+      const W = floor.params.width, wallX = floor.pos[0] - W / 2;
+      const bw = bed.params.width ?? 0.72;
+      const LANE = 0.45;                                   // one working body per flank
+      const NEED = 0.9;                                    // clear torso-length stretch per flank
+      const cx = wallX + LANE + 0.06 + bw / 2;             // deployed bed centerline
+      const bz = bed.pos[2], z0 = bz - 0.75, z1 = bz + 0.75;
+      // rails must actually reach the deployed position
+      const railReach = Math.max(railH.pos[0], railF.pos[0]) + (railH.params.length ?? 1) / 2;
+      const problems = [];
+      if (railReach < cx - 0.05) problems.push(`Deployment tracks stop at x=${fmt(railReach, 2)} — short of the deployed bed centerline x=${fmt(cx, 2)}.`);
+      // chair hooks away, upper cot latches flat, rails are recessed — everything else must leave each flank a clear working stretch
+      const skip = new Set(['medCot', 'medChair', 'medUpperBed', 'medRailHead', 'medRailFoot', 'medBoom']);
+      const lanes = [
+        ['wall-side', cx - bw / 2 - LANE, cx - bw / 2],
+        ['room-side', cx + bw / 2, cx + bw / 2 + LANE],
+      ];
+      for (const [label, lx0, lx1] of lanes) {
+        if (lx0 < wallX - 0.01) { problems.push(`The ${label} lane falls outside the room.`); continue; }
+        const blocked = [];
+        for (const { rec, bb } of furnitureAABBs()) {
+          if (rec.room !== 'medbay' || skip.has(rec.layoutKey || '')) continue;
+          if (bb.max.y < 0.12 || bb.min.y > 1.8) continue;
+          if (bb.max.x > lx0 && bb.min.x < lx1 && bb.max.z > z0 && bb.min.z < z1) {
+            blocked.push([Math.max(bb.min.z, z0), Math.min(bb.max.z, z1), rec.name]);
+          }
+        }
+        blocked.sort((a, b) => a[0] - b[0]);
+        let clear = 0, cursor = z0;
+        for (const [a, b] of blocked) { clear = Math.max(clear, a - cursor); cursor = Math.max(cursor, b); }
+        clear = Math.max(clear, z1 - cursor);
+        if (clear < NEED) problems.push(`The ${label} flank keeps only ${fmt(clear, 2)} m clear (need ${NEED}) — blocked by ${blocked.map(b => b[2]).join(', ')}.`);
+      }
+      // the deployed bed must not crowd the hatch clearance zone
+      const hatch = state.project.objects.find(o => o.layoutKey === 'medHatch');
+      if (hatch) {
+        for (const side of [1, -1]) {
+          const pt = doorFloorPoint(hatch, side);
+          const nx = Math.max(cx - bw / 2, Math.min(pt.x, cx + bw / 2));
+          const nz = Math.max(z0, Math.min(pt.z, z1));
+          if (Math.hypot(pt.x - nx, pt.z - nz) < 0.32) problems.push('The deployed bed crowds the medbay hatch clearance zone.');
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: `Procedure mode works: bed deploys to x=${fmt(cx, 2)} on tracks that reach it, both flanks keep a ${NEED}+ m working stretch (chair on its hook, upper cot latched flat), the boom follows from overhead, and the hatch stays clear.`,
       };
     },
   },

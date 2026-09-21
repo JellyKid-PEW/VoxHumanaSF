@@ -831,7 +831,7 @@ export const SEED_CONSTRAINTS = [
     key: 'med-two-beds', source: 'Next-01',
     quote: 'The space was compact, holding two recessed wall beds, a console, and a sterilizer unit with a blinking diagnostic loop. No clutter. No softness.',
     category: 'furniture', subject: 'medbay layout',
-    interpretation: 'RESOLVED (author ruling): the medbay has one real bed plus one cot — the lower recessed wall bed is the real recovery bed (the "cot" everyone says aboard), and the second recessed bed is a lighter fold-down cot latched flat above it. Both passages stay true: two beds installed, one in daily use.',
+    interpretation: 'RESOLVED (author ruling): the medbay has one real bed plus one cot — and the real bed is official medical hardware: a certified procedure bed on recessed deployment rails. Stowed against the wall it is the "cot" everyone says aboard; unlatched, it slides clear on its tracks for walk-around access, umbilical boom following overhead, chair on its wall hook, upper fold-down cot latched flat. Both passages stay true: two beds installed, one in daily use, and the compact room converts rather than grows.',
     evidence: 'explicit',
     claims: [
       { kind: 'presence', target: 'medbay' },

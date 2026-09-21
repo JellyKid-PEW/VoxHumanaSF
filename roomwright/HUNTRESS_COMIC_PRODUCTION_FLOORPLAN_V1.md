@@ -50,7 +50,7 @@ Production-fixed relationships:
 - legacy storage spine branches before the main corridor offset;
 - primary corridor offsets before medbay, preventing direct airlock-to-medbay sightline;
 - medbay opens from the aft corridor run;
-- medbay holds **one real bed plus one cot** (author ruling): the lower recessed wall bed is the real recovery bed — "the cot" everyone says aboard — with a lighter fold-down cot latched flat above it for the rare two-patient day;
+- medbay holds **one real bed plus one cot** (author ruling): the lower wall bed is a certified **procedure bed on recessed deployment rails** — "the cot" everyone says aboard when it sits stowed against the wall. Unlatched, it slides out on flush deck tracks for walk-around access, the overhead umbilical boom (power / med-gas / telemetry) following it out, the chair on its wall hook, the lighter fold-down cot latched flat above. Probably the most over-spec fitting aboard, from whichever refit era certified her for crewed long-haul work. In art: stowed is the default; procedure mode means the room is FULL;
 - galley is a closable room at the aft domestic junction;
 - separate dry domestic-service branch leads toward hygiene and the secondary ladder;
 - toilet and shower are separate compartments;

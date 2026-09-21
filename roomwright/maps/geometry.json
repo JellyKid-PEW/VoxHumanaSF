@@ -2603,7 +2603,7 @@
    "layoutKey": "medCot",
    "room": "medbay",
    "type": "bench",
-   "name": "Medbay bed — \"the cot\"",
+   "name": "Procedure bed — \"the cot\" (stowed)",
    "params": {
     "width": 0.72,
     "height": 0.52,
@@ -2615,6 +2615,58 @@
     5.8
    ],
    "rotY": 0
+  },
+  {
+   "layoutKey": "medRailHead",
+   "room": "medbay",
+   "type": "rail",
+   "name": "Bed deployment track (head)",
+   "params": {
+    "length": 1.15,
+    "height": 0.015,
+    "midRail": false
+   },
+   "pos": [
+    -2.1550000000000002,
+    0,
+    5.25
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "medRailFoot",
+   "room": "medbay",
+   "type": "rail",
+   "name": "Bed deployment track (foot)",
+   "params": {
+    "length": 1.15,
+    "height": 0.015,
+    "midRail": false
+   },
+   "pos": [
+    -2.1550000000000002,
+    0,
+    6.35
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "medBoom",
+   "room": "medbay",
+   "type": "shelf",
+   "name": "Umbilical boom (power / med-gas / telemetry)",
+   "params": {
+    "width": 0.9,
+    "depth": 0.28,
+    "mountHeight": 1.95,
+    "tins": 0
+   },
+   "pos": [
+    -2.64,
+    0,
+    5.35
+   ],
+   "rotY": 1.5707963267948966
   },
   {
    "layoutKey": "medUpperBed",
@@ -8174,5 +8226,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 24
+ "version": 25
 }
