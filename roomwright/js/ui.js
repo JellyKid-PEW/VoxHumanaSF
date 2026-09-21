@@ -846,7 +846,7 @@ function renderObjects() {
     'flex-bay': 'Hold Two (flex bay)', 'engineering-access': 'Engineering access',
     'aft-freight': 'Aft freight node', 'freight-lock': 'Freight lock',
     'cargo-bay': 'Hold One (cargo / training)', 'lower-aft-spine': 'Lower aft spine',
-    'equipment-crawl': 'Equipment crawl (Nova)', hull: 'Hull & massing', other: 'Custom',
+    'equipment-crawl': 'Equipment crawl (Nova)', unlisted: 'Unlisted corridor', hull: 'Hull & massing', other: 'Custom',
   };
   const groups = {};
   for (const k of Object.keys(ROOM_LABEL)) groups[k] = [];

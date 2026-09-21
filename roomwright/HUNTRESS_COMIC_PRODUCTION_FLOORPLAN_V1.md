@@ -102,7 +102,8 @@ Production-fixed relationships:
 - work spine passes configurable mission / flex bay, repair recess, and principal underdeck engineering access;
 - aft freight / service node connects freight lock, main cargo bay, work spine, and lower-aft service route;
 - main cargo bay has large freight access and a smaller service / personnel hatch;
-- Nova's port-side equipment crawl sits in the lower aft spine.
+- Nova's port-side equipment crawl sits in the lower aft spine;
+- the **unlisted corridor** (Next-09) runs between Hold One's starboard wall and the hull: shoulder-wide (~0.66 m clear), low overhead (~1.95 m), entered through an access plate in the hold wall beside the secondary vent grid, with the layered-deck cache three meters in. It is real geometry the ship's own maps don't carry — B.O.B.'s cartography follows use, not architecture.
 
 Approximate art-facing dimensions:
 - Lower Operations landing: ~3.0 × 2.7 m.
@@ -116,6 +117,7 @@ Approximate art-facing dimensions:
 - Main cargo / training bay: ~7.0 × 8.0 m, ~3.2 m overhead.
 - Freight transfer lock: ~3.4 × 2.8 m.
 - Nova equipment crawl: ~1.8 × 1.45 m, ~1.65 m overhead.
+- Unlisted corridor: ~0.66 m clear width × 7.2 m, ~1.95 m overhead; cache recess ~0.5 × 0.65 m in the deck.
 
 ## Production-flexible elements
 

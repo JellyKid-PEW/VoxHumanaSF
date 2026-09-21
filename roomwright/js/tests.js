@@ -1361,6 +1361,53 @@ export const HABIT_TESTS = [
       };
     },
   },
+  {
+    id: 'unlisted-corridor',
+    name: 'The corridor that is not on the map is real, narrow, cached, and deaf',
+    basis: ['unl-corridor', 'unl-seam-grid', 'unl-narrow', 'unl-cache', 'unl-audio-shadow'],
+    run() {
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const floor = byKey('unlFloor'), hatch = byKey('unlHatch'), grid = byKey('ventGridPanel');
+      const lid = byKey('unlCacheHatch'), stores = byKey('unlCacheStores'), kase = byKey('unlCacheCase');
+      if (!floor || !hatch) return { status: 'fail', details: 'The unlisted corridor or its access plate is missing.' };
+      const problems = [];
+      // the seam sits at the vent grid
+      if (grid && Math.abs(grid.pos[2] - hatch.pos[2]) > 1.4) {
+        problems.push(`The access plate has drifted ${fmt(Math.abs(grid.pos[2] - hatch.pos[2]), 1)} m from the secondary vent grid — the seam belongs beside it.`);
+      }
+      // shoulder-wide: a body fits, and shoulders brush
+      const w = floor.params.width ?? 1;
+      if (w > 0.75) problems.push(`Corridor is ${fmt(w, 2)} m wide — too generous; shoulders should brush (≤ 0.75).`);
+      if (w < 0.52) problems.push(`Corridor is ${fmt(w, 2)} m wide — a body no longer fits.`);
+      // walkable: from just inside the hatch to the cache, and on to the aft end
+      const grid2 = computeNavGrid(0.24, [], floor.pos[1] || 0);
+      const inPt = new THREE.Vector3(floor.pos[0], 0, hatch.pos[2]);
+      if (lid) {
+        const toCache = grid2 && findPath(grid2, inPt, new THREE.Vector3(floor.pos[0], 0, lid.pos[2]), 3);
+        if (!toCache) problems.push('No walkable route from the access plate to the cache panel.');
+        const inDist = Math.abs(lid.pos[2] - hatch.pos[2]);
+        if (inDist < 2.5 || inDist > 3.5) problems.push(`The cache sits ${fmt(inDist, 1)} m from the plate — the prose says three meters in.`);
+      } else problems.push('The layered deck panel (cache lid) is missing.');
+      const aftPt = new THREE.Vector3(floor.pos[0], 0, floor.pos[2] + (floor.params.depth ?? 0) / 2 - 0.4);
+      if (grid2 && !findPath(grid2, inPt, aftPt, 3)) problems.push('The corridor is not walkable end to end.');
+      if (!stores || !kase) problems.push('The cache contents are missing (stores and/or the black travel case).');
+      // acoustic shadow: with the plate shut, speech at the cache reaches no
+      // other space as words, and the corridor rides no routed vent branch
+      const rep = audibilityReport({ x: floor.pos[0], y: floor.pos[1] || 0, z: lid ? lid.pos[2] : floor.pos[2] }, 'speech', 'drift-night');
+      for (const r of rep.rows) {
+        if (r.layoutKey !== 'unlFloor' && r.level === 'words') {
+          problems.push(`${r.name} hears WORDS from inside the corridor — it is supposed to be an acoustic shadow ("Audio response degraded in current position").`);
+        }
+      }
+      const branches = ductBranchesByFloor();
+      if ((branches.get(floor.id) || new Set()).size) problems.push('The corridor rides a routed vent branch — it should be off every loop (uncirculated air).');
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: `Real, narrow (${fmt(w, 2)} m — shoulders brush), walkable end to end, cache ${fmt(Math.abs((lid?.pos[2] ?? 0) - hatch.pos[2]), 1)} m in with its contents below, plate at the vent-grid seam, and deaf: nothing outside hears words, no vent branch reaches in. B.O.B. still doesn't map it; now that is a fact about B.O.B., not about the model.`,
+      };
+    },
+  },
 ];
 
 export function runAllTests() {

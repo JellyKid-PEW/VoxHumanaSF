@@ -1617,3 +1617,16 @@ What the instrument reported:
 - **The mundane-things check found a real gap:** the dented toolbox and cracked datapad — recurring objects with a fixed home per Next — existed only as a sentence in the workbench's note. Promoted to a real object on the bench top (v26). The rig-for-burn test immediately objected that a benched crate has no tie-down, which forced the honest detail: a wear-polished **mag-pad** holds the toolbox through burns, and the datapad rides on top unsecured — which may be how the crack happened. The tests are now writing set dressing.
 
 The "mug" stays loose — production-flexible, as a mug should be. 31/31 habit tests green; v25→v26 migration verified; maps re-exported (the toolbox has a callout now).
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The unlisted corridor becomes real (v27)
+
+Next-09 cashed in the deferred item, and the author said build it. The corridor that isn't on the map is now canon geometry that B.O.B.'s maps still don't carry — which is no longer a modeling gap but a fact about B.O.B., whose cartography follows use, not architecture.
+
+**The build:** a shoulder-wide passage (0.66 m clear, 1.95 m overhead, 7.2 m long) between Hold One's starboard wall and the hull. The hold wall is split around an **access plate** at the vent-grid seam — a 0.55 m sliding plate that releases under steady palm pressure, no alarms, no status request. Inside: old conduit buried behind newer work along the outboard wall (which runs cooler — hull side), dead ends fore and aft, and **three meters in, the layered deck panel** over the underfloor cache. Below it, both compartments hold their inventory: supply rolls, half a medkit, filtration patches, the pre-drift crate marker — and behind the rear panel, the black travel case with the dead datapad, the worn journal, and the cloth-wrapped medallion. Eight new Next-09 constraints seed the evidence base; the anomaly massing retires.
+
+**The 32nd habit test, `unlisted-corridor`, holds the chapter's whole physics:** the plate sits at the vent-grid seam; the corridor stays shoulder-wide (0.52–0.75 m — fails if it ever grows generous); walkable end to end and to the cache; the cache exactly three meters in with its contents below; and DEAF — with the plate shut, speech inside reaches no other space as words, and no routed vent branch enters (uncirculated air). "Audio response degraded in current position" is now a verified property.
+
+**Re-staging Next-09 on the real geometry:** both figures stand on true floor; the conversation over the open cache stays in the corridor at drift-night — nothing above a presence-level murmur escapes — so the discovery scene is exactly as private as the chapter needs; and fifteen of the chapter's spatial statements now match the evidence base. The journal, medallion, and crate marker remain loose props by design: they travel to the bridge in the same chapter.
+
+All 32 tests green; v26→v27 migration verified (massing retired, wall split, corridor and cache appear, user objects preserved). Maps re-exported — the lower deck plan now shows the UNLISTED slot behind Hold One's wall.

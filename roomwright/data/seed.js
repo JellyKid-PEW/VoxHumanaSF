@@ -1369,6 +1369,69 @@ export const SEED_CONSTRAINTS = [
     evidence: 'explicit',
     claims: [{ kind: 'relation', a: 'skiffBay', b: 'medbay', rel: 'near' }],
   },
+
+  // ======== the unlisted corridor (Next-09) ========
+  {
+    key: 'unl-corridor', source: 'Next-09 (unlisted corridor)',
+    quote: 'The corridor wasn’t on the map. That didn’t mean much.',
+    category: 'adjacency', subject: 'the unlisted corridor',
+    interpretation: 'A real service passage on the lower deck, aft-starboard, between Hold One’s wall and the hull — present in architecture, absent from B.O.B.’s maps. Built as canon geometry per author direction (the chapter un-deferred it).',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'unlFloor' }],
+  },
+  {
+    key: 'unl-map-use', source: 'Next-09 (unlisted corridor)',
+    quote: 'B.O.B.’s maps followed use more than architecture. A hatch ignored long enough became a wall. A wall opened often enough became a route.',
+    category: 'lore', subject: 'B.O.B.’s cartography',
+    interpretation: 'The ship’s own map is behavioral, not architectural. Unused space falls off it. This is why the corridor can be real and unmapped at once — and why the model and B.O.B. can honestly disagree.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'unl-seam-grid', source: 'Next-09 (unlisted corridor)',
+    quote: 'A narrow line behind the secondary vent grid. Not hidden well enough to be secret. Not used enough to be ordinary.',
+    category: 'door', subject: 'the access plate',
+    interpretation: 'The way in is a seam at the secondary vent grid on Hold One’s starboard wall, found while tracing a variance in the aft air return. The plate releases under steady palm pressure — no alarms, no maintenance notice, no status request.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'unlHatch' }],
+  },
+  {
+    key: 'unl-narrow', source: 'Next-09 (unlisted corridor)',
+    quote: 'The passage narrowed almost immediately. … Her shoulder brushed one wall.',
+    category: 'dimension', subject: 'corridor width',
+    interpretation: 'Shoulder-wide: one small adult moves with a shoulder brushing wall. Two people fit only crouched at the cache, sharing the space deliberately.',
+    evidence: 'explicit',
+    claims: [{ kind: 'dimension', target: 'unlFloor.width', max: 0.75 }],
+  },
+  {
+    key: 'unl-cache', source: 'Next-09 (unlisted corridor)',
+    quote: 'Three meters in, her boot shifted and the deck answered differently. Not hollow. Layered. … Storage beneath. The panel opened without resistance.',
+    category: 'furniture', subject: 'the underfloor cache',
+    interpretation: 'Three meters in from the access plate, a layered deck panel lifts onto an underfloor cache. It opens too easily for a forgotten space — the first wrong thing.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'unlCacheHatch' }],
+  },
+  {
+    key: 'unl-cache-contents', source: 'Next-09 (unlisted corridor)',
+    quote: 'Inside: two supply rolls, half a medkit, sealed filtration patches. And tucked behind them— metal clicked softly against metal.',
+    category: 'object', subject: 'cache contents',
+    interpretation: 'Front recess: supply rolls, half a medkit, filtration patches, and the pre-drift crate marker (cold-storage origin, civilian coded, never logged). Rear compartment: polymer cloth, collapsed ration packaging, a dead-encryption storage block, and the black travel case — dead datapad, worn journal, cloth-wrapped handmade medallion.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'unlCacheStores' }, { kind: 'presence', target: 'unlCacheCase' }],
+  },
+  {
+    key: 'unl-audio-shadow', source: 'Next-09 (unlisted corridor)',
+    quote: '“Audio response degraded in current position. Repeat?”',
+    category: 'sound', subject: 'B.O.B.’s reach into the corridor',
+    interpretation: 'The corridor is an acoustic and attention shadow: B.O.B. barely hears into it, and speech inside it should not carry as words to any occupied space. Off every routed vent branch.',
+    evidence: 'explicit', claims: [],
+  },
+  {
+    key: 'unl-cooler-metal', source: 'Next-09 (unlisted corridor)',
+    quote: 'The metal felt cooler here, only by enough to make her keep her hand there.',
+    category: 'environment', subject: 'corridor temperature',
+    interpretation: 'The outboard wall runs against hull structure — measurably cooler than lived spaces, by a hand’s-width of difference, with dry, metal-heavy, uncirculated air.',
+    evidence: 'explicit', claims: [],
+  },
 ];
 
 // ---- documents (assembled from the same quote strings) ----

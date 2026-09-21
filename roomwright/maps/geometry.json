@@ -6032,19 +6032,36 @@
    "rotY": 0
   },
   {
-   "layoutKey": "cargoWallE",
+   "layoutKey": "cargoWallE1",
    "room": "cargo-bay",
    "type": "wall",
-   "name": "Main cargo bay starboard wall",
+   "name": "Main cargo bay starboard wall (forward)",
    "params": {
-    "length": 8,
+    "length": 2.5500000000000007,
     "height": 3.2,
     "thickness": 0.16
    },
    "pos": [
     0.9000000000000004,
     -3,
-    25
+    22.275
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "cargoWallE2",
+   "room": "cargo-bay",
+   "type": "wall",
+   "name": "Main cargo bay starboard wall (aft)",
+   "params": {
+    "length": 4.550000000000001,
+    "height": 3.2,
+    "thickness": 0.16
+   },
+   "pos": [
+    0.9000000000000004,
+    -3,
+    26.725
    ],
    "rotY": 1.5707963267948966
   },
@@ -6159,6 +6176,182 @@
     24.65
    ],
    "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "unlFloor",
+   "room": "unlisted",
+   "type": "floor",
+   "name": "Unlisted corridor deck",
+   "params": {
+    "width": 0.66,
+    "depth": 7.199999999999999
+   },
+   "pos": [
+    1.3100000000000003,
+    -3,
+    25.1
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlCeil",
+   "room": "unlisted",
+   "type": "ceiling",
+   "name": "Unlisted corridor overhead",
+   "params": {
+    "width": 0.66,
+    "depth": 7.199999999999999,
+    "height": 1.95
+   },
+   "pos": [
+    1.3100000000000003,
+    -3,
+    25.1
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlWallE",
+   "room": "unlisted",
+   "type": "wall",
+   "name": "Unlisted corridor outboard wall",
+   "params": {
+    "length": 7.199999999999999,
+    "height": 1.95,
+    "thickness": 0.1
+   },
+   "pos": [
+    1.6900000000000004,
+    -3,
+    25.1
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "unlCapN",
+   "room": "unlisted",
+   "type": "wall",
+   "name": "Unlisted corridor forward end",
+   "params": {
+    "length": 0.78,
+    "height": 1.95,
+    "thickness": 0.1
+   },
+   "pos": [
+    1.3100000000000003,
+    -3,
+    21.5
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlCapS",
+   "room": "unlisted",
+   "type": "wall",
+   "name": "Unlisted corridor aft end",
+   "params": {
+    "length": 0.78,
+    "height": 1.95,
+    "thickness": 0.1
+   },
+   "pos": [
+    1.3100000000000003,
+    -3,
+    28.7
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlHatch",
+   "room": "unlisted",
+   "type": "doorway",
+   "name": "Access plate (the seam behind the vent grid)",
+   "params": {
+    "length": 0.9,
+    "height": 1.85,
+    "thickness": 0.16,
+    "doorWidth": 0.55,
+    "doorHeight": 1.78,
+    "kind": "sliding",
+    "slideDir": 1,
+    "open": 0
+   },
+   "pos": [
+    0.9000000000000004,
+    -3,
+    24
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "unlConduit",
+   "room": "unlisted",
+   "type": "conduit",
+   "name": "Old conduit run (buried behind newer work)",
+   "params": {
+    "length": 6.6,
+    "lines": 2,
+    "gauge": 0.07,
+    "mountHeight": 1.78,
+    "era": "ancient"
+   },
+   "pos": [
+    1.5100000000000002,
+    -3,
+    25.1
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlCacheHatch",
+   "room": "unlisted",
+   "type": "crate",
+   "name": "Layered deck panel (the cache lid)",
+   "params": {
+    "width": 0.5,
+    "height": 0.025,
+    "depth": 0.65
+   },
+   "pos": [
+    1.3100000000000003,
+    -3,
+    27
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlCacheStores",
+   "room": "unlisted",
+   "type": "crate",
+   "name": "Underfloor cache — supply rolls, half a medkit, filtration patches",
+   "params": {
+    "width": 0.5,
+    "height": 0.34,
+    "depth": 0.6
+   },
+   "pos": [
+    1.3100000000000003,
+    -3.44,
+    27
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "unlCacheCase",
+   "room": "unlisted",
+   "type": "crate",
+   "name": "Rear compartment — the black travel case",
+   "params": {
+    "width": 0.42,
+    "height": 0.16,
+    "depth": 0.3
+   },
+   "pos": [
+    1.3100000000000003,
+    -3.42,
+    27.62
+   ],
+   "rotY": 0
   },
   {
    "layoutKey": "cargoTiem2_4",
@@ -7382,28 +7575,9 @@
    "pos": [
     0.84,
     -3,
-    24
+    25.05
    ],
    "rotY": 1.5707963267948966
-  },
-  {
-   "layoutKey": "mhUnlisted",
-   "room": "hull",
-   "type": "massing",
-   "name": "Unlisted service corridor (unmapped)",
-   "params": {
-    "width": 0.6,
-    "depth": 7.7,
-    "height": 2,
-    "lift": 0,
-    "tint": "anomaly"
-   },
-   "pos": [
-    1.4,
-    -3,
-    25.15
-   ],
-   "rotY": 0
   },
   {
    "layoutKey": "p1Panel",
@@ -8244,5 +8418,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 26
+ "version": 27
 }

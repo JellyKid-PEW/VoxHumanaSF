@@ -2359,11 +2359,22 @@ function defs(rulings) {
     pos: [cbx, D2, cbz + CBD / 2], rotY: 0, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'Old freight scars, rails, and protective structure remain visible.',
   });
-  add('cargoWallE', {
-    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay starboard wall',
-    params: { length: CBD, height: CBH, thickness: 0.16 },
-    pos: [cbx + CBW / 2, D2, cbz], rotY: Math.PI / 2, locked: true,
+  // The starboard wall carries the unlisted corridor behind it (Next-09).
+  // It is split around the access plate at the vent-grid seam.
+  const unlHatchZ = 24.0;
+  const cargoE1Len = (unlHatchZ - 0.45) - (cbz - CBD / 2);
+  const cargoE2Len = (cbz + CBD / 2) - (unlHatchZ + 0.45);
+  add('cargoWallE1', {
+    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay starboard wall (forward)',
+    params: { length: cargoE1Len, height: CBH, thickness: 0.16 },
+    pos: [cbx + CBW / 2, D2, cbz - CBD / 2 + cargoE1Len / 2], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('cargoWallE2', {
+    room: 'cargo-bay', type: 'wall', name: 'Main cargo bay starboard wall (aft)',
+    params: { length: cargoE2Len, height: CBH, thickness: 0.16 },
+    pos: [cbx + CBW / 2, D2, cbz + CBD / 2 - cargoE2Len / 2], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The secondary vent grid hangs on this stretch; the seam beside it is easy to stop seeing.',
   });
   const cargoPersonnelZ = 24.65;
   const cargoWestNLen = (cargoPersonnelZ - 0.5) - (cbz - CBD / 2);
@@ -2404,6 +2415,84 @@ function defs(rulings) {
     params: { length: 1.0, height: 2.2, thickness: 0.12, doorWidth: 0.75, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 0 },
     pos: [cbx - CBW / 2, D2, cargoPersonnelZ], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: [], note: 'Quieter access from the lower-aft service route; training use does not require walking through the freight interface.',
+  });
+
+  // ---------- the unlisted corridor (Next-09: "The corridor wasn't on the map.") ----------
+  // A shoulder-wide service passage between Hold One's starboard wall and the
+  // hull, real now and still absent from B.O.B.'s use-driven maps. Designers
+  // included it because systems needed bodies sometimes, then forgot it
+  // because bodies were inconvenient once the ship began pretending to be
+  // finished.
+  const UNLW = 0.66;                                  // floor width — clear span reads shoulder-wide
+  const unlCx = cbx + CBW / 2 + 0.08 + UNLW / 2;      // hugging the hold wall's outboard face
+  const UNLZ0 = 21.5, UNLZ1 = 28.7;
+  const unlCz = (UNLZ0 + UNLZ1) / 2, UNLD = UNLZ1 - UNLZ0;
+  add('unlFloor', {
+    room: 'unlisted', type: 'floor', name: 'Unlisted corridor deck',
+    params: { width: UNLW, depth: UNLD },
+    pos: [unlCx, D2, unlCz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['unl-corridor', 'unl-map-use', 'unl-narrow'],
+    note: 'The corridor that isn’t on the map. B.O.B.’s maps follow use more than architecture, and this section stopped earning labels a long time ago. The ship knows it exists; it has simply stopped caring. Dry air, metal-heavy, uncirculated.',
+  });
+  add('unlCeil', {
+    room: 'unlisted', type: 'ceiling', name: 'Unlisted corridor overhead',
+    params: { width: UNLW, depth: UNLD, height: 1.95 },
+    pos: [unlCx, D2, unlCz], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: ['unl-corridor'], note: 'Low, close, unfinished. No light follows anyone in.',
+  });
+  add('unlWallE', {
+    room: 'unlisted', type: 'wall', name: 'Unlisted corridor outboard wall',
+    params: { length: UNLD, height: 1.95, thickness: 0.1 },
+    pos: [unlCx + UNLW / 2 + 0.05, D2, unlCz], rotY: Math.PI / 2, locked: true,
+    evidence: 'explicit', evidenceRefs: ['unl-narrow', 'unl-cooler-metal'],
+    note: 'The outboard skin side — the metal runs cooler here, only by enough to make a hand stay on it.',
+  });
+  add('unlCapN', {
+    room: 'unlisted', type: 'wall', name: 'Unlisted corridor forward end',
+    params: { length: UNLW + 0.12, height: 1.95, thickness: 0.1 },
+    pos: [unlCx, D2, UNLZ0], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: ['unl-corridor'], note: 'Dead end forward — old structure closes the run.',
+  });
+  add('unlCapS', {
+    room: 'unlisted', type: 'wall', name: 'Unlisted corridor aft end',
+    params: { length: UNLW + 0.12, height: 1.95, thickness: 0.1 },
+    pos: [unlCx, D2, UNLZ1], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: ['unl-corridor'], note: 'The aft end closes against the drive-section fabric. For now.',
+  });
+  add('unlHatch', {
+    room: 'unlisted', type: 'doorway', name: 'Access plate (the seam behind the vent grid)',
+    params: { length: 0.9, height: 1.85, thickness: 0.16, doorWidth: 0.55, doorHeight: 1.78, kind: 'sliding', slideDir: 1, open: 0 },
+    pos: [cbx + CBW / 2, D2, unlHatchZ], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['unl-seam-grid'],
+    note: 'A narrow line beside the secondary vent grid — not hidden well enough to be secret, not used enough to be ordinary. Releases under steady palm pressure. No alarms. No maintenance notice. No status request.',
+  });
+  add('unlConduit', {
+    room: 'unlisted', type: 'conduit', name: 'Old conduit run (buried behind newer work)',
+    params: { length: UNLD - 0.6, lines: 2, gauge: 0.07, mountHeight: 1.78, era: 'ancient' },
+    pos: [unlCx + 0.2, D2, unlCz], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['unl-corridor'],
+    note: 'Service access, secondary venting, old conduit buried behind newer work — the fabric the corridor was built to serve.',
+  });
+  add('unlCacheHatch', {
+    room: 'unlisted', type: 'crate', name: 'Layered deck panel (the cache lid)',
+    params: { width: 0.5, height: 0.025, depth: 0.65 },
+    pos: [unlCx, D2, 27.0], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['unl-cache'],
+    note: 'Three meters in, the deck answers differently — not hollow, layered. The panel opens without resistance, which is the first wrong thing: forgotten panels stick, and this one lifts as though the ship had been waiting for someone to remember how.',
+  });
+  add('unlCacheStores', {
+    room: 'unlisted', type: 'crate', name: 'Underfloor cache — supply rolls, half a medkit, filtration patches',
+    params: { width: 0.5, height: 0.34, depth: 0.6 },
+    pos: [unlCx, D2 - 0.44, 27.0], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['unl-cache-contents'],
+    note: 'Two supply rolls, half a medkit, sealed filtration patches — and tucked behind them, the crate marker: blank, scratched, pre-drift, cold-storage origin, civilian coded, never logged. Edges worn smooth from handling, not from use.',
+  });
+  add('unlCacheCase', {
+    room: 'unlisted', type: 'crate', name: 'Rear compartment — the black travel case',
+    params: { width: 0.42, height: 0.16, depth: 0.3 },
+    pos: [unlCx, D2 - 0.42, 27.62], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['unl-cache-contents'],
+    note: 'Behind the rear panel: polymer cloth, collapsed ration packaging, a storage block with dead encryption — and beneath it the case. Black, civilian, travel-grade, no locks, handle polished by old use. Inside: a dead datapad, the worn journal, and the cloth-wrapped medallion (handmade, geometric bloom, radiating lines — copied from memory, not measured from a template).',
   });
   for (const xoff of [-2.4, 0, 2.4]) add('cargoTie' + String(xoff).replace('-', 'm').replace('.', '_'), {
     room: 'cargo-bay', type: 'rail', name: 'Recessed cargo tie / floor track',
@@ -2695,12 +2784,10 @@ function defs(rulings) {
   add('ventGridPanel', {
     room: 'cargo-bay', type: 'storage', name: 'Secondary vent grid',
     params: { width: 1.3, height: 1.5, depth: 0.08 },
-    pos: [0.84 + HX, D2, 24.0], rotY: Math.PI / 2, locked: false,
-    evidence: 'explicit', evidenceRefs: ['vent-grid'],
-    note: 'The secondary vent grid on Hold One’s starboard wall. Something runs behind it that B.O.B. never mapped.',
+    pos: [0.84 + HX, D2, 25.05], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['vent-grid', 'unl-seam-grid'],
+    note: 'The secondary vent grid on Hold One’s starboard wall, hung just aft of the access plate. The seam beside it went four days between being found and being opened. (The unlisted corridor behind this wall is real geometry now — Next-09 — though B.O.B.’s maps still don’t carry it.)',
   });
-  hm('mhUnlisted', 'Unlisted service corridor (unmapped)', 1.4, -3.0, 25.15, 0.6, 7.7, 2.0,
-    'The narrow passage behind the secondary vent grid — too narrow for B.O.B.’s standard access routines, absent from every schematic. The underfloor cache is somewhere along it. Reserved as massing; walkable modeling is future work.', { tint: 'anomaly' });
 
   // ---------- pocket archaeology ----------
   add('p1Panel', {
@@ -2933,7 +3020,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 26;
+export const LAYOUT_VERSION = 27;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2958,4 +3045,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   24: [...DOOR_WING_KEYS, 'stationRail', 'iriQ*'], // all six declared conflicts resolved by author ruling and baked in — regenerate everything a contrary stored ruling could have moved (door wing, station rail, Iri's aft-room variant), plus the new engine-bay floor hatch
   25: ['medFloor', 'medCot', 'medChair', 'medRailHead', 'medRailFoot', 'medBoom'], // author ruling: the cot is a rated procedure bed on recessed deployment rails, umbilical boom overhead
   26: ['engBench', 'engToolbox'], // the dented toolbox + cracked datapad promoted from a bench note to a real object (found by the scene-review workbench on Presence-01)
+  27: ['unl*', 'mhUnlisted', 'cargoWallE*', 'ventGridPanel'], // Next-09 un-defers the unlisted corridor: real walkable geometry, access plate in the split hold wall, underfloor cache; the anomaly massing retires
 };

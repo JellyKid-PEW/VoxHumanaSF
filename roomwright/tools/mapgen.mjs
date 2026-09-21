@@ -27,7 +27,7 @@ const ROOM_LABEL = {
   'domestic-stores': 'STORES / GARDEN', 'aft-service': 'AFT SERVICE', 'flex-bay': 'HOLD TWO (FLEX)',
   'engineering-access': 'ENG ACCESS', 'aft-freight': 'FREIGHT NODE', 'freight-lock': 'FREIGHT LOCK',
   'cargo-bay': 'HOLD ONE (CARGO / TRAINING)', 'lower-aft-spine': 'LOWER AFT SPINE',
-  'equipment-crawl': "NOVA'S CRAWL", hull: '',
+  'equipment-crawl': "NOVA'S CRAWL", unlisted: 'UNLISTED', hull: '',
 };
 const ROOM_TINT = {
   bridge: '#dfe8f2', corridor: '#e9e9e9', airlock: '#f2e7d8', spine: '#efe6da', 'storage-four': '#efe6da',
@@ -37,7 +37,7 @@ const ROOM_TINT = {
   residential: '#f3ece4', nav: '#e8e4f0', cabin: '#f6efe6', 'domestic-stores': '#e8f0e2',
   'aft-service': '#eae6e0', 'flex-bay': '#e2e8dc', 'engineering-access': '#efe0da',
   'aft-freight': '#e6e2da', 'freight-lock': '#e0ddd4', 'cargo-bay': '#eee9db',
-  'lower-aft-spine': '#e6e0d6', 'equipment-crawl': '#e8ddd2',
+  'lower-aft-spine': '#e6e0d6', 'equipment-crawl': '#e8ddd2', unlisted: '#e3dcea',
 };
 const BRANCH_COLOR = { domestic: '#2a8fa8', habitation: '#4f9d55', ops: '#c07a2a', 'med-iso': '#8f5fb0' };
 
