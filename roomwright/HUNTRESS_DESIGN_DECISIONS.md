@@ -1657,3 +1657,18 @@ Three author rulings from the Next-10 review, applied:
 - **Storage Two placed** — "wherever it will fit," and where it fits is the aft service passage's port bulkhead, past Cabin Six in the old fabric: a 0.9 m numbered store from the same old deck plan that still calls Hold One "the forward hold." It kept its stencil because nobody repaints the aft service passage. Low traffic, so the dust holds a mark for weeks — which is the whole point of the sealed box, the fresh smear, and the thumbprint she wiped clean. On Iri's maintenance loop and almost nobody else's.
 
 No evidence-base seeding from Next-10 (author direction). 32/32 tests green; v28→v29 migration verified; maps re-exported with Storage Two's callout.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The installations chapter: three rulings built (v30)
+
+The fourth field-tested chapter (the amber lights, the installations, the wrong room, the belt) produced three author-approved changes:
+
+**Cargo Bay Four is registry archaeology.** A painted "CARGO BAY FOUR →" stencil now hangs on the work spine near the freight complex — old deck-plan registry, half a century stale, pointing at fabric renumbered generations of owners ago. It joins Storage Two and "the forward hold" in the ship's pattern: her labels outnumber her rooms, old labels are history not directions, and the crew navigates by them anyway.
+
+**Deck Three's walked fragment is real.** DECK3Y = -5.6 exists now: the landing at the foot of the engineering rungs, the mouth door (standing its half-centimeter open), a low hall, and **the wrong room** — 2.0 × 1.15 m, 1.8 m overhead, too shallow, too cold, badly placed near the power trunk that clicks through its forward wall. Keyed lock, left open enough to be found. Inside: the old crate (tiles, mismatched cups, faded cloth, dead training core; the card in an old stage hand: *Improvised*). Outside the door, barely within the light spill: **the bolt**, modeled at 5 cm because it earned it — upright, precarious on purpose, adjusted by the width of a fingernail, logged by nobody. The rest of Deck Three stays massing, carved into four reserve slabs around the fragment. The belly plan is now a real drawing: fragment in walls, reserves dashed.
+
+**Nav has its chair.** Two chapters running gave nav seating the model didn't have ("nav bench," "an empty chair at the nav post"). Now: a light, unbolted chair that drifts — pulled to the console for long plots, turned to face a blank wall when somebody is making a point. Where it stands on any given day is information.
+
+The 33rd habit test, **wrong-room**, keeps the fragment honest: mouth at the foot of the rungs, hall walkable, the room stays shallow/low/near-power, crate and bolt hold their stations, no vent loop reaches down (Deck Three air stays unhandled and cold), and nothing above hears more than presence from inside the void. The room remains wrong. Good.
+
+Supporting work: acoustics, nav grids, mapgen, and the workbench all went genuinely multi-deck (generic y-rounding replaced two-deck assumptions in three places); the hull-envelope test gained Deck Three bounds; the belly map switched from massing-only to fragment-plus-massing. Clearance tests caught and fixed three first-draft placements (nav chair vs. hatch zone and console; mouth door vs. rung foot). 33/33 tests green; v29→v30 migration verified.

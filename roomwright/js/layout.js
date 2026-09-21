@@ -33,6 +33,7 @@ export const HULL_LEVELS = [
   { y: 3.1, pts: [[-2.6, -1], [1.4, -1], [2.2, 4], [2.2, 26], [0, 30], [-3.5, 30], [-4.5, 26], [-4.5, 4]] },
 ];
 export const DECK2Y = -3.0;                  // lower deck base height; 3.0 m floor-to-floor leaves real structure/service depth under occupied main-deck spaces
+export const DECK3Y = -5.6;                  // Deck Three (ventral service/reserve layer): 2.6 below the lower deck, low overheads, mostly massing — only the walked fragment is rooms
 const COR = { W: 1.1, LEN: 4.6, H: 2.15 };   // corridor: narrow, lower overhead
 // One galley size: the six-crew commercial scale (author ruling). The
 // galley conflict's rulings are interpretive — they change no geometry.
@@ -1811,6 +1812,13 @@ function defs(rulings) {
     pos: [navx - 0.55, D2, navz + 0.28], rotY: Math.PI / 2, locked: false,
     evidence: 'assumption', evidenceRefs: [], note: 'Useful enough to become a bad sleeping choice.',
   });
+  add('navChair', {
+    room: 'nav', type: 'seat', name: 'Nav chair (light, unbolted)',
+    params: { seatHeight: 0.44, width: 0.4, hasArms: false },
+    pos: [navx + 0.78, D2, navz + 0.12], rotY: -0.5, locked: false,
+    evidence: 'decision', evidenceRefs: ['nav-locks-helm'],
+    note: 'The seat the prose keeps seeing — the "nav bench," the "empty chair at the nav post." Light and unbolted, so it drifts: pulled to the console for long plots, turned to face a blank wall when somebody is making a point. Where it stands on any given day is information.',
+  });
 
   // ---------- cabin helper ----------
   // Doors sit 0.3 m aft of each cabin's centre so the bunk wall (forward)
@@ -2515,6 +2523,152 @@ function defs(rulings) {
     evidence: 'explicit', evidenceRefs: ['unl-cache-contents'],
     note: 'Behind the rear panel: polymer cloth, collapsed ration packaging, a storage block with dead encryption — and beneath it the case. Black, civilian, travel-grade, no locks, handle polished by old use. Inside: a dead datapad, the worn journal, and the cloth-wrapped medallion (handmade, geometric bloom, radiating lines — copied from memory, not measured from a template).',
   });
+  // ---------- Deck Three fragment: the mouth, the hall, and the wrong room ----------
+  // The chapter of the installations walks it, so the first piece of Deck
+  // Three becomes real: the landing under the engineering rungs, a low hall,
+  // and the shallow cold storage room "badly placed near power" that Quenby
+  // rebuilt into a space that interferes with use. The rest of Deck Three
+  // stays massing.
+  const D3 = DECK3Y;
+  add('d3LandingFloor', {
+    room: 'deck-three', type: 'floor', name: 'Deck Three landing',
+    params: { width: 1.3, depth: 2.0 },
+    pos: [-4.15, D3, 16.3], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: ['deck-three'],
+    note: 'The foot of the engineering rungs — the mouth of Deck Three. Colder than the lower deck by enough to notice; the hum arrives filtered through structure.',
+  });
+  add('d3LandingCeil', {
+    room: 'deck-three', type: 'ceiling', name: 'Deck Three landing overhead',
+    params: { width: 1.3, depth: 2.0, height: 1.95 },
+    pos: [-4.15, D3, 16.3], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The rung hatch opens through this overhead from the work spine’s access recess.',
+  });
+  add('d3LandingCapS', {
+    room: 'deck-three', type: 'wall', name: 'Deck Three landing aft wall',
+    params: { length: 1.3, height: 1.95, thickness: 0.12 },
+    pos: [-4.15, D3, 17.3], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Aft of here is tankage and structure, not rooms.',
+  });
+  for (const s of [-1, 1]) add(s < 0 ? 'd3LandingWallW' : 'd3LandingWallE', {
+    room: 'deck-three', type: 'wall', name: 'Deck Three landing side wall',
+    params: { length: 2.0, height: 1.95, thickness: 0.12 },
+    pos: [-4.15 + s * 0.65, D3, 16.3], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('d3Mouth', {
+    room: 'deck-three', type: 'doorway', name: 'Deck Three mouth door',
+    params: { length: 1.3, height: 1.95, thickness: 0.12, doorWidth: 0.7, doorHeight: 1.8, kind: 'sliding', slideDir: 1, open: 0.02 },
+    pos: [-4.15, D3, 15.3], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['deck-three'],
+    note: 'The door at the mouth of Deck Three — the one that shifted half a centimeter and stilled. It stands a fraction open more often than shut; nobody logs which.',
+  });
+  add('d3HallFloor', {
+    room: 'deck-three', type: 'floor', name: 'Deck Three hall deck',
+    params: { width: 1.0, depth: 3.1 },
+    pos: [-4.15, D3, 13.75], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: ['deck-three'],
+    note: 'A low service hall in the ventral layer. Too shallow an overhead for comfortable work, which is why nothing lives down here that needs daily hands.',
+  });
+  add('d3HallCeil', {
+    room: 'deck-three', type: 'ceiling', name: 'Deck Three hall overhead',
+    params: { width: 1.0, depth: 3.1, height: 1.9 },
+    pos: [-4.15, D3, 13.75], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('d3HallWallE', {
+    room: 'deck-three', type: 'wall', name: 'Deck Three hall inboard wall',
+    params: { length: 3.1, height: 1.9, thickness: 0.12 },
+    pos: [-3.65, D3, 13.75], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Water-cell band beyond.',
+  });
+  add('d3HallCapN', {
+    room: 'deck-three', type: 'wall', name: 'Deck Three hall forward wall',
+    params: { length: 1.0, height: 1.9, thickness: 0.12 },
+    pos: [-4.15, D3, 12.2], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The layer continues forward as massing. For now.',
+  });
+  // hall outboard wall, split around the wrong room's door
+  add('d3HallWallW1', {
+    room: 'deck-three', type: 'wall', name: 'Deck Three hall outboard wall (fwd)',
+    params: { length: 0.45, height: 1.9, thickness: 0.12 },
+    pos: [-4.65, D3, 12.425], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('d3HallWallW2', {
+    room: 'deck-three', type: 'wall', name: 'Deck Three hall outboard wall (aft)',
+    params: { length: 1.75, height: 1.9, thickness: 0.12 },
+    pos: [-4.65, D3, 14.425], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('d3RoomDoor', {
+    room: 'deck-three', type: 'doorway', name: 'The wrong room’s door (keyed lock)',
+    params: { length: 0.9, height: 1.85, thickness: 0.12, doorWidth: 0.65, doorHeight: 1.75, kind: 'sliding', slideDir: -1, open: 0.3 },
+    pos: [-4.65, D3, 13.1], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['deck-three'],
+    note: 'Manual keyed lock, worked by hand. Left open enough to be found — which is a setting, not an accident.',
+  });
+  add('d3RoomFloor', {
+    room: 'deck-three', type: 'floor', name: 'The wrong room (Deck Three store) deck',
+    params: { width: 2.0, depth: 1.15 },
+    pos: [-5.7, D3, 13.075], rotY: 0, locked: true,
+    evidence: 'explicit', evidenceRefs: ['deck-three'],
+    note: 'Too shallow, too cold, and badly placed near power — useful, then. Not functional, not symmetrical, not safe. Deliberate. The card under the interface panel reads, in an old stage hand: Improvised.',
+  });
+  add('d3RoomCeil', {
+    room: 'deck-three', type: 'ceiling', name: 'The wrong room overhead',
+    params: { width: 2.0, depth: 1.15, height: 1.8 },
+    pos: [-5.7, D3, 13.075], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'Low enough that tall crew stoop without thinking about it.',
+  });
+  add('d3RoomWallN', {
+    room: 'deck-three', type: 'wall', name: 'The wrong room forward wall',
+    params: { length: 2.0, height: 1.8, thickness: 0.12 },
+    pos: [-5.7, D3, 12.5], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The power trunk runs hot-and-ticking on the far side — the "badly placed near power" wall.',
+  });
+  add('d3RoomWallS', {
+    room: 'deck-three', type: 'wall', name: 'The wrong room aft wall',
+    params: { length: 2.0, height: 1.8, thickness: 0.12 },
+    pos: [-5.7, D3, 13.65], rotY: 0, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: 'The pinned synth cloth hangs here, crooked on purpose. One crease, left by a knuckle, not corrected.',
+  });
+  add('d3RoomWallW', {
+    room: 'deck-three', type: 'wall', name: 'The wrong room outboard wall',
+    params: { length: 1.15, height: 1.8, thickness: 0.12 },
+    pos: [-6.7, D3, 13.075], rotY: Math.PI / 2, locked: true,
+    evidence: 'assumption', evidenceRefs: [], note: '',
+  });
+  add('d3PowerTrunk', {
+    room: 'deck-three', type: 'conduit', name: 'Power distribution trunk (Deck Three run)',
+    params: { length: 2.4, lines: 3, gauge: 0.08, mountHeight: 1.45, era: 'modern' },
+    pos: [-5.55, D3, 12.38], rotY: Math.PI / 2, locked: true,
+    evidence: 'decision', evidenceRefs: ['deck-three'],
+    note: 'The run that makes the room a bad store and a good void: heat-cycled clicking through the shared frame, a few degrees of stolen warmth that never quite reach the room.',
+  });
+  add('d3RoomCrate', {
+    room: 'deck-three', type: 'crate', name: 'The old crate — tiles, mismatched cups, faded cloth, dead training core',
+    params: { width: 0.8, height: 0.55, depth: 0.6 },
+    pos: [-6.25, D3, 13.15], rotY: 0.18, locked: false,
+    evidence: 'explicit', evidenceRefs: ['deck-three'],
+    note: 'Dragged in awkward more than heavy. Broken interface tiles leaned just off-center; mismatched cups stacked wrong on purpose — more useful unstable; a coil of tape spiraled on the floor like a target too lazy to care. Intention mattered. Care would have ruined it.',
+  });
+  add('d3Bolt', {
+    room: 'deck-three', type: 'crate', name: 'The bolt (upright, precarious on purpose)',
+    params: { width: 0.05, height: 0.05, depth: 0.05 },
+    pos: [-4.38, D3, 13.38], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['deck-three'],
+    note: 'Balanced with irritating precision just outside the door, barely within the light spill. A marker, not a claim. Adjusted since — by the width of a fingernail, not straighter: more precarious. Neither of them has moved it. Neither of them has logged it. "Location only?" — "No."',
+  });
+
+  // ---------- registry archaeology: the CARGO BAY FOUR stencil ----------
+  add('cargoBay4Stencil', {
+    room: 'work-spine', type: 'shelf', name: 'Painted stencil — "CARGO BAY FOUR →"',
+    params: { width: 0.95, depth: 0.04, mountHeight: 1.55, tins: 0 },
+    pos: [-1.85, D2, 18.6], rotY: -Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['forward-hold-route'],
+    note: 'Old deck-plan registry, half a century out of date: nothing aboard answers to "Cargo Bay Four" anymore — the fabric it pointed at was renumbered into the freight complex generations of owners ago. The stencil survives because nobody repaints the work spine, and the crew navigates by it anyway ("the junction near Cargo Bay Four"). Old labels aboard the Huntress are history, not directions — and everyone uses them as directions.',
+  });
+
   for (const xoff of [-2.4, 0, 2.4]) add('cargoTie' + String(xoff).replace('-', 'm').replace('.', '_'), {
     room: 'cargo-bay', type: 'rail', name: 'Recessed cargo tie / floor track',
     params: { length: 5.8, height: 0.045, midRail: false },
@@ -2637,8 +2791,11 @@ function defs(rulings) {
     'Multiple water cells rather than one great tank — main reclaimed-water mass low and inboard (mass study).');
   hm('mhTankW2', 'Water cells (aft band)', 0.8, -5.3, 16.0, 3.4, 6, 1.9,
     'Second inboard water band. Domestic day-buffers live nearer the wet-service stack.');
-  hm('mhDeck3', 'Deck Three — ventral service / reserve layer', -4.4, -5.5, 12.5, 6.4, 15, 2.2,
-    'The partial third level, down: deep stores, tank access, heavy-service connections, old freight infrastructure, pieces of the power/thermal backbone. Walkable in some regions, crawl and tank volume in others. The cold unused storage room lost its environmental loop in a refit while the old power route stayed uncomfortably close. Footprint OPEN.');
+  const D3NOTE = 'The partial third level, down: deep stores, tank access, heavy-service connections, old freight infrastructure, pieces of the power/thermal backbone. Walkable in some regions, crawl and tank volume in others — carved open where the walked fragment (landing, hall, the wrong room) is now real geometry. Footprint OPEN.';
+  hm('mhDeck3F', 'Deck Three — reserve layer (forward)', -4.4, -5.5, 8.525, 6.4, 7.05, 2.2, D3NOTE);
+  hm('mhDeck3A', 'Deck Three — reserve layer (aft)', -4.4, -5.5, 18.725, 6.4, 2.55, 2.2, D3NOTE);
+  hm('mhDeck3E', 'Deck Three — reserve layer (inboard sliver)', -2.275, -5.5, 14.75, 2.15, 5.3, 2.2, D3NOTE);
+  hm('mhDeck3W', 'Deck Three — reserve layer (outboard sliver)', -7.275, -5.5, 14.75, 0.65, 5.3, 2.2, D3NOTE);
   hm('mhGearNose', 'Nose gear bay', -2.6, -5.3, 0.2, 2.2, 2.6, 1.9,
     'Retractable nose gear. She lands on her belly structure — prepared pads and rough commercial ground alike.');
   hm('mhGearPort', 'Main gear bay (port)', -9.2, -5.6, 17.5, 2.2, 3.2, 2.2,
@@ -3041,7 +3198,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 29;
+export const LAYOUT_VERSION = 30;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3069,4 +3226,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   27: ['unl*', 'mhUnlisted', 'cargoWallE*', 'ventGridPanel'], // Next-09 un-defers the unlisted corridor: real walkable geometry, access plate in the split hold wall, underfloor cache; the anomaly massing retires
   28: ['hygBranchWallS', 'domRunDoor'], // Next-10 review found the domestic-service run sealed at its mouth: the branch aft wall now splits around a real door (the one that "remembers weight")
   29: ['storageTwo'], // Storage Two placed (author direction: "wherever it will fit") — old registry number in the aft service passage
+  30: ['d3*', 'mhDeck3*', 'cargoBay4Stencil', 'navChair'], // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
 };

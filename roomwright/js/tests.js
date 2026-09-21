@@ -5,7 +5,7 @@ import { state } from './state.js';
 import { editor, objectAABB, collectAABBs, castSight, circleHitsColliders, clearSightLines, drawSightLine } from './editor.js';
 import { CHARACTERS, eyeHeight } from './mannequin.js';
 import { audibilityReport, levelAt, ductBranchesByFloor } from './acoustics.js';
-import { FRAME } from './layout.js';
+import { FRAME, DECK3Y } from './layout.js';
 import { fmt } from './util.js';
 
 // ---------- navigation grid ----------
@@ -979,7 +979,7 @@ export const HABIT_TESTS = [
       const cor = state.project.objects.find(o => o.layoutKey === 'corFloor');
       const HX = (cor?.pos[0] ?? 1.5) - 1.5;
       // per-deck plan bounds of the working envelope (generous, not shrink-wrap)
-      const bounds = { 0: { x: [-8.2 + HX, 7.6 + HX], z: [-4.4, 31.6] }, '-3': { x: [-11.9 + HX, 7.6 + HX], z: [-4.1, 33.1] } };
+      const bounds = { 0: { x: [-8.2 + HX, 7.6 + HX], z: [-4.4, 31.6] }, '-3': { x: [-11.9 + HX, 7.6 + HX], z: [-4.1, 33.1] }, '-6': { x: [-8.5 + HX, 5.5 + HX], z: [1.5, 34.5] } };
       const rectOf = f => {
         const fw = f.params.width ?? 6, fd = f.params.depth ?? 5;
         const rot = Math.abs(Math.sin(f.rotY || 0)) > 0.5;
@@ -1412,6 +1412,63 @@ export const HABIT_TESTS = [
       return {
         status: 'pass',
         details: `Real, narrow (${fmt(w, 2)} m — shoulders brush), walkable end to end, cache ${fmt(Math.abs((lid?.pos[2] ?? 0) - hatch.pos[2]), 1)} m in with its contents below, plate at the vent-grid seam, and deaf: nothing outside hears words, no vent branch reaches in. B.O.B. still doesn't map it; now that is a fact about B.O.B., not about the model.`,
+      };
+    },
+  },
+  {
+    id: 'wrong-room',
+    name: 'Deck Three’s walked fragment holds: mouth under the rungs, low hall, the wrong room',
+    basis: ['deck-three'],
+    run() {
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const landing = byKey('d3LandingFloor'), mouth = byKey('d3Mouth'), hall = byKey('d3HallFloor');
+      const roomDoor = byKey('d3RoomDoor'), room = byKey('d3RoomFloor'), crate = byKey('d3RoomCrate');
+      const bolt = byKey('d3Bolt'), trunk = byKey('d3PowerTrunk'), rungs = byKey('engAccessHatch');
+      if (!landing || !mouth || !hall || !room) return { status: 'fail', details: 'Deck Three fragment incomplete (landing / mouth / hall / room).' };
+      const problems = [];
+      // the mouth sits at the foot of the engineering rungs
+      if (rungs && Math.hypot(rungs.pos[0] - landing.pos[0], rungs.pos[2] - landing.pos[2]) > 0.9) {
+        problems.push('The landing has drifted out from under the engineering rungs — the mouth belongs at their foot.');
+      }
+      // the room stays wrong: shallow, low, near power
+      if ((room.params.depth ?? 9) > 1.4) problems.push(`The wrong room is ${fmt(room.params.depth, 2)} m deep — it is supposed to be too shallow (≤ 1.4).`);
+      const roomCeil = byKey('d3RoomCeil');
+      if (roomCeil && (roomCeil.params.height ?? 9) > 1.9) problems.push('The wrong room grew a comfortable overhead — it should stay low.');
+      if (trunk) {
+        const d = Math.abs(trunk.pos[2] - (room.pos[2] - (room.params.depth ?? 1) / 2));
+        if (d > 0.6) problems.push('The power trunk wandered from the room’s forward wall — "badly placed near power" is the point.');
+      } else problems.push('The Deck Three power trunk is missing.');
+      // walkable: landing → through the mouth → hall → to the room door; and into the room
+      const grid = computeNavGrid(0.22, [], DECK3Y);
+      const start = new THREE.Vector3(landing.pos[0], 0, landing.pos[2] + 0.25);
+      const atDoor = new THREE.Vector3(hall.pos[0], 0, roomDoor ? roomDoor.pos[2] : room.pos[2]);
+      if (!grid || !findPath(grid, start, atDoor, 4)) problems.push('No walkable route from the landing through the mouth to the wrong room’s door.');
+      const inside = new THREE.Vector3(room.pos[0] + 0.35, 0, room.pos[2] + 0.15);
+      if (grid && !findPath(grid, atDoor, inside, 5)) problems.push('The wrong room cannot be stepped into — the threshold beat needs one clear pace inside.');
+      if (!crate) problems.push('The old crate (tiles, cups, cloth, training core) is missing from the room.');
+      // the bolt: outside the door, barely within the light spill
+      if (!bolt) problems.push('The bolt is missing.');
+      else {
+        const onHallSide = bolt.pos[0] > (roomDoor ? roomDoor.pos[0] : -4.65);
+        const nearDoor = roomDoor && Math.hypot(bolt.pos[0] - roomDoor.pos[0], bolt.pos[2] - roomDoor.pos[2]) < 0.7;
+        if (!onHallSide || !nearDoor) problems.push('The bolt belongs just outside the wrong room’s door, barely within the light spill.');
+      }
+      // cold and quiet: no routed vent branch reaches Deck Three, and speech in
+      // the room stays off every other deck's floors above presence level
+      const branches = ductBranchesByFloor();
+      for (const f of state.project.objects.filter(o => o.type === 'floor' && o.room === 'deck-three')) {
+        if ((branches.get(f.id) || new Set()).size) problems.push(`${f.name} rides a routed vent branch — Deck Three air should be unhandled and cold.`);
+      }
+      const rep = audibilityReport({ x: room.pos[0], y: DECK3Y, z: room.pos[2] }, 'speech', 'drift-night');
+      for (const r of rep.rows) {
+        if (r.room !== 'deck-three' && (r.level === 'words' || r.level === 'tone')) {
+          problems.push(`${r.name} hears ${r.level} from the wrong room — the void should keep its conversations.`);
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'The fragment holds: the mouth door sits at the foot of the rungs, the hall walks, the room stays shallow, low, and badly placed near power, the crate and the bolt keep their stations, no vent loop reaches down, and nothing above hears more than presence. The room remains wrong. Good.',
       };
     },
   },

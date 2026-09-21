@@ -10,7 +10,7 @@ import { computeNavGrid, findPath } from './tests.js';
 import { castSight } from './editor.js';
 import { checkProseAgainstLayout } from './constraints.js';
 import { CHARACTERS, eyeHeight } from './mannequin.js';
-import { DECK2Y } from './layout.js';
+import { DECK2Y, DECK3Y } from './layout.js';
 
 // ---------- geometry helpers ----------
 function floorRect(f) {
@@ -19,13 +19,14 @@ function floorRect(f) {
   const hw = (rot ? fd : fw) / 2, hd = (rot ? fw : fd) / 2;
   return { minX: f.pos[0] - hw, maxX: f.pos[0] + hw, minZ: f.pos[2] - hd, maxZ: f.pos[2] + hd, area: fw * fd };
 }
-const deckOf = o => Math.abs((o.pos[1] || 0) - DECK2Y) < 0.4 ? DECK2Y : 0;
+const deckOf = o => Math.round((o.pos[1] || 0) * 10) / 10;   // generic: any deck level, incl. Deck Three
 // snap to a known deck only when actually near one; a figure at Deck Three
 // depth (y ≈ -5.5) keeps its own level, so roomAt honestly finds no floor
 export const nearestDeck = y => {
   const v = y || 0;
   if (Math.abs(v) < 1.5) return 0;
-  if (Math.abs(v - DECK2Y) < 1.5) return DECK2Y;
+  if (Math.abs(v - DECK2Y) < 1.3) return DECK2Y;
+  if (Math.abs(v - DECK3Y) < 1.3) return DECK3Y;
   return v;
 };
 
@@ -58,7 +59,8 @@ const ROOM_LEXICON = [
   [/\bengine (?:bay|room)\b/i, 'engine'], [/\bairlock\b/i, 'airlock'], [/\bskiff\b/i, 'skiffbay'],
   [/\bobservation dome\b|\bdome\b/i, 'dome'], [/\bcabin\b/i, 'cabin'],
   [/\bstairs?\b|\bstairwell\b/i, 'stairwell'], [/\bfreight lock\b/i, 'freight-lock'],
-  [/\bwork spine\b|\bbelowdeck\b/i, 'work-spine'], [/\bnav(?:igation)? (?:room|station|alcove)\b/i, 'nav'],
+  [/\bwork spine\b|\bbelowdeck\b/i, 'work-spine'], [/\bnav(?:igation)? (?:room|station|alcove|post|node)\b/i, 'nav'],
+  [/\bdeck three\b/i, 'deck-three'], [/\bunlisted corridor\b/i, 'unlisted'],
 ];
 // generic words that ground nothing on their own
 const GENERIC = new Set(['deck', 'wall', 'door', 'hatch', 'unit', 'panel', 'floor', 'overhead',

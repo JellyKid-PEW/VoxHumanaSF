@@ -27,7 +27,7 @@ const ROOM_LABEL = {
   'domestic-stores': 'STORES / GARDEN', 'aft-service': 'AFT SERVICE', 'flex-bay': 'HOLD TWO (FLEX)',
   'engineering-access': 'ENG ACCESS', 'aft-freight': 'FREIGHT NODE', 'freight-lock': 'FREIGHT LOCK',
   'cargo-bay': 'HOLD ONE (CARGO / TRAINING)', 'lower-aft-spine': 'LOWER AFT SPINE',
-  'equipment-crawl': "NOVA'S CRAWL", unlisted: 'UNLISTED', hull: '',
+  'equipment-crawl': "NOVA'S CRAWL", unlisted: 'UNLISTED', 'deck-three': 'DECK THREE', hull: '',
 };
 const ROOM_TINT = {
   bridge: '#dfe8f2', corridor: '#e9e9e9', airlock: '#f2e7d8', spine: '#efe6da', 'storage-four': '#efe6da',
@@ -37,7 +37,7 @@ const ROOM_TINT = {
   residential: '#f3ece4', nav: '#e8e4f0', cabin: '#f6efe6', 'domestic-stores': '#e8f0e2',
   'aft-service': '#eae6e0', 'flex-bay': '#e2e8dc', 'engineering-access': '#efe0da',
   'aft-freight': '#e6e2da', 'freight-lock': '#e0ddd4', 'cargo-bay': '#eee9db',
-  'lower-aft-spine': '#e6e0d6', 'equipment-crawl': '#e8ddd2', unlisted: '#e3dcea',
+  'lower-aft-spine': '#e6e0d6', 'equipment-crawl': '#e8ddd2', unlisted: '#e3dcea', 'deck-three': '#dbe2e8',
 };
 const BRANCH_COLOR = { domestic: '#2a8fa8', habitation: '#4f9d55', ops: '#c07a2a', 'med-iso': '#8f5fb0' };
 
@@ -363,9 +363,9 @@ planMap({
   subtitle: 'Lower Operations · skiff/mission bay (mudroom) · work spine · nav · cabins & quiet run · wet core & dogleg · Hold Two · freight node & lock · Hold One · lower aft spine · Nova’s crawl',
 });
 planMap({
-  file: 'level-belly.svg', deckY: -99,   // no floors at this level: massing only
-  title: 'DECK THREE / BELLY PLAN (working massing)', legendTitle: 'BELLY — CALLOUTS',
-  subtitle: 'Ventral service & reserve layer: Deck Three volume, water cells, gear bays, chute trunk — dashed = reserved massing, footprints OPEN',
+  file: 'level-belly.svg', deckY: -5.6,   // Deck Three: the walked fragment is real rooms; the rest stays massing
+  title: 'DECK THREE / BELLY PLAN (fragment + working massing)', legendTitle: 'BELLY — CALLOUTS',
+  subtitle: 'Ventral layer: the walked fragment (landing · mouth · hall · the wrong room) is real; water cells, gear bays, chute trunk stay dashed reserved massing',
   extraObjects: objects.filter(o => o.type === 'massing' && ((o.pos[1] ?? 0) + (o.params.lift ?? 0)) <= -3.8).map(o => ({ ...o, type: 'massingPlan' })),
   ghost: objects.filter(o => o.type === 'floor' && Math.abs(deckOf(o) - DECK2Y) < 0.4),
 });
