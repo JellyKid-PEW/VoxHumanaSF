@@ -3896,11 +3896,11 @@
    "type": "floor",
    "name": "Cabin One deck",
    "params": {
-    "width": 2,
-    "depth": 1.85
+    "width": 2.4,
+    "depth": 2
    },
    "pos": [
-    -7.7749999999999995,
+    -7.975,
     -3,
     7.65
    ],
@@ -3912,12 +3912,12 @@
    "type": "ceiling",
    "name": "Cabin One overhead",
    "params": {
-    "width": 2,
-    "depth": 1.85,
+    "width": 2.4,
+    "depth": 2,
     "height": 2.05
    },
    "pos": [
-    -7.7749999999999995,
+    -7.975,
     -3,
     7.65
    ],
@@ -3929,14 +3929,14 @@
    "type": "wall",
    "name": "Cabin One wall",
    "params": {
-    "length": 2,
+    "length": 2.4,
     "height": 2.05,
     "thickness": 0.1
    },
    "pos": [
-    -7.7749999999999995,
+    -7.975,
     -3,
-    6.7250000000000005
+    6.65
    ],
    "rotY": 0
   },
@@ -3946,14 +3946,14 @@
    "type": "wall",
    "name": "Cabin One wall",
    "params": {
-    "length": 2,
+    "length": 2.4,
     "height": 2.05,
     "thickness": 0.1
    },
    "pos": [
-    -7.7749999999999995,
+    -7.975,
     -3,
-    8.575000000000001
+    8.65
    ],
    "rotY": 0
   },
@@ -3963,12 +3963,12 @@
    "type": "wall",
    "name": "Cabin One outer wall",
    "params": {
-    "length": 1.85,
+    "length": 2,
     "height": 2.05,
     "thickness": 0.1
    },
    "pos": [
-    -8.774999999999999,
+    -9.174999999999999,
     -3,
     7.65
    ],
@@ -4007,9 +4007,9 @@
     "depth": 0.68
    },
    "pos": [
-    -7.7749999999999995,
+    -7.975,
     -3,
-    7.105
+    7.03
    ],
    "rotY": 0
   },
@@ -4024,9 +4024,9 @@
     "depth": 0.42
    },
    "pos": [
-    -8.474999999999998,
+    -8.874999999999998,
     -3,
-    8.345
+    8.42
    ],
    "rotY": 0
   },
@@ -4041,9 +4041,9 @@
     "height": 0.74
    },
    "pos": [
-    -7.804999999999999,
+    -8.204999999999998,
     -3,
-    8.365
+    8.44
    ],
    "rotY": 0
   },
@@ -4058,9 +4058,9 @@
     "hasArms": false
    },
    "pos": [
-    -7.874999999999998,
+    -8.274999999999999,
     -3,
-    7.795000000000001
+    7.87
    ],
    "rotY": 3.141592653589793
   },
@@ -7055,6 +7055,59 @@
    "rotY": 0
   },
   {
+   "layoutKey": "novaCrawlSlates",
+   "room": "equipment-crawl",
+   "type": "shelf",
+   "name": "Frequency slates (…DO NOT ANSWER)",
+   "params": {
+    "width": 0.55,
+    "depth": 0.06,
+    "mountHeight": 0.55,
+    "tins": 0
+   },
+   "pos": [
+    -8.77,
+    -3,
+    26.05
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "novaCrawlLamp",
+   "room": "equipment-crawl",
+   "type": "shelf",
+   "name": "Patched lamp + taped light strips",
+   "params": {
+    "width": 0.28,
+    "depth": 0.12,
+    "mountHeight": 1.3,
+    "tins": 0
+   },
+   "pos": [
+    -8,
+    -3,
+    25.07
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "novaCrawlSideCrate",
+   "room": "equipment-crawl",
+   "type": "crate",
+   "name": "Broken crate (side table)",
+   "params": {
+    "width": 0.4,
+    "height": 0.32,
+    "depth": 0.38
+   },
+   "pos": [
+    -7.53,
+    -3,
+    25.4
+   ],
+   "rotY": -0.15
+  },
+  {
    "layoutKey": "aftEngHatch",
    "room": "lower-aft-spine",
    "type": "storage",
@@ -8948,5 +9001,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 33
+ "version": 34
 }

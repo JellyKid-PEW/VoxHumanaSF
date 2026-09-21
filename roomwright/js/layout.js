@@ -1904,9 +1904,9 @@ function defs(rulings) {
   const resWestDoorX = RESX - RESW / 2;
   const resEastDoorX = RESX + RESW / 2;
   addLowerCabin({
-    key: 'cab1', name: 'Cabin One', x: resWestDoorX - 1.0, z: 7.65, doorX: resWestDoorX, open: 0,
-    evidence: 'decision', refs: ['cabin-row'],
-    note: 'The catalog cabin: closest to the residential turn, most traffic noise, utterly standard — the untouched baseline against which the others’ quirks read. Unchosen for a reason.',
+    key: 'cab1', name: 'Cabin One', x: resWestDoorX - 1.2, z: 7.65, w: 2.4, d: 2.0, doorX: resWestDoorX, open: 0,
+    evidence: 'decision', refs: ['cabin-row', 'crew-quarters'],
+    note: 'The SECOND of the two larger cabins (author lock), Cabin Six’s forward complement: closest to the residential turn, most traffic noise — which is exactly why it stayed unchosen through the two-crew years, an oversized room nobody wanted badly enough to hear the corridor for. Slated history: in Volume 3 it becomes the mother-and-daughter cabin, and the traffic noise turns into a feature — a parent sleeps better where the ship can be heard coming.',
   });
   addLowerCabin({
     key: 'cab2', name: 'Cabin Two', x: resEastDoorX + 1.0, z: 9.05, doorX: resEastDoorX, open: 0.35, locker: false,
@@ -2758,13 +2758,36 @@ function defs(rulings) {
     room: 'equipment-crawl', type: 'counter', name: 'Repurposed cargo-panel desk',
     params: { width: 0.9, depth: 0.35, height: 0.64, sink: false },
     pos: [ncx - 0.3, D2, ncz - 0.35], rotY: 0, locked: false,
-    evidence: 'explicit', evidenceRefs: [], note: 'Mismatched receivers, cable loops, slates, and improvised listening equipment live here in the current Book 3 draft.',
+    evidence: 'explicit', evidenceRefs: [],
+    note: 'The secondary listening array: a bank of mismatched receivers arranged by reach instead of category, a scrap of cloth tied to the knob that sticks, cable loops on hooks bent from fasteners. Two hands are everywhere in it — Nova chose the clutter and the labels; Iri redistributed cable weight, bled heat to a thermal regulator, put a non-broadcast filter between the array and anything that could speak outward, and fixed a support bracket under the desk at exactly the point where Nova’s elbow would have collapsed it within a week. It does not broadcast. It listens. That is all. That is not small.',
   });
   add('novaCrawlPad', {
     room: 'equipment-crawl', type: 'bench', name: 'Folded insulation pad',
     params: { width: 0.8, height: 0.08, depth: 0.55 },
     pos: [ncx + 0.28, D2, ncz + 0.28], rotY: 0, locked: false,
-    evidence: 'explicit', evidenceRefs: [], note: 'Nova sits cross-legged here to listen.',
+    evidence: 'explicit', evidenceRefs: [],
+    note: 'Not a chair. It fits. Nova sits cross-legged here to listen; arguments about better seating have been filed and rejected.',
+  });
+  add('novaCrawlSlates', {
+    room: 'equipment-crawl', type: 'shelf', name: 'Frequency slates (…DO NOT ANSWER)',
+    params: { width: 0.55, depth: 0.06, mountHeight: 0.55, tins: 0 },
+    pos: [ncx - 0.62, D2, ncz + 0.3], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: [],
+    note: 'Three slates leaned against the wall, frequency ranges in Nova’s sharp cramped hand: STATIC THAT BREATHES · SLOW WET HUM · OLD WOMAN CLICKING · THREE-BEAT NOTHING · DO NOT ANSWER. The last one reads twice.',
+  });
+  add('novaCrawlLamp', {
+    room: 'equipment-crawl', type: 'shelf', name: 'Patched lamp + taped light strips',
+    params: { width: 0.28, depth: 0.12, mountHeight: 1.3, tins: 0 },
+    pos: [ncx + 0.15, D2, ncz - 0.68], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: [],
+    note: 'One lamp with a patched shade clipped to a conduit, two narrow strips taped under a shelf and angled away from the doorway — the room keeps its light to itself. Warm by accident.',
+  });
+  add('novaCrawlSideCrate', {
+    room: 'equipment-crawl', type: 'crate', name: 'Broken crate (side table)',
+    params: { width: 0.4, height: 0.32, depth: 0.38 },
+    pos: [ncx + 0.62, D2, ncz - 0.35], rotY: -0.15, locked: false,
+    evidence: 'explicit', evidenceRefs: [],
+    note: 'A broken crate serving as a side table, which is a demotion or a promotion depending on the crate.',
   });
 
   add('aftEngHatch', {
@@ -3212,7 +3235,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 33;
+export const LAYOUT_VERSION = 34;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3243,5 +3266,6 @@ export const LAYOUT_MIGRATION_KEYS = {
   30: ['d3*', 'mhDeck3*', 'cargoBay4Stencil', 'navChair'],
   31: ['spineMarks', 'pktCrate', 'unlCacheCase'],
   32: ['medPrepSpout'], // the vigil chapter: the galley-line prep spout appears on the medbay's forward wall
-  33: ['unlCacheCase'], // Chapter 09: the journal travels by Book 3 — the cache note records find-state vs. current whereabouts // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
+  33: ['unlCacheCase'], // Chapter 09: the journal travels by Book 3 — the cache note records find-state vs. current whereabouts
+  34: ['cab1*', 'novaCrawl*'], // author lock: Cabin One is the second larger cabin (Vol 3 mother-and-daughter); Nova's listening array dresses the equipment crawl // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
 };
