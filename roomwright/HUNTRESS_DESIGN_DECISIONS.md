@@ -1523,3 +1523,21 @@ The distributed-maintenance principle is now physical, and the ship has learned 
 - **The spine turn**: two turns from anywhere, Quenby's old lean spot at the support rail; only the engine-bay approach sees in.
 
 Two new habit tests (28 total) hold all of it: **service-reach** (every working space keeps a service point; all three interlock release panels stay within a child's reach) and **stolen-moments** (each corner stays hidden from its listed vantages AND stays honestly exposed to exactly one approach — the tests fail if a corner ever becomes fully sealed, because the point is three minutes, not a locked door). Layout version 20; migration verified.
+
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Salvage & stowage (the mudroom pass)
+
+The Huntress works salvage and exterior jobs regularly, and the ship now carries the workflow — RV-style: home above, job below, and a ritual seam between them.
+
+**THE INTAKE RULE (canon):** salvage comes in LOW. The skiff bay and freight lock are the mudroom; the personnel airlock is a people door, not a parts door — quick clean EVAs only. Anything carried, and anyone dirty, comes in through the bay. Nothing of the job ever stages in a domestic space.
+
+**The mudroom** (skiff bay): EVA suit rack — *two heavy, one light*, a family portrait in equipment; wash-down/decon point; the suit-up bench that seats exactly two, which is the number the procedure requires and the number the procedure excuses; and an overhead hoist rail from the launch aperture across the bay to the hatch (two-person work: one steadies, one drives), continuing at the freight node.
+
+**The scrub cycle (author's intimacy engine, made procedure):** after a dirty return the bay hatch holds while the ops loop scrubs the bay air — ten to twenty minutes, and post-EVA decon is a two-person job in both directions (nobody can reach their own back seals). **Every salvage job ends with the crew locked in the bay together, helping each other out of suits, per procedure.** Sixth lock-in venue, and the only one that happens routinely.
+
+**Triage:** everything incoming waits at the staging rack at the freight node — "incoming, uncleared" — until Iri clears it; then to the bench, the holds, Nova's crate, or the sealed hatch. The salvage the ship already carries (the Presence-07 manifold, R. Vale's crate, Nova's receivers, Iri's found pieces) is this system's history.
+
+**Rigged for burn:** deck tie-down anchors in the bay, freight node, engine bay, and lower aft spine join Hold One's tracks; the put-away ritual is the ship's conversion ceremony. Lived-in stowage from the prose is placed: the **ceiling hooks with draped cables** (Next-11, work spine) and the **coat-hook locker row** past the galley with the not-hers jacket and the empty hook beside it (Next-10) — both newly seeded as constraints.
+
+Two new habit tests (30 total): **salvage-flow** (mudroom kit present, bench within buddy-reach of the rack, cart-width routes bay→node and lock→staging, staging never in a domestic room) and **rig-for-burn** (every loose crate on the working decks within reach of a tie-down). doors-open and no-overlap caught the first placements of the staging rack and bench — in the freight door's sweep and the rig station respectively. Layout version 21; migration verified.

@@ -330,7 +330,7 @@ function defs(rulings) {
     pos: [cx + COR.W / 2, 0, alkZ], rotY: Math.PI / 2, locked: false,
     evidence: 'explicit',
     evidenceRefs: ['alk-main-hatch', 'alk-two-steps', 'alk-two-stage', 'alk-inner-release', 'doors-wait'],
-    note: 'The personnel / EVA airlock remains near the bridge. The corridor bend farther aft blocks a direct view into medbay.',
+    note: 'The personnel / EVA airlock remains near the bridge. The corridor bend farther aft blocks a direct view into medbay. THE INTAKE RULE: this is a people door, not a parts door — quick clean EVAs only. Anything carried, and anyone dirty, comes in low through the bay or the freight lock. Salvage never walks through home.',
   });
   if (eastB > 0.05) add('corWallStbd1b', {
     room: 'corridor', type: 'wall', name: 'Main corridor starboard wall (mid)',
@@ -1473,7 +1473,7 @@ function defs(rulings) {
     params: { width: SBW, depth: SBD },
     pos: [sbx, D2, sbz], rotY: 0, locked: true,
     evidence: 'explicit', evidenceRefs: ['skiff-cradle', 'bay-lights-low', 'bay-medbay-near'],
-    note: 'Immediate side branch from Lower Operations. It can isolate / open to space without becoming through-circulation.',
+    note: 'Immediate side branch from Lower Operations. It can isolate / open to space without becoming through-circulation. This is the ship’s mudroom: suits, wash-down, hoist, and the intake rule — everything the job drags home comes through here first.',
   });
   add('sbCeil', {
     room: 'skiffbay', type: 'ceiling', name: 'Skiff / mission bay overhead',
@@ -1518,7 +1518,7 @@ function defs(rulings) {
     params: { length: 1.2, height: 2.55, thickness: 0.14, doorWidth: 0.9, doorHeight: 1.95, kind: 'sliding', slideDir: -1, open: 0 },
     pos: [sbx, D2, sbz + SBD / 2], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['bay-palm-hatch', 'bay-medbay-near', 'doors-wait'],
-    note: 'Palm-activated hatch opening directly off the forward side of Lower Operations. The stair approaches from starboard, so skiff traffic and stair traffic do not occupy the same opening.',
+    note: 'Palm-activated hatch opening directly off the forward side of Lower Operations. The stair approaches from starboard, so skiff traffic and stair traffic do not occupy the same opening. PARTICULATE SCRUB: after a dirty return — salvage aboard, or suits in from exterior work — this hatch holds while the ops loop scrubs the bay air, ten to twenty minutes. The crew spends it getting each other out of suits at the bench. Every salvage job ends locked in together. It is procedure.',
   });
   add('sbSkiff', {
     room: 'skiffbay', type: 'crate', name: 'Skiff in its cradle',
@@ -2724,6 +2724,94 @@ function defs(rulings) {
     note: 'The dogleg’s north wall, warm off the wet-service core, pump-masked, sight-broken from the approach and the work deck both. Only the quiet run can see in — and the quiet run is family. The ship’s best three minutes.',
   });
 
+  // ================= SALVAGE & STOWAGE (the mudroom pass) =================
+  // The Huntress converts like a working RV: home above, job below, and a
+  // ritual seam between them. THE INTAKE RULE (canon): salvage comes in
+  // LOW — the skiff bay and freight lock are the mudroom; the personnel
+  // airlock is a people door, not a parts door. Suited crew come in low
+  // too: post-EVA decon is a two-person procedure (nobody can reach their
+  // own back seals), and after a dirty return the bay runs a particulate
+  // scrub with the hatch held — the most routine lock-in aboard, earned
+  // at the end of every exterior job.
+  add('suitRack', {
+    room: 'skiffbay', type: 'storage', name: 'EVA suit rack — two heavy, one light',
+    params: { width: 1.3, height: 1.9, depth: 0.45 },
+    pos: [-4.85 + HX, D2, -0.6], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['alk-kit-locker'],
+    note: 'Two heavy work suits and one light one, racked by size. A family portrait in equipment. Suit checks are buddy checks; the rack faces the bench for a reason.',
+  });
+  add('svcScrub', {
+    room: 'skiffbay', type: 'counter', name: 'Wash-down / decon point',
+    params: { width: 1.0, depth: 0.5, height: 0.9, sink: true },
+    pos: [-1.1 + HX, D2, -1.85], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: ['bay-palm-hatch'],
+    note: 'Grit, coolant film, and vacuum-baked dust come off here — off the parts, and off the people. Helmet seals get inspected wet, close, and by someone else’s hands.',
+  });
+  add('buddyBench', {
+    room: 'skiffbay', type: 'bench', name: 'Suit-up bench',
+    params: { width: 1.0, height: 0.42, depth: 0.4 },
+    pos: [-4.78 + HX, D2, 0.95], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['alk-side-rail'],
+    note: '"Sit still — seals." Boots, cuffs, and back closures are two-person work in both directions. The bench seats two exactly, which is the number the procedure requires and the number the procedure excuses.',
+  });
+  add('hoistRailBay1', {
+    room: 'skiffbay', type: 'conduit', name: 'Overhead hoist rail (bay run)',
+    params: { length: 4.4, lines: 1, gauge: 0.16, mountHeight: 2.3, era: 'modern' },
+    pos: [-2.5 + HX, D2, 0.35], rotY: Math.PI / 2, locked: true,
+    evidence: 'decision', evidenceRefs: ['loadout-grid'],
+    note: 'Trolley hoist from the launch aperture across the bay — awkward masses come inboard on the rail, one crew steadying, one driving. Two-person work by design.',
+  });
+  add('hoistRailBay2', {
+    room: 'skiffbay', type: 'conduit', name: 'Overhead hoist rail (hatch spur)',
+    params: { length: 2.0, lines: 1, gauge: 0.16, mountHeight: 2.3, era: 'modern' },
+    pos: [-2.6 + HX, D2, 1.35], rotY: 0, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Carries loads to the bay hatch, where the cart takes over.',
+  });
+  add('hoistRailFreight', {
+    room: 'aft-freight', type: 'conduit', name: 'Overhead hoist rail (freight node)',
+    params: { length: 2.6, lines: 1, gauge: 0.16, mountHeight: 2.4, era: 'modern' },
+    pos: [-2.0 + HX, D2, 20.0], rotY: Math.PI / 2, locked: true,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Spans the junction from the freight lock’s mouth toward Hold One’s door.',
+  });
+  add('stagingRack', {
+    room: 'aft-freight', type: 'storage', name: 'Salvage staging rack — "incoming, uncleared"',
+    params: { width: 1.4, height: 1.6, depth: 0.5 },
+    pos: [-3.95 + HX, D2, 20.1], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['rig-locker'],
+    note: 'Everything that comes aboard sits here until Iri clears it: inspected, tagged, and only then released to the bench, the holds, Nova’s crate, or the sealed hatch. Nothing uncleared goes past the freight node — and nothing of the job’s ever goes upstairs.',
+  });
+  // deck tie-down anchors: the put-away ritual, bolted to the floor
+  const anchor = (key, room, x, z, deckY = D2) => add(key, {
+    room, type: 'strut', name: 'Deck tie-down anchor',
+    params: { width: 0.16, height: 0.06, depth: 0.16 },
+    pos: [x + HX, deckY, z], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: [],
+    note: 'Rigged-for-burn: everything loose on the work decks gets a home before the drive lights. The ritual is domestic as much as it is procedural.',
+  });
+  anchor('anchorSB1', 'skiffbay', -1.6, 1.6);
+  anchor('anchorSB2', 'skiffbay', -2.7, -0.9);
+  anchor('anchorFN1', 'aft-freight', -3.4, 19.5);
+  anchor('anchorFN2', 'aft-freight', -1.9, 19.3);
+  anchor('anchorEng', 'engine', 4.0, 11.1, 0);
+  anchor('anchorLAS', 'lower-aft-spine', -6.45, 21.35);
+  // lived-in stowage the prose already gave us
+  add('ceilHooks', {
+    room: 'work-spine', type: 'shelf', name: 'Ceiling hooks, draped cables',
+    params: { width: 1.4, depth: 0.12, mountHeight: 1.98, tins: 0 },
+    pos: [-2.2 + HX, D2, 17.4], rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['ceiling-hooks'],
+    note: '"Cables draped in lazy curves from ceiling hooks." Overhead stowage on the work run — the ship’s ceilings carry what her floors shouldn’t.',
+  });
+  add('coatRow', {
+    room: 'domestic-service', type: 'shelf', name: 'Locker row — coat hooks',
+    params: { width: 1.2, depth: 0.18, mountHeight: 1.62, tins: 0 },
+    pos: [-4.03 + HX, 0, 8.2], rotY: -Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['locker-row-hooks'],
+    note: 'The locker row past the galley: the jacket that fits her too well hangs here — and the empty hook beside it, which is a different kind of invitation.',
+  });
+
   return list;
 }
 
@@ -2763,7 +2851,7 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 // The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
 // and galley all follow the hatch).
 export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel', 'svc*', 'rib*', 'nook*'],
+  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel', 'svc*', 'rib*', 'nook*', 'anchor*', 'hoist*', 'stagingRack', 'suitRack', 'buddyBench', 'ceilHooks', 'coatRow'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
   'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
@@ -2774,7 +2862,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 20;
+export const LAYOUT_VERSION = 21;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2793,4 +2881,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   17: ['gal*', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab6*', 'cargoFloor', 'flexFloor', 'resApproachFloor', 'quietRunFloor'], // author-canon session: island folded into the counter run, nav lock levers at the helm, hold registry names, cabin quirks, crew-quarters naming
   19: ['cdPortDuct'], // the port air trunk becomes the domestic loop's tagged supply spine (ducting pass)
   20: ['wetCorePanel', 'wetCoreFloor', 'spnLeg2S', 'engAccessPanel', 'medAirUnit', 'freightLockFloor', 'engManifold'], // interlock and lock-in canon written onto the five maintenance venues (service-points pass)
+  21: ['sbHatch', 'sbFloor', 'alkInnerDoor'], // the intake rule and the bay scrub cycle (salvage & stowage pass)
 };

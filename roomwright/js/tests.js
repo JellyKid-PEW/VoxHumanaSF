@@ -1157,6 +1157,76 @@ export const HABIT_TESTS = [
     },
   },
   {
+    id: 'salvage-flow',
+    name: 'Salvage comes in low, and the mudroom works',
+    basis: ['skiff-cradle', 'rig-locker', 'bay-palm-hatch', 'locker-row-hooks', 'ceiling-hooks'],
+    run() {
+      const byKey = k => state.project.objects.find(o => o.layoutKey === k);
+      const problems = [];
+      // the mudroom kit
+      for (const [k, label] of [['suitRack', 'the EVA suit rack'], ['svcScrub', 'the wash-down / decon point'],
+        ['buddyBench', 'the suit-up bench'], ['hoistRailBay1', 'the bay hoist rail'], ['hoistRailFreight', 'the freight-node hoist rail'],
+        ['stagingRack', 'the salvage staging rack'], ['coatRow', 'the coat-hook locker row'], ['ceilHooks', 'the ceiling hooks']]) {
+        if (!byKey(k)) problems.push(`Missing: ${label}`);
+      }
+      // buddy geometry: the bench faces the rack within helping distance
+      const rack = byKey('suitRack'), bench = byKey('buddyBench');
+      if (rack && bench) {
+        const d = Math.hypot(rack.pos[0] - bench.pos[0], rack.pos[2] - bench.pos[2]);
+        if (d > 3.2) problems.push('Suit rack and suit-up bench are too far apart for buddy checks');
+      }
+      // the cart route: wider than a person (0.35 m radius), bay hatch →
+      // work spine → freight node, and freight lock → staging
+      const D2 = -3;
+      const cartGrid = computeNavGrid(0.35, [], D2);
+      const sb = byKey('sbFloor'), fn = byKey('aftFreightFloor'), fl = byKey('freightLockFloor'), stg = byKey('stagingRack');
+      if (sb && fn && !findPath(cartGrid, new THREE.Vector3(sb.pos[0], 0, sb.pos[2]), new THREE.Vector3(fn.pos[0], 0, fn.pos[2]), 8)) {
+        problems.push('No cart-width route from the skiff bay to the freight node');
+      }
+      if (fl && stg && !findPath(cartGrid, new THREE.Vector3(fl.pos[0], 0, fl.pos[2]), new THREE.Vector3(stg.pos[0] + 0.6, 0, stg.pos[2]), 8)) {
+        problems.push('No cart-width route from the freight lock to the staging rack');
+      }
+      // staging stays off the home side: never in a domestic room
+      const HOME_ROOMS = new Set(['galley', 'cabin', 'quarters', 'residential', 'nav', 'domestic-stores', 'medbay', 'hygiene', 'bridge', 'wet-service']);
+      for (const o of state.project.objects) {
+        if (/staging|salvage/i.test(o.name || '') && HOME_ROOMS.has(o.room)) {
+          problems.push(`${o.name} sits in a domestic space (${o.room}) — the job never goes upstairs`);
+        }
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'The mudroom holds: suits, wash-down, bench, and hoist in the bay; a cart-width route runs bay → freight node and lock → staging; incoming salvage waits at the rack until cleared; nothing of the job stages in a domestic space. And the intake rule’s corollary stands — every dirty return ends with the crew locked in the bay together for the scrub cycle, per procedure.',
+      };
+    },
+  },
+  {
+    id: 'rig-for-burn',
+    name: 'Everything loose on the work decks has a home before the drive lights',
+    basis: ['skiff-cradle', 'cradle-clunk'],
+    run() {
+      const WORK_ROOMS = new Set(['skiffbay', 'cargo-bay', 'flex-bay', 'aft-freight', 'work-spine', 'engine', 'lower-aft-spine', 'freight-lock', 'operations']);
+      const anchors = state.project.objects.filter(o =>
+        (o.layoutKey || '').startsWith('anchor') || (o.layoutKey || '').startsWith('cargoTie'));
+      if (!anchors.length) return { status: 'fail', details: 'No tie-down anchors on the working decks.' };
+      const problems = [];
+      for (const o of state.project.objects) {
+        if (o.type !== 'crate' || !WORK_ROOMS.has(o.room)) continue;
+        let best = Infinity;
+        for (const a of anchors) {
+          if (Math.abs((a.pos[1] || 0) - (o.pos[1] || 0)) > 0.5) continue;
+          best = Math.min(best, Math.hypot(a.pos[0] - o.pos[0], a.pos[2] - o.pos[2]));
+        }
+        if (best > 1.8) problems.push(`${o.name} (${o.room}) sits ${fmt(best, 1)} m from the nearest tie-down — it becomes a projectile under burn`);
+      }
+      if (problems.length) return { status: 'fail', details: problems.join('\n') };
+      return {
+        status: 'pass',
+        details: 'Rigged for burn: every loose crate on the working decks sits within reach of a tie-down anchor or track. The put-away ritual is geometrically possible everywhere it is needed — the RV converts, and nothing flies.',
+      };
+    },
+  },
+  {
     id: 'sound-and-privacy',
     name: 'The ship’s sound map holds (who hears what)',
     basis: ['galley-sounds', 'cabin-six', 'iri-cabin-lower', 'pocket-hum', 'med-corridor'],

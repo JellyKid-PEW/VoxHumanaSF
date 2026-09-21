@@ -82,6 +82,22 @@ export const SEED_CONSTRAINTS = [
     claims: [{ kind: 'relation', a: 'pilotCradle', b: 'viewport', rel: 'facing' }],
   },
   {
+    key: 'locker-row-hooks', source: 'Next-10',
+    quote: 'In the locker row, she found the not-hers jacket again, and the empty hook beside it.',
+    category: 'furniture', subject: 'the locker row / coat hooks',
+    interpretation: 'A locker row with a line of coat hooks stands past the galley — the mended jacket’s home, with a spare hook beside it.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'coatRow' }],
+  },
+  {
+    key: 'ceiling-hooks', source: 'Next-11',
+    quote: 'Cables draped in lazy curves from ceiling hooks.',
+    category: 'object', subject: 'corridor ceiling hooks',
+    interpretation: 'Working corridors carry overhead utility hooks — the ship’s ceilings hold what her floors shouldn’t.',
+    evidence: 'explicit',
+    claims: [{ kind: 'presence', target: 'ceilingHooks' }],
+  },
+  {
     key: 'spine-support-rail', source: 'VH1_B3_02',
     quote: 'The access angle forced her elbow high. The lower bracket sat too deep behind the support rail.',
     category: 'railing', subject: 'spine support rail and recessed bracket',
