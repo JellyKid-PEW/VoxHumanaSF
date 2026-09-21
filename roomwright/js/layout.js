@@ -1404,6 +1404,13 @@ function defs(rulings) {
     evidence: 'explicit', evidenceRefs: ['med-two-beds'],
     note: 'Sterilizer unit with its blinking diagnostic loop, in the aft corner clear of the door lane.',
   });
+  add('medPrepSpout', {
+    room: 'medbay', type: 'shelf', name: 'Medbay prep spout (galley line)',
+    params: { width: 0.26, depth: 0.14, mountHeight: 1.08, tins: 0 },
+    pos: mrel(0.53, -MD / 2 + 0.08), rotY: 0, locked: false,
+    evidence: 'explicit', evidenceRefs: ['med-console'],
+    note: 'A small hot-water spout on the forward wall between console and shelf, teed off the galley’s domestic line during some refit — because the one room where somebody keeps vigil is the one room that needs tea without leaving. Not ideal; hot enough. B.O.B. dispenses through it "with the gravity of a diplomatic exchange."',
+  });
 
   // ================= LOWER DECK =================
   // The lower deck is the seam between three uses of the Huntress:
@@ -3205,7 +3212,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 31;
+export const LAYOUT_VERSION = 32;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3234,5 +3241,6 @@ export const LAYOUT_MIGRATION_KEYS = {
   28: ['hygBranchWallS', 'domRunDoor'], // Next-10 review found the domestic-service run sealed at its mouth: the branch aft wall now splits around a real door (the one that "remembers weight")
   29: ['storageTwo'], // Storage Two placed (author direction: "wherever it will fit") — old registry number in the aft service passage
   30: ['d3*', 'mhDeck3*', 'cargoBay4Stencil', 'navChair'],
-  31: ['spineMarks', 'pktCrate', 'unlCacheCase'], // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
+  31: ['spineMarks', 'pktCrate', 'unlCacheCase'],
+  32: ['medPrepSpout'], // the vigil chapter: the galley-line prep spout appears on the medbay's forward wall // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
 };

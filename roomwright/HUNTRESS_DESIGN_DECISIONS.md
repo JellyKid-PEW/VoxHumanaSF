@@ -1684,3 +1684,17 @@ What the chapter added (v31):
 - **The two caches are linked**: the journal in the unlisted corridor and the margin notes in the crate share one cramped script. R. Vale's lore is recorded on the crate: contract systems interpreter, temporary berth, departed after an external boarding event, effects never fully removed — with partial ship-response events in B.O.B.'s memory.
 
 33/33 tests green; v30→v31 migration verified; maps re-exported (the marks have a callout on the main deck now).
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The vigil chapter: the room built from it holds it (v32)
+
+Sixth field test, and a circular one: this Book 3 medbay chapter is the source of several of the model's oldest constraints — "the chair behind her sat unused," the two fingers braced on the console edge, the telemetry past the cot's foot, the chair hooked into position beside the console within reach of the tea. Staged with all three crew in the 2.6 × 2.0 room — Quenby on the procedure bed, Iri standing at the console, Nova at the storage shelf — everything places cleanly, every sightline holds, and the acoustics carry the scene's real requirement: **the whole conversation stays in the room.** ColdLight, the divergence questions, the chair beat — nothing above a presence-level murmur escapes at drift-day. The shut medbay keeps its conversations, as canonized; this is the chapter that needed it.
+
+Added (v32): **the medbay prep spout** — a small hot-water point on the forward wall, teed off the galley's domestic line during some refit, because the one room where somebody keeps vigil is the one room that needs tea without leaving. "Not ideal; hot enough."
+
+Noted for the author, not actioned:
+- **B.O.B.'s renewed anticipation dates this scene.** He dims telemetry unasked, pre-heats water ("Presumptuous." / "Prepared."), and nobody orders him to stop. Door behavior dates a scene — and by Book 3 the era rule seems to have a third phase: automation as presumption (early Next), automation refused (Manual), anticipation readmitted as care. If that's the arc, the workbench's era check may eventually want a "reconciled" setting.
+- Two references reach outside anything modeled or seen: **"a hastily carved nine"** and **"the garden was his; he wanted a place without orders."** If the nine is carved into the ship somewhere, it deserves a home when its chapter surfaces.
+- "Plate seven" gives the hull a plate registry; the exterior remains canon-open, so it stays prose-only for now.
+
+33/33 tests green; v31→v32 migration verified; maps re-exported.

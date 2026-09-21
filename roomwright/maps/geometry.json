@@ -2816,6 +2816,24 @@
    "rotY": 0
   },
   {
+   "layoutKey": "medPrepSpout",
+   "room": "medbay",
+   "type": "shelf",
+   "name": "Medbay prep spout (galley line)",
+   "params": {
+    "width": 0.26,
+    "depth": 0.14,
+    "mountHeight": 1.08,
+    "tins": 0
+   },
+   "pos": [
+    -0.97,
+    0,
+    4.88
+   ],
+   "rotY": 0
+  },
+  {
    "layoutKey": "stwSteps",
    "room": "stairwell",
    "type": "step",
@@ -8930,5 +8948,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 31
+ "version": 32
 }
