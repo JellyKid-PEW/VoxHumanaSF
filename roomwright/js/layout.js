@@ -2528,7 +2528,7 @@ function defs(rulings) {
     params: { width: 0.42, height: 0.16, depth: 0.3 },
     pos: [unlCx, D2 - 0.42, 27.62], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['unl-cache-contents'],
-    note: 'Behind the rear panel: polymer cloth, collapsed ration packaging, a storage block with dead encryption — and beneath it the case. Black, civilian, travel-grade, no locks, handle polished by old use. Inside: a dead datapad, the worn journal, and the cloth-wrapped medallion (handmade, geometric bloom, radiating lines — copied from memory, not measured from a template). The journal’s cramped script matches the margin notes in R. Vale’s crate, two decks up in starboard pocket three.',
+    note: 'Behind the rear panel: polymer cloth, collapsed ration packaging, a storage block with dead encryption — and beneath it the case. Black, civilian, travel-grade, no locks, handle polished by old use. Inside: a dead datapad, the worn journal, and the cloth-wrapped medallion (handmade, geometric bloom, radiating lines — copied from memory, not measured from a template). The journal’s cramped script matches the margin notes in R. Vale’s crate, two decks up in starboard pocket three. (This records the find-state: by Book 3 the journal travels — it turns up open beside the crate in pocket three, in Nova’s hands, and closed by Iri.)',
   });
   // ---------- Deck Three fragment: the mouth, the hall, and the wrong room ----------
   // The chapter of the installations walks it, so the first piece of Deck
@@ -3212,7 +3212,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 32;
+export const LAYOUT_VERSION = 33;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3242,5 +3242,6 @@ export const LAYOUT_MIGRATION_KEYS = {
   29: ['storageTwo'], // Storage Two placed (author direction: "wherever it will fit") — old registry number in the aft service passage
   30: ['d3*', 'mhDeck3*', 'cargoBay4Stencil', 'navChair'],
   31: ['spineMarks', 'pktCrate', 'unlCacheCase'],
-  32: ['medPrepSpout'], // the vigil chapter: the galley-line prep spout appears on the medbay's forward wall // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
+  32: ['medPrepSpout'], // the vigil chapter: the galley-line prep spout appears on the medbay's forward wall
+  33: ['unlCacheCase'], // Chapter 09: the journal travels by Book 3 — the cache note records find-state vs. current whereabouts // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
 };

@@ -96,7 +96,7 @@ export function scanProse(scene) {
 // era heuristics: anticipatory automation reads as early-Next; a Manual-mode
 // scene using them is dated wrong (author ruling: door behavior dates a scene)
 const AUTO_DOOR = /(door|hatch)[^.!?]{0,60}\b(slid|hissed|ground|eased|opened?)\b[^.!?]{0,45}\b(at (?:her|his|their) approach|itself|on its own|before (?:she|he|they) (?:touched|reached|asked))/i;
-const AUTO_LIGHTS = /\blights?\b[^.!?]{0,45}\b(adjusted|dimmed|rose|warmed|brightened)\b[^.!?]{0,35}\b(to (?:her|his|their)|for (?:her|him|them)|preference)/i;
+const AUTO_LIGHTS = /\blights?\b[^.!?]{0,45}\b(adjusted|dimmed|rose|warmed|brightened|softened)\b[^.!?]{0,35}\b(to (?:her|his|their)|for (?:her|him|them)|preference|before (?:she|he|they|\w+) (?:had to|could|reached|asked|arrived))/i;
 
 // ---------- the review ----------
 const LEVEL_RANK = { silent: 0, presence: 1, tone: 2, words: 3 };
@@ -239,6 +239,10 @@ const SEED_CORRECTIONS = [
   {
     id: 'corr-seed-next10-left', source: 'author ruling — directions are character-relative',
     text: 'Next-10 "turned left at the galley" → turned RIGHT (walking aft, the locker row is a right turn into the dry branch; "left" walks into the storage spine). Series convention now locked: prose directions follow the walker’s facing, never ship port/starboard.',
+  },
+  {
+    id: 'corr-seed-hevns-coin', source: 'workbench — spelling consistency',
+    text: '"Hevn’s Coin" (B.O.B.’s archive line, the Mark-It chapter) vs. "Heaven’s Coin" (Chapter 09, repeatedly). Pick one — or keep both deliberately (Hevn as B.O.B.’s clipped register / archival contraction) and mark this done.',
   },
   {
     id: 'corr-seed-next10-mug', source: 'author ruling — Next-10 sightline',

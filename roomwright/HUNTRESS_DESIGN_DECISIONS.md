@@ -1693,8 +1693,22 @@ Sixth field test, and a circular one: this Book 3 medbay chapter is the source o
 Added (v32): **the medbay prep spout** — a small hot-water point on the forward wall, teed off the galley's domestic line during some refit, because the one room where somebody keeps vigil is the one room that needs tea without leaving. "Not ideal; hot enough."
 
 Noted for the author, not actioned:
-- **B.O.B.'s renewed anticipation dates this scene.** He dims telemetry unasked, pre-heats water ("Presumptuous." / "Prepared."), and nobody orders him to stop. Door behavior dates a scene — and by Book 3 the era rule seems to have a third phase: automation as presumption (early Next), automation refused (Manual), anticipation readmitted as care. If that's the arc, the workbench's era check may eventually want a "reconciled" setting.
-- Two references reach outside anything modeled or seen: **"a hastily carved nine"** and **"the garden was his; he wanted a place without orders."** If the nine is carved into the ship somewhere, it deserves a home when its chapter surfaces.
+- **B.O.B.'s renewed anticipation dates this scene** — and the author has since ruled on it: *technically B.O.B. shouldn't have done what he did.* There is no "reconciled" third era. Manual mode remains the standing rule; his unasked dimming and pre-heated water are transgressions — tolerated in that room, that night, but transgressions. The era check should keep flagging them; when it does, it is agreeing with the canon, not missing a nuance. (Chapter 09 confirms the rule from inside: "B.O.B., who had learned to ask before helping because the wrong kind of help had become another kind of hand.")
+- Two references reach outside anything modeled or seen: **"a hastily carved nine"** and **"the garden was his; he wanted a place without orders."** The author has since confirmed the nine is NOT carved into the ship — it lives somewhere else. No shipboard object owed.
 - "Plate seven" gives the hull a plate registry; the exterior remains canon-open, so it stays prose-only for now.
 
 33/33 tests green; v31→v32 migration verified; maps re-exported.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Chapter 09 "Close Enough": the pocket plays its own canon (v33)
+
+Seventh field test — and this is VH1_B3_09 itself, the chapter several of the model's oldest Book 3 constraints were mined from. The full chapter arrived and its fragments' room held it:
+
+- **The threshold choreography is exact.** "The room made her choose where to stand" and "Iri stayed at the hatch line — not outside, not fully in" are the pocket-choose-stand and pocket-threshold constraints, re-enacted: Nova on the floor at the crate, Quenby beside the Narrow shelf (the model object, by name), Iri at the hatch line. All three place cleanly; the room holds only because everyone stands where the prose says. Iri later sits on the Low storage box — the model object, by name, "dragged near the crate" (it is movable; it may drift).
+- **The pocket keeps the secret.** The cadence-profile conversation — the most dangerous information in the series so far — stays inside starboard pocket three at drift-night: nothing above a presence-level murmur escapes. The room where Quenby's copied self is discussed is a room the ship cannot overhear into.
+- **The walk validates** (medbay → elbow → spine → pocket, 6.9 m), and the sharpened era check FIRED on "B.O.B. dimmed light before Quenby had to squint" — correctly, per the author's fresh ruling: *technically B.O.B. shouldn't have done what he did.* Manual mode remains the rule; his anticipations are transgressions the text and the checker now agree on. (The "reconciled era" idea from the v32 note is struck.)
+- **The nine is not aboard** (author confirmation) — no shipboard object owed.
+
+Recorded, not built: the corridor prep (taped floor plate near the bend, tool crate moved to a recessed shelf, the covered cup) stays production-flexible — recovery-era temporary by nature. One route observation: the cup sits "near the galley junction," which is aft of medbay while the spine turn is forward; reads fine as a prep-inventory rather than an itinerary, worth a glance if the walk is ever drawn. New lore noted prose-only: the SHIPBOARD CADENCE PROFILE (legacy layer, origin unverified), Vox packs, Glass Spine, old-line recovery. One spelling flag queued as a pending correction: "Hevn's Coin" vs. "Heaven's Coin" — pick one, or keep the doubling deliberately as B.O.B.'s clipped register. The journal's travel (unlisted-corridor find-state → circulating with the Vale material by Book 3) is now recorded on the cache note, so the two-crates question stays answered.
+
+33/33 tests green; maps refreshed at v33.
