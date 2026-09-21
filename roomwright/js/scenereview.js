@@ -61,7 +61,8 @@ const GENERIC = new Set(['deck', 'wall', 'door', 'hatch', 'unit', 'panel', 'floo
 // mundane portable props — production-flexible things prose reaches for
 const PROP_NOUNS = ['mug', 'cup', 'kettle', 'teapot', 'blanket', 'wrench', 'spanner', 'datapad',
   'slate', 'tin', 'jacket', 'boots', 'towel', 'tray', 'knife', 'pan', 'pot', 'mirror', 'lamp',
-  'toolbox', 'crate', 'stool', 'cable', 'mattress', 'pillow', 'basin', 'bottle', 'jar', 'ration'];
+  'toolbox', 'crate', 'stool', 'cable', 'mattress', 'pillow', 'basin', 'bottle', 'jar', 'ration',
+  'journal', 'medallion', 'marker', 'medkit', 'lantern', 'satchel', 'tarp'];
 
 export function scanProse(scene) {
   const text = (scene.prose || '').toLowerCase();
@@ -73,7 +74,7 @@ export function scanProse(scene) {
   for (const o of state.project.objects) {
     if (['floor', 'ceiling', 'wall', 'doorway', 'bolts', 'massing', 'conduit'].includes(o.type)) continue;
     const words = (o.name.toLowerCase().match(/[a-z]{4,}/g) || []).filter(w => !GENERIC.has(w));
-    const hit = words.find(w => text.includes(w));
+    const hit = words.find(w => new RegExp(`\\b${w}s?\\b`).test(text));
     if (hit && !seen.has(o.name)) { seen.add(o.name); objects.push({ name: o.name, room: o.room, word: hit }); }
   }
   // a prop counts as grounded if ANY object aboard carries its word (this
