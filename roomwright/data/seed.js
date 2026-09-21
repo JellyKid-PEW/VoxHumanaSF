@@ -1088,9 +1088,9 @@ export const SEED_CONSTRAINTS = [
     key: 'eng-manifold', source: 'Presence-01',
     quote: 'Iri-Six was waist‑deep in the cooling manifold, half the paneling stripped and stacked by her knee like ribs laid open.',
     category: 'furniture', subject: 'cooling manifold',
-    interpretation: 'The cooling manifold is a person-sized opening behind removable paneling — Iri works waist-deep in it, stripped panels stacked on the floor.',
+    interpretation: 'The cooling manifold is a person-sized opening behind removable paneling — Iri works waist-deep in it, stripped panels stacked on the floor. AUTHOR RULING: this scene lives at the coolant riser in the main corridor’s elbow, not in the engine bay — maintenance erupting into lived space.',
     evidence: 'explicit',
-    claims: [{ kind: 'presence', target: 'engManifold' }],
+    claims: [{ kind: 'presence', target: 'coolantRiser' }],
   },
   {
     key: 'eng-bench-cross', source: 'Presence-01',

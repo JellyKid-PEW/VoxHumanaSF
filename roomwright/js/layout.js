@@ -1253,8 +1253,8 @@ function defs(rulings) {
     room: 'engine', type: 'storage', name: 'Cooling manifold (open)',
     params: { width: 1.2, height: 1.5, depth: 0.3 },
     pos: erel(EBW / 2 - 0.22, -0.1), rotY: -Math.PI / 2, locked: false,
-    evidence: 'explicit', evidenceRefs: ['eng-manifold'],
-    note: 'Where Iri works waist-deep, half the paneling stripped — "like ribs laid open." (AUTHOR CHOICE PENDING: the Presence-01 scene may live here, or at the coolant riser in the corridor elbow — the cooling system is distributed, and both access points are real.)',
+    evidence: 'inference', evidenceRefs: ['eng-spat-heat', 'eng-bench-cross'],
+    note: 'The bay’s own manifold run, serviced at the bench. The Presence-01 waist-deep scene lives at the corridor elbow’s coolant riser (author ruling) — the cooling system is distributed, and its most dramatic access point is in the hallway.',
   });
   add('engPanels', {
     room: 'engine', type: 'crate', name: 'Stripped paneling, stacked',
@@ -1831,9 +1831,9 @@ function defs(rulings) {
     note: 'Legacy door hardware sticks, and a junction box behind the wall panel clicks whenever the midline bus settles — annoying to anyone who doesn’t love the ship’s voice.',
   });
   addLowerCabin({
-    key: 'cab4', name: 'Cabin Four', x: resEastDoorX + 1.0, z: 11.15, doorX: resEastDoorX, open: 0,
-    evidence: 'decision', refs: ['cabin-row'],
-    note: 'The cabin where the ship never stops talking: its work-spine bulkhead carries the coolant line’s pulse (lay a palm on it and feel the aft pump run two beats late), and an automation-era cableway cover plate sits in the ceiling. Nova’s cabin choice remains the author’s; this one is the standing proposal.',
+    key: 'cab4', name: 'Cabin Four — Nova', x: resEastDoorX + 1.0, z: 11.15, doorX: resEastDoorX, open: 0,
+    evidence: 'decision', refs: ['cabin-row', 'crew-quarters'],
+    note: 'Nova’s cabin (author lock): the one where the ship never stops talking. Its work-spine bulkhead carries the coolant line’s pulse — lay a palm on it and feel the aft pump run two beats late — and an automation-era cableway cover plate sits in the ceiling, four fasteners from an entire hidden geography. She chose it the way she chooses everything: by listening first.',
   });
   add('cab2Drawers', {
     room: 'cabin', type: 'storage', name: 'Labeled drawer unit (Cabin Two)',
@@ -2661,7 +2661,7 @@ function defs(rulings) {
   svc('svcCorMidline', 'corridor', 'Corridor service panel — power distribution', 1.0, 0, 2.75, Math.PI / 2, 0.6, 1.0, 0.09,
     'A distribution pull-panel where the midline bus taps down into the forward run. Opened and reclosed by three generations of owners; the fasteners no longer match.');
   svc('svcCorBend', 'corridor', 'Coolant riser access (elbow corner)', 2.0, 0, 5.32, Math.PI / 2, 0.5, 1.3, 0.1,
-    'A coolant riser rides the elbow’s dead corner, where the run detours around the offset. Paneling comes off in sheets and stacks like ribs — a standing candidate for where the Presence-01 manifold scene lives (author’s choice pending).');
+    'THE Presence-01 site (author ruling): Iri waist-deep in the cooling manifold, half the paneling stripped and stacked by her knee like ribs laid open — in the hallway, because that is where the run detours around the offset. Maintenance erupting into lived space is not an accident aboard this ship; it is the architecture.', ['eng-manifold']);
   svc('svcGalleyHeater', 'galley', 'Galley heater service panel', 0.84, 0, 8.35, -Math.PI / 2, 0.7, 1.2, 0.08,
     'The heater’s working guts, one panel deep into a lived-in room — the click at the end of its cycle is audible belowdeck through the frame.');
   svc('svcLowerCool', 'residential', 'Coolant valve set (residential approach)', -6.73, DECK2Y, 6.3, Math.PI / 2, 0.6, 1.1, 0.09,
@@ -2862,7 +2862,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 21;
+export const LAYOUT_VERSION = 22;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2882,4 +2882,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   19: ['cdPortDuct'], // the port air trunk becomes the domestic loop's tagged supply spine (ducting pass)
   20: ['wetCorePanel', 'wetCoreFloor', 'spnLeg2S', 'engAccessPanel', 'medAirUnit', 'freightLockFloor', 'engManifold'], // interlock and lock-in canon written onto the five maintenance venues (service-points pass)
   21: ['sbHatch', 'sbFloor', 'alkInnerDoor'], // the intake rule and the bay scrub cycle (salvage & stowage pass)
+  22: ['cab4*', 'engManifold', 'svcCorBend'], // author locks: Cabin Four is Nova's; Presence-01 lives at the elbow coolant riser
 };
