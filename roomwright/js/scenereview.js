@@ -241,10 +241,6 @@ const SEED_CORRECTIONS = [
     text: 'Next-10 "turned left at the galley" → turned RIGHT (walking aft, the locker row is a right turn into the dry branch; "left" walks into the storage spine). Series convention now locked: prose directions follow the walker’s facing, never ship port/starboard.',
   },
   {
-    id: 'corr-seed-hevns-coin', source: 'workbench — spelling consistency',
-    text: '"Hevn’s Coin" (B.O.B.’s archive line, the Mark-It chapter) vs. "Heaven’s Coin" (Chapter 09, repeatedly). Pick one — or keep both deliberately (Hevn as B.O.B.’s clipped register / archival contraction) and mark this done.',
-  },
-  {
     id: 'corr-seed-next10-mug', source: 'author ruling — Next-10 sightline',
     text: 'Next-10 "From the bridge, Iri watched the mug pass through the door’s peripheral frame" — geometry doesn’t support it: from the bridge, the visible stretch is the forward corridor between the unused airlock and a bulkhead, and Quenby’s locker-row→galley route never crosses it. Move Iri to the corridor for the beat, or change watching to hearing/inference.',
   },
