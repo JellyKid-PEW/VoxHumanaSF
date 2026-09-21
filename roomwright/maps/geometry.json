@@ -2362,6 +2362,23 @@
    "rotY": 0
   },
   {
+   "layoutKey": "engFloorHatch",
+   "room": "engine",
+   "type": "crate",
+   "name": "Deck access hatch",
+   "params": {
+    "width": 0.7,
+    "height": 0.03,
+    "depth": 0.7
+   },
+   "pos": [
+    3,
+    0,
+    10.7
+   ],
+   "rotY": 0
+  },
+  {
    "layoutKey": "engWallNW",
    "room": "engine",
    "type": "wall",
@@ -8157,5 +8174,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 23
+ "version": 24
 }

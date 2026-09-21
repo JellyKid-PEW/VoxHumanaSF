@@ -226,17 +226,9 @@ export const SEED_CONSTRAINTS = [
     key: 'throttle', source: 'Presence-06',
     quote: 'The bridge door gave her Quenby’s profile first: bent forward in the cradle, one hand steady on the console, the other flexing tension into the throttle.',
     category: 'console', subject: 'physical throttle',
-    interpretation: 'The helm has a physical throttle beside the console — and from the door, the first view of the pilot is her PROFILE.',
+    interpretation: 'RESOLVED (author ruling): the single bridge hatch sits in the aft-starboard corner, angled. Approaching it is still "behind her," and someone entering sees her three-quarter profile first — both passages stay true. (Two doors were considered and rejected: the bridge meets hull on its other three sides, so a second door would cut the same aft pressure wall two meters from the first and lead to the same corridor.) The helm keeps its physical throttle beside the console.',
     evidence: 'explicit',
-    claims: [
-      { kind: 'clashes-with', target: 'door-behind',
-        explanation: 'From this doorway you see the seated pilot in profile (from the side). But VH1_B3_05 has the bridge door opening directly behind the seated pilot. A single door cannot be both dead-aft of a forward-facing seat (you would see the back of her head) and abeam of it (profile view).',
-        options: [
-          { id: 'aft-corner', label: 'Door in the aft corner (recommended)', detail: 'Place the single door at the aft-starboard corner, angled. Approaching it is still "behind her", and a person entering sees her three-quarter/profile first. Satisfies both passages approximately.' },
-          { id: 'aft-center', label: 'Door dead aft', detail: 'Keep the door centered behind the cradle. Treat "profile first" as loose phrasing (she was bent forward and turned). Marks the Presence-06 line as tension.' },
-          { id: 'side-door', label: 'Door on the side wall', detail: 'Put the door abeam of the cradle. Treat "behind her" as loose phrasing for "out of view". Marks the VH1_B3_05 line as tension.' },
-        ] },
-    ],
+    claims: [],
   },
   {
     key: 'console-mug-rim', source: 'Next-10',
@@ -336,18 +328,9 @@ export const SEED_CONSTRAINTS = [
     key: 'rail-between', source: 'Presence-02',
     quote: 'Iri-Six took the auxiliary station without the performative glance; she didn’t have to look to claim it. The datapad sat on the rail between them.',
     category: 'railing', subject: 'rail between stations',
-    interpretation: 'A rail runs between the helm and the auxiliary station, close enough to both to serve as a shared shelf.',
+    interpretation: 'RESOLVED (author ruling): a short shared rail segment at the console line between helm and auxiliary station — the datapad shelf — with the gap between the CHAIRS left open. The datapad rests on the rail; knees still meet when the chairs turn. Both passages literally true.',
     evidence: 'explicit',
-    claims: [
-      { kind: 'presence', target: 'stationRail' },
-      { kind: 'clashes-with', target: 'knees-touch',
-        explanation: 'A rail "between" the two stations implies they sit side by side with a barrier element sharing reach. But VH1_B3_05 has the two crew turning toward each other until their knees nearly touch — no rail could stand in that gap. Both cannot be literally true of the same pair of stations.',
-        options: [
-          { id: 'short-rail', label: 'Short rail segment behind the consoles (recommended)', detail: 'Keep a short shared rail at the console line between the two stations, but leave the gap between the CHAIRS open. The datapad rests on the rail; knees still meet when the chairs turn.' },
-          { id: 'no-between-rail', label: 'No rail between stations', detail: 'Treat "the rail between them" as the forward rail, loosely phrased. Removes the station rail; marks the Presence-02 line as tension.' },
-          { id: 'stations-apart', label: 'Stations separated by a full rail', detail: 'Keep a full rail between the stations and treat the knees-almost-touch scene as the copilot chair instead. Marks the VH1_B3_05 line as tension.' },
-        ] },
-    ],
+    claims: [{ kind: 'presence', target: 'stationRail' }],
   },
   {
     key: 'knees-touch', source: 'VH1_B3_05',
@@ -611,16 +594,13 @@ export const SEED_CONSTRAINTS = [
     category: 'dimension', subject: 'galley size',
     interpretation: 'The galley feels too small for three — read per the author’s ruling as choreography, not volume: two people’s routines had expanded to fill a six-crew room, and a third body broke them.',
     evidence: 'explicit',
-    claims: [
-      { kind: 'presence', target: 'galley' },
-      { kind: 'clashes-with', target: 'galley-island',
-        explanation: 'Presence reads as a "tiny galley" where three people don’t quite fit. But the Huntress was built for a crew of six, and by Volume 3 the galley must hold five adults and a child semi-comfortably. The author has ruled how both are true: the room keeps its commercial six-crew scale, and the crowding is social — Quenby alone for months, then a year of two women whose habits annexed the whole room. Nova didn’t take up space; she took up slack.',
-        options: [
-          { id: 'crowded-by-habit', label: 'Sized for six, crowded by habit (author ruling — recommended)', detail: 'The room keeps its six-crew scale with one long integrated counter run. What "didn’t fit" was the choreography of two people’s expanded routines meeting a third body. No geometry changes; the prose stays true as written.' },
-          { id: 'tiny-literal', label: 'Literally tiny (superseded)', detail: 'The two-person-compartment reading. Superseded by the author’s ruling that the galley must eventually hold the Volume-3 crew of six; kept for the record. Accepting it changes no geometry.' },
-        ] },
-    ],
+    claims: [{ kind: 'presence', target: 'galley' }],
   },
+  // RESOLVED (author ruling, recorded on galley-tiny's interpretation): the
+  // galley keeps its commercial six-crew scale; the crowding is social —
+  // Quenby alone for months, then a year of two women whose habits annexed
+  // the whole room. Nova didn't take up space; she took up slack. By Volume 3
+  // the same room holds five adults and a child semi-comfortably.
   {
     key: 'galley-island', source: 'Next-07',
     quote: 'Quenby didn’t sit. She leaned. One elbow braced against the side of the central prep counter, watching the water generator refill.',
@@ -1035,24 +1015,18 @@ export const SEED_CONSTRAINTS = [
     key: 'eng-walkin', source: 'Presence-01',
     quote: 'Quenby leaned to the frame and set the mug on the deck plate within reach.',
     category: 'door', subject: 'engine bay doorway',
-    interpretation: 'The engine bay is a WALK-IN room with a doorframe to lean on, the work area within a lean-and-reach of the door.',
+    interpretation: 'RESOLVED (author ruling): both are true — the walk-in engine bay every Presence scene needs, with a deck access hatch in its floor. The ladder and crawl-height service runs live beneath, joining the same underdeck fabric the work spine’s engineering access reaches from the lower deck. Presence leans on the doorframe; Next climbs down through the hatch.',
     evidence: 'explicit',
     claims: [
       { kind: 'presence', target: 'engineBay' },
-      { kind: 'clashes-with', target: 'eng-belowdeck',
-        explanation: 'Presence shows engineering as a walk-in room — a doorframe to lean on, a workbench to cross to, two people standing at once. But Next reaches engineering BELOWDECK, down ringing ladder rungs, crawling backward out of a hatch. A stand-up room with a doorway and a crawl-height underdeck reached by ladder cannot be the same space.',
-        options: [
-          { id: 'walk-in-bay', label: 'Walk-in engine bay (recommended)', detail: 'A stand-up engine bay at the aft end of the storage spine — the room every Presence scene needs. Treats the Next belowdeck passages as a separate service level to be modeled with the lower deck later.' },
-          { id: 'low-bay', label: 'Low-ceilinged bay', detail: 'Keep the aft bay but drop its overhead to 1.85 m — cramped enough to honor the belowdeck feel; adults stoop. Both arcs read approximately true.' },
-          { id: 'bay-plus-crawl', label: 'Bay plus underdeck crawl', detail: 'Stand-up bay with a deck access hatch in its floor — the ladder and crawl spaces run beneath. Both passages stay literally true; the crawl itself is modeled with the lower deck later.' },
-        ] },
+      { kind: 'presence', target: 'engFloorHatch' },
     ],
   },
   {
     key: 'eng-belowdeck', source: 'Next-02',
     quote: 'Belowdeck had a heartbeat you could hear with your teeth. Rungs rang, then dulled. Oil and dust.',
     category: 'adjacency', subject: 'belowdeck engineering',
-    interpretation: 'Engineering spaces are belowdeck, reached by a rung ladder — crawl-height, exited backward through a hatch.',
+    interpretation: 'Engineering spaces continue belowdeck, reached by a rung ladder through the engine bay’s deck hatch (author ruling) — crawl-height, exited backward.',
     evidence: 'explicit', claims: [],
   },
   {
@@ -1067,16 +1041,9 @@ export const SEED_CONSTRAINTS = [
     key: 'hold2-hatch', source: 'Next-02',
     quote: 'Hold Two’s hatch slid open at her approach.',
     category: 'door', subject: 'Hold Two hatch',
-    interpretation: 'Hold Two (today’s configurable flex bay) has a powered, proximity-keyed hatch — at least it did in the early days, when B.O.B. still ran the doors.',
+    interpretation: 'RESOLVED (author ruling): automation is an era, not a fixture. The hatch carries a powered assist that B.O.B. drove in the early days — open at her approach, lights to her preference — and after the Manual-mode order it waits to be told, like every other door. Same hardware, different authority. Prose-checking rule: door behavior dates a scene.',
     evidence: 'explicit',
-    claims: [
-      { kind: 'clashes-with', target: 'doors-wait',
-        explanation: 'In early Next, Hold Two’s hatch opens at Quenby’s approach and the hold’s lights adjust to her preference — B.O.B. running the ship anticipatorily. By the Presence arc, "everything here waits to be told": doors are manual, B.O.B. ordered into Manual mode. Both lines are literally true of the same hatch only if its automation is a condition, not a fixture.',
-        options: [
-          { id: 'era-automation', label: 'Automation is an era, not a fixture (recommended)', detail: 'The hatch carries a powered assist that B.O.B. drove in the early days; after the Manual-mode order it waits like every other door. Same hardware, different authority. Changes no geometry — records the reading for prose checking.' },
-          { id: 'always-manual', label: 'Always manual', detail: 'The early line reads loosely — the hatch was unlatched and light on its track, and she pushed it as she arrived. Marks the Next-02 lines as tension. Changes no geometry.' },
-        ] },
-    ],
+    claims: [],
   },
   {
     key: 'eng-manifold', source: 'Presence-01',
@@ -1286,22 +1253,15 @@ export const SEED_CONSTRAINTS = [
     key: 'iri-cabin-lower', source: 'Next-07',
     quote: 'The door wasn’t closed. Wasn’t open either. Half-angle. Half-invite.',
     category: 'door', subject: 'Iri’s cabin door',
-    interpretation: 'Iri’s cabin sits on the lower corridor’s cabin row — Quenby passes it walking the row, its door held at half-angle.',
+    interpretation: 'RESOLVED (author ruling): Iri’s quarters are Cabin Five on the quiet run past the wet-core dogleg, sharing a wall with Quenby’s Cabin Six — Iri belongs beside Quenby. The Next-09 upper-corridor route reads as the long way home; the manuscript’s "third cabin" phrasing is queued for correction.',
     evidence: 'explicit',
-    claims: [
-      { kind: 'clashes-with', target: 'iri-quarters-route',
-        explanation: 'Walking the LOWER corridor’s cabin row, Quenby passes Iri’s door held at half-angle. But when Iri carries the found pieces home, her route runs "back through the upper corridor, past the galley, past the junction lights, into her own quarters" — an upper-deck room aft. One set of quarters cannot be both a cabin down the lower row and a room past the galley on the upper corridor.',
-        options: [
-          { id: 'cabin-row', label: 'Cabin on the lower deck (recommended)', detail: 'Her quarters are Cabin Five on the quiet run past the wet-core dogleg, sharing a wall with Cabin Six. The Next-09 route is read loosely — she took the long way home. (Author ruling: the manuscript’s "third cabin" phrasing is queued for correction — Iri belongs beside Quenby.)' },
-          { id: 'aft-room', label: 'Room past the galley', detail: 'Her quarters sit on the main deck, tucked behind the galley tanks and entered through the engine bay — the Next-09 route taken literally. Cabin Five stands blank.' },
-        ] },
-    ],
+    claims: [],
   },
   {
     key: 'iri-quarters-route', source: 'Next-09',
     quote: 'She carried the pieces with both hands—back through the upper corridor, past the galley, past the junction lights, into her own quarters.',
     category: 'movement', subject: 'the route to Iri’s quarters',
-    interpretation: 'Iri’s quarters are reached along the upper corridor, past the galley — reading literally, a main-deck room aft.',
+    interpretation: 'Iri carries found pieces the long way home (author ruling) — up the storage spine, past the galley, down the secondary ladder to the quiet run — a route that shows the ship to the things she saves.',
     evidence: 'explicit', claims: [],
   },
   {

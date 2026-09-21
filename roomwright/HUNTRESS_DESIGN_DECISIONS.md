@@ -1560,3 +1560,17 @@ And the first real production drawings: `tools/mapgen.mjs` renders `maps/geometr
 **Every cabin now holds a life, not just a bunk (author direction):** a full-height clothing/personal locker in the aft outer corner, a wall-hinged fold-down desk sized for a slate, a mug, and one project, a stool no two of which have aged the same way, and two flat drawers under every bunk. Two cabins keep it in character: Cabin Two's storage is still the dead crew member's labeled drawer unit — half of why nobody moves in is that you'd have to relabel it — and Iri's desk is her worktable, the standard fold-down being the first thing she unbolted; her locker stands sideways against the outer wall, lower shelf given to labeled tins of sorted salvage.
 
 Placement in 2.0 × 1.85 m cabins is knife-edge work: the no-overlap and door-clearance tests rejected three drafts (stool tucked under the desk lip, desk edge 20 cm inside the door's clearance circle, Iri's lane one stool too narrow) before everything cleared. All 30 habit tests pass across baseline and stress rulings; v22→v23 autosave migration verified — user edits preserved, sixteen new fittings appear. Maps re-exported at v23.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The docket cleared: all six conflicts ruled (v24)
+
+The author sat the full conflict docket in one session. Every declared evidence conflict is now resolved, and the choices are baked into the generator as canon — the ruling matrix retires; the ship has exactly one configuration.
+
+- **Bridge door — aft-starboard corner, angled (single hatch).** Approaching is still "behind her"; entering gives her three-quarter profile first. Two doors were weighed and rejected on hull logic: the bridge meets hull on its other three sides, so a second door would cut the same aft pressure wall two meters from the first and lead to the same corridor — no route gained, one pressure penetration lost.
+- **Station rail — short shared segment at the console line, chair gap open.** The datapad rests on the rail; knees still meet when the chairs turn. Both passages literally true.
+- **Galley — sized for six, crowded by habit** (confirmed; was already the working ruling). Choreography, not volume.
+- **Engine bay — bay plus underdeck crawl.** The walk-in room every Presence scene needs, with a deck hatch in its floor; the ladder rings down into the crawl-height service layer that the work spine's engineering access reaches from below. Presence leans on the doorframe; Next climbs down through the hatch. One more place two people work close.
+- **Hold Two's hatch — automation is an era, not a fixture.** Powered assist that B.O.B. drove in the early days; after the Manual-mode order it waits to be told. Prose-checking rule: door behavior dates a scene.
+- **Iri's quarters — Cabin Five, beside Quenby** (confirmed; "third cabin" correction stays queued). The Next-09 upper-corridor route is the long way home — a route that shows the ship to the things she saves.
+
+Mechanically: the six choices are constants in the generator now; stored rulings from older saves are superseded. Migration 24 regenerates the whole door wing plus the station rail and the retired aft-room variant, so even a save that carried a contrary ruling comes back canonical — verified with a v23 save deliberately ruled side-door, which migrated to the aft-corner hatch with user objects intact and 30/30 tests green. The conflicts tab is empty for the first time since the seed was mined.

@@ -40,12 +40,20 @@ const GALLEY_SIZES = { lived: [3.4, 4.8] };
 
 function defs(rulings) {
   const W = BRIDGE.W, D = BRIDGE.D, H = BRIDGE.H;
-  const doorRuling = rulings['declared:door-behind~throttle']?.choice || null;
-  const railRuling = rulings['declared:knees-touch~rail-between']?.choice || null;
-  // (the galley conflict is interpretive since the author's sized-for-six
-  // ruling — no geometry reads it)
-  const iriRuling = rulings['declared:iri-cabin-lower~iri-quarters-route']?.choice || null;
-  const iriProvisional = !iriRuling;
+  // Author rulings — all six declared conflicts are resolved canon. The
+  // choices are fixed here; rulings stored in older saves are superseded.
+  //   bridge door: single hatch, aft-starboard corner, angled approach
+  //     (two doors would both cut the same aft pressure wall two meters
+  //     apart — hull on the other three sides — so one door it is)
+  //   station rail: short shared segment at the console line, chairs open
+  //   galley: sized for six, crowded by habit (interpretive; no geometry)
+  //   engine bay: walk-in bay plus underdeck crawl below a deck hatch
+  //   Hold Two hatch: automation is an era, not a fixture (interpretive)
+  //   Iri's quarters: Cabin Five on the quiet run, beside Quenby
+  const doorRuling = 'aft-corner';
+  const railRuling = 'short-rail';
+  const iriRuling = 'cabin-row';
+  const iriProvisional = false;
 
   // door placement
   let doorX = 1.5, doorOnSideWall = false;
@@ -96,7 +104,7 @@ function defs(rulings) {
       evidenceRefs: ['door-behind', 'throttle', 'door-palm', 'door-grind-slide', 'doorframe-lean', 'doors-wait'],
       note: doorProvisional
         ? '⚠ Provisional position — the door-placement conflict is unresolved (aft of the pilot vs. profile view from the door). Currently placed in the aft-starboard corner as a compromise.'
-        : `Position fixed by your ruling (${doorRuling}). Palm-plate, manual sliding hatch that grinds open slowly.`,
+        : 'Position fixed by author ruling: the single hatch sits in the aft-starboard corner, angled — approaching is still "behind her," and someone entering sees her three-quarter profile first. Palm-plate, manual sliding hatch that grinds open slowly.',
     });
     const segL = 1.8;
     const leftLen = (doorX - segL / 2) - (-W / 2);
@@ -215,7 +223,7 @@ function defs(rulings) {
         ? '⚠ Provisional — the rail-between-stations conflict is unresolved. Shown as a short segment at the console line (datapad shelf) so the chairs can still meet knees.'
         : (full
           ? 'Your ruling: full rail separates the two stations.'
-          : 'Your ruling: short rail segment at the console line between helm and auxiliary station — the datapad shelf.'),
+          : 'Author ruling: short rail segment at the console line between helm and auxiliary station — the datapad shelf. The gap between the chairs stays open; knees still meet when they turn.'),
     });
   }
 
@@ -1115,8 +1123,8 @@ function defs(rulings) {
   });
 
   // ================= ENGINE BAY =================
-  const engRuling = rulings['declared:eng-belowdeck~eng-walkin']?.choice || null;
-  const engProvisional = !engRuling;
+  const engRuling = 'bay-plus-crawl';   // author ruling — see the canon block at the top of defs()
+  const engProvisional = false;
   const EBW = 2.7, EBD = 2.4;
   const EBH = engRuling === 'low-bay' ? 1.85 : 2.15;
   const ebx = leg2x, ebz = leg2z1 + EBD / 2;
@@ -1144,7 +1152,7 @@ function defs(rulings) {
       params: { width: 0.7, height: 0.03, depth: 0.7 },
       pos: erel(-0.75, -0.55), rotY: 0, locked: false,
       evidence: 'decision', evidenceRefs: ['eng-belowdeck', 'eng-galley-above'],
-      note: 'Your ruling: the ladder down to the underdeck crawl runs beneath this hatch — rungs that ring, oil and dust. The crawl itself arrives with the lower deck.',
+      note: 'Author ruling: the walk-in bay AND the belowdeck are both true. The ladder down to the underdeck crawl runs beneath this hatch — rungs that ring, then dull; oil and dust — joining the crawl-height service layer above the lower deck (the work spine’s underdeck engineering access reaches the same fabric from below). Presence leans on the doorframe; Next climbs down through here.',
     });
   }
   const engWallSeg = (EBW - SPW) / 2;
@@ -2169,7 +2177,8 @@ function defs(rulings) {
     room: 'flex-bay', type: 'doorway', name: 'Mission / flex bay cargo hatch',
     params: { length: 1.55, height: 2.6, thickness: 0.14, doorWidth: 1.25, doorHeight: 2.15, kind: 'sliding', slideDir: -1, open: 0 },
     pos: [OPX + WORKW / 2, D2, fbz], rotY: Math.PI / 2, locked: false,
-    evidence: 'decision', evidenceRefs: [], note: 'Cargo-capable opening directly from the work spine.',
+    evidence: 'decision', evidenceRefs: ['hold2-hatch'],
+    note: 'Cargo-capable opening directly from the work spine. Author ruling: the hatch carries a powered assist that B.O.B. drove in the early days — "slid open at her approach" — and after the Manual-mode order it waits to be told, like every other door. Same hardware, different authority; door behavior dates a scene.',
   });
   add('flexOuter', {
     room: 'flex-bay', type: 'wall', name: 'Mission / flex bay outer wall',
@@ -2883,20 +2892,18 @@ export function generateLayout({ replaceKeys = null, fresh = false } = {}) {
 }
 
 // Keys affected by each curated conflict — regenerated when a ruling lands.
-// The door ruling moves the whole aft wing (corridor, spine, pocket, medbay,
-// and galley all follow the hatch).
-export const CONFLICT_LAYOUT_KEYS = {
-  'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel', 'svc*', 'rib*', 'nook*', 'anchor*', 'hoist*', 'stagingRack', 'suitRack', 'buddyBench', 'ceilHooks', 'coatRow'],
-  'declared:knees-touch~rail-between': ['stationRail'],
-  'declared:galley-island~galley-tiny': ['gal*'],
-  'declared:eng-belowdeck~eng-walkin': ['engFloor', 'engCeil', 'engWall*', 'engFloorHatch'],
-  'declared:iri-cabin-lower~iri-quarters-route': ['cab5*', 'iriQ*', 'engWall*'],
-};
+// All declared conflicts are resolved by author ruling and their choices are
+// baked into the generator, so no ruling regenerates geometry anymore. The
+// old door-ruling key list survives below as DOOR_WING_KEYS because the v24
+// migration uses it: a save that carried a contrary door ruling needs its
+// whole aft wing regenerated onto the canonical aft-corner hatch.
+export const CONFLICT_LAYOUT_KEYS = {};
+const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel', 'svc*', 'rib*', 'nook*', 'anchor*', 'hoist*', 'stagingRack', 'suitRack', 'buddyBench', 'ceilHooks', 'coatRow'];
 
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 23;
+export const LAYOUT_VERSION = 24;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2918,4 +2925,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   21: ['sbHatch', 'sbFloor', 'alkInnerDoor'], // the intake rule and the bay scrub cycle (salvage & stowage pass)
   22: ['cab4*', 'engManifold', 'svcCorBend'], // author locks: Cabin Four is Nova's; Presence-01 lives at the elbow coolant riser
   23: ['medCot', 'medUpperBed', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*'], // author rulings: medbay = one real bed + one fold-down cot (conflict resolved); every cabin gets locker / fold-down desk / stool
+  24: [...DOOR_WING_KEYS, 'stationRail', 'iriQ*'], // all six declared conflicts resolved by author ruling and baked in — regenerate everything a contrary stored ruling could have moved (door wing, station rail, Iri's aft-room variant), plus the new engine-bay floor hatch
 };

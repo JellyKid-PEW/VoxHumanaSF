@@ -123,8 +123,9 @@ decisions), the engineering studies (`HUNTRESS_MASS_AND_TANK_STUDY.md`,
 `HUNTRESS_THERMAL_PROPULSION_STUDY.md`, `HUNTRESS_VERTICAL_HULL_STUDY.md`,
 `BOOK3_SHIP_SPACE_AUDIT.md`), and the art-facing
 `HUNTRESS_COMIC_PRODUCTION_FLOORPLAN_V1.md`, whose freeze now rests on
-geometry validated in the live app — every habit test green across all
-rulings of the six evidence conflicts. Still waiting in the prose for a
+geometry validated in the live app — every habit test green, and all six
+declared evidence conflicts now resolved by author ruling and baked into
+the generator as canon. Still waiting in the prose for a
 future pass: the paneled-over observation passage, the wiring nest under
 B.O.B.'s tertiary relay stack, Deck Three's exact footprint, and the deeper
 underdeck crawl network.
