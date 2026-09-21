@@ -1604,3 +1604,16 @@ Each scene carries its prose, a ship state (drift-night / drift-day / burn), and
 Any non-ok finding can be **queued as a pending manuscript correction** with one click. The corrections list is part of the project now — pending/done, exportable as Markdown — and it starts seeded with the two corrections already owed: Iri's "third cabin" → Cabin Five, and the Next-07 "central prep counter" island phrasing.
 
 Verified headless end to end: a three-figure galley scene (Nova asleep two decks of habit away) produced the right hearing matrix, both sightline blocks, the placement catch, the era catch on a hatch that "slid open at her approach," and a clean corrections round-trip. All 31 habit tests stay green.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — First field test: Presence-01 on the workbench (v26)
+
+The scene-review workbench ran its first real prose: the Presence-01 fragments held in the evidence base, staged at the author-ruled site — Iri waist-deep in the elbow coolant riser, Quenby arriving with the mug, then crossing to the engine bay where the heat has its center. Era: Manual mode. Ship state: drift-day.
+
+What the instrument reported:
+- **Everything placed cleanly** — Iri at the riser, Quenby at the frame, both on real floor; line of sight between them; Quenby's recorded walk from the elbow to the workbench is 9.8 m of clear route through the storage spine. The prose says "she crossed to the bench" in a breath; the ship says that breath contains three turns and ten meters. Worth knowing, not wrong — the chapter elides the walk.
+- **The conversation is public.** At drift-day, words from the riser carry into the forward corridor, the aft corridor, the hygiene access, and the Lower Operations landing, and tone reaches the residential turn. Presence-01's intimacy happens in the ship's most acoustically open junction — maintenance erupting into lived space, eavesdroppable from five directions. Any scene that wants this conversation private has to move it or wait for a burn.
+- **Four spatial statements matched the evidence base**; no era violations (B.O.B.'s status line is an announcement, not an anticipatory door).
+- **The mundane-things check found a real gap:** the dented toolbox and cracked datapad — recurring objects with a fixed home per Next — existed only as a sentence in the workbench's note. Promoted to a real object on the bench top (v26). The rig-for-burn test immediately objected that a benched crate has no tie-down, which forced the honest detail: a wear-polished **mag-pad** holds the toolbox through burns, and the datapad rides on top unsecured — which may be how the crack happened. The tests are now writing set dressing.
+
+The "mug" stays loose — production-flexible, as a mug should be. 31/31 habit tests green; v25→v26 migration verified; maps re-exported (the toolbox has a callout now).

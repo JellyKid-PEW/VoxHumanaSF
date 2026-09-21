@@ -2482,6 +2482,24 @@
    "rotY": 3.141592653589793
   },
   {
+   "layoutKey": "engToolbox",
+   "room": "engine",
+   "type": "crate",
+   "name": "Dented toolbox + cracked datapad",
+   "params": {
+    "width": 0.42,
+    "height": 0.24,
+    "depth": 0.28,
+    "secured": "mag-pad"
+   },
+   "pos": [
+    3.95,
+    0.92,
+    12.15
+   ],
+   "rotY": 0.12
+  },
+  {
    "layoutKey": "engManifold",
    "room": "engine",
    "type": "storage",
@@ -8226,5 +8244,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 25
+ "version": 26
 }

@@ -1255,7 +1255,15 @@ function defs(rulings) {
     pos: erel(-0.25, EBD / 2 - 0.32), rotY: Math.PI, locked: false,
     evidence: 'explicit',
     evidenceRefs: ['eng-bench-cross', 'eng-toolbox', 'eng-tap', 'eng-glove-spot'],
-    note: 'The workbench with the dented toolbox and the cracked datapad on top; the tap she runs over her wrists; the empty spot where gloves would’ve lived. Clearances tight enough that a passing hip brushes it.',
+    note: 'The workbench with the tap she runs over her wrists, and the empty spot where gloves would’ve lived. Clearances tight enough that a passing hip brushes it.',
+  });
+  add('engToolbox', {
+    room: 'engine', type: 'crate', name: 'Dented toolbox + cracked datapad',
+    params: { width: 0.42, height: 0.24, depth: 0.28, secured: 'mag-pad' },
+    // rides the bench top, not the deck (y = bench height)
+    pos: [erel(0.2, EBD / 2 - 0.3)[0], 0.92, erel(0.2, EBD / 2 - 0.3)[2]], rotY: 0.12, locked: false,
+    evidence: 'explicit', evidenceRefs: ['eng-toolbox'],
+    note: 'The dented toolbox, datapad on top, crack thin as a scar — it has lived on this bench since they found it in the dead pocket aft. A wear-polished mag-pad under it holds it through burns; the datapad rides on top, unsecured, which may be how the crack happened. Her knuckle nudges the pad on the way past. (Promoted to a real object by the scene-review workbench, which noticed the prose kept reaching for things the model did not hold — and the rig-for-burn test immediately demanded to know what keeps it on the bench.)',
   });
   add('engManifold', {
     room: 'engine', type: 'storage', name: 'Cooling manifold (open)',
@@ -2925,7 +2933,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 25;
+export const LAYOUT_VERSION = 26;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2949,4 +2957,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   23: ['medCot', 'medUpperBed', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*'], // author rulings: medbay = one real bed + one fold-down cot (conflict resolved); every cabin gets locker / fold-down desk / stool
   24: [...DOOR_WING_KEYS, 'stationRail', 'iriQ*'], // all six declared conflicts resolved by author ruling and baked in — regenerate everything a contrary stored ruling could have moved (door wing, station rail, Iri's aft-room variant), plus the new engine-bay floor hatch
   25: ['medFloor', 'medCot', 'medChair', 'medRailHead', 'medRailFoot', 'medBoom'], // author ruling: the cot is a rated procedure bed on recessed deployment rails, umbilical boom overhead
+  26: ['engBench', 'engToolbox'], // the dented toolbox + cracked datapad promoted from a bench note to a real object (found by the scene-review workbench on Presence-01)
 };

@@ -1216,6 +1216,7 @@ export const HABIT_TESTS = [
       const problems = [];
       for (const o of state.project.objects) {
         if (o.type !== 'crate' || !WORK_ROOMS.has(o.room)) continue;
+        if (o.params?.secured) continue;   // a declared restraint (mag-pad, lashing lip) IS its home
         let best = Infinity;
         for (const a of anchors) {
           if (Math.abs((a.pos[1] || 0) - (o.pos[1] || 0)) > 0.5) continue;
