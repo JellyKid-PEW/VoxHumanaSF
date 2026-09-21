@@ -8313,6 +8313,24 @@
    "rotY": 1.5707963267948966
   },
   {
+   "layoutKey": "spineMarks",
+   "room": "spine",
+   "type": "shelf",
+   "name": "Graphite pause-marks (the widened wall)",
+   "params": {
+    "width": 0.75,
+    "depth": 0.015,
+    "mountHeight": 1.35,
+    "tins": 0
+   },
+   "pos": [
+    3.28,
+    0,
+    7
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
    "layoutKey": "svcSpineBracket",
    "room": "spine",
    "type": "storage",
@@ -8912,5 +8930,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 30
+ "version": 31
 }

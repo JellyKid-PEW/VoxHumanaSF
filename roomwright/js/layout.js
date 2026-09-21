@@ -640,7 +640,7 @@ function defs(rulings) {
     params: { width: 0.56, height: 0.5, depth: 0.44 },
     pos: [pkx + 0.32, 0, pkz + 0.52], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['pocket-slates', 'pocket-nova-crate'],
-    note: 'The crate from starboard pocket three — stills, the throat-pickup case, pause-notation pages. Slates spread across the floor around it; a utility lamp angled away from the door.',
+    note: 'The seventh sealed unit in a room the manifest says holds six. Mechanical clasp, not a lock — hidden from attention, not from thieves; split at one hinge, repaired badly, scorched at one corner; it holds, barely. Closed, not sealed. Inside: signal-capture stills of a younger Quenby; working references margin-noted in the same cramped script as the journal from the unlisted corridor; expired laminates and access strips (one snapped and film-repaired, from near Helio’s Belt); a cracked stage-relay token; the throat-pickup case in yellowing foam; pause-notation pages ("opens faster if I stop meaning it"); and the throat overlay with its false scar, reproduced in careful pigment on a dried synthetic skin patch — damage copied from shadow. Allocation tag: R. Vale, contract systems interpreter, temporary berth, departed after an external boarding event, effects never fully removed. Storage record per the captain: location only. No item expansion.',
   });
 
   // ---------- Storage Four ----------
@@ -2521,7 +2521,7 @@ function defs(rulings) {
     params: { width: 0.42, height: 0.16, depth: 0.3 },
     pos: [unlCx, D2 - 0.42, 27.62], rotY: 0, locked: false,
     evidence: 'explicit', evidenceRefs: ['unl-cache-contents'],
-    note: 'Behind the rear panel: polymer cloth, collapsed ration packaging, a storage block with dead encryption — and beneath it the case. Black, civilian, travel-grade, no locks, handle polished by old use. Inside: a dead datapad, the worn journal, and the cloth-wrapped medallion (handmade, geometric bloom, radiating lines — copied from memory, not measured from a template).',
+    note: 'Behind the rear panel: polymer cloth, collapsed ration packaging, a storage block with dead encryption — and beneath it the case. Black, civilian, travel-grade, no locks, handle polished by old use. Inside: a dead datapad, the worn journal, and the cloth-wrapped medallion (handmade, geometric bloom, radiating lines — copied from memory, not measured from a template). The journal’s cramped script matches the margin notes in R. Vale’s crate, two decks up in starboard pocket three.',
   });
   // ---------- Deck Three fragment: the mouth, the hall, and the wrong room ----------
   // The chapter of the installations walks it, so the first piece of Deck
@@ -3032,6 +3032,13 @@ function defs(rulings) {
     evidence: 'explicit', evidenceRefs: ['spine-support-rail'],
     note: 'The support rail along the spine wall — a handhold in the narrow dark, and Quenby’s old lean spot two turns from anywhere.',
   });
+  add('spineMarks', {
+    room: 'spine', type: 'shelf', name: 'Graphite pause-marks (the widened wall)',
+    params: { width: 0.75, depth: 0.015, mountHeight: 1.35, tins: 0 },
+    pos: [3.28 + HX, 0, 7.0], rotY: Math.PI / 2, locked: false,
+    evidence: 'explicit', evidenceRefs: ['spine-support-rail'],
+    note: 'Where the corridor widens enough for a wall to hold weight: short vertical strokes in scarred pencil, uneven enough to keep from becoming tidy. Not counts — pauses. One early mark thumb-smeared soft; the last one left clean. Invisible head-on, just scuffs among scuffs; they lift from the metal only when the light comes low and sideways. The same notation R. Vale practiced on paper — except these are hers, and a pause does not belong to whoever learned how to draw it.',
+  });
   svc('svcSpineBracket', 'spine', 'Recessed equipment bracket (behind the rail line)', 3.31, 0, 7.7, Math.PI / 2, 0.6, 0.9, 0.1,
     '"The access angle forced her elbow high. The lower bracket sat too deep behind the support rail." Refit archaeology: the rail came later than the bracket, and no one has ever moved either.', ['spine-support-rail']);
   // exposed ring-frame ribs: the frame grid, felt in the corridors
@@ -3198,7 +3205,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 30;
+export const LAYOUT_VERSION = 31;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3226,5 +3233,6 @@ export const LAYOUT_MIGRATION_KEYS = {
   27: ['unl*', 'mhUnlisted', 'cargoWallE*', 'ventGridPanel'], // Next-09 un-defers the unlisted corridor: real walkable geometry, access plate in the split hold wall, underfloor cache; the anomaly massing retires
   28: ['hygBranchWallS', 'domRunDoor'], // Next-10 review found the domestic-service run sealed at its mouth: the branch aft wall now splits around a real door (the one that "remembers weight")
   29: ['storageTwo'], // Storage Two placed (author direction: "wherever it will fit") — old registry number in the aft service passage
-  30: ['d3*', 'mhDeck3*', 'cargoBay4Stencil', 'navChair'], // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
+  30: ['d3*', 'mhDeck3*', 'cargoBay4Stencil', 'navChair'],
+  31: ['spineMarks', 'pktCrate', 'unlCacheCase'], // the R. Vale crate chapter: graphite pause-marks appear on the widened spine wall; the crate note carries its full inventory and the location-only ruling; the journal's script links to Vale's hand // the installations chapter: Deck Three fragment becomes real (mouth, hall, the wrong room, the bolt), the CARGO BAY FOUR stencil is registry archaeology, and nav finally gets the chair the prose keeps seeing
 };
