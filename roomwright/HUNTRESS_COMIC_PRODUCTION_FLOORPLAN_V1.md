@@ -50,6 +50,7 @@ Production-fixed relationships:
 - legacy storage spine branches before the main corridor offset;
 - primary corridor offsets before medbay, preventing direct airlock-to-medbay sightline;
 - medbay opens from the aft corridor run;
+- medbay holds **one real bed plus one cot** (author ruling): the lower recessed wall bed is the real recovery bed — "the cot" everyone says aboard — with a lighter fold-down cot latched flat above it for the rare two-patient day;
 - galley is a closable room at the aft domestic junction;
 - separate dry domestic-service branch leads toward hygiene and the secondary ladder;
 - toilet and shower are separate compartments;
@@ -95,6 +96,7 @@ Production-fixed relationships:
 - wet-service dogleg breaks the route before the quiet cabin run;
 - domestic stores / future garden opens from the dogleg;
 - Cabin Five is Iri; Cabin Six is Quenby; they share a wall;
+- every cabin carries the same three fittings (author direction): a full-height clothing/personal locker in the aft outer corner, a wall-hinged fold-down desk on the aft bulkhead, and a stool — plus two flat drawers under each bunk. Two cabins express it in character: Cabin Two's storage is the dead crew member's labeled drawer unit, and Iri's "desk" is her worktable (her locker stands sideways against the outer wall);
 - passage continues beyond Cabin Six into older aft-service fabric;
 - work spine passes configurable mission / flex bay, repair recess, and principal underdeck engineering access;
 - aft freight / service node connects freight lock, main cargo bay, work spine, and lower-aft service route;

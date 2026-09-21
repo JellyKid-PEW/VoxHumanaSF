@@ -2586,18 +2586,36 @@
    "layoutKey": "medCot",
    "room": "medbay",
    "type": "bench",
-   "name": "Medbay cot",
+   "name": "Medbay bed — \"the cot\"",
    "params": {
-    "width": 0.7,
+    "width": 0.72,
     "height": 0.52,
     "depth": 1.5
    },
    "pos": [
-    -2.38,
+    -2.37,
     0,
     5.8
    ],
    "rotY": 0
+  },
+  {
+   "layoutKey": "medUpperBed",
+   "room": "medbay",
+   "type": "shelf",
+   "name": "Fold-down cot (upper)",
+   "params": {
+    "width": 1.5,
+    "tins": 0,
+    "depth": 0.58,
+    "mountHeight": 1.34
+   },
+   "pos": [
+    -2.45,
+    0,
+    5.8
+   ],
+   "rotY": 1.5707963267948966
   },
   {
    "layoutKey": "medConsole",
@@ -3852,6 +3870,57 @@
    "rotY": 0
   },
   {
+   "layoutKey": "cab1Locker",
+   "room": "cabin",
+   "type": "storage",
+   "name": "Cabin One locker",
+   "params": {
+    "width": 0.55,
+    "height": 1.78,
+    "depth": 0.42
+   },
+   "pos": [
+    -8.474999999999998,
+    -3,
+    8.345
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab1Desk",
+   "room": "cabin",
+   "type": "table",
+   "name": "Cabin One fold-down desk",
+   "params": {
+    "width": 0.6,
+    "depth": 0.4,
+    "height": 0.74
+   },
+   "pos": [
+    -7.804999999999999,
+    -3,
+    8.365
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab1Stool",
+   "room": "cabin",
+   "type": "seat",
+   "name": "Cabin One stool",
+   "params": {
+    "seatHeight": 0.44,
+    "width": 0.38,
+    "hasArms": false
+   },
+   "pos": [
+    -7.874999999999998,
+    -3,
+    7.795000000000001
+   ],
+   "rotY": 3.141592653589793
+  },
+  {
    "layoutKey": "cab2Floor",
    "room": "cabin",
    "type": "floor",
@@ -3973,6 +4042,40 @@
     8.505
    ],
    "rotY": 0
+  },
+  {
+   "layoutKey": "cab2Desk",
+   "room": "cabin",
+   "type": "table",
+   "name": "Cabin Two fold-down desk",
+   "params": {
+    "width": 0.6,
+    "depth": 0.4,
+    "height": 0.74
+   },
+   "pos": [
+    -4.594999999999999,
+    -3,
+    9.765
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab2Stool",
+   "room": "cabin",
+   "type": "seat",
+   "name": "Cabin Two stool",
+   "params": {
+    "seatHeight": 0.44,
+    "width": 0.38,
+    "hasArms": false
+   },
+   "pos": [
+    -4.5249999999999995,
+    -3,
+    9.195000000000002
+   ],
+   "rotY": 3.141592653589793
   },
   {
    "layoutKey": "cab3Floor",
@@ -4098,6 +4201,57 @@
    "rotY": 0
   },
   {
+   "layoutKey": "cab3Locker",
+   "room": "cabin",
+   "type": "storage",
+   "name": "Cabin Three locker",
+   "params": {
+    "width": 0.55,
+    "height": 1.78,
+    "depth": 0.42
+   },
+   "pos": [
+    -8.474999999999998,
+    -3,
+    10.945
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab3Desk",
+   "room": "cabin",
+   "type": "table",
+   "name": "Cabin Three fold-down desk",
+   "params": {
+    "width": 0.6,
+    "depth": 0.4,
+    "height": 0.74
+   },
+   "pos": [
+    -7.804999999999999,
+    -3,
+    10.965
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab3Stool",
+   "room": "cabin",
+   "type": "seat",
+   "name": "Cabin Three stool",
+   "params": {
+    "seatHeight": 0.44,
+    "width": 0.38,
+    "hasArms": false
+   },
+   "pos": [
+    -7.874999999999998,
+    -3,
+    10.395000000000001
+   ],
+   "rotY": 3.141592653589793
+  },
+  {
    "layoutKey": "cab4Floor",
    "room": "cabin",
    "type": "floor",
@@ -4221,6 +4375,57 @@
    "rotY": 0
   },
   {
+   "layoutKey": "cab4Locker",
+   "room": "cabin",
+   "type": "storage",
+   "name": "Cabin Four — Nova locker",
+   "params": {
+    "width": 0.55,
+    "height": 1.78,
+    "depth": 0.42
+   },
+   "pos": [
+    -3.924999999999999,
+    -3,
+    11.845
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab4Desk",
+   "room": "cabin",
+   "type": "table",
+   "name": "Cabin Four — Nova fold-down desk",
+   "params": {
+    "width": 0.6,
+    "depth": 0.4,
+    "height": 0.74
+   },
+   "pos": [
+    -4.594999999999999,
+    -3,
+    11.865
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab4Stool",
+   "room": "cabin",
+   "type": "seat",
+   "name": "Cabin Four — Nova stool",
+   "params": {
+    "seatHeight": 0.44,
+    "width": 0.38,
+    "hasArms": false
+   },
+   "pos": [
+    -4.5249999999999995,
+    -3,
+    11.295000000000002
+   ],
+   "rotY": 3.141592653589793
+  },
+  {
    "layoutKey": "cab2Drawers",
    "room": "cabin",
    "type": "storage",
@@ -4231,7 +4436,7 @@
     "depth": 0.32
    },
    "pos": [
-    -4.074999999999999,
+    -4.004999999999999,
     -3,
     9.6
    ],
@@ -5065,6 +5270,57 @@
    "rotY": 0
   },
   {
+   "layoutKey": "cab6Locker",
+   "room": "cabin",
+   "type": "storage",
+   "name": "Cabin Six — Quenby locker",
+   "params": {
+    "width": 0.55,
+    "height": 1.78,
+    "depth": 0.42
+   },
+   "pos": [
+    -10.874999999999996,
+    -3,
+    17.22
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab6Desk",
+   "room": "cabin",
+   "type": "table",
+   "name": "Cabin Six — Quenby fold-down desk",
+   "params": {
+    "width": 0.6,
+    "depth": 0.4,
+    "height": 0.74
+   },
+   "pos": [
+    -10.204999999999997,
+    -3,
+    17.24
+   ],
+   "rotY": 0
+  },
+  {
+   "layoutKey": "cab6Stool",
+   "room": "cabin",
+   "type": "seat",
+   "name": "Cabin Six — Quenby stool",
+   "params": {
+    "seatHeight": 0.44,
+    "width": 0.38,
+    "hasArms": false
+   },
+   "pos": [
+    -10.274999999999997,
+    -3,
+    16.669999999999998
+   ],
+   "rotY": 3.141592653589793
+  },
+  {
    "layoutKey": "cab5Table",
    "room": "cabin",
    "type": "table",
@@ -5075,11 +5331,28 @@
     "height": 0.78
    },
    "pos": [
-    -10.124999999999998,
+    -9.995,
     -3,
-    14.9
+    15.1
    ],
    "rotY": 3.141592653589793
+  },
+  {
+   "layoutKey": "cab5Stool",
+   "room": "cabin",
+   "type": "seat",
+   "name": "Iri’s stool",
+   "params": {
+    "seatHeight": 0.44,
+    "width": 0.38,
+    "hasArms": false
+   },
+   "pos": [
+    -9.874999999999998,
+    -3,
+    14.51
+   ],
+   "rotY": 0
   },
   {
    "layoutKey": "cab5Hatch",
@@ -5095,7 +5368,24 @@
    "pos": [
     -10.774999999999999,
     -3,
-    14.55
+    14.45
+   ],
+   "rotY": 1.5707963267948966
+  },
+  {
+   "layoutKey": "cab5Locker",
+   "room": "cabin",
+   "type": "storage",
+   "name": "Cabin Five — Iri locker",
+   "params": {
+    "width": 0.55,
+    "height": 1.78,
+    "depth": 0.42
+   },
+   "pos": [
+    -10.665,
+    -3,
+    15.12
    ],
    "rotY": 1.5707963267948966
   },
@@ -7867,5 +8157,5 @@
   }
  ],
  "DECK2Y": -3,
- "version": 22
+ "version": 23
 }

@@ -1267,8 +1267,9 @@ function defs(rulings) {
   // ================= MEDBAY =================
   // Port side of the main corridor, "deeper in the ship" than the bridge,
   // its hatch just forward of the galley junction.
-  const bedsRuling = rulings['declared:med-cot~med-two-beds']?.choice || null;
-  const bedsProvisional = !bedsRuling;
+  // Bed count is author-ruled: one real bed plus one cot. The prose's "the
+  // cot" is the lower, real recovery bed; the second "recessed wall bed" of
+  // Next-01 survives as a lighter fold-down cot above it.
   const MW = 2.6, MD = 2.0, MH = 2.1;
   const mE = aftCx - COR.W / 2;          // shared wall with the offset aft corridor
   const mx = mE - MW / 2, mz = medHatchZ;
@@ -1298,33 +1299,23 @@ function defs(rulings) {
     pos: [mx - MW / 2, 0, mz], rotY: Math.PI / 2, locked: true,
     evidence: 'assumption', evidenceRefs: [], note: 'The cot wall.',
   });
-  // the cot (and, per ruling, a second recessed bed above it)
+  // the real bed — "the cot" of Presence and Book 3
   add('medCot', {
-    room: 'medbay', type: 'bench', name: bedsRuling === 'two-beds' ? 'Lower wall bed' : 'Medbay cot',
-    params: { width: 0.7, height: 0.52, depth: 1.5 },
-    pos: mrel(-MW / 2 + 0.42, 0), rotY: 0, locked: false,
-    evidence: bedsProvisional ? 'assumption' : 'decision',
+    room: 'medbay', type: 'bench', name: 'Medbay bed — "the cot"',
+    params: { width: 0.72, height: 0.52, depth: 1.5 },
+    pos: mrel(-MW / 2 + 0.43, 0), rotY: 0, locked: false,
+    evidence: 'decision',
     evidenceRefs: ['med-cot', 'med-two-beds', 'med-telemetry'],
-    note: (bedsProvisional ? '⚠ Provisional — the bed-count conflict (two recessed wall beds vs. the single cot) is unresolved. ' : '') +
-      'Reclines "at an angle designed by someone who believed recovery worked better if the body had nowhere useful to go." The telemetry projection hovers past its foot.',
+    note: 'The real bed (author ruling: one real bed plus one cot). Everyone aboard calls it the cot anyway. Reclines "at an angle designed by someone who believed recovery worked better if the body had nowhere useful to go." The telemetry projection hovers past its foot.',
   });
-  if (bedsRuling === 'two-beds' || bedsRuling === 'cot-plus-folded') {
-    // wall-mounted (legless) upper bunk — a shelf, structurally
-    add('medUpperBed', {
-      room: 'medbay', type: 'shelf',
-      name: bedsRuling === 'two-beds' ? 'Upper wall bed' : 'Folded upper bunk',
-      params: {
-        width: 1.5, tins: 0,
-        depth: bedsRuling === 'two-beds' ? 0.6 : 0.2,
-        mountHeight: bedsRuling === 'two-beds' ? 1.3 : 1.25,
-      },
-      pos: mrel(-MW / 2 + (bedsRuling === 'two-beds' ? 0.36 : 0.18), 0), rotY: Math.PI / 2, locked: false,
-      evidence: 'decision', evidenceRefs: ['med-two-beds', 'med-cot'],
-      note: bedsRuling === 'two-beds'
-        ? 'Your ruling: both recessed wall beds modeled — the upper folds down over the cot.'
-        : 'Your ruling: the second recessed bed exists but stays folded flat against the wall.',
-    });
-  }
+  // the second recessed wall bed of Next-01: a lighter fold-down cot above it
+  add('medUpperBed', {
+    room: 'medbay', type: 'shelf', name: 'Fold-down cot (upper)',
+    params: { width: 1.5, tins: 0, depth: 0.58, mountHeight: 1.34 },
+    pos: mrel(-MW / 2 + 0.35, 0), rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['med-two-beds', 'med-cot'],
+    note: 'The second recessed wall bed (author ruling): a lighter fold-down cot above the real bed, for the rare two-patient day. Kept latched flat between uses; the singular "the cot" of later books is the real bed below it.',
+  });
   add('medConsole', {
     room: 'medbay', type: 'console', name: 'Medbay console',
     params: { width: 0.9, depth: 0.55, height: 0.95, screens: 1, lit: true },
@@ -1772,7 +1763,7 @@ function defs(rulings) {
   // ---------- cabin helper ----------
   // Doors sit 0.3 m aft of each cabin's centre so the bunk wall (forward)
   // keeps a clear person-width beside the doorway clearance zone.
-  function addLowerCabin({ key, name, x, z, w = 2.0, d = 1.85, doorX, doorZ = z + 0.3, open = 0, evidence = 'assumption', refs = [], note = '' }) {
+  function addLowerCabin({ key, name, x, z, w = 2.0, d = 1.85, doorX, doorZ = z + 0.3, open = 0, evidence = 'assumption', refs = [], note = '', locker = true, desk = true }) {
     add(key + 'Floor', {
       room: 'cabin', type: 'floor', name: name + ' deck',
       params: { width: w, depth: d }, pos: [x, D2, z], rotY: 0, locked: true,
@@ -1808,8 +1799,38 @@ function defs(rulings) {
       pos: [x, D2, z - d / 2 + 0.38], rotY: 0, locked: false,
       evidence: key === 'cab6' ? 'explicit' : 'inference',
       evidenceRefs: key === 'cab6' ? ['cabin-bunk'] : ['cabin-row'],
-      note: key === 'cab6' ? 'Standard low bunk; tight-cornered, sheet pulled taut.' : 'Standard crew bunk.',
+      note: (key === 'cab6' ? 'Standard low bunk; tight-cornered, sheet pulled taut.' : 'Standard crew bunk.') +
+        ' Two flat drawers ride underneath — bedding and the things that live closest.',
     });
+    // Every cabin ships with the same three fittings (author direction):
+    // clothing/personal storage, a work surface, and something to sit on.
+    // They line the aft wall, clear of the door sweep and the bunk lane.
+    const inward = x < doorX ? 1 : -1;               // +x direction from outer wall toward the door wall
+    const outX = x - inward * (w / 2);               // outer (hull-side) wall plane
+    const aftZ = z + d / 2;
+    if (locker) add(key + 'Locker', {
+      room: 'cabin', type: 'storage', name: name + ' locker',
+      params: { width: 0.55, height: 1.78, depth: 0.42 },
+      pos: [outX + inward * 0.30, D2, aftZ - 0.23], rotY: 0, locked: false,
+      evidence: 'decision', evidenceRefs: ['cabin-row', 'crew-quarters'],
+      note: 'Full-height crew locker in the aft outer corner — hanging clothes above, personal effects below, a lip shelf at eye height for the small things that matter.',
+    });
+    if (desk) {
+      add(key + 'Desk', {
+        room: 'cabin', type: 'table', name: name + ' fold-down desk',
+        params: { width: 0.6, depth: 0.4, height: 0.74 },
+        pos: [outX + inward * 0.97, D2, aftZ - 0.21], rotY: 0, locked: false,
+        evidence: 'decision', evidenceRefs: ['cabin-row', 'crew-quarters'],
+        note: 'Wall-hinged fold-down desk on the aft bulkhead — big enough for a slate, a mug, and one project. Folds flat when the cabin needs to be a bedroom instead of an office.',
+      });
+      add(key + 'Stool', {
+        room: 'cabin', type: 'seat', name: name + ' stool',
+        params: { seatHeight: 0.44, width: 0.38, hasArms: false },
+        pos: [outX + inward * 0.90, D2, aftZ - 0.78], rotY: Math.PI, locked: false,
+        evidence: 'decision', evidenceRefs: ['cabin-row', 'crew-quarters'],
+        note: 'Low stool pulled up to the desk. Every cabin has one; no two have aged the same way.',
+      });
+    }
   }
 
   // ---------- Cabins One through Four: accessible / passenger-capable approach ----------
@@ -1821,7 +1842,7 @@ function defs(rulings) {
     note: 'The catalog cabin: closest to the residential turn, most traffic noise, utterly standard — the untouched baseline against which the others’ quirks read. Unchosen for a reason.',
   });
   addLowerCabin({
-    key: 'cab2', name: 'Cabin Two', x: resEastDoorX + 1.0, z: 9.05, doorX: resEastDoorX, open: 0.35,
+    key: 'cab2', name: 'Cabin Two', x: resEastDoorX + 1.0, z: 9.05, doorX: resEastDoorX, open: 0.35, locker: false,
     evidence: 'decision', refs: ['cabin-row'],
     note: 'The door ajar, the room too orderly — a previous crew member’s habits fossilized. Drawer labels in an unfamiliar hand; a mirror polished by someone else’s routine. Nobody quite wants to overwrite a stranger.',
   });
@@ -1838,9 +1859,9 @@ function defs(rulings) {
   add('cab2Drawers', {
     room: 'cabin', type: 'storage', name: 'Labeled drawer unit (Cabin Two)',
     params: { width: 0.8, height: 0.9, depth: 0.32 },
-    pos: [resEastDoorX + 1.55, D2, 9.6], rotY: -Math.PI / 2, locked: false,
+    pos: [resEastDoorX + 1.62, D2, 9.6], rotY: -Math.PI / 2, locked: false,
     evidence: 'inference', evidenceRefs: ['cabin-row'],
-    note: 'Drawer labels in an unfamiliar hand, contents squared away by someone who is not aboard anymore. Too orderly.',
+    note: 'Drawer labels in an unfamiliar hand, contents squared away by someone who is not aboard anymore. Too orderly. This dresser IS the cabin’s clothing storage — which is half of why nobody moves in: you would have to relabel it.',
   });
   add('cab4CablewayPlate', {
     room: 'cabin', type: 'shelf', name: 'Cableway cover plate (Cabin Four ceiling)',
@@ -2039,7 +2060,7 @@ function defs(rulings) {
   addLowerCabin({
     key: 'cab5',
     name: iriRuling === 'aft-room' ? 'Cabin Five (blank)' : 'Cabin Five — Iri',
-    x: quietWestDoorX - 1.05, z: 14.45, w: 2.1, d: 2.0,
+    x: quietWestDoorX - 1.05, z: 14.45, w: 2.1, d: 2.0, desk: false, locker: false,
     doorX: quietWestDoorX, open: iriRuling === 'aft-room' ? 0 : 0.45,
     evidence: iriRuling ? 'decision' : 'assumption', refs: ['iri-cabin-lower'],
     note: iriRuling === 'aft-room'
@@ -2056,15 +2077,29 @@ function defs(rulings) {
   add('cab5Table', {
     room: 'cabin', type: 'table', name: 'Iri’s worktable',
     params: { width: 0.85, depth: 0.5, height: 0.78 },
-    pos: [quietWestDoorX - 1.35, D2, 14.9], rotY: Math.PI, locked: false,
+    pos: [quietWestDoorX - 1.22, D2, 15.10], rotY: Math.PI, locked: false,
     evidence: 'decision', evidenceRefs: ['iri-worktable'],
-    note: 'Where she lays found pieces out with both hands.',
+    note: 'Where she lays found pieces out with both hands. Doubles as her desk — the standard fold-down was the first thing she unbolted.',
+  });
+  add('cab5Stool', {
+    room: 'cabin', type: 'seat', name: 'Iri’s stool',
+    params: { seatHeight: 0.44, width: 0.38, hasArms: false },
+    pos: [quietWestDoorX - 1.10, D2, 14.51], rotY: 0, locked: false,
+    evidence: 'decision', evidenceRefs: ['iri-worktable'],
+    note: 'Pulled up to the worktable more evenings than not — the lane between bunk and table is exactly one stool wide.',
   });
   add('cab5Hatch', {
     room: 'cabin', type: 'shelf', name: 'Iri’s sealed storage hatch',
     params: { width: 0.7, depth: 0.26, mountHeight: 1.2, tins: 0 },
-    pos: [quietWestDoorX - 2.0, D2, 14.55], rotY: Math.PI / 2, locked: false,
+    pos: [quietWestDoorX - 2.0, D2, 14.45], rotY: Math.PI / 2, locked: false,
     evidence: 'decision', evidenceRefs: ['iri-storage-hatch'], note: 'Soft-wrapped, layered, sealed.',
+  });
+  add('cab5Locker', {
+    room: 'cabin', type: 'storage', name: 'Cabin Five — Iri locker',
+    params: { width: 0.55, height: 1.78, depth: 0.42 },
+    pos: [quietWestDoorX - 1.89, D2, 15.12], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['cabin-row', 'crew-quarters'],
+    note: 'Iri’s locker stands against the outer wall in the aft corner, turned sideways to leave the worktable its light — clothes above, and the lower shelf given over to labeled tins of sorted salvage.',
   });
 
   // ---------- aft service passage: habitation gives way to old ship ----------
@@ -2854,7 +2889,6 @@ export const CONFLICT_LAYOUT_KEYS = {
   'declared:door-behind~throttle': ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSill', 'cor*', 'spine*', 'spn*', 'pkt*', 'med*', 'gal*', 'hyg*', 'mainWet*', 'hygLadderHatch', 's4*', 'alk*', 'eng*', 'dome*', 'stw*', 'stairDoor', 'op*', 'work*', 'res*', 'nav*', 'cab*', 'sb*', 'dogleg*', 'quiet*', 'wet*', 'secondaryLadder', 'garden*', 'aftService*', 'aftReconnect*', 'flex*', 'parts*', 'engAccess*', 'aftFreight*', 'freight*', 'cargo*', 'lowerAft*', 'novaCrawl*', 'aftEng*', 'mh*', 'cd*', 'oldHz*', 'aftPump', 'p1Panel', 'navLockBank', 'duct*', 'ahu*', 'medAirUnit', 'ventGridPanel', 'svc*', 'rib*', 'nook*', 'anchor*', 'hoist*', 'stagingRack', 'suitRack', 'buddyBench', 'ceilHooks', 'coatRow'],
   'declared:knees-touch~rail-between': ['stationRail'],
   'declared:galley-island~galley-tiny': ['gal*'],
-  'declared:med-cot~med-two-beds': ['medCot', 'medUpperBed'],
   'declared:eng-belowdeck~eng-walkin': ['engFloor', 'engCeil', 'engWall*', 'engFloorHatch'],
   'declared:iri-cabin-lower~iri-quarters-route': ['cab5*', 'iriQ*', 'engWall*'],
 };
@@ -2862,7 +2896,7 @@ export const CONFLICT_LAYOUT_KEYS = {
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 22;
+export const LAYOUT_VERSION = 23;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -2883,4 +2917,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   20: ['wetCorePanel', 'wetCoreFloor', 'spnLeg2S', 'engAccessPanel', 'medAirUnit', 'freightLockFloor', 'engManifold'], // interlock and lock-in canon written onto the five maintenance venues (service-points pass)
   21: ['sbHatch', 'sbFloor', 'alkInnerDoor'], // the intake rule and the bay scrub cycle (salvage & stowage pass)
   22: ['cab4*', 'engManifold', 'svcCorBend'], // author locks: Cabin Four is Nova's; Presence-01 lives at the elbow coolant riser
+  23: ['medCot', 'medUpperBed', 'cab1*', 'cab2*', 'cab3*', 'cab4*', 'cab5*', 'cab6*'], // author rulings: medbay = one real bed + one fold-down cot (conflict resolved); every cabin gets locker / fold-down desk / stool
 };

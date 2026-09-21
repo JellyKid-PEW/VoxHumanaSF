@@ -1513,7 +1513,7 @@ The distributed-maintenance principle is now physical, and the ship has learned 
 - **Freight lock** — seal-integrity cycle dogs both doors, released from the new panel at the freight junction, outside.
 - **Medbay** — filter purge cycle: the one room where a locked-in conversation is also soundproof.
 
-**Presence-01 anchoring (author choice pending):** the waist-deep manifold scene can live in the engine bay (current placement) or at the **elbow coolant riser**, where stripped paneling stacks in a lived corridor. Both access points now exist; the log records the choice as open.
+**Presence-01 anchoring (since RESOLVED — see the author-locks note below: the elbow coolant riser):** the waist-deep manifold scene can live in the engine bay (current placement) or at the **elbow coolant riser**, where stripped paneling stacks in a lived corridor. Both access points now exist; the log records the choice as open.
 
 **Halls that aren't straight shots:** exposed ring-frame ribs now interrupt the aft corridor, the work spine (twice), and the residential approach — the frame grid felt at shoulder height. You hear someone coming before you see them, everywhere aboard.
 
@@ -1541,3 +1541,22 @@ The Huntress works salvage and exterior jobs regularly, and the ship now carries
 **Rigged for burn:** deck tie-down anchors in the bay, freight node, engine bay, and lower aft spine join Hold One's tracks; the put-away ritual is the ship's conversion ceremony. Lived-in stowage from the prose is placed: the **ceiling hooks with draped cables** (Next-11, work spine) and the **coat-hook locker row** past the galley with the not-hers jacket and the empty hook beside it (Next-10) — both newly seeded as constraints.
 
 Two new habit tests (30 total): **salvage-flow** (mudroom kit present, bench within buddy-reach of the rack, cart-width routes bay→node and lock→staging, staging never in a domestic room) and **rig-for-burn** (every loose crate on the working decks within reach of a tie-down). doors-open and no-overlap caught the first placements of the staging rack and bench — in the freight door's sweep and the rig station respectively. Layout version 21; migration verified.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Author locks: Nova's cabin, the Presence-01 site, and the production map set
+
+Two open questions closed by author ruling (layout version 22):
+
+- **Cabin Four is Nova's.** She chose by listening: the work-spine bulkhead carries the coolant line's pulse — palm flat, the aft pump running two beats late — and the ceiling holds an automation-era cableway cover plate, four fasteners from a hidden geography.
+- **The Presence-01 cold-start scene lives at the elbow coolant riser**, not the engine-bay manifold. Iri waist-deep in the cooling manifold happens in the hallway, because that is where the run detours around the offset. The eng-manifold seed constraint now aims its claim there.
+
+And the first real production drawings: `tools/mapgen.mjs` renders `maps/geometry.json` (exported from the live app) into wall-and-opening plans of the main deck, lower deck, and belly massing, plus a three-level side elevation — door glyphs, furniture symbols, air-loop colors, frame ruler, numbered callouts. The floorplan doc points at the set; regenerate after any geometry change.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The medbay bed count, and cabins that hold a life (v23)
+
+**Medbay bed conflict RESOLVED (author ruling): one real bed plus one cot.** The lower recessed wall bed is the real recovery bed — "the cot," as everyone aboard calls it, reclined at its opinionated angle — and the second recessed wall bed of the early Next-01 line survives as a lighter fold-down cot latched flat above it, dropped only on a two-patient day. Both passages stay true: two beds installed, one in daily use. The conflict leaves the open list; six declared conflicts remain.
+
+**Every cabin now holds a life, not just a bunk (author direction):** a full-height clothing/personal locker in the aft outer corner, a wall-hinged fold-down desk sized for a slate, a mug, and one project, a stool no two of which have aged the same way, and two flat drawers under every bunk. Two cabins keep it in character: Cabin Two's storage is still the dead crew member's labeled drawer unit — half of why nobody moves in is that you'd have to relabel it — and Iri's desk is her worktable, the standard fold-down being the first thing she unbolted; her locker stands sideways against the outer wall, lower shelf given to labeled tins of sorted salvage.
+
+Placement in 2.0 × 1.85 m cabins is knife-edge work: the no-overlap and door-clearance tests rejected three drafts (stool tucked under the desk lip, desk edge 20 cm inside the door's clearance circle, Iri's lane one stool too narrow) before everything cleared. All 30 habit tests pass across baseline and stress rulings; v22→v23 autosave migration verified — user edits preserved, sixteen new fittings appear. Maps re-exported at v23.
