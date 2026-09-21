@@ -2,7 +2,7 @@
 // inspector, and modal dialogs.
 import * as THREE from 'three';
 import { state } from './state.js';
-import { bus, esc, el, fmt, status, uid } from './util.js';
+import { bus, esc, el, fmt, status, uid, download } from './util.js';
 import { editor, rebuildMannequins, makeLabel, clearSightLines } from './editor.js';
 import { OBJECT_TYPES } from './objects.js';
 import { CHARACTERS, POSES } from './mannequin.js';
@@ -11,6 +11,7 @@ import { generateLayout, CONFLICT_LAYOUT_KEYS, frameSpan } from './layout.js';
 import { HABIT_TESTS, runAllTests, computeNavGrid } from './tests.js';
 import { extractCandidates } from './extract.js';
 import { listVersions, saveVersion, restoreVersion, deleteVersion } from './persist.js';
+import { reviewScene, scanProse, corrections, addCorrection, correctionsAsText } from './scenereview.js';
 
 const EV_LABEL = {
   explicit: 'direct textual evidence',
@@ -428,6 +429,7 @@ function renderTests() {
 // ================= scenes =================
 let compareGhostGroup = null;
 let recording = null;
+let lastReview = null;   // {sceneId, findings, at} — survives re-renders within a session
 
 function renderScenes() {
   const root = document.getElementById('tab-scenes');
@@ -438,6 +440,7 @@ function renderScenes() {
     </div>
     <div id="scene-list"></div>
     <div id="scene-detail"></div>
+    <div id="corr-section"></div>
     <div class="section-head" style="margin-top:14px;"><span>Saved versions</span>
       <button class="small" id="ver-save">Save version</button>
     </div>
@@ -488,6 +491,104 @@ function renderScenes() {
   const detail = root.querySelector('#scene-detail');
   const scene = state.activeScene;
   if (scene) {
+    // ---- scene-review workbench: prose, era, flight mode, review ----
+    detail.appendChild(el(`<div class="section-head"><span>Workbench — “${esc(scene.name)}”</span></div>`));
+    const proseLen = (scene.prose || '').length;
+    const wb = el(`<div class="card">
+      <div class="muted" style="font-size:11px;margin-bottom:6px;">${proseLen ? `Prose loaded · ${(proseLen / 1000).toFixed(1)}k chars` : 'No prose loaded — paste the scene to check it against the ship.'}</div>
+      <div class="row" style="margin-bottom:6px;">
+        <button class="small" data-act="prose">${proseLen ? 'Edit prose…' : 'Load prose…'}</button>
+        <button class="small primary" data-act="review">Review scene</button>
+      </div>
+      <div class="row">
+        <label style="font-size:11px;color:var(--muted);">Ship state
+          <select data-role="mode">
+            ${['drift-night', 'drift-day', 'burn'].map(m => `<option value="${m}" ${(scene.flightMode || 'drift-night') === m ? 'selected' : ''}>${m}</option>`).join('')}
+          </select></label>
+        <label style="font-size:11px;color:var(--muted);">Era
+          <select data-role="era">
+            <option value="bob-auto" ${scene.era === 'bob-auto' ? 'selected' : ''}>early Next — B.O.B. drives</option>
+            <option value="manual" ${(scene.era || 'manual') === 'manual' ? 'selected' : ''}>Manual mode — doors wait</option>
+          </select></label>
+      </div>
+      <div id="scene-mentions"></div>
+    </div>`);
+    wb.querySelector('[data-act=prose]').addEventListener('click', () => {
+      const body = el(`<div>
+        <p class="muted" style="margin-bottom:8px;">Paste the scene. Review checks it against placed figures, the layout, the acoustics, and the evidence base.</p>
+        <textarea id="scene-prose" rows="14">${esc(scene.prose || '')}</textarea>
+      </div>`);
+      showModal(`Prose for “${esc(scene.name)}”`, body, [
+        { label: 'Cancel' },
+        {
+          label: 'Save prose', primary: true, onClick: () => {
+            state.checkpoint('scene prose');
+            scene.prose = body.querySelector('#scene-prose').value;
+            renderScenes();
+          }
+        },
+      ]);
+    });
+    wb.querySelector('[data-role=mode]').addEventListener('change', e => { state.checkpoint('scene mode'); scene.flightMode = e.target.value; });
+    wb.querySelector('[data-role=era]').addEventListener('change', e => { state.checkpoint('scene era'); scene.era = e.target.value; });
+    wb.querySelector('[data-act=review]').addEventListener('click', () => {
+      lastReview = { sceneId: scene.id, findings: reviewScene(scene), at: Date.now() };
+      renderScenes();
+    });
+    detail.appendChild(wb);
+
+    // mention chips: people the prose names who are not yet placed
+    const scan = scene.prose ? scanProse(scene) : null;
+    if (scan) {
+      const placedChars = new Set(scene.mannequins.map(m => m.character));
+      const missing = scan.characters.filter(c => !placedChars.has(c));
+      const mentions = wb.querySelector('#scene-mentions');
+      if (missing.length) {
+        mentions.appendChild(el(`<div class="muted" style="font-size:11px;margin-top:6px;">Named in the prose, not yet placed:</div>`));
+        const row = el(`<div class="row">${missing.map(c => `<button class="small" data-add-char="${c}">+ place ${esc(CHARACTERS[c].label)}</button>`).join('')}</div>`);
+        row.querySelectorAll('[data-add-char]').forEach(b => b.addEventListener('click', () => {
+          state.checkpoint('add mentioned figure');
+          scene.mannequins.push({ character: b.dataset.addChar, pos: [0, 0, 0.6], rotY: Math.PI, pose: 'stand', props: null });
+          bus.emit('scenes:changed');
+          renderScenes();
+        }));
+        mentions.appendChild(row);
+      }
+    }
+
+    // review findings
+    if (lastReview && lastReview.sceneId === scene.id) {
+      const fs = lastReview.findings;
+      const issues = fs.filter(f => f.severity === 'issue').length;
+      detail.appendChild(el(`<div class="section-head"><span>Findings — ${issues ? `${issues} issue(s)` : 'no issues'}</span></div>`));
+      const KIND_LABEL = { placement: 'people', hearing: 'sound & privacy', sight: 'sightlines', path: 'movement', prose: 'prose vs. evidence', props: 'things', era: 'era' };
+      let lastKind = null;
+      for (const f of fs) {
+        if (f.kind !== lastKind) {
+          detail.appendChild(el(`<div class="muted" style="font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;margin:8px 0 3px;">${esc(KIND_LABEL[f.kind] || f.kind)}</div>`));
+          lastKind = f.kind;
+        }
+        const cls = f.severity === 'issue' ? 'status-fail' : f.severity === 'ok' ? 'status-pass' : 'status-warn';
+        const card = el(`<div class="card">
+          <div style="display:flex;gap:6px;align-items:flex-start;">
+            <span class="pill ${cls}" style="flex-shrink:0;">${f.severity === 'issue' ? 'issue' : f.severity === 'ok' ? 'ok' : 'note'}</span>
+            <div style="min-width:0;">
+              <div style="font-size:12px;">${esc(f.title)}</div>
+              ${f.detail ? `<div class="muted" style="font-size:11px;margin-top:2px;">${esc(f.detail)}</div>` : ''}
+            </div>
+          </div>
+          ${f.severity !== 'ok' ? '<div class="row"><button class="small" data-act="corr">→ queue correction</button></div>' : ''}
+        </div>`);
+        card.querySelector('[data-act=corr]')?.addEventListener('click', () => {
+          state.checkpoint('queue correction');
+          addCorrection(`${f.title}${f.detail ? ' — ' + f.detail : ''}`, `scene: ${scene.name}`);
+          status('Queued as a pending correction');
+          renderScenes();
+        });
+        detail.appendChild(card);
+      }
+    }
+
     detail.appendChild(el(`<div class="section-head"><span>Figures in “${esc(scene.name)}”</span></div>`));
     scene.mannequins.forEach((m, i) => {
       const card = el(`<div class="card">
@@ -559,6 +660,41 @@ function renderScenes() {
     });
     detail.appendChild(recBtn);
   }
+
+  // pending manuscript corrections
+  const corrRoot = root.querySelector('#corr-section');
+  const corrList = corrections();
+  const pending = corrList.filter(c => c.status === 'pending').length;
+  corrRoot.appendChild(el(`<div class="section-head" style="margin-top:14px;"><span>Pending corrections (${pending})</span>
+    <button class="small" id="corr-copy">Export list</button></div>`));
+  for (const c of corrList) {
+    const donec = c.status !== 'pending';
+    const card = el(`<div class="card" style="${donec ? 'opacity:0.55;' : ''}">
+      <div style="font-size:12px;${donec ? 'text-decoration:line-through;' : ''}">${esc(c.text)}</div>
+      ${c.source ? `<div class="src" style="margin-top:2px;">${esc(c.source)}</div>` : ''}
+      <div class="row">
+        <button class="small" data-act="toggle">${donec ? 'Reopen' : 'Mark done'}</button>
+        <button class="small danger" data-act="del">Remove</button>
+      </div>
+    </div>`);
+    card.querySelector('[data-act=toggle]').addEventListener('click', () => {
+      state.checkpoint('toggle correction');
+      c.status = donec ? 'pending' : 'done';
+      renderScenes();
+    });
+    card.querySelector('[data-act=del]').addEventListener('click', () => {
+      state.checkpoint('remove correction');
+      state.project.corrections = corrList.filter(x => x.id !== c.id);
+      renderScenes();
+    });
+    corrRoot.appendChild(card);
+  }
+  corrRoot.querySelector('#corr-copy').addEventListener('click', () => {
+    const text = correctionsAsText();
+    navigator.clipboard?.writeText(text).then(
+      () => status('Correction list copied to the clipboard'),
+      () => { download('huntress-corrections.md', text, 'text/markdown'); });
+  });
 
   // versions
   const verList = root.querySelector('#ver-list');

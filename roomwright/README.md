@@ -101,6 +101,8 @@ js/layout.js          constraint-driven bridge generator
 js/constraints.js     claims, conflict detection, evidence tracing
 js/extract.js         rule-based spatial statement extractor
 js/tests.js           habit tests, nav grid, sightlines, door sweeps
+js/acoustics.js       three-channel sound propagation (air, structure, duct)
+js/scenereview.js     scene-review workbench: prose vs. ship, corrections queue
 js/persist.js         autosave, versions, JSON i/o
 js/atmosphere.js      starfield, lighting modes, ambient sound
 js/ui.js              panels, inspector, modals

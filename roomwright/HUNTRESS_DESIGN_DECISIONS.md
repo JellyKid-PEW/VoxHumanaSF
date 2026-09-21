@@ -1585,3 +1585,22 @@ So the lower wall bed is now canonically a **certified medical procedure bed on 
 Story dividend: procedure mode FILLS the 2.6 × 2.0 room. Two people working over a patient are shoulder to shoulder for the duration, in the one room where a filter purge also makes the conversation soundproof. And for anything bigger than one patient, the registry already holds the answer as background canon: Hold Two takes contract fit-outs, and a medical module is exactly the kind of thing flex bays exist for — tie-in points aboard, module not.
 
 A 31st habit test, **procedure-bed-deploy**, deploys the bed virtually every run: the tracks must reach the deployed centerline, both flanks must keep a 0.9 m working stretch (chair away, upper cot flat, rails exempt as floor-flush), and the deployed bed must not crowd the hatch clearance zone. Negative-controlled with a cart parked mid-room — the test fails exactly as it should. The no-overlap test learned one honest exemption along the way: floor-flush hardware under 8 cm (recessed tracks, cargo guides) cannot meaningfully collide with the things that stand on it by design. All 31 tests pass; v24→v25 migration verified. Maps re-exported.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — The scene-review workbench (v1)
+
+The instrument the whole model was building toward: **paste a scene, place its people, and let the ship talk back.** The Scenes tab is now a workbench.
+
+Each scene carries its prose, a ship state (drift-night / drift-day / burn), and an era (early Next — B.O.B. drives / Manual mode — doors wait). Loading prose scans it: characters named but not yet placed become one-click "+ place" chips; rooms, modeled objects, and mundane props are recognized. **Review scene** then runs seven checks with the placed figures:
+
+- **People** — every figure stands on real walkable floor (or sits within reach of an actual seat), and the workbench names the room each person is in. It caught its own first test: a figure planted inside the galley counter run.
+- **Sound & privacy** — the series-review question, aimed at one scene: for every speaker, what every other figure hears (words / tone / presence / silent) at the scene's flight mode, plus where the conversation LEAKS — every unoccupied room that catches words or tone, because anyone there is a witness the scene has to own.
+- **Sightlines** — who can see whom, and what blocks the eye contact a beat might need.
+- **Movement** — recorded paths validated leg by leg against the nav grid, with walked distance.
+- **Prose vs. evidence** — every spatial sentence checked against the constraint database: matches, new claims worth extracting, contradictions of rulings.
+- **Things** — objects the prose mentions that exist aboard (grounded), and mundane props that don't ("kettle" — production-flexible: loose set dressing, or add it if it should recur).
+- **Era** — door behavior dates a scene (author ruling): a hatch that opens at someone's approach, or lights that adjust to preference, in a Manual-mode scene gets flagged.
+
+Any non-ok finding can be **queued as a pending manuscript correction** with one click. The corrections list is part of the project now — pending/done, exportable as Markdown — and it starts seeded with the two corrections already owed: Iri's "third cabin" → Cabin Five, and the Next-07 "central prep counter" island phrasing.
+
+Verified headless end to end: a three-figure galley scene (Nova asleep two decks of habit away) produced the right hearing matrix, both sightline blocks, the placement catch, the era catch on a hatch that "slid open at her approach," and a clean corrections round-trip. All 31 habit tests stay green.
