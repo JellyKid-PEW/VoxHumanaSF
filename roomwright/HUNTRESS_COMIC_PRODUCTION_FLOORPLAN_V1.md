@@ -35,6 +35,7 @@ An artist does not need to show every object in every panel. If a wall, hatch, t
 - Aft = toward cargo / propulsion geography / positive Z.
 - Port = left / negative X.
 - Starboard = right / positive X.
+- **Prose directions are character-relative (author ruling):** "left" and "right" in the manuscript follow the walker's facing, never ship port/starboard. Walking aft, port is on the walker's RIGHT.
 - Main deck floor = 0 m.
 - Lower deck floor = -3.0 m.
 
@@ -99,6 +100,7 @@ Production-fixed relationships:
 - Cabin Five is Iri; Cabin Six is Quenby; they share a wall;
 - every cabin carries the same three fittings (author direction): a full-height clothing/personal locker in the aft outer corner, a wall-hinged fold-down desk on the aft bulkhead, and a stool — plus two flat drawers under each bunk. Two cabins express it in character: Cabin Two's storage is the dead crew member's labeled drawer unit, and Iri's "desk" is her worktable (her locker stands sideways against the outer wall);
 - passage continues beyond Cabin Six into older aft-service fabric;
+- **Storage Two (old registry)** stands against the aft service passage's port bulkhead — a numbered store from the same old deck plan that still calls Hold One "the forward hold." Low traffic; dust in there holds a mark for weeks;
 - work spine passes configurable mission / flex bay, repair recess, and principal underdeck engineering access;
 - aft freight / service node connects freight lock, main cargo bay, work spine, and lower-aft service route;
 - main cargo bay has large freight access and a smaller service / personnel hatch;

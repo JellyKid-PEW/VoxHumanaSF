@@ -210,21 +210,33 @@ export function reviewScene(scene) {
 }
 
 // ---------- pending manuscript corrections ----------
+// Seeded corrections carry stable ids so author rulings made outside the app
+// reach every project, even ones whose corrections list already exists.
+const SEED_CORRECTIONS = [
+  {
+    id: 'corr-seed-third-cabin', source: 'author ruling — cabin registry',
+    text: 'Iri’s "third cabin" phrasing → Cabin Five: she belongs beside Quenby on the quiet run, sharing the party wall.',
+  },
+  {
+    id: 'corr-seed-prep-island', source: 'author ruling — galley',
+    text: 'Next-07 "central prep counter" island phrasing → the working stretch of the one long counter run (no free-standing island).',
+  },
+  {
+    id: 'corr-seed-next10-left', source: 'author ruling — directions are character-relative',
+    text: 'Next-10 "turned left at the galley" → turned RIGHT (walking aft, the locker row is a right turn into the dry branch; "left" walks into the storage spine). Series convention now locked: prose directions follow the walker’s facing, never ship port/starboard.',
+  },
+  {
+    id: 'corr-seed-next10-mug', source: 'author ruling — Next-10 sightline',
+    text: 'Next-10 "From the bridge, Iri watched the mug pass through the door’s peripheral frame" — geometry doesn’t support it: from the bridge, the visible stretch is the forward corridor between the unused airlock and a bulkhead, and Quenby’s locker-row→galley route never crosses it. Move Iri to the corridor for the beat, or change watching to hearing/inference.',
+  },
+];
 export function corrections() {
   const p = state.project;
-  if (!p.corrections) {
-    p.corrections = [
-      {
-        id: uid('corr'), status: 'pending', createdAt: new Date().toISOString(),
-        source: 'author ruling — cabin registry',
-        text: 'Iri’s "third cabin" phrasing → Cabin Five: she belongs beside Quenby on the quiet run, sharing the party wall.',
-      },
-      {
-        id: uid('corr'), status: 'pending', createdAt: new Date().toISOString(),
-        source: 'author ruling — galley',
-        text: 'Next-07 "central prep counter" island phrasing → the working stretch of the one long counter run (no free-standing island).',
-      },
-    ];
+  if (!p.corrections) p.corrections = [];
+  const have = new Set(p.corrections.map(c => c.id));
+  const haveText = new Set(p.corrections.map(c => c.text));   // older projects hold the first seeds under random ids
+  for (const s of SEED_CORRECTIONS) {
+    if (!have.has(s.id) && !haveText.has(s.text)) p.corrections.push({ ...s, status: 'pending', createdAt: new Date().toISOString() });
   }
   return p.corrections;
 }

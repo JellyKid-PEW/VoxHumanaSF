@@ -1646,3 +1646,14 @@ Findings for the author, recorded here:
 - "Nav bench" (the meal tray's perch) vs. the model's "nav fold-down perch" — same object, loose phrasing; noted, not queued.
 
 All 32 tests green (the hygiene route test now has teeth); v27→v28 migration verified. Maps re-exported with the run door.
+
+
+### ROOMWRIGHT IMPLEMENTATION NOTE — Next-10 rulings executed (v29)
+
+Three author rulings from the Next-10 review, applied:
+
+- **Directions are character-relative — series convention locked.** "Left" and "right" in prose follow the walker's facing, never ship port/starboard. Recorded in the floorplan's orientation block. Consequence: Next-10's "turned left at the galley" is a queued manuscript correction (walking aft, the locker row is a RIGHT turn).
+- **The mug-watching line is a queued correction.** From the bridge, the visible stretch of corridor runs between the unused airlock and a bulkhead — Quenby's locker-row→galley route never crosses it. The correction note offers the fix shapes: move Iri to the corridor for the beat, or make it hearing. Both corrections ship as seeded entries with stable ids, so they reach existing projects' pending-corrections lists, not just fresh ones.
+- **Storage Two placed** — "wherever it will fit," and where it fits is the aft service passage's port bulkhead, past Cabin Six in the old fabric: a 0.9 m numbered store from the same old deck plan that still calls Hold One "the forward hold." It kept its stencil because nobody repaints the aft service passage. Low traffic, so the dust holds a mark for weeks — which is the whole point of the sealed box, the fresh smear, and the thumbprint she wiped clean. On Iri's maintenance loop and almost nobody else's.
+
+No evidence-base seeding from Next-10 (author direction). 32/32 tests green; v28→v29 migration verified; maps re-exported with Storage Two's callout.

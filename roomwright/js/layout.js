@@ -2169,6 +2169,13 @@ function defs(rulings) {
     evidence: 'assumption', evidenceRefs: [], note: '',
   });
 
+  add('storageTwo', {
+    room: 'aft-service', type: 'storage', name: 'Storage Two (old registry)',
+    params: { width: 0.9, height: 1.6, depth: 0.34 },
+    pos: [QUIETX - RESW / 2 + 0.22, D2, 18.6], rotY: Math.PI / 2, locked: false,
+    evidence: 'decision', evidenceRefs: ['lower-corridor'],
+    note: 'Storage Two — a numbered store from the same old deck plan that still calls Hold One "the forward hold." It kept its stencil because nobody repaints the aft service passage. Low traffic; the dust in here holds a mark for weeks (Next-10: the sealed box, the fresh smear on the latch, the thumbprint she wiped clean). On Iri’s maintenance loop and almost nobody else’s.',
+  });
   add('aftServiceWallW', {
     room: 'aft-service', type: 'wall', name: 'Aft service passage port bulkhead',
     params: { length: 2.8, height: 2.05, thickness: 0.1 },
@@ -3034,7 +3041,7 @@ const DOOR_WING_KEYS = ['doorway', 'aftWallL', 'aftWallR', 'wallStbd*', 'doorSil
 // Layout-format migrations: when a generated object's DEFINITION changed
 // between app versions, these keys are force-regenerated on old projects
 // (user-added objects and rulings are untouched).
-export const LAYOUT_VERSION = 28;
+export const LAYOUT_VERSION = 29;
 export const LAYOUT_MIGRATION_KEYS = {
   3: ['corWallPort', 'spineStub*'],   // port wall split for the medbay hatch; spine stub became the real spine
   4: ['corWallStbd1', 'spnLeg2*'],    // starboard wall split for the airlock; spine extended to the engine bay
@@ -3061,4 +3068,5 @@ export const LAYOUT_MIGRATION_KEYS = {
   26: ['engBench', 'engToolbox'], // the dented toolbox + cracked datapad promoted from a bench note to a real object (found by the scene-review workbench on Presence-01)
   27: ['unl*', 'mhUnlisted', 'cargoWallE*', 'ventGridPanel'], // Next-09 un-defers the unlisted corridor: real walkable geometry, access plate in the split hold wall, underfloor cache; the anomaly massing retires
   28: ['hygBranchWallS', 'domRunDoor'], // Next-10 review found the domestic-service run sealed at its mouth: the branch aft wall now splits around a real door (the one that "remembers weight")
+  29: ['storageTwo'], // Storage Two placed (author direction: "wherever it will fit") — old registry number in the aft service passage
 };
