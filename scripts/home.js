@@ -729,12 +729,40 @@ function pickOne(items) {
   const form = document.getElementById('signal-form');
   const ack  = document.getElementById('signal-ack');
   if (!form || !ack) return;
-  form.addEventListener('submit', (e) => {
+  // Sign-ups go to window.VOX_SIGNAL_ENDPOINT (set in index.html once a
+  // mailing-list service is chosen; it receives the form as a POST). The
+  // confirmation only appears after that service accepts the address —
+  // never before, and never when nothing is connected.
+  const status = document.getElementById('signal-status');
+  const button = form.querySelector('button[type="submit"]');
+  const say = (msg, kind) => {
+    if (!status) return;
+    status.textContent = msg;
+    status.dataset.kind = kind || '';
+    status.hidden = !msg;
+  };
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // TODO: send `new FormData(form).get('email')` to your endpoint
-    form.hidden = true;
-    ack.hidden  = false;
+    const endpoint = window.VOX_SIGNAL_ENDPOINT;
+    if (!endpoint) {
+      say('Sign-ups aren’t connected yet — nothing was sent. Check back soon.', 'info');
+      return;
+    }
+    say('Opening channel…', 'busy');
+    if (button) button.disabled = true;
+    try {
+      const res = await fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(String(res.status));
+      say('', '');
+      form.hidden = true;
+      ack.hidden  = false;
+    } catch (err) {
+      say('The channel didn’t open — your address wasn’t saved. Please try again.', 'error');
+    } finally {
+      if (button) button.disabled = false;
+    }
   });
+  form.addEventListener('input', () => { if (status && status.dataset.kind !== 'busy') say('', ''); });
 })();
 
 

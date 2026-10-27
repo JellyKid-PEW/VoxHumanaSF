@@ -117,15 +117,24 @@
     const ring = document.createElement("div");
     ring.className = "cursor-ring";
     document.body.appendChild(ring);
-    let x = -100, y = -100, tx = -100, ty = -100;
+    // The ring eases after the pointer, and the animation loop runs only
+    // while it is catching up: it stops once the ring settles and restarts
+    // on the next movement. With reduced motion there is no loop at all —
+    // the ring is placed directly at the pointer.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let x = -100, y = -100, tx = -100, ty = -100, running = false;
+    const place = () => { ring.style.transform = `translate(${tx}px, ${ty}px) translate(-50%, -50%)`; };
     function tick() {
       tx += (x - tx) * 0.22;
       ty += (y - ty) * 0.22;
-      ring.style.transform = `translate(${tx}px, ${ty}px) translate(-50%, -50%)`;
+      if (Math.abs(x - tx) < 0.3 && Math.abs(y - ty) < 0.3) { tx = x; ty = y; running = false; place(); return; }
+      place();
       requestAnimationFrame(tick);
     }
     window.addEventListener("mousemove", (e) => {
       x = e.clientX; y = e.clientY;
+      if (reduce.matches) { tx = x; ty = y; place(); }
+      else if (!running) { running = true; requestAnimationFrame(tick); }
       const el = e.target;
       if (!el) return;
       // Focusable reading panels (tabpanels with tabindex) aren't targets.
@@ -139,7 +148,6 @@
       ring.classList.toggle("over-text", !!isText);
       ring.classList.toggle("quiet", !!isText || !!reading);
     });
-    requestAnimationFrame(tick);
   }
 
   // ── Atmospherics — scan + grain + vignette ─────────────────────
@@ -170,9 +178,27 @@
     setInterval(tick, 1000);
   }
 
+  // ── Resting page — after 45s with no input, decorative loops hold still
+  // (html.is-resting, see styles.css) until the next movement, key, scroll
+  // or touch. Content such as the dispatch ticker keeps moving.
+  function setupRest() {
+    const root = document.documentElement;
+    const REST_AFTER = 45000;
+    let timer = null;
+    const wake = () => {
+      if (root.classList.contains("is-resting")) root.classList.remove("is-resting");
+      clearTimeout(timer);
+      timer = setTimeout(() => root.classList.add("is-resting"), REST_AFTER);
+    };
+    ["pointermove", "pointerdown", "keydown", "wheel", "touchstart", "scroll"].forEach((t) =>
+      window.addEventListener(t, wake, { passive: true, capture: true }));
+    wake();
+  }
+
   // ── Init on DOM ready ──────────────────────────────────────────
   function init() {
     setupAtmos();
+    setupRest();
     setupCursor();
     setupClock();
     setupPerspective();

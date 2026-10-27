@@ -164,9 +164,16 @@ button { font-family: inherit; color: inherit; }
 }
 
 /* Scanlines + grain overlays — applied at body level so they cover all */
+/* No blend mode: the scan lines and grain are pure white at low opacity,
+   which looks identical blended normally or with screen, but a full-screen
+   screen-blend made the browser re-blend the whole window on every frame
+   anything beneath it moved. The old vignette only dimmed these lines
+   toward the edges (under screen it couldn't darken the page), so a
+   static mask does that job instead. */
 .atmos {
   position: fixed; inset: 0; pointer-events: none; z-index: 9000;
-  mix-blend-mode: screen;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 55%, rgba(0, 0, 0, 0.45) 100%);
+  mask-image: radial-gradient(ellipse at center, #000 55%, rgba(0, 0, 0, 0.45) 100%);
   /* Contain the over-sized grain layer (inset:-50%) so its transforms
      can't register as document overflow. */
   overflow: hidden;
@@ -198,11 +205,7 @@ button { font-family: inherit; color: inherit; }
 }
 
 /* Vignette ring (worn edge) */
-.atmos .vignette {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
-  mix-blend-mode: multiply;
-}
+.atmos .vignette { display: none; } /* folded into .atmos's mask (above) */
 
 /* ─── Boot scan-in ──────────────────────────────────────────────────── */
 
@@ -2280,7 +2283,7 @@ body { background: var(--bg); }
 /* Subtle ambient — just the scan + grain, no vignette */
 .atmos-light {
   position: fixed; inset: 0; pointer-events: none; z-index: 100;
-  mix-blend-mode: screen;
+  /* white lines: same look without a full-screen blend (see .atmos) */
 }
 .atmos-light .scan {
  position: absolute;
@@ -2524,3 +2527,12 @@ body { background: var(--bg); }
 
 /* ── Selection — keep it ship ──────────────────────────────────────── */
 ::selection { background: var(--signal); color: #fff; }
+/* ── Resting page ──────────────────────────────────────────────────────
+   After a stretch with no input (page-chrome.js adds .is-resting), the
+   small decorative loops — pulses, pips, the seal's breath, drifting scan
+   line, blinking caret — hold still where they are, so a page left open
+   costs almost nothing. Content keeps moving (the dispatch ticker), and
+   everything resumes on the next movement, key or scroll. */
+html.is-resting *:not(.dispatch-track),
+html.is-resting *::before,
+html.is-resting *::after { animation-play-state: paused !important; }

@@ -1571,7 +1571,7 @@ body.home { overflow-x: clip; }
   .home .receive {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(200px, 260px);
-    grid-template-areas: "eyebrow form" "title form" "copy form" "fine fine";
+    grid-template-areas: "eyebrow form" "title form" "copy form" "status status" "fine fine";
     column-gap: 18px; align-items: center;
     margin-top: -4px; padding: 12px 18px 10px;
   }
@@ -1602,7 +1602,7 @@ body.home { overflow-x: clip; }
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr) minmax(0, 1.8fr) minmax(0, 0.6fr);
     padding-top: 12px;
   }
-  .home .receive { grid-template-areas: "title form" "copy form" "fine fine"; padding: 10px 16px 8px; }
+  .home .receive { grid-template-areas: "title form" "copy form" "status status" "fine fine"; padding: 10px 16px 8px; }
   .home .receive-eyebrow { display: none; }
   .home .brandfoot { line-height: 1.45; }
   .home .brand-hero { margin-bottom: 12px; line-height: 1.6; }
@@ -1623,3 +1623,61 @@ body.home { overflow-x: clip; }
 /* READ THE OPENING: the epigraph is each Lens's chapter 01 line (home.js),
    one or two lines long — reserve two so switching never moves the text. */
 .home .op-epigraph { min-height: 2lh; }
+
+/* ── 15. Perspective pull in the Transmission queue ────────────────────
+   Like everything else that changes with the Lens, each row's own line
+   carries the character's colour: the divider beside the chapter number
+   turns that colour and the line beneath the title takes a softened tint
+   with a faint glow. Titles (the same under every Lens) stay ink. */
+.home .q-num { border-right-color: color-mix(in srgb, var(--signal) 60%, transparent); transition: border-color 0.4s ease; }
+.home .q-sub {
+  color: color-mix(in srgb, var(--signal) 58%, var(--ink));
+  text-shadow: 0 0 14px color-mix(in srgb, var(--signal) 28%, transparent);
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+}
+.home .q-row:hover .q-sub { color: color-mix(in srgb, var(--signal) 78%, var(--ink)); }
+
+/* ── 16. Receive the Signal: stacks when its column is narrow ───────────
+   (laptop widths) so the description never squeezes into a thin column
+   beside the form; status line for honest send feedback. */
+@media (min-width: 1080px) {
+  .home .bottombar > .col:has(.receive) { container-type: inline-size; }
+}
+@container (max-width: 560px) {
+  .home .receive {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "eyebrow" "title" "copy" "form" "status" "fine";
+    row-gap: 0;
+  }
+  .home .receive p { margin-bottom: 8px; }
+  .home .receive .field { width: 100%; }
+}
+.home .signal-status {
+  grid-area: status;
+  margin: 8px 0 0;
+  font-size: 10.5px; line-height: 1.5; letter-spacing: 0.04em;
+  color: var(--ink-dim);
+}
+.home .signal-status[data-kind="error"] { color: var(--signal); }
+.home .signal-status[hidden] { display: none; }
+
+/* ── 17. Shorter desktop windows: more of the panel for reading ─────────
+   The panel's own chrome and the chapter header tighten so the opening's
+   first lines sit higher; nothing is removed. */
+@media (min-width: 1080px) and (max-height: 1000px) {
+  .home .queue { padding-top: 14px; }
+  .home .queue-head { padding-bottom: 10px; }
+  .home .panel-switch { margin-top: 10px; }
+  .home .panel-view { margin-top: 10px; }
+  .home .opening { padding-top: 16px; }
+  .home .op-kicker { margin-bottom: 8px; }
+  .home .op-title { margin-bottom: 10px; font-size: clamp(20px, 3.4cqi, 26px); }
+  .home .op-epigraph { margin-bottom: 18px; font-size: 15.5px; line-height: 1.4; }
+  .home .queue-foot { margin-top: 10px; padding-top: 8px; }
+}
+/* Ship Status reads in two columns only where the footer has room; on
+   laptop widths it stacks (the Receive card stays the tallest column, so
+   the footer doesn't grow). */
+@media (min-width: 1080px) and (max-width: 1499px) {
+  .home .bottombar > .col:first-child { grid-template-columns: max-content; }
+}

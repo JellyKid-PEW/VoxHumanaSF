@@ -538,6 +538,7 @@
 <span class="ar">→</span>
 </button>
 </form>
+<div aria-live="polite" class="signal-status" hidden="" id="signal-status" role="status"></div>
 <div class="ack" hidden="" id="signal-ack">— Frequency held. Signal will reach you.<br>Next release.</div>
 <div class="receive-fine">Vox Humana · Presence <b>Nov26</b></div>
 </div>
@@ -562,6 +563,10 @@
    Once it's deployed, put its address here, e.g. "https://margins.example.com/api". */
 window.VOX_MARGINS_API = window.VOX_MARGINS_API != null ? window.VOX_MARGINS_API
   : (/^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$/.test(location.hostname) ? "/margins/api" : "");
+/* Receive the Signal: the mailing-list service's form address (it receives
+   a POST with an "email" field). Empty = not connected yet; the form says
+   so instead of pretending to subscribe. */
+window.VOX_SIGNAL_ENDPOINT = window.VOX_SIGNAL_ENDPOINT || "";
 </script>
 <script src="scripts/voices.js"></script>
 <script src="scripts/memory.js"></script>

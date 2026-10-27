@@ -108,20 +108,42 @@
     master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
     ambBus = ctx.createGain(); ambBus.gain.value = 1; ambBus.connect(master);
     voiceBus = ctx.createGain(); voiceBus.gain.value = voiceLevel; voiceBus.connect(master);
+    // Each layer's fader exists from the start; its sound generator is only
+    // built the first time that layer is actually audible (see voiceFor),
+    // so silent layers cost nothing.
     CHANNELS.forEach(function (c) {
       var fader = ctx.createGain(); fader.gain.value = 0;
-      var voice = ctx.createGain(); voice.gain.value = 0.2;
-      if (RECIPES[c.id]) RECIPES[c.id](voice);
-      voice.connect(fader); fader.connect(ambBus);
+      fader.connect(ambBus);
       chans[c.id] = fader;
-      fader.gain.value = audible(c.id) ? levels[c.id] : 0;
     });
     ctx.onstatechange = notify;
     started = true;
   }
-  function applyEngineLevel(id) { if (ctx && chans[id]) chans[id].gain.setTargetAtTime(audible(id) ? levels[id] : 0, ctx.currentTime, 0.04); }
+  var voices = {};
+  function voiceFor(id) {
+    if (voices[id] || !ctx || !chans[id]) return;
+    var voice = ctx.createGain(); voice.gain.value = 0.2;
+    if (RECIPES[id]) RECIPES[id](voice);
+    voice.connect(chans[id]);
+    voices[id] = voice;
+  }
+  function applyEngineLevel(id) {
+    if (!ctx || !chans[id]) return;
+    var v = audible(id) ? levels[id] : 0;
+    if (v > 0) voiceFor(id);
+    chans[id].gain.setTargetAtTime(v, ctx.currentTime, 0.04);
+  }
   function applyMaster(tc) { if (ctx && master) master.gain.setTargetAtTime(wantOn ? MASTER * masterLevel : 0, ctx.currentTime, tc || 0.12); }
   function resumeCtx() { if (ctx && ctx.state === "suspended") return ctx.resume().then(notify); return Promise.resolve(); }
+  // After sound is turned off, the fade-out finishes and the whole engine is
+  // suspended (no audio processing at all) until it's turned back on.
+  var suspendTimer = null;
+  function suspendSoon() {
+    clearTimeout(suspendTimer);
+    suspendTimer = setTimeout(function () {
+      if (!wantOn && ctx && ctx.state === "running") ctx.suspend().then(notify);
+    }, 1500);
+  }
   function isLive() { return !!(wantOn && started && ctx && ctx.state === "running"); }
 
   // ── Public actions ───────────────────────────────────────────────────
@@ -139,8 +161,8 @@
   // Call ONLY from an explicit sound control's own click/keypress.
   function power(on) {
     wantOn = !!on;
-    if (wantOn) { build(); CHANNELS.forEach(function (c) { applyEngineLevel(c.id); }); resumeCtx(); applyMaster(0.4); }
-    else if (started) { applyMaster(0.25); }
+    if (wantOn) { clearTimeout(suspendTimer); build(); CHANNELS.forEach(function (c) { applyEngineLevel(c.id); }); resumeCtx(); applyMaster(0.4); }
+    else if (started) { applyMaster(0.25); suspendSoon(); }
     notify(); return isLive();
   }
 
@@ -290,6 +312,9 @@
     levels: function () { return levels; },
     setLevel: setLevel, applyPreset: applyPreset,
     power: power, isLive: isLive, wantsOn: function () { return wantOn; },
+    // "none" (never started) / "running" / "suspended" (sound off: no processing)
+    engineState: function () { return ctx ? ctx.state : "none"; },
+    builtLayers: function () { return Object.keys(voices); },
     master: function () { return masterLevel; }, setMaster: setMaster,
     setAccess: setAccess, audible: audible,
     attachMedia: attachMedia, setVoiceLevel: setVoiceLevel, setDuckAmount: setDuckAmount, duck: duck,
