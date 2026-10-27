@@ -1619,3 +1619,7 @@ body.home { overflow-x: clip; }
   position: absolute; left: auto; right: 0; bottom: calc(100% + 8px);
   white-space: nowrap;
 }
+
+/* READ THE OPENING: the epigraph is each Lens's chapter 01 line (home.js),
+   one or two lines long — reserve two so switching never moves the text. */
+.home .op-epigraph { min-height: 2lh; }

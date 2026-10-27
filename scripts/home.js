@@ -908,7 +908,7 @@ const CHAPTER_LENSES = {
       "num": "01",
       "href": "chapters/volume1/book1/V1_B1_C01.html",
       "title": "Initial Crew Irregularity",
-      "subtitle": "Two aboard. One captain. Several unresolved definitions."
+      "subtitle": "One aboard. Several unresolved definitions."
     },
     {
       "num": "02",
@@ -1053,21 +1053,43 @@ const CHAPTER_LENSES = {
   ]
 };
 
+// Chapter titles are the same under every Lens (Quenby's list is the
+// canonical title set); each Lens keeps its own line beneath the title.
 function updateQueueLens(key) {
   const rows = document.querySelectorAll('.q-row[data-chapter]');
-  if (!rows.length) return;
-  const lens = CHAPTER_LENSES[key] || CHAPTER_LENSES['q-vox'];
+  const canon = CHAPTER_LENSES['q-vox'];
+  const lens = CHAPTER_LENSES[key] || canon;
   rows.forEach((row) => {
     const num = row.dataset.chapter;
     const item = lens.find((entry) => entry.num === num);
-    if (!item) return;
+    const base = canon.find((entry) => entry.num === num) || item;
+    if (!item || !base) return;
     const title = row.querySelector('.q-title');
     const sub = row.querySelector('.q-sub');
-    if (title) title.textContent = item.title;
+    if (title) title.textContent = base.title;
     if (sub) sub.textContent = item.subtitle;
-    if (item.href) row.setAttribute('href', item.href);
-    row.setAttribute('aria-label', `${num}. ${item.title}. ${item.subtitle}`);
+    if (base.href) row.setAttribute('href', base.href);
+    row.setAttribute('aria-label', `${num}. ${base.title}. ${item.subtitle}`);
   });
+  updateOpeningEpigraph(lens);
+}
+
+// READ THE OPENING: the epigraph under the chapter 01 title is this Lens's
+// chapter 01 line (Quenby: "You don't earn a ship. / You survive what it
+// hears."), set on two lines at the sentence break nearest its middle.
+function updateOpeningEpigraph(lens) {
+  const epi = document.querySelector('#panel-opening .op-epigraph');
+  const item = lens && lens.find((entry) => entry.num === '01');
+  if (!epi || !item || !item.subtitle) return;
+  const text = item.subtitle;
+  let cut = -1;
+  for (const m of text.matchAll(/[.!?]\s+/g)) {
+    const at = m.index + 1;
+    if (cut < 0 || Math.abs(text.length / 2 - at) < Math.abs(text.length / 2 - cut)) cut = at;
+  }
+  epi.textContent = '';
+  if (cut > 0) epi.append(text.slice(0, cut), document.createElement('br'), text.slice(cut).trim());
+  else epi.append(text);
 }
 
 // ── Perspective-driven homepage updates ───────────────────────────
