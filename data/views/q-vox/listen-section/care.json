@@ -1,0 +1,42 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "care",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 2,
+  "lines": [
+    {
+      "id": "lst-q-vox-05",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 66,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "Q. Vox · Environmental Control",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Comfort is expensive. Cut it."
+    },
+    {
+      "id": "lst-q-vox-15",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 56,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "Q. Vox · Common Bench",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "We breathe. Then we decide."
+    }
+  ],
+  "generated_at": 1793062847741
+}

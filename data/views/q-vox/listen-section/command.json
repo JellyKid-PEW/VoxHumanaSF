@@ -1,0 +1,133 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "command",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 9,
+  "lines": [
+    {
+      "id": "lst-q-vox-01",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 70,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Pilot Cradle",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "We run quiet until we don't."
+    },
+    {
+      "id": "lst-q-vox-02",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 69,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Bridge",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "No banners. Just the lane."
+    },
+    {
+      "id": "lst-q-vox-10",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 61,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Pilot Cradle",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Don’t make drift a philosophy."
+    },
+    {
+      "id": "lst-q-vox-11",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 60,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Skiff Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "We’re not taking banners. We’re taking exits."
+    },
+    {
+      "id": "lst-q-vox-21",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 50,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Skiff Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Make the exit boring."
+    },
+    {
+      "id": "lst-q-vox-26",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 45,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Bridge Lights",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "No stage lights. Not today."
+    },
+    {
+      "id": "lst-q-vox-31",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 40,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Skiff Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "That’s not a plan. That’s a dare wearing boots."
+    },
+    {
+      "id": "lst-q-vox-32",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 39,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Pilot Cradle",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The Huntress hates being begged."
+    },
+    {
+      "id": "lst-q-vox-40",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 31,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Q. Vox · Pilot Cradle",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The chair’s warm. That’s not loyalty."
+    }
+  ],
+  "generated_at": 1793062847738
+}

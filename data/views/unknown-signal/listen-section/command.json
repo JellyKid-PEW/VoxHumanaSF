@@ -1,0 +1,29 @@
+{
+  "kind": "memory-listing",
+  "view": "unknown-signal",
+  "surface": "listen-section",
+  "slot": "command",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 1,
+  "lines": [
+    {
+      "id": "unk-05",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 66,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Unknown Signal · Skiff Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The ship opened before anyone asked."
+    }
+  ],
+  "generated_at": 1793062847784
+}

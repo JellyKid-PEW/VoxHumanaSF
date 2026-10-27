@@ -1,0 +1,152 @@
+/* perspective-selector.css
+   ─────────────────────────────────────────────────────────────────────────
+   The character-lens switcher — "Crew Rail" (concept D), mounted on the LEFT
+   outer edge of the Transmission Queue box. It rides just outside the queue's
+   left border, a quiet vertical line of signal-bars + initials.
+
+   Resting state = colored bars + initials. Hover an item and its name appears
+   as a small solid tooltip to the left (so it never shoves the layout). The
+   SELECTED lens collapses to a single lit, glowing bar.
+
+   Built from the site's own tokens (--signal, --ink, --mono, --display…).
+   Per-voice color arrives as --c, set inline by perspective-selector.js.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* The queue is the positioning context for the rail. */
+.queue { position: relative; }
+
+.lens-dock {
+  position: absolute;
+  right: calc(100% + 18px);   /* sit just outside the queue's left edge */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+.lens-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;       /* bars line up against the queue edge */
+  gap: 3px;
+}
+.lens-rail-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 1px 9px 0;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.lens-rail-label::after {
+  content: "";
+  width: 12px;
+  height: 1px;
+  background: var(--signal);
+  box-shadow: 0 0 6px var(--signal-dim);
+}
+
+.lens-item {
+  position: relative;
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--mono);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 5px 2px 5px 5px;
+  border-radius: 3px;
+}
+.lens-item:focus-visible { outline: 1px solid var(--c); outline-offset: 2px; }
+
+.lens-ini {
+  font-family: var(--display);
+  font-size: 11px;
+  width: 13px;
+  text-align: center;
+  color: var(--ink-faint);
+  transition: color 0.2s ease;
+}
+.lens-bar {
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  flex: none;
+  background: color-mix(in srgb, var(--c) 38%, transparent);
+  transition: height 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* name + role — a solid tooltip to the LEFT, shown only on hover intent */
+.lens-meta {
+  position: absolute;
+  right: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  line-height: 1.2;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: var(--bg-elev, #0e0e10);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease, transform 0.18s ease;
+}
+.lens-meta b { font-size: 10.5px; font-weight: 400; color: var(--ink); letter-spacing: 0.04em; }
+.lens-meta i {
+  font-size: 7.5px; font-style: normal; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+
+.lens-item:hover .lens-bar { height: 24px; background: color-mix(in srgb, var(--c) 72%, transparent); }
+.lens-item:hover .lens-ini { color: var(--ink-dim); }
+.lens-item:hover .lens-meta { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+/* selected = quiet lit marker, NO persistent name */
+.lens-item.on .lens-ini { color: var(--c); }
+.lens-item.on .lens-bar {
+  height: 28px;
+  background: var(--c);
+  box-shadow: 0 0 10px var(--c);
+}
+
+/* Nova reserved — dim + slow shimmer, can't activate */
+.lens-item.locked { cursor: not-allowed; }
+.lens-item.locked .lens-ini { opacity: 0.6; }
+.lens-item.locked .lens-bar {
+  background: color-mix(in srgb, var(--c) 20%, transparent);
+  animation: lens-nova calc(4s / var(--motion, 1)) ease-in-out infinite;
+}
+.lens-item.locked:hover .lens-ini { color: var(--ink-faint); }
+.lens-item.locked .lens-meta i { color: var(--ink-faint); }
+@keyframes lens-nova {
+  0%, 100% { box-shadow: 0 0 0 transparent; }
+  50%      { box-shadow: 0 0 7px color-mix(in srgb, var(--c) 55%, transparent); }
+}
+
+/* Single-column layout (≤980px, the site's own breakpoint): the queue is
+   full-width, so the rail tucks into the page's left margin. Drop the label
+   and flip the hover tooltip to the RIGHT so it never runs off-screen. */
+@media (max-width: 980px) {
+  .lens-rail-label { display: none; }
+  .lens-dock { right: calc(100% + 12px); }
+  .lens-meta {
+    right: auto;
+    left: calc(100% + 8px);
+    align-items: flex-start;
+    transform: translateY(-50%) translateX(-6px);
+  }
+  .lens-item:hover .lens-meta { transform: translateY(-50%) translateX(0); }
+}

@@ -1,0 +1,94 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "systems",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 6,
+  "lines": [
+    {
+      "id": "lst-bob-11",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 60,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "B.O.B. · Corridor Routing",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Local pathways narrowing. Haste advised."
+    },
+    {
+      "id": "lst-bob-17",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 54,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "B.O.B. · Engine Crawl",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The ship is not sulking. The ship is registering disagreement."
+    },
+    {
+      "id": "lst-bob-18",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 53,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "B.O.B. · Cooling Manifold",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Cooling patch window recalculating. Please enjoy uncertainty."
+    },
+    {
+      "id": "lst-bob-29",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 42,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "B.O.B. · Maintenance Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Diagnostic result: ship remains stubborn."
+    },
+    {
+      "id": "lst-bob-34",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 37,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "B.O.B. · Auxiliary Console",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Observation: Iri-Six uses silence as infrastructure."
+    },
+    {
+      "id": "lst-bob-37",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 34,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "B.O.B. · Cooling Manifold",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Thermal drift inside tolerance. Barely."
+    }
+  ],
+  "generated_at": 1793062847765
+}

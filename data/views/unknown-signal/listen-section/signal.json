@@ -1,0 +1,42 @@
+{
+  "kind": "memory-listing",
+  "view": "unknown-signal",
+  "surface": "listen-section",
+  "slot": "signal",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 2,
+  "lines": [
+    {
+      "id": "unk-07",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 64,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Unknown Signal · Relay Feed",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Pressure arrived before the sound."
+    },
+    {
+      "id": "unk-10",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 61,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Unknown Signal · Hull Skin",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Something small knocked once and listened back."
+    }
+  ],
+  "generated_at": 1793062847788
+}

@@ -1,0 +1,15 @@
+{
+  "kind": "memory-listing",
+  "view": "iri-six",
+  "surface": "listen-section",
+  "slot": "ritual",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 0,
+  "lines": [],
+  "generated_at": 1793062847755
+}

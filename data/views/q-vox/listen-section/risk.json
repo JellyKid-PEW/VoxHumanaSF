@@ -1,0 +1,68 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "risk",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 4,
+  "lines": [
+    {
+      "id": "lst-q-vox-04",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 67,
+      "surface": "listen-section",
+      "slot": "risk",
+      "context_key": "Q. Vox · Debt Ledger",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Debt lingers. Don’t give it a chair."
+    },
+    {
+      "id": "lst-q-vox-13",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 58,
+      "surface": "listen-section",
+      "slot": "risk",
+      "context_key": "Q. Vox · Dockside Market",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Let the room think we’re smaller than we are."
+    },
+    {
+      "id": "lst-q-vox-27",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 44,
+      "surface": "listen-section",
+      "slot": "risk",
+      "context_key": "Q. Vox · Debt Ledger",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "We can be broke after we’re alive."
+    },
+    {
+      "id": "lst-q-vox-39",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 32,
+      "surface": "listen-section",
+      "slot": "risk",
+      "context_key": "Q. Vox · Job Board",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "If they wanted honest work, they’d pay honest money."
+    }
+  ],
+  "generated_at": 1793062847741
+}

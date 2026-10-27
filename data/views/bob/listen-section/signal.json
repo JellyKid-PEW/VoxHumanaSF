@@ -1,0 +1,107 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "signal",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 7,
+  "lines": [
+    {
+      "id": "lst-bob-02",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 69,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Bridge Feed",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Recommendation withheld."
+    },
+    {
+      "id": "lst-bob-15",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 56,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Relay Feed",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Signal bleed detected. Politeness level: poor."
+    },
+    {
+      "id": "lst-bob-23",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 48,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Internal Comms",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Internal comms quiet. This is rarely a good sign."
+    },
+    {
+      "id": "lst-bob-30",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 41,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Hull Skin",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Unregistered signal brushed hull. No handshake accepted."
+    },
+    {
+      "id": "lst-bob-31",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 40,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Bridge Feed",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Captain tone suggests further questions would be poorly received."
+    },
+    {
+      "id": "lst-bob-33",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 38,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Internal Comms",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Observation: captain uses silence as punctuation."
+    },
+    {
+      "id": "lst-bob-39",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 32,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "B.O.B. · Surface Relay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Signal mirror active. Surface contamination low."
+    }
+  ],
+  "generated_at": 1793062847768
+}

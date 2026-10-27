@@ -1,0 +1,55 @@
+{
+  "kind": "memory-listing",
+  "view": "iri-six",
+  "surface": "listen-section",
+  "slot": "signal",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 3,
+  "lines": [
+    {
+      "id": "lst-iri-six-25",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 46,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Iri-Six · Relay Station",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Watch the seam."
+    },
+    {
+      "id": "lst-iri-six-30",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 41,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Iri-Six · Relay Station",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Keep the exit behind your shoulder."
+    },
+    {
+      "id": "lst-iri-six-36",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 35,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Iri-Six · Relay Station",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Move when the room commits."
+    }
+  ],
+  "generated_at": 1793062847756
+}

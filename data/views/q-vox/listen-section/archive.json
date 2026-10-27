@@ -1,0 +1,81 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "archive",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 5,
+  "lines": [
+    {
+      "id": "lst-q-vox-12",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 59,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "Q. Vox · Archive Terminal",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Sounds fade. People just hate noticing."
+    },
+    {
+      "id": "lst-q-vox-24",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 47,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "Q. Vox · Archive Terminal",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "If the myth knocks, don’t answer fast."
+    },
+    {
+      "id": "lst-q-vox-25",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 46,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "Q. Vox · Registry Cache",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Old names open bad doors."
+    },
+    {
+      "id": "lst-q-vox-30",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 41,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "Q. Vox · Archive Feed",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "If I start performing, cut the feed."
+    },
+    {
+      "id": "lst-q-vox-38",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 33,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "Q. Vox · Registry Cache",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Names travel badly."
+    }
+  ],
+  "generated_at": 1793062847743
+}

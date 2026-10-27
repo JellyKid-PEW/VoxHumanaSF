@@ -1,0 +1,42 @@
+{
+  "kind": "memory-listing",
+  "view": "unknown-signal",
+  "surface": "listen-section",
+  "slot": "care",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 2,
+  "lines": [
+    {
+      "id": "unk-01",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 70,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "Unknown Signal · Medbay Cot",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Blanket logged as shelter. Dispute pending."
+    },
+    {
+      "id": "unk-09",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 62,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "Unknown Signal · Common Bench",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Choice offered. Proof still pending."
+    }
+  ],
+  "generated_at": 1793062847786
+}

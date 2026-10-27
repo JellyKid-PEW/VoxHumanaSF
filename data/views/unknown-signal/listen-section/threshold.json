@@ -1,0 +1,55 @@
+{
+  "kind": "memory-listing",
+  "view": "unknown-signal",
+  "surface": "listen-section",
+  "slot": "threshold",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 3,
+  "lines": [
+    {
+      "id": "unk-03",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 68,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Unknown Signal · Corridor",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Hands hidden. Eyes open."
+    },
+    {
+      "id": "unk-04",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 67,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Unknown Signal · Bridge Threshold",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Question repeated. Answer avoided."
+    },
+    {
+      "id": "unk-08",
+      "view": "unknown-signal",
+      "behavior": "Current",
+      "weight": 63,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Unknown Signal · Medbay Door",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Nobody says cargo when they mean person."
+    }
+  ],
+  "generated_at": 1793062847786
+}

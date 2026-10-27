@@ -1,0 +1,68 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "drift",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 4,
+  "lines": [
+    {
+      "id": "lst-q-vox-06",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 65,
+      "surface": "listen-section",
+      "slot": "drift",
+      "context_key": "Q. Vox · View Dome",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Forward is not the same as safe."
+    },
+    {
+      "id": "lst-q-vox-09",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 62,
+      "surface": "listen-section",
+      "slot": "drift",
+      "context_key": "Q. Vox · View Dome",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The trick is knowing when quiet turns into a trap."
+    },
+    {
+      "id": "lst-q-vox-17",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 54,
+      "surface": "listen-section",
+      "slot": "drift",
+      "context_key": "Q. Vox · View Dome",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Don’t sell silence back to me like it’s peace."
+    },
+    {
+      "id": "lst-q-vox-35",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 36,
+      "surface": "listen-section",
+      "slot": "drift",
+      "context_key": "Q. Vox · View Dome",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "A quiet room is still a room with teeth."
+    }
+  ],
+  "generated_at": 1793062847744
+}

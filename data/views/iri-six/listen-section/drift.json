@@ -1,0 +1,29 @@
+{
+  "kind": "memory-listing",
+  "view": "iri-six",
+  "surface": "listen-section",
+  "slot": "drift",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 1,
+  "lines": [
+    {
+      "id": "lst-iri-six-08",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 63,
+      "surface": "listen-section",
+      "slot": "drift",
+      "context_key": "Iri-Six · View Dome",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Do not make drift sentimental."
+    }
+  ],
+  "generated_at": 1793062847757
+}

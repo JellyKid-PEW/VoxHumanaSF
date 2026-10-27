@@ -1,0 +1,29 @@
+{
+  "kind": "memory-listing",
+  "view": "iri-six",
+  "surface": "listen-section",
+  "slot": "archive",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 1,
+  "lines": [
+    {
+      "id": "lst-iri-six-13",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 58,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "Iri-Six · Cargo Alcove",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "A closed hatch still tells you where the room ends."
+    }
+  ],
+  "generated_at": 1793062847756
+}

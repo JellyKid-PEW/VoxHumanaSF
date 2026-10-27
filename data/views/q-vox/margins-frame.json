@@ -1,0 +1,15 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "margins-frame",
+  "slot": null,
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 0,
+  "lines": [],
+  "generated_at": 1793062847746
+}

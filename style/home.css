@@ -1,0 +1,1621 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Vox Humana — index refinements (iteration 1)
+   Loaded ONLY by index.html, after styles.css + perspective-selector.css.
+   Every other page keeps the shared styles untouched. Delete the
+   <link href="style/home.css"> line in index.html to fall back.
+
+   Sections
+     0. Tokens + shell bounds
+     1. Topbar · Dispatch
+     2. Main grid (identity · Lens column · console column)
+     3. Identity — lockup, quote, Begin Book One, Listening
+     4. Lens
+     5. Site navigation + Explore menu
+     6. Transmission panel — head, view switch, opening, queue
+     7. Footer
+     8. Quieter motion
+     9. Stacked layout (< 1080px) and phones
+    10. Ship ambience button + mixer
+    11. Lens review alternatives: rail · seam · type
+    12. Bounded panel at stacked / phone / short sizes
+    13. Lens placement comparisons (rail-identity · rail-nav · rail-panel · classic)
+   ───────────────────────────────────────────────────────────────────── */
+
+/* ── 0. Tokens + shell bounds ─────────────────────────────────────── */
+.home {
+  --pad-x: clamp(16px, 3.4vw, 64px);
+  --pad-y: clamp(20px, 2.4vw, 38px);
+  --gap: clamp(20px, 2vw, 30px);
+  --shell-max: 2080px;          /* bounds drift on very wide screens */
+  --lens-col: 128px;
+  --serif: "Newsreader", "Spectral", Georgia, "Times New Roman", serif;
+}
+
+/* The background stays full-bleed; only the content rows are bounded, so
+   very wide windows gain margin instead of pulling the halves apart. */
+.home .screen > .topbar,
+.home .screen > .main,
+.home .screen > .bottombar {
+  width: 100%;
+  max-width: var(--shell-max);
+  margin-inline: auto;
+}
+/* The ship-time line now sits on the footer's top rule (see §14), so the
+   page needs no extra room under the footer. */
+.home .screen { padding-bottom: var(--pad-y); }
+/* `clip` instead of `hidden`: same containment, but it doesn't become a
+   scroll container, so the Lens column can stay beside the reader. */
+.home .hull { overflow: clip; }
+body.home { overflow-x: clip; }
+
+/* One visible focus treatment for the page. */
+.home a:focus-visible,
+.home button:focus-visible,
+.home [tabindex]:focus-visible {
+  outline: 1px solid var(--signal);
+  outline-offset: 3px;
+}
+
+/* ── 1. Topbar · Dispatch ─────────────────────────────────────────── */
+.home .topbar {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(16px, 3vw, 44px);
+}
+.home .dispatch-bar { grid-template-columns: auto minmax(0, 1fr); }
+.home .dispatch-edge { display: none; }
+
+/* Registry block: kept as an atmospheric label, one step quieter. */
+.home .topbar .right { color: var(--ink-faint); font-size: 10.5px; }
+.home .topbar .right b { color: var(--ink-dim); }
+
+/* Ticker pace is set in home.js (~22px/s). Hold still while someone is
+   pointing at it or has it focused. */
+.home .dispatch-bar:hover .dispatch-track,
+.home .dispatch-window:focus .dispatch-track,
+.home .dispatch-window:focus-within .dispatch-track {
+  animation-play-state: paused;
+}
+.home .dispatch-window:focus-visible { outline-offset: 5px; }
+.home .dispatch-body { color: #9d9b94; }
+
+/* ── 2. Main grid ─────────────────────────────────────────────────── */
+.home .main {
+  grid-template-columns: minmax(0, 1fr) var(--lens-col) minmax(0, 1.2fr);
+  column-gap: clamp(14px, 1.4vw, 28px);
+  row-gap: 0;
+  align-items: start;
+}
+.home .identity,
+.home .console-col,
+.home .lens-col { min-width: 0; }
+
+/* ── 3. Identity ──────────────────────────────────────────────────── */
+/* The lockup scales with its own column (container units) rather than the
+   window, so it keeps its proportions whatever the panel beside it does. */
+.home .identity { container-type: inline-size; }
+
+.home .identity .brand {
+  min-height: clamp(150px, 42cqi, 272px);
+  margin-bottom: clamp(14px, 3cqi, 24px);
+}
+/* Ratios keep VOX on one line (Michroma needs ~3.05em for it) with the
+   word block still slipping slightly over the seal, as designed. */
+.home .brand-seal {
+  left: clamp(-34px, -4cqi, -10px);
+  top: clamp(-8px, -1cqi, -3px);
+  width: clamp(150px, 44cqi, 300px);
+}
+.home .brand-word {
+  padding-left: clamp(132px, 40cqi, 276px);
+  max-width: 100%;
+}
+.home .brand-stamp { font-size: clamp(9.5px, 1.8cqi, 11px); gap: 6px 12px; }
+.home .brand-vox { font-size: clamp(54px, 17cqi, 120px); white-space: nowrap; }
+.home .brand-humana {
+  font-size: clamp(14px, 4.3cqi, 27px);
+  margin-left: clamp(14px, 4.6cqi, 38px);
+}
+
+/* The quote: still a faint marking on the artifact — a little larger,
+   more air, slightly less transparent. Not brightened to a headline. */
+.home .brand-hero {
+  margin: 0 0 clamp(24px, 4.6cqi, 34px) clamp(40px, 16cqi, 104px);
+  font-size: clamp(12px, 2.25cqi, 14px);
+  line-height: 1.8;
+  letter-spacing: 0.035em;
+  opacity: 0.8;
+  max-width: 44ch;
+}
+
+/* Begin Book One — quieter so it doesn't compete with the visible opening,
+   still the clear entrance to the full chapter. */
+.home .cta {
+  margin-top: 0;
+  padding: 14px 18px;
+  max-width: min(100%, 35rem);
+}
+.home .cta::before,
+.home .cta::after { width: 8px; height: 8px; }
+.home .cta-inner { gap: 16px; }
+.home .cta-pulse { width: 28px; height: 28px; }
+.home .cta-text .head { font-size: 14.5px; letter-spacing: 0.2em; }
+.home .cta-text .sub { font-size: 10.5px; margin-top: 6px; }
+.home .cta-arrow { font-size: 20px; }
+
+/* Listening — readable attribution, secondary cycle marks. */
+.home .listening {
+  max-width: min(100%, 35rem);
+  margin-top: 18px;
+  padding: 18px 22px 14px;
+}
+.home .ls-head { font-size: 10.5px; gap: 12px; margin-bottom: 12px; }
+.home .ls-eyebrow { white-space: nowrap; }
+.home .ls-who { font-size: 11px; letter-spacing: 0.14em; text-align: right; }
+.home .ls-line { font-size: 15px; line-height: 1.65; }
+/* Height is reserved by home.js for the longest entry of every
+   perspective, so no jumps. The attribution takes the head's remaining
+   width (not its text's width) so that reserve is measured consistently. */
+.home .ls-who { display: block; flex: 1 1 0; min-width: 0; }
+.home .ls-head { align-items: flex-start; }
+
+/* Bottom strip: position · selectable dots · prev / pause / next.
+   Same quiet register as the old cycle line; targets are 32px+. */
+.home .ls-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding-top: 6px;
+  font-size: 10px;
+  color: var(--ink-dim);
+}
+.home .ls-foot b { color: var(--ink); }
+.home .ls-cycle { white-space: nowrap; margin-right: auto; }
+.home .ls-dots { display: inline-flex; gap: 0; }
+.home .ls-dot,
+.home .ls-btn {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  color: var(--ink-dim);
+}
+.home .ls-dot { width: 22px; height: 32px; }
+.home .ls-dot i {
+  display: block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-faint);
+  background: transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.home .ls-dot:hover i { border-color: var(--ink-dim); }
+/* Current: filled + accent ring — shape changes, not only colour. */
+.home .ls-dot.on i { background: var(--signal); border-color: var(--signal); width: 7px; height: 7px; }
+.home .ls-controls {
+  display: inline-flex;
+  border: 1px solid var(--line);
+}
+.home .ls-btn { width: 34px; height: 32px; }
+.home .ls-btn + .ls-btn { border-left: 1px solid var(--line); }
+.home .ls-btn:hover { color: var(--ink); background: rgba(255, 255, 255, 0.03); }
+.home .ls-btn:focus-visible,
+.home .ls-dot:focus-visible { outline-offset: -2px; }
+.home .ls-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.home .ls-toggle .i-play { display: none; fill: currentColor; stroke: none; }
+.home .ls-toggle.is-paused .i-pause { display: none; }
+.home .ls-toggle.is-paused .i-play { display: block; }
+.home .ls-toggle.is-paused { color: var(--ink); }
+
+/* ── 4. Lens ──────────────────────────────────────────────────────── */
+/* Own column between the halves, right-aligned against the panel, level
+   with the quote. */
+.home .lens-col {
+  align-self: start;
+  margin-top: clamp(96px, 9vw, 150px);
+}
+.home .lens-dock {
+  position: static;
+  transform: none;
+  right: auto; top: auto;
+}
+.home .lens-rail { align-items: flex-end; gap: 2px; }
+.home .lens-rail-label {
+  display: flex;
+  margin: 0 2px 4px 0;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--ink-dim);
+}
+.home .lens-rail-hint {
+  display: block;
+  margin: 0 2px 10px 0;
+  max-width: 11ch;
+  text-align: right;
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--warm-dim);
+}
+
+.home .lens-item {
+  min-height: 38px;
+  padding: 6px 4px 6px 8px;
+  gap: 10px;
+}
+.home .lens-item:focus-visible { outline-color: var(--c); outline-offset: 0; }
+.home .lens-ini {
+  font-size: 13px;
+  width: 16px;
+  color: #6f6c66;
+}
+.home .lens-bar {
+  height: 20px;
+  background: color-mix(in srgb, var(--c) 48%, transparent);
+}
+
+/* Name + role: plain right-aligned text in the column's own space (no
+   floating box), so it never covers the identity or the panel. */
+.home .lens-meta {
+  right: calc(100% + 2px);
+  transform: translateY(-50%) translateX(4px);
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  gap: 2px;
+}
+.home .lens-meta b { font-size: 12px; color: var(--ink); letter-spacing: 0.03em; }
+.home .lens-meta i { font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-dim); }
+
+.home .lens-item:hover .lens-meta,
+.home .lens-item:focus-visible .lens-meta,
+.home .lens-item.on .lens-meta {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+.home .lens-item:hover .lens-ini,
+.home .lens-item:focus-visible .lens-ini { color: var(--ink); }
+.home .lens-item:hover .lens-bar,
+.home .lens-item:focus-visible .lens-bar {
+  height: 24px;
+  background: color-mix(in srgb, var(--c) 75%, transparent);
+}
+
+/* Selected: lit bar, coloured initial and a persistent name. */
+.home .lens-item.on .lens-meta b { color: var(--c); }
+.home .lens-item.on .lens-bar { height: 30px; }
+.home .lens-item.locked .lens-meta b { color: var(--ink-dim); }
+
+/* ── 5. Site navigation ───────────────────────────────────────────── */
+.home .site-nav {
+  position: relative;
+  z-index: 60;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.home .sn-list {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+.home .sn-list > li { position: relative; display: flex; }
+.home .sn-list > li + li::before {
+  content: "";
+  align-self: center;
+  width: 1px; height: 14px;
+  background: var(--line-strong);
+}
+.home .sn-link {
+  appearance: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 13px clamp(12px, 1.3vw, 20px) 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color 0.15s ease;
+}
+.home .sn-list > li:first-child .sn-link { padding-left: 0; }
+/* Accent rule sits on the nav's own baseline. */
+.home .sn-link::after {
+  content: "";
+  position: absolute;
+  left: clamp(12px, 1.3vw, 20px); right: clamp(12px, 1.3vw, 20px);
+  bottom: -1px;
+  height: 1px;
+  background: var(--signal);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.home .sn-list > li:first-child .sn-link::after { left: 0; }
+.home .sn-link:hover::after,
+.home .sn-has-menu.is-open .sn-link::after { opacity: 1; }
+.home .sn-link:hover { color: #fff; }
+.home .sn-note {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-dim);
+}
+.home .sn-caret {
+  align-self: center;
+  width: 6px; height: 6px;
+  margin: 0 2px 3px 0;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.home .sn-has-menu.is-open .sn-caret { transform: rotate(-135deg) translate(-2px, -2px); }
+
+.home .sn-menu {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  z-index: 70;
+  width: max-content;
+  min-width: 300px;
+  max-width: min(380px, calc(100vw - 2 * var(--pad-x)));
+  padding: 6px 0 8px;
+  background: #0b0b0c;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65);
+}
+.home .sn-menu::before {
+  content: "";
+  position: absolute; top: -1px; left: -1px;
+  width: 8px; height: 8px;
+  border: 1px solid var(--signal);
+  border-right: 0; border-bottom: 0;
+}
+.home .sn-menu-head {
+  padding: 8px 18px 9px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+.home .sn-menu ul { list-style: none; margin: 0; padding: 0; }
+.home .sn-menu a {
+  display: grid;
+  gap: 3px;
+  padding: 10px 18px 11px 16px;
+  border-left: 2px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.home .sn-menu a b {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+.home .sn-menu a span {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--ink-dim);
+  letter-spacing: 0.02em;
+}
+.home .sn-menu a:hover,
+.home .sn-menu a:focus-visible {
+  background: rgba(255, 255, 255, 0.035);
+  border-left-color: var(--signal);
+}
+.home .sn-menu a:focus-visible { outline-offset: -1px; }
+.home .sn-menu a:hover b,
+.home .sn-menu a:focus-visible b { color: var(--signal); }
+
+/* ── 6. Transmission panel ────────────────────────────────────────── */
+/* Bounded: the header, view switch and footer stay put; each view scrolls
+   inside. Height follows the viewport within limits; the page itself still
+   scrolls normally around it. */
+.home .queue {
+  --pp-x: clamp(18px, 2.4vw, 36px);
+  --panel-h: clamp(460px, calc(100svh - 190px), 1000px);
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  height: var(--panel-h);
+  padding: clamp(18px, 2vw, 28px) var(--pp-x) 16px;
+}
+.home .queue-head,
+.home .panel-switch,
+.home .queue-foot { flex: none; }
+.home .queue-head { margin-bottom: 0; padding-bottom: 14px; }
+.home .queue-head .title { font-size: 12px; }
+.home .qh-left a { font-size: 12.5px; }
+/* Repeated registry marks — kept, but subordinate to reading. */
+.home .qh-menu .tag-stack .row { font-size: 10.5px; }
+.home .qh-menu .tag-stack .lbl { color: var(--ink-dim); }
+.home .qh-menu .tag-stack .ghost { color: var(--ink-faint); }
+.home .qh-menu .tag-stack .sub { color: color-mix(in srgb, var(--signal) 78%, transparent); }
+.home .qh-menu .topbar-seal img { width: 32px; opacity: 0.85; }
+.home .queue-head .title { white-space: nowrap; }
+/* In a narrower panel the repeated "Wild Huntress // Manual Interface"
+   line steps aside; "Listen first. Then choose." stays. */
+@container (max-width: 760px) {
+  .home .qh-menu .tag-stack .row:first-child { display: none; }
+}
+
+/* View switch — a boxed segmented control inside the panel, so it reads
+   as a panel control rather than site navigation. Selected = filled
+   square + raised background + underline, not colour alone. */
+.home .panel-switch {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 18px;
+  border: 1px solid var(--line-strong);
+}
+.home .ps-tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 10px 18px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--ink-dim);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.home .ps-tab + .ps-tab { border-left: 1px solid var(--line-strong); }
+.home .ps-tab:hover { color: var(--ink); }
+.home .ps-tab:focus-visible { outline-offset: -4px; }
+.home .ps-mark {
+  flex: none;
+  width: 8px; height: 8px;
+  border: 1px solid currentColor;
+}
+.home .ps-tab[aria-selected="true"] {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.045);
+}
+.home .ps-tab[aria-selected="true"] .ps-mark {
+  background: var(--signal);
+  border-color: var(--signal);
+}
+.home .ps-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: var(--ink);
+}
+
+/* Both views fill the same space below the switch. The scroll region runs
+   out to the panel's right edge so its scrollbar sits by the border. */
+.home .panel-view {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 16px;
+  margin-right: calc(-1 * var(--pp-x) + 6px);
+  padding-right: calc(var(--pp-x) - 6px);
+  border-top: 1px solid var(--line);
+}
+.home .panel-view[hidden] { display: none; }
+
+/* One restrained scrollbar per view (never nested). */
+.home #panel-opening,
+.home #panel-queue .q-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 230, 225, 0.26) transparent;
+}
+@supports not (scrollbar-color: auto) {
+  .home #panel-opening::-webkit-scrollbar,
+  .home #panel-queue .q-scroll::-webkit-scrollbar { display: block; width: 6px; }
+  .home #panel-opening::-webkit-scrollbar-thumb,
+  .home #panel-queue .q-scroll::-webkit-scrollbar-thumb { background: rgba(232, 230, 225, 0.26); }
+}
+.home #panel-opening:focus-visible,
+.home #panel-queue .q-scroll:focus-visible { outline-offset: -2px; }
+
+.home #panel-queue { display: flex; flex-direction: column; }
+.home #panel-queue[hidden] { display: none; }
+.home #panel-queue .q-frame { flex: 1 1 auto; min-height: 0; display: flex; padding-right: 0; }
+.home #panel-queue .q-scroll { flex: 1 1 auto; max-height: none; padding-right: 6px; }
+.home #panel-queue .q-indicator { flex: none; }
+/* The rail stood in for a hidden scrollbar; the real one replaces it. */
+.home .queue-rail { display: none; }
+
+/* Opening — the chapter's own reading voice (serif "Page" mode). */
+.home .opening {
+  padding-top: clamp(20px, 2.4vw, 32px);
+  padding-bottom: 28px;
+  padding-left: clamp(0px, 6cqi - 22px, 64px);
+}
+.home .op-kicker {
+  margin-bottom: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.home .op-title {
+  margin: 0 0 18px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(21px, 4.2cqi, 32px);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.home .op-epigraph {
+  margin: 0 0 clamp(28px, 5cqi, 44px);
+  padding-left: 18px;
+  border-left: 1px solid var(--signal);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(16px, 2.6cqi, 18.5px);
+  line-height: 1.5;
+  color: var(--warm-dim);
+}
+.home .op-prose p {
+  margin: 0 0 1.15em;
+  max-width: 34em;
+  font-family: var(--serif);
+  font-size: clamp(17.5px, 2.5cqi, 19.5px);
+  line-height: 1.72;
+  letter-spacing: 0;
+  color: #e6e3dc;
+  text-wrap: pretty;
+}
+.home .op-prose p em { font-style: italic; color: var(--warm); }
+.home .op-prose p.dropcap::first-letter {
+  float: left;
+  padding: 0.05em 0.06em 0 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 3.3em;
+  line-height: 0.8;
+  color: var(--signal);
+}
+
+.home .op-continue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  max-width: 40em;
+  margin-top: clamp(26px, 4cqi, 40px);
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.home .op-continue-link {
+  display: inline-grid;
+  grid-template-columns: minmax(0, auto) auto;
+  column-gap: 18px;
+  row-gap: 4px;
+  align-items: center;
+  padding: 13px 18px 14px;
+  border: 1px solid var(--line-strong);
+  position: relative;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.home .op-continue-link::before {
+  content: "";
+  position: absolute; top: -1px; left: -1px;
+  width: 8px; height: 8px;
+  border: 1px solid var(--signal);
+  border-right: 0; border-bottom: 0;
+}
+.home .op-continue-link:hover {
+  border-color: var(--signal);
+  background: rgba(255, 255, 255, 0.02);
+}
+.home .op-c-label {
+  font-size: 12.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.home .op-c-from {
+  grid-column: 1;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--warm-dim);
+}
+.home .op-c-arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: 22px;
+  color: var(--ink-dim);
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+.home .op-continue-link:hover .op-c-arrow { transform: translateX(4px); color: var(--signal); }
+.home .op-restart {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 5px;
+}
+.home .op-restart:hover { color: var(--ink); text-decoration-color: var(--signal); }
+
+/* Queue view — unchanged rows; only the footer text gets more legible. */
+.home .queue-foot {
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 10.5px;
+  color: var(--ink-dim);
+}
+.home .q-indicator { font-size: 10.5px; }
+/* Entrance: brief on first visit (0.8s), briefer on return (0.35s, see
+   boot() in home.js). */
+.home .boot-cover.scanning,
+.home .boot-cover.scanning .boot-sweep { animation-duration: 0.8s; }
+.home .boot-cover.brief.scanning,
+.home .boot-cover.brief.scanning .boot-sweep { animation-duration: 0.35s; }
+/* .q-more is display:inline-flex, which would override [hidden]. */
+.home .q-more[hidden],
+.home .q-end[hidden] { display: none; }
+
+/* ── 7. Footer ────────────────────────────────────────────────────── */
+.home .bottombar {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) minmax(0, 1.6fr) minmax(0, 0.9fr);
+  gap: clamp(22px, 3vw, 48px);
+}
+.home .brandfoot { color: var(--ink-faint); }
+.home .brandfoot b { color: var(--ink-dim); }
+.home .sync-line { color: var(--ink-faint); }
+
+/* ── 8. Quieter motion ────────────────────────────────────────────── */
+/* Keep the texture, lose the jitter: grain holds still, pulses slow to a
+   breath, the queue's "scroll" arrow stops bouncing. Nothing new added. */
+.home .atmos .grain { animation: none; }
+.home .vox-mic-dot { animation-duration: calc(4.8s / var(--motion, 1)); }
+.home .dispatch-pip { animation-duration: calc(4s / var(--motion, 1)); }
+.home .cta-pulse::before { animation-duration: calc(6s / var(--motion, 1)); opacity: 0.4; }
+.home .q-arr { animation: none; }
+.home .receive-pulse::before { animation-duration: calc(6s / var(--motion, 1)); }
+.home .sync-line .pip { animation-duration: calc(4s / var(--motion, 1)); }
+.home .lens-item.locked .lens-bar { animation-duration: calc(8s / var(--motion, 1)); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* No marquee at all — the feed becomes a still line you can scroll. */
+  .home .dispatch-track { animation: none !important; }
+  .home .dispatch-window { overflow-x: auto; scrollbar-width: none; }
+  .home .brand-seal { animation: none !important; }
+  .home .boot-cover { display: none; }
+}
+
+/* ── 9. Wide, stacked and phone layouts ───────────────────────────── */
+/* Show the destination notes only where there is comfortable room. */
+@media (max-width: 1679px) {
+  .home .sn-note { display: none; }
+}
+
+/* Stacked: navigation first, identity, Lens as a horizontal strip
+   between the two areas, then the panel. */
+@media (max-width: 1079px) {
+  .home .main {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(22px, 4vw, 34px);
+  }
+  .home .console-col { display: contents; }
+  .home .site-nav { order: -1; margin-bottom: 0; }
+  .home .lens-col {
+    position: static;
+    margin-top: 0;
+  }
+  /* Keep the lockup at its desktop scale; the identity stays left-weighted. */
+  .home .identity { max-width: 600px; }
+  .home .identity .brand { min-height: clamp(150px, 40cqi, 250px); }
+
+  .home .lens-rail {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .home .lens-rail-label { display: flex; margin: 0 8px 0 0; }
+  .home .lens-rail-hint { max-width: none; margin: 0 12px 0 0; text-align: left; }
+  .home .lens-item {
+    min-height: 44px;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    justify-content: flex-start;
+  }
+  .home .lens-item.on { border-color: color-mix(in srgb, var(--c) 55%, transparent); }
+  .home .lens-bar { height: 18px; }
+  .home .lens-item.on .lens-bar { height: 24px; }
+  .home .lens-item:hover .lens-bar,
+  .home .lens-item:focus-visible .lens-bar { height: 22px; }
+  /* Selected name sits inline; others appear below on hover/focus. */
+  .home .lens-meta,
+  .home .lens-item:hover .lens-meta,
+  .home .lens-item:focus-visible .lens-meta {
+    right: auto;
+    left: -1px;
+    top: calc(100% + 4px);
+    align-items: flex-start;
+    padding: 6px 10px;
+    background: var(--bg-elev);
+    border: 1px solid var(--line-strong);
+    transform: none;
+    z-index: 5;
+  }
+  .home .lens-item.on .lens-meta {
+    position: static;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    border: 0;
+    opacity: 1;
+    transform: none;
+  }
+
+  .home .bottombar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .home .topbar { grid-template-columns: minmax(0, 1fr); }
+  .home .topbar .right { display: none; }
+  .home .dispatch-bar { gap: 12px; }
+  .home .dispatch-label { padding-right: 12px; letter-spacing: 0.2em; }
+
+  /* Lockup stamp: the registry repeats in the ticker; keep one clean line. */
+  .home .brand-stamp { letter-spacing: 0.16em; }
+  .home .brand-stamp .dot,
+  .home .brand-stamp > span:last-child { display: none; }
+  .home .brand-hero { margin-left: clamp(24px, 9cqi, 40px); letter-spacing: 0.02em; }
+
+  /* Label + hint on one line, the four voices together on the next. */
+  .home .lens-rail-hint { flex: 1 1 calc(100% - 72px); }
+  .home .lens-item.on .lens-meta i { display: none; }
+
+  .home .sn-link {
+    padding: 12px 11px 11px;
+    font-size: 11.5px;
+    letter-spacing: 0.15em;
+  }
+  .home .sn-link::after { left: 11px; right: 11px; }
+  .home .sn-menu {
+    min-width: 0;
+    width: calc(100vw - 2 * var(--pad-x));
+    max-width: none;
+  }
+  /* The Explore item is second; anchor its menu to the nav's left edge. */
+  .home .sn-has-menu,
+  .home .sn-list > li.sn-has-menu { position: static; }
+  .home .site-nav { position: relative; }
+
+  .home .queue { padding: 18px 16px 18px; }
+  .home .queue-head { gap: 12px; }
+  .home .panel-switch { width: 100%; }
+  .home .ps-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+  }
+  .home .op-prose p { font-size: 17.5px; line-height: 1.7; }
+  .home .op-continue-link { width: 100%; }
+
+  /* Queue rows keep their content; the waveform yields first. */
+  .home .q-row { grid-template-columns: 30px minmax(0, 1fr) auto; gap: 12px; }
+  .home .q-row .q-wave { display: none; }
+  .home .q-num { padding-right: 8px; font-size: 12px; }
+  .home .q-title { font-size: 12.5px; letter-spacing: 0.14em; }
+
+  .home .bottombar { grid-template-columns: minmax(0, 1fr); }
+  .home .receive { margin-right: 0; }
+  .home .brandfoot { text-align: left; }
+}
+
+/* ── 10. Ship ambience button + mixer ─────────────────────────────── */
+.home .sn-list > li.sn-sound { margin-left: auto; }
+.home .sn-list > li.sn-sound::before { display: none; }
+.home .sn-sound-btn { padding-left: 12px; padding-right: 2px; }
+.home .sn-sound-btn::after { left: 8px; right: 0; }
+.home .snd-icon {
+  width: 20px; height: 20px;
+  align-self: center;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.home .snd-on { display: none; }
+.home .sn-sound-btn.is-live .snd-on { display: inline; }
+.home .sn-sound-btn.is-live .snd-off { display: none; }
+.home .sn-sound-btn.is-live { color: var(--signal); }
+.home .sn-sound-btn.is-live .snd-body { fill: color-mix(in srgb, var(--signal) 30%, transparent); }
+/* Visible label on hover / keyboard focus. */
+.home .sn-sound-label {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 71;
+  padding: 5px 9px;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  background: #0b0b0c;
+  border: 1px solid var(--line-strong);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.home .sn-sound-btn:hover .sn-sound-label,
+.home .sn-sound-btn:focus-visible .sn-sound-label { opacity: 1; }
+.home .sn-sound.is-open .sn-sound-label { opacity: 0; }
+
+.home .sn-mixer {
+  left: auto;
+  right: 0;
+  width: 360px;
+  min-width: 0;
+  max-width: calc(100vw - 2 * var(--pad-x));
+  max-height: calc(100svh - 120px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232, 230, 225, 0.26) transparent;
+  padding: 0 0 12px;
+  font-size: 11px;
+}
+.home .sn-mixer::before { left: auto; right: -1px; border-left: 0; border-right: 1px solid var(--signal); }
+.home .mx-head {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 6px 6px 16px;
+  background: #0b0b0c;
+  border-bottom: 1px solid var(--line);
+}
+.home .mx-title { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--signal); }
+.home .mx-close {
+  appearance: none; background: none; border: 0; cursor: pointer;
+  width: 36px; height: 36px;
+  font-size: 20px; line-height: 1; color: var(--ink-dim);
+}
+.home .mx-close:hover { color: var(--ink); }
+.home .mx-dev {
+  margin: 10px 16px 0; padding: 6px 8px;
+  border: 1px dashed #A79EFF; color: #C7C2FF;
+  font-size: 10.5px; line-height: 1.45;
+}
+.home .mx-power-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px 10px; }
+.home .mx-power,
+.home .mx-toggle {
+  appearance: none; cursor: pointer; flex: none;
+  display: inline-flex; align-items: center; gap: 9px;
+  min-height: 36px; padding: 8px 12px;
+  background: none;
+  border: 1px solid var(--line-strong);
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.home .mx-power:hover,
+.home .mx-toggle:hover:not(:disabled) { color: var(--ink); border-color: var(--ink-dim); }
+.home .mx-dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid currentColor; }
+.home .mx-power.is-on { color: var(--ink); border-color: var(--signal); }
+.home .mx-power.is-on .mx-dot { background: var(--signal); border-color: var(--signal); }
+.home .mx-check { width: 9px; height: 9px; border: 1px solid currentColor; }
+.home .mx-toggle.is-on { color: var(--ink); border-color: var(--signal); }
+.home .mx-toggle.is-on .mx-check { background: var(--signal); border-color: var(--signal); }
+.home .mx-toggle:disabled { cursor: not-allowed; opacity: 0.5; }
+
+.home .mx-master { flex: 1; display: grid; grid-template-columns: auto 1fr 26px; align-items: center; gap: 8px; }
+.home .mx-master label,
+.home .mx-field label,
+.home .mx-chars legend {
+  font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-dim);
+}
+.home .mx-field { display: grid; grid-template-columns: 86px 1fr; align-items: center; gap: 10px; padding: 2px 16px 10px; }
+.home .mx-voices .mx-field { padding: 4px 0 2px; }
+.home .mx-field select {
+  min-height: 34px; width: 100%;
+  padding: 6px 8px;
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--line-strong);
+}
+.home .mx-group,
+.home .mx-voices { padding: 8px 16px 6px; border-top: 1px solid var(--line); }
+/* Deeper sections fold: a labelled row with its Supporter tag and a short
+   state (Locked / Unlocked / On / Off) stays visible when closed. */
+.home .mx-more { border-top: 1px solid var(--line); }
+.home .mx-sum {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  min-height: 40px; padding: 4px 16px;
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink);
+}
+.home .mx-sum::-webkit-details-marker { display: none; }
+.home .mx-sum::before {
+  content: ""; flex: none; width: 6px; height: 6px;
+  border-right: 1px solid var(--ink-dim); border-bottom: 1px solid var(--ink-dim);
+  transform: rotate(-45deg); transition: transform 0.2s ease;
+  margin-right: 2px;
+}
+.home .mx-more[open] > .mx-sum::before { transform: rotate(45deg); }
+.home .mx-sum:hover { background: rgba(255, 255, 255, 0.02); }
+.home .mx-sum:focus-visible { outline: 1px solid var(--signal); outline-offset: -2px; }
+.home .mx-sum .mx-tag { margin-left: 0; }
+.home .mx-sum-state {
+  margin-left: auto;
+  font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-dim);
+}
+.home .mx-more-body { padding: 0 16px 8px; }
+.home .mx-more .mx-voices { border-top: 0; padding-top: 0; }
+.home .mx-group-head {
+  display: flex; align-items: center; gap: 8px;
+  margin: 4px 0 6px;
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink);
+}
+.home .mx-layer {
+  display: grid; grid-template-columns: 118px 1fr 40px;
+  align-items: center; gap: 10px;
+  min-height: 30px;
+}
+.home .mx-layer label { font-size: 11px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.home .mx-layer output,
+.home .mx-master output { font-size: 10px; color: var(--ink-dim); text-align: right; font-variant-numeric: tabular-nums; }
+.home .mx-layer.is-locked label { color: var(--ink-faint); }
+.home .mx-tag {
+  display: inline-block; margin-left: 6px; padding: 1px 4px;
+  font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--warm-dim); border: 1px solid var(--line-warm); vertical-align: 1px;
+}
+.home .mx-group-head .mx-tag { margin-left: 0; }
+.home .mx-note { margin: 4px 0 8px; font-size: 10.5px; line-height: 1.5; color: var(--ink-dim); }
+.home .mx-note a { color: var(--signal); text-decoration: underline; text-underline-offset: 3px; }
+.home .mx-foot { margin: 0; padding: 10px 16px 0; border-top: 1px solid var(--line); font-size: 10px; line-height: 1.5; color: var(--ink-faint); }
+
+/* Sliders: fine track, small flat thumb. */
+.home .mx-range { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; margin: 0; background: transparent; cursor: pointer; }
+.home .mx-range::-webkit-slider-runnable-track { height: 2px; background: var(--line-strong); }
+.home .mx-range::-moz-range-track { height: 2px; background: var(--line-strong); }
+.home .mx-range::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 16px; margin-top: -7px; background: var(--ink); border: 0; }
+.home .mx-range::-moz-range-thumb { width: 10px; height: 16px; background: var(--ink); border: 0; border-radius: 0; }
+.home .mx-range:focus-visible { outline: 1px solid var(--signal); outline-offset: 2px; }
+.home .mx-range:disabled { cursor: not-allowed; }
+.home .mx-range:disabled::-webkit-slider-thumb { background: var(--ink-faint); }
+.home .mx-range:disabled::-moz-range-thumb { background: var(--ink-faint); }
+
+.home .mx-voices.is-locked .mx-chars,
+.home .mx-voices.is-locked .mx-layer,
+.home .mx-voices.is-locked .mx-field,
+.home .mx-voices.is-locked [data-mx-freq-note] { opacity: 0.45; }
+.home .mx-chars { margin: 10px 0 6px; padding: 0; border: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; min-width: 0; }
+.home .mx-chars legend { padding: 0; margin-bottom: 6px; }
+.home .mx-char {
+  position: relative;
+  display: grid; grid-template-columns: 12px minmax(0, 1fr); column-gap: 8px; align-items: center;
+  min-height: 42px; padding: 6px 8px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.home .mx-char input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: inherit; }
+.home .mx-char-box { width: 10px; height: 10px; border: 1px solid var(--c); grid-row: 1 / span 2; }
+.home .mx-char-name { font-size: 11.5px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.home .mx-char-meta { grid-column: 2; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dim); }
+.home .mx-char:has(input:checked) { border-color: color-mix(in srgb, var(--c) 55%, transparent); }
+.home .mx-char:has(input:checked) .mx-char-box { background: var(--c); }
+.home .mx-char:has(input:focus-visible) { outline: 1px solid var(--c); outline-offset: 1px; }
+.home .mx-char:has(input:disabled) { cursor: not-allowed; }
+.home .mx-heard { margin-top: 8px; padding-left: 8px; border-left: 2px solid var(--signal); font-size: 11px; color: var(--ink); }
+.home .mx-heard-k { font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim); }
+.home .mx-heard summary { cursor: pointer; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); margin-top: 4px; }
+.home .mx-heard p { margin: 6px 0 0; font-family: var(--serif); font-size: 14px; line-height: 1.55; color: var(--ink); }
+
+/* ── 11. Lens review alternatives: rail · seam · type ────────────── */
+/* Shared: no boxes. Generous invisible hit areas (≥44px tall), quiet
+   visible marks, a focus ring in the character's colour, and short
+   colour/opacity transitions only. */
+.home .lr-item,
+.home .lsm-item,
+.home .lt-item {
+  appearance: none; background: none; border: 0; margin: 0;
+  cursor: pointer;
+  font-family: var(--mono);
+  color: var(--ink-dim);
+  -webkit-tap-highlight-color: transparent;
+}
+.home .lr-item:focus-visible,
+.home .lsm-item:focus-visible,
+.home .lt-item:focus-visible { outline: 1px solid var(--c); outline-offset: 2px; }
+
+/* Seam and type move the Lens out of the middle column. */
+.home[data-lens-variant="seam"] .lens-col,
+.home[data-lens-variant="type"] .lens-col { display: none; }
+.home[data-lens-variant="seam"] .main,
+.home[data-lens-variant="type"] .main {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  column-gap: clamp(28px, 3vw, 56px);
+}
+
+/* ─ 1 · RAIL: one hairline between the halves; colour ticks cross it.
+   Names surface as the pointer approaches the rail; the selected name
+   and role are always shown. Touch screens show every name. */
+.home[data-lens-variant="rail"] { --lens-col: 176px; }
+.home[data-lens-variant="rail"] .lens-dock { display: none; }
+.home .lr { display: flex; flex-direction: column; align-items: stretch; }
+.home .lr-head { display: grid; justify-items: end; gap: 4px; margin: 0 0 12px; }
+.home .lr-k {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink);
+}
+.home .lr-k::after { content: ""; width: 14px; height: 1px; background: var(--sel); }
+.home .lr-invite { font-size: 11.5px; font-style: italic; color: var(--warm-dim); white-space: nowrap; }
+.home .lr-line { position: relative; display: grid; }
+.home .lr-line::before {
+  content: ""; position: absolute;
+  right: 4px; top: 12px; bottom: 12px; width: 1px;
+  background: var(--line-strong);
+}
+.home .lr-item {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1fr) 18px 9px; align-items: center; column-gap: 10px;
+  min-height: 48px; padding: 4px 0 4px 6px;
+  text-align: right;
+}
+.home .lr-text { display: grid; justify-items: end; line-height: 1.25; opacity: 0; transition: opacity 0.15s ease; }
+.home .lr-name { font-size: 12.5px; letter-spacing: 0.03em; color: var(--ink); }
+.home .lr-role { font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dim); opacity: 0; transition: opacity 0.15s ease; }
+.home .lr-ini { font-family: var(--display); font-size: 14px; text-align: center; color: #9a978f; transition: color 0.15s ease; }
+.home .lr-mark {
+  justify-self: center;
+  width: 9px; height: 1px;
+  background: color-mix(in srgb, var(--c) 75%, transparent);
+  transition: background 0.15s ease, height 0.15s ease, width 0.15s ease;
+}
+/* Approach: the whole rail lifts its names a little … */
+.home .lr:hover .lr-text { opacity: 0.5; }
+/* … the one under the pointer or focus comes fully forward. */
+.home .lr-item:hover .lr-text,
+.home .lr-item:focus-visible .lr-text { opacity: 1; }
+.home .lr-item:hover .lr-role,
+.home .lr-item:focus-visible .lr-role { opacity: 1; }
+.home .lr-item:hover .lr-ini,
+.home .lr-item:focus-visible .lr-ini { color: var(--ink); }
+.home .lr-item:hover .lr-mark,
+.home .lr-item:focus-visible .lr-mark { height: 2px; background: var(--c); }
+/* Selected: name + role always, coloured initial, a lit bar on the rail. */
+.home .lr-item.on .lr-text,
+.home .lr-item.on .lr-role { opacity: 1; }
+.home .lr-item.on .lr-name { color: var(--c); }
+.home .lr-item.on .lr-ini { color: var(--c); }
+.home .lr-item.on .lr-mark { width: 3px; height: 30px; background: var(--c); box-shadow: 0 0 8px color-mix(in srgb, var(--c) 55%, transparent); }
+@media (hover: none) {
+  .home .lr-text { opacity: 0.72; }
+}
+
+/* ─ 2 · SEAM: a full-width rule under the top bar — the console's own
+   edge. Names sit on it; the selected one lights its stretch of the
+   rule, and its role hangs just beneath. */
+.home[data-lens-variant="seam"] .screen { grid-template-rows: auto auto 1fr auto; }
+.home .lsm {
+  position: relative;
+  width: 100%; max-width: var(--shell-max); margin: calc(-0.35 * var(--gap)) auto 14px;
+  display: flex; flex-wrap: wrap; align-items: flex-end;
+  column-gap: clamp(16px, 2.2vw, 40px);
+}
+.home .lsm::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--line-strong);
+}
+.home .lsm-k { display: flex; align-items: baseline; gap: 10px; padding: 0 0 11px; margin-right: clamp(4px, 1vw, 18px); }
+.home .lsm-k > span:first-child { font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink); }
+.home .lsm-invite { font-size: 11.5px; font-style: italic; color: var(--warm-dim); }
+.home .lsm-item {
+  position: relative;
+  display: inline-flex; align-items: baseline;
+  min-height: 44px; padding: 14px 4px 11px 10px;
+}
+.home .lsm-tick {
+  position: absolute; left: 0; bottom: 0;
+  width: 1px; height: 9px;
+  background: color-mix(in srgb, var(--c) 80%, transparent);
+  transition: height 0.15s ease;
+}
+.home .lsm-name { font-size: 12.5px; letter-spacing: 0.05em; color: #a4a19a; white-space: nowrap; transition: color 0.15s ease; }
+.home .lsm-role {
+  position: absolute; left: 10px; top: calc(100% + 5px);
+  font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap;
+  color: var(--ink-dim);
+  opacity: 0; transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.home .lsm-item::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px;
+  background: var(--c);
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.home .lsm-item:hover .lsm-name,
+.home .lsm-item:focus-visible .lsm-name { color: var(--ink); }
+.home .lsm-item:hover .lsm-tick,
+.home .lsm-item:focus-visible .lsm-tick { height: 14px; }
+.home .lsm-item:hover .lsm-role,
+.home .lsm-item:focus-visible .lsm-role { opacity: 1; }
+.home .lsm-item.on .lsm-name { color: var(--c); }
+.home .lsm-item.on .lsm-role { opacity: 1; color: color-mix(in srgb, var(--c) 70%, var(--ink-dim)); }
+.home .lsm-item.on::after { opacity: 1; }
+.home .lsm-item.on .lsm-tick { opacity: 0; }
+/* When another name is hovered, the selected role steps back so only
+   one role shows at a time. */
+.home .lsm:has(.lsm-item:not(.on):hover) .lsm-item.on .lsm-role { opacity: 0; }
+
+/* ─ 3 · TYPE: an open typographic block under the quote, part of the
+   identity's own markings. Fixed 2×2 positions; the selected name is
+   bold, coloured and led by a longer rule; roles reserve their line. */
+.home .lt {
+  display: grid; grid-template-columns: auto auto; justify-content: start; align-items: start;
+  column-gap: clamp(18px, 5cqi, 34px);
+  margin: calc(-1 * clamp(8px, 2cqi, 14px)) 0 clamp(22px, 4.6cqi, 32px) clamp(40px, 16cqi, 104px);
+}
+.home .lt-k { display: grid; gap: 4px; padding-top: 10px; }
+.home .lt-k > span:first-child {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink);
+}
+.home .lt-k > span:first-child::after { content: ""; width: 12px; height: 1px; background: var(--sel); }
+.home .lt-invite { width: min-content; font-size: 11.5px; line-height: 1.35; font-style: italic; color: var(--warm-dim); }
+.home .lt-grid { display: grid; grid-template-columns: repeat(2, max-content); column-gap: clamp(18px, 5cqi, 36px); }
+.home .lt-item {
+  display: grid; grid-template-columns: 16px auto; align-items: center; column-gap: 8px;
+  min-height: 48px; padding: 7px 4px 5px 0;
+  text-align: left;
+}
+.home .lt-rule {
+  justify-self: start; width: 8px; height: 1px;
+  background: color-mix(in srgb, var(--c) 75%, transparent);
+  transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
+}
+.home .lt-name { font-size: 13px; letter-spacing: 0.04em; color: #a4a19a; white-space: nowrap; transition: color 0.15s ease; }
+.home .lt-role {
+  grid-column: 2;
+  font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-dim);
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.home .lt-item:hover .lt-name,
+.home .lt-item:focus-visible .lt-name { color: var(--ink); }
+.home .lt-item:hover .lt-role,
+.home .lt-item:focus-visible .lt-role { opacity: 1; }
+.home .lt-item:hover .lt-rule,
+.home .lt-item:focus-visible .lt-rule { width: 12px; background: var(--c); }
+.home .lt-item.on .lt-name { color: var(--c); font-weight: 700; }
+.home .lt-item.on .lt-role { opacity: 1; }
+.home .lt-item.on .lt-rule { width: 16px; height: 2px; background: var(--c); }
+
+/* Stacked layouts */
+@media (max-width: 1079px) {
+  .home[data-lens-variant="seam"] .main,
+  .home[data-lens-variant="type"] .main { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .home .lsm-k { flex-basis: 100%; padding-bottom: 0; padding-top: 4px; }
+  .home .lsm { margin-bottom: 18px; }
+  .home .lsm-item { padding-left: 9px; padding-right: 2px; }
+}
+@media (max-width: 420px) {
+  .home .lt { grid-template-columns: 1fr; margin-left: clamp(24px, 9cqi, 40px); }
+  .home .lt-k { display: flex; align-items: baseline; gap: 10px; padding-top: 0; }
+  .home .lt-invite { width: auto; }
+  .home .lr--h .lr-head { flex-basis: 100%; padding-top: 0; display: flex; gap: 10px; align-items: baseline; }
+  .home .lsm { column-gap: 12px; }
+  .home .lsm-name { font-size: 12px; letter-spacing: 0.02em; }
+}
+
+/* Rail · horizontal form (.lr--h). A hairline with four stations; names
+   always shown. Used by "rail-identity" and "rail-panel" at every width,
+   and by "rail" once the layout stacks (lens-variants.js toggles it). */
+.home .lr.lr--h { flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 10px clamp(18px, 4vw, 40px); }
+.home .lr--h .lr-head { justify-items: start; margin: 0; padding-top: 14px; }
+.home .lr--h .lr-line { flex: 1 1 320px; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 10px; container-type: inline-size; }
+.home .lr--h .lr-line::before { left: 0; right: 0; top: 8px; bottom: auto; width: auto; height: 1px; }
+.home .lr--h .lr-item {
+  grid-template-columns: auto minmax(0, 1fr); grid-template-rows: 17px auto;
+  grid-template-areas: "mark mark" "ini text";
+  align-items: start; column-gap: 8px;
+  padding: 0 4px 6px 0; text-align: left;
+}
+.home .lr--h .lr-mark { grid-area: mark; justify-self: start; align-self: start; margin-top: 4px; width: 1px; height: 9px; }
+.home .lr--h .lr-item:hover .lr-mark,
+.home .lr--h .lr-item:focus-visible .lr-mark { width: 2px; height: 9px; }
+.home .lr--h .lr-item.on .lr-mark { width: 100%; height: 3px; margin-top: 7px; box-shadow: none; }
+.home .lr--h .lr-ini { grid-area: ini; padding-top: 2px; }
+.home .lr--h .lr-text { grid-area: text; justify-items: start; opacity: 0.72; }
+.home .lr.lr--h:hover .lr-text { opacity: 0.72; }
+.home .lr--h .lr-item:hover .lr-text,
+.home .lr--h .lr-item:focus-visible .lr-text,
+.home .lr--h .lr-item.on .lr-text { opacity: 1; }
+/* Narrow stations (phones, the panel header): the initials step aside so
+   each full name keeps one line. Keyed to the rail's own width. */
+@container (max-width: 400px) {
+  .home .lr--h .lr-item { grid-template-columns: minmax(0, 1fr); grid-template-areas: "mark" "text"; }
+  .home .lr--h .lr-ini { display: none; }
+  .home .lr--h .lr-name { font-size: 12px; letter-spacing: 0; white-space: nowrap; }
+}
+
+/* ── 12. Bounded panel: stacked, phone and short windows ──────────── */
+@media (max-width: 1079px) {
+  .home .queue { --panel-h: clamp(440px, 84svh, 860px); }
+}
+@media (max-width: 720px) {
+  .home .queue { --panel-h: clamp(420px, 82svh, 740px); --pp-x: 16px; }
+  .home .sn-mixer { left: 0; right: auto; width: calc(100vw - 2 * var(--pad-x)); max-height: calc(100svh - 130px); }
+  .home .sn-sound-label { display: none; }
+}
+@media (max-width: 480px) {
+  .home .sn-list > li + li::before { display: none; }
+  .home .sn-link { padding-left: 8px; padding-right: 8px; letter-spacing: 0.12em; }
+  .home .sn-link::after { left: 8px; right: 8px; }
+  .home .mx-layer { grid-template-columns: 100px 1fr 34px; }
+  .home .mx-chars { grid-template-columns: 1fr; }
+}
+/* Short windows: compact the panel head so the reading area keeps room. */
+@media (max-height: 620px) {
+  .home .qh-menu { display: none; }
+  .home .panel-switch { margin-top: 10px; }
+  .home .panel-view { margin-top: 10px; }
+}
+.home .mx-sub { margin: 8px 0 2px; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-dim); }
+.home .mx-sub .mx-tag { margin-left: 4px; }
+.home .ls-controls { margin-left: auto; }
+/* Seam adds a row above the main area; keep the bounded panel in view. */
+.home[data-lens-variant="seam"] .queue { --panel-h: clamp(460px, calc(100svh - 250px), 1000px); }
+@media (max-width: 1079px) {
+  .home[data-lens-variant="seam"] .queue { --panel-h: clamp(440px, 84svh, 860px); }
+}
+/* Keep the header tagline on one line; only a genuinely narrow panel
+   drops it rather than wrapping it. */
+.home .qh-menu .tag-stack .row span { white-space: nowrap; }
+@container (max-width: 470px) {
+  .home .qh-menu .tag-stack { display: none; }
+}
+
+/* ── 13. Lens placement comparisons ───────────────────────────────── */
+/* rail-identity · rail-panel: the same open rail (horizontal form), placed
+   in the identity under the lockup, or in the panel's fixed header.
+   classic: the original vertical Lens with "Choose perspective" on one
+   unbroken line. */
+.home[data-lens-variant="rail-identity"] .lens-col,
+.home[data-lens-variant="rail-panel"] .lens-col { display: none; }
+.home[data-lens-variant="rail-identity"] .main,
+.home[data-lens-variant="rail-panel"] .main {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  column-gap: clamp(28px, 3vw, 56px);
+}
+@media (max-width: 1079px) {
+  .home[data-lens-variant="rail-identity"] .main,
+  .home[data-lens-variant="rail-panel"] .main { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+/* 2 · In the Transmission panel's fixed header, right-aligned opposite the
+   title. The tagline + seal step aside to give it room; the label says the
+   choice applies to the whole site. Stays out of the scroll region. */
+.home[data-lens-variant="rail-panel"] .qh-menu { display: none; }
+.home[data-lens-variant="rail-panel"] .queue-head { align-items: flex-start; flex-wrap: wrap; row-gap: 12px; }
+.home .lr--panel { margin-left: auto; width: min(100%, 380px); }
+.home .lr--panel .lr-head { flex-basis: 100%; padding-top: 0; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+@media (max-width: 720px) {
+  .home .lr--panel { margin-left: 0; width: 100%; }
+}
+
+/* 3 · Original vertical Lens, label on one line. The hint keeps its size
+   and right edge; any extra width spills left into the open gap beside
+   the column (never over either panel). */
+.home[data-lens-variant="classic"] .lens-rail-hint {
+  max-width: none;
+  white-space: nowrap;
+  font-size: 11.5px;
+}
+/* Under-lockup placement: the lockup's reserved height (sized for the
+   seal artwork's transparent margin) shrinks to the visible seal, so the
+   rail sits close beneath it without a large new gap. */
+.home[data-lens-variant="rail-identity"] .identity .brand {
+  min-height: clamp(140px, 31cqi, 200px);
+  margin-bottom: clamp(10px, 2cqi, 16px);
+}
+/* Horizontal rail: reserve two role lines (a long role can
+   wrap) so switching characters never shifts what sits below. */
+.home .lr--h .lr-item { min-height: 66px; }
+/* Very narrow rails (phones): names may wrap rather than run into the next
+   station; reserve that height so selection never shifts the layout. */
+@container (max-width: 300px) {
+  .home .lr--h .lr-name { white-space: normal; overflow-wrap: anywhere; }
+  .home .lr--h .lr-item { min-height: 84px; }
+}
+/* Panel placement on phones: its header carries the rail, so give the
+   panel more height to keep a comfortable reading area. */
+@media (max-width: 720px) {
+  .home[data-lens-variant="rail-panel"] .queue { --panel-h: clamp(480px, 90svh, 800px); }
+}
+
+/* 1 · Under the lockup, matched to the stamp above it. The hairline
+   starts where "Wild Huntress · Manual Interface" starts and runs to the
+   same right edge as the stamp's underline; LENS sits just left of it,
+   with "Choose perspective" above LENS. */
+.home .lr.lr--identity {
+  display: grid;
+  grid-template-columns: clamp(132px, 40cqi, 276px) minmax(0, 1fr);
+  grid-template-areas: "invite ." "k line";
+  align-items: start;
+  column-gap: 0; row-gap: 4px;
+  margin: 0 0 clamp(18px, 3.6cqi, 26px);
+  max-width: none;
+}
+/* LENS sits just left of the hairline, level with the highlight bar;
+   "Choose perspective" sits above LENS, so it takes no width from the
+   row. The hairline keeps its length and its right edge. */
+.home .lr--identity .lr-head { display: contents; }
+.home .lr--identity .lr-k {
+  grid-area: k; justify-self: end; align-self: start;
+  margin-top: -1px; padding-right: 12px;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.28em; gap: 10px;
+}
+.home .lr--identity .lr-k::after { width: 18px; height: 2px; }
+.home .lr--identity .lr-invite {
+  grid-area: invite; justify-self: end; padding-right: 12px;
+  font-size: 11.5px; line-height: 1.2;
+}
+.home .lr--identity .lr-line { grid-area: line; flex: none; }
+/* Slightly heavier type and lines, near the stamp's MANUAL INTERFACE. */
+.home .lr--identity .lr-name { font-weight: 700; letter-spacing: 0.02em; }
+.home .lr--identity .lr-role { font-weight: 700; }
+.home .lr--identity .lr-text { opacity: 0.85; }
+.home .lr--identity .lr-item.on .lr-text { opacity: 1; }
+.home .lr--identity .lr-line::before { height: 2px; top: 7px; }
+.home .lr--identity .lr-mark { width: 2px; height: 10px; margin-top: 3px; }
+/* Hover / focus: the line answers first — the tick runs out along the
+   hairline in the character's colour, a lighter preview of selection. */
+.home .lr--identity .lr-mark {
+  transition: background 0.2s ease, height 0.2s ease, margin 0.2s ease,
+    width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease;
+}
+.home .lr--identity .lr-item:not(.on):hover .lr-mark,
+.home .lr--identity .lr-item:not(.on):focus-visible .lr-mark {
+  width: 100%; height: 2px; margin-top: 7px; opacity: 0.55; background: var(--c);
+}
+.home .lr--identity .lr-item:hover .lr-ini,
+.home .lr--identity .lr-item:focus-visible .lr-ini { color: var(--c); }
+/* Keyboard focus: a clear ring in the character's colour. */
+.home .lr--identity .lr-item:focus-visible { outline: 2px solid var(--c); outline-offset: 4px; }
+/* Selected: the colour lies on the hairline at the hairline's own
+   thickness, with a soft glow, instead of a heavier bar. */
+.home .lr--identity .lr-item.on .lr-mark {
+  width: 100%; height: 2px; margin-top: 7px;
+  box-shadow: 0 0 6px color-mix(in srgb, var(--c) 50%, transparent);
+}
+
+/* Behind the line, a faint wash of the character's colour. It sweeps in
+   from the hairline's start, its glow drifts after the pointer (--mx, set
+   in lens-variants.js and eased here) and the gradient slowly breathes;
+   leaving sweeps it back out. Kept low so it never reads as a button. */
+@property --mx { syntax: "<percentage>"; inherits: true; initial-value: 20%; }
+.home .lr--identity .lr-item {
+  isolation: isolate;
+  transition: --mx 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.home .lr--identity .lr-item::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  left: -6px; right: -2px; top: 13px; height: 46px;
+  background:
+    radial-gradient(80% 130% at var(--mx) 0%, color-mix(in srgb, var(--c) 20%, transparent), transparent 75%),
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--c) 10%, transparent),
+      color-mix(in srgb, var(--c) 2%, transparent) 50%,
+      color-mix(in srgb, var(--c) 9%, transparent)) 0 0 / 200% 100%;
+  -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent);
+  mask-image: linear-gradient(180deg, #000 30%, transparent);
+  clip-path: inset(0 100% 0 0);
+  opacity: 0;
+  transition: clip-path 0.55s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.4s ease;
+  animation: lrBreathe 5s ease-in-out infinite alternate paused;
+}
+.home .lr--identity .lr-item:hover::before,
+.home .lr--identity .lr-item:focus-visible::before {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  animation-play-state: running;
+}
+.home .lr--identity .lr-item:hover .lr-name,
+.home .lr--identity .lr-item:focus-visible .lr-name { color: var(--ink); }
+.home .lr--identity .lr-item.on:hover .lr-name,
+.home .lr--identity .lr-item.on:focus-visible .lr-name { color: var(--c); }
+@keyframes lrBreathe {
+  from { background-position: 0 0, 0% 0; }
+  to   { background-position: 0 0, 100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home .lr--identity .lr-item { transition: none; }
+  .home .lr--identity .lr-item::before { clip-path: none; transition: opacity 0.2s ease; animation: none; }
+}
+
+/* Narrow identity (phones): the prompt above LENS, hairline full width. */
+@container (max-width: 519px) {
+  .home .lr.lr--identity {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "invite" "k" "line";
+    row-gap: 6px;
+  }
+  .home .lr--identity .lr-k,
+  .home .lr--identity .lr-invite { justify-self: start; margin-top: 0; padding-right: 0; }
+  .home .lr--identity .lr-line { width: 100%; margin-top: 4px; }
+}
+
+/* 2 · In the site navigation, between Support and the sound icon. The
+   nav's own bottom rule is the rail's hairline: each name carries a
+   colour tick, the selected one lights its stretch of that rule, and
+   its role hangs just beneath. Mixed-case names and the colour marks set
+   it apart from the uppercase destination links. */
+.home[data-lens-variant="rail-nav"] .lens-col { display: none; }
+.home[data-lens-variant="rail-nav"] .main {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  column-gap: clamp(28px, 3vw, 56px);
+}
+@media (max-width: 1079px) {
+  .home[data-lens-variant="rail-nav"] .main { grid-template-columns: minmax(0, 1fr); }
+}
+.home[data-lens-variant="rail-nav"] .site-nav { container-type: inline-size; margin-bottom: 18px; }
+.home .sn-list > li.sn-lens { margin-left: auto; }
+.home .sn-list > li.sn-lens::before { display: none; }
+.home[data-lens-variant="rail-nav"] .sn-list > li.sn-sound { margin-left: 0; }
+.home .lnv { position: relative; display: flex; align-items: stretch; padding-left: 10px; }
+/* A little less air between destination links so the Lens fits inline. */
+.home[data-lens-variant="rail-nav"] .sn-link { padding-left: clamp(8px, 0.8vw, 20px); padding-right: clamp(8px, 0.8vw, 20px); }
+.home[data-lens-variant="rail-nav"] .sn-link::after { left: clamp(8px, 0.8vw, 20px); right: clamp(8px, 0.8vw, 20px); }
+.home[data-lens-variant="rail-nav"] .sn-list > li:first-child .sn-link { padding-left: 0; }
+.home[data-lens-variant="rail-nav"] .sn-list > li:first-child .sn-link::after { left: 0; }
+.home .lnv::before {
+  content: ""; position: absolute; left: 0; top: 50%; width: 1px; height: 14px;
+  transform: translateY(-50%); background: var(--line-strong);
+}
+.home .lnv-k {
+  align-self: center; margin-right: 2px;
+  font-size: 9.5px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-dim);
+}
+.home .lnv-item {
+  appearance: none; background: none; border: 0; margin: 0; cursor: pointer;
+  position: relative;
+  display: inline-flex; align-items: center; gap: 5px;
+  min-height: 44px; padding: 13px 5px 12px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em; text-transform: none;
+  color: #a4a19a;
+  -webkit-tap-highlight-color: transparent;
+}
+.home .lnv-item:focus-visible { outline: 1px solid var(--c); outline-offset: -2px; }
+.home .lnv-tick { width: 1px; height: 9px; background: color-mix(in srgb, var(--c) 80%, transparent); transition: height 0.15s ease; }
+.home .lnv-name { white-space: nowrap; transition: color 0.15s ease; }
+.home .lnv-item::after {
+  content: ""; position: absolute; left: 5px; right: 5px; bottom: -1px; height: 3px;
+  background: var(--c); opacity: 0; transition: opacity 0.15s ease;
+}
+.home .lnv-role {
+  position: absolute; left: 5px; top: calc(100% + 4px);
+  font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+  color: var(--ink-dim); opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
+}
+.home .lnv-item:hover,
+.home .lnv-item:focus-visible { color: var(--ink); }
+.home .lnv-item:hover .lnv-tick,
+.home .lnv-item:focus-visible .lnv-tick { height: 14px; }
+.home .lnv-item:hover .lnv-role,
+.home .lnv-item:focus-visible .lnv-role { opacity: 1; }
+.home .lnv-item.on { color: var(--c); }
+.home .lnv-item.on::after { opacity: 1; }
+.home .lnv-item.on .lnv-tick { opacity: 0; }
+.home .lnv-item.on .lnv-role { opacity: 1; color: color-mix(in srgb, var(--c) 70%, var(--ink-dim)); }
+.home .lnv:has(.lnv-item:not(.on):hover) .lnv-item.on .lnv-role { opacity: 0; }
+/* Not enough width beside the links: the Lens takes its own row of the
+   nav, still sitting on the nav's bottom rule; the sound icon stays at
+   the end of the first row. */
+@container (max-width: 700px) {
+  .home .sn-list > li.sn-sound { order: 2; margin-left: auto; }
+  .home .sn-list > li.sn-lens { order: 3; flex-basis: 100%; margin-left: 0; border-top: 1px solid var(--line); }
+  .home .lnv { padding-left: 0; flex-wrap: wrap; }
+  .home .lnv::before { display: none; }
+  .home .lnv-k { margin-right: 4px; }
+  .home .lnv-item:first-of-type { padding-left: 6px; }
+}
+
+/* ── 14. Fit the window (two-column desktop) ──────────────────────
+   home.js (fitToWindow) sizes the panel so header, both halves and the
+   footer fit the window. To make that possible on an ordinary 1080p
+   screen (~950px of browser window), the footer is tightened here —
+   same content, fewer rows — and on shorter windows the left column's
+   spacing closes up a little. */
+@media (min-width: 1080px) {
+  .home .bottombar { padding-top: 16px; align-items: start; }
+  .home .bottombar .col h4 { margin-bottom: 8px; }
+  /* Ship status: four readings in two rows. */
+  .home .bottombar > .col:first-child {
+    display: grid; grid-template-columns: repeat(2, max-content); column-gap: 22px;
+  }
+  .home .bottombar > .col:first-child h4 { grid-column: 1 / -1; }
+  /* Care protocol: two lines instead of four. */
+  .home .bottombar .care p { line-height: 1.6; }
+  .home .bottombar .care p br:nth-of-type(odd) { display: none; }
+  /* Receive the Signal: heading and copy on the left, the field beside. */
+  .home .receive {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 260px);
+    grid-template-areas: "eyebrow form" "title form" "copy form" "fine fine";
+    column-gap: 18px; align-items: center;
+    margin-top: -4px; padding: 12px 18px 10px;
+  }
+  .home .receive-eyebrow { grid-area: eyebrow; margin-bottom: 2px; }
+  .home .receive h4 { grid-area: title; margin: 0 0 2px; }
+  .home .receive p { grid-area: copy; margin: 0; }
+  .home .receive .field,
+  .home .receive .ack { grid-area: form; }
+  .home .receive-fine { grid-area: fine; margin-top: 6px; }
+  .home .brandfoot { line-height: 1.55; }
+  .home .screen { padding-bottom: 20px; }
+}
+@media (min-width: 1080px) and (max-height: 1000px) {
+  .home .brand-hero { margin-bottom: 16px; }
+  .home .lr.lr--identity { margin-bottom: 14px; }
+  /* Desktop roles are one word, so the stations need less reserved height. */
+  .home .lr--identity .lr-item { min-height: 50px; }
+  .home .listening { margin-top: 12px; padding-top: 14px; padding-bottom: 10px; }
+}
+/* Ship time line: a quiet separator between the two readings. */
+.home .sync-line .sync-sep { color: var(--ink-faint); }
+
+/* Laptop-height windows (two-column, ≤860px tall): tighter still before
+   home.js scales the page. Same content; the Receive card drops its
+   "Open channel" eyebrow and gives the field more room. */
+@media (min-width: 1080px) and (max-height: 860px) {
+  .home .bottombar {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr) minmax(0, 1.8fr) minmax(0, 0.6fr);
+    padding-top: 12px;
+  }
+  .home .receive { grid-template-areas: "title form" "copy form" "fine fine"; padding: 10px 16px 8px; }
+  .home .receive-eyebrow { display: none; }
+  .home .brandfoot { line-height: 1.45; }
+  .home .brand-hero { margin-bottom: 12px; line-height: 1.6; }
+  .home .lr.lr--identity { margin-bottom: 10px; }
+  .home .listening { padding: 12px 20px 8px; }
+  .home .ls-head { margin-bottom: 8px; }
+}
+
+/* Ship time line (SHIP TIME · SIGNAL DRIFT): inside the footer, right-
+   aligned just above its top rule, at every width — it never competes
+   with the footer's columns. */
+.home .bottombar { position: relative; }
+.home .bottombar > .sync-line {
+  position: absolute; left: auto; right: 0; bottom: calc(100% + 8px);
+  white-space: nowrap;
+}

@@ -1,0 +1,68 @@
+{
+  "kind": "memory-listing",
+  "view": "iri-six",
+  "surface": "listen-section",
+  "slot": "command",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 4,
+  "lines": [
+    {
+      "id": "lst-iri-six-10",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 61,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Iri-Six · Skiff Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "I can ride the well."
+    },
+    {
+      "id": "lst-iri-six-16",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 55,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Iri-Six · Bridge Rail",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Both hands."
+    },
+    {
+      "id": "lst-iri-six-21",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 50,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Iri-Six · Skiff Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Less drag. More room."
+    },
+    {
+      "id": "lst-iri-six-39",
+      "view": "iri-six",
+      "behavior": "Current",
+      "weight": 32,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "Iri-Six · Bridge Rail",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Forward. Then argue."
+    }
+  ],
+  "generated_at": 1793062847752
+}

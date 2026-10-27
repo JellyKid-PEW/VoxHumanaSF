@@ -1,0 +1,55 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "command",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 3,
+  "lines": [
+    {
+      "id": "lst-bob-07",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 64,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "B.O.B. · Helm Subroutine",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Manual mode persists. Ship irritation measurable."
+    },
+    {
+      "id": "lst-bob-19",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 52,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "B.O.B. · Bridge Lights",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Bridge lights trimmed. Drama level remains externally generated."
+    },
+    {
+      "id": "lst-bob-22",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 49,
+      "surface": "listen-section",
+      "slot": "command",
+      "context_key": "B.O.B. · Pilot Cradle",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Captain ignored advisory. Advisory remains emotionally available."
+    }
+  ],
+  "generated_at": 1793062847764
+}

@@ -1,0 +1,55 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "threshold",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 3,
+  "lines": [
+    {
+      "id": "lst-bob-12",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 59,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "B.O.B. · Docking Collar",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Dock seal cooperative. I am choosing optimism."
+    },
+    {
+      "id": "lst-bob-27",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 44,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "B.O.B. · Medbay Door",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Crew status: upright. This is not the same as fine."
+    },
+    {
+      "id": "lst-bob-36",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 35,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "B.O.B. · Docking Collar",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Docking request accepted under suspiciously casual terms."
+    }
+  ],
+  "generated_at": 1793062847765
+}

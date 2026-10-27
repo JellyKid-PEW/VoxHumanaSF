@@ -1,0 +1,42 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "ritual",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 2,
+  "lines": [
+    {
+      "id": "lst-bob-06",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 65,
+      "surface": "listen-section",
+      "slot": "ritual",
+      "context_key": "B.O.B. · Galley Feed",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Kettle cycled twice. No one claimed responsibility."
+    },
+    {
+      "id": "lst-bob-24",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 47,
+      "surface": "listen-section",
+      "slot": "ritual",
+      "context_key": "B.O.B. · Tea Rack",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Galley temperature stable. Tea morale inconclusive."
+    }
+  ],
+  "generated_at": 1793062847767
+}

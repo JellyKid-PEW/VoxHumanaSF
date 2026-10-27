@@ -1,0 +1,81 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "threshold",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 5,
+  "lines": [
+    {
+      "id": "lst-q-vox-19",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 52,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Q. Vox · Docking Collar",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "If it wants ceremony, disappoint it."
+    },
+    {
+      "id": "lst-q-vox-20",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 51,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Q. Vox · Airlock",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "I don’t trust friendly docks."
+    },
+    {
+      "id": "lst-q-vox-22",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 49,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Q. Vox · Medbay Door",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Nothing heroic. Just useful."
+    },
+    {
+      "id": "lst-q-vox-34",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 37,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Q. Vox · Dockside Approach",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "I don’t need clean. I need through."
+    },
+    {
+      "id": "lst-q-vox-37",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 34,
+      "surface": "listen-section",
+      "slot": "threshold",
+      "context_key": "Q. Vox · Airlock",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "We leave before the station gets sentimental."
+    }
+  ],
+  "generated_at": 1793062847740
+}

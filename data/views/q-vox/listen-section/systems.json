@@ -1,0 +1,94 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "systems",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 6,
+  "lines": [
+    {
+      "id": "lst-q-vox-03",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 68,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "Q. Vox · Navigation Well",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Plot me the cleanest filthy lane."
+    },
+    {
+      "id": "lst-q-vox-07",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 64,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "Q. Vox · Maintenance Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "I’ve rented worse."
+    },
+    {
+      "id": "lst-q-vox-16",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 55,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "Q. Vox · Maintenance Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "I’m careful with different things."
+    },
+    {
+      "id": "lst-q-vox-18",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 53,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "Q. Vox · Engine Crawl",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Keep the ship ugly and moving."
+    },
+    {
+      "id": "lst-q-vox-33",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 38,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "Q. Vox · Maintenance Bay",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Ugly counts if it flies."
+    },
+    {
+      "id": "lst-q-vox-36",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 35,
+      "surface": "listen-section",
+      "slot": "systems",
+      "context_key": "Q. Vox · Engine Crawl",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Don’t make me call that luck."
+    }
+  ],
+  "generated_at": 1793062847739
+}

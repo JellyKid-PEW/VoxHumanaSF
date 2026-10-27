@@ -1,0 +1,2526 @@
+/* ─────────────────────────────────────────────────────────────────────
+   Vox Humana — Manual Interface
+   Tone: maintained ship systems; used, not damaged. Listening.
+   ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Color tokens — overridden by Tweaks at runtime via inline custom props */
+  --bg: #060606;
+  --bg-elev: #0a0a0a;
+  --hull: #0c0c0d;
+  --ink: #e8e6e1;          /* bone — cool operational ink */
+  --ink-dim: #8a8881;
+  --ink-faint: #4a4845;
+  /* Warm cream/wheat — pulled from the logo's distressed highlights.
+     The lockup is a physical artifact on a cool operational ship; the warm
+     ink lets it read as one object, distinct from the UI around it. */
+  --warm: #d4c194;
+  --warm-dim: #9a8a6a;
+  --warm-faint: #5d5340;
+  --line: rgba(232, 230, 225, 0.10);
+  --line-strong: rgba(232, 230, 225, 0.22);
+  --line-warm: rgba(212, 193, 148, 0.18);
+  --signal: #E05A4F;       /* Q. Vox default accent — overwritten by saved perspective */
+  --signal-dim: rgba(224, 90, 79, 0.55);
+  --relay: #5eb3ff;        /* secondary blue (other systems) */
+  --relay-dim: rgba(94, 179, 255, 0.35);
+
+  /* Density (tweakable) */
+  --pad-x: 56px;
+  --pad-y: 38px;
+  --gap: 28px;
+  --row-pad: 22px;
+
+  /* Motion (tweakable, 0..2) */
+  --motion: 1;
+
+  /* Scan/grain intensity */
+  --scan-op: 0.06;
+  --grain-op: 0.07;
+
+  /* Type */
+  --display: "Michroma", "Saira", "Eurostile", system-ui, sans-serif;
+  --mono: "Space Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  
+  /* ── Strata schema ─────────────────────────────────────────────────── */
+  --strata-hl-bg: color-mix(in srgb, var(--signal) 18%, transparent);
+  --strata-hl-bg-hover: color-mix(in srgb, var(--signal) 32%, transparent);
+  --strata-hl-rule: color-mix(in srgb, var(--signal) 55%, transparent);
+  --strata-badge-accent: var(--signal);
+}
+}
+
+[data-density="compact"] {
+  --pad-x: 40px; --pad-y: 26px; --gap: 20px; --row-pad: 16px;
+}
+[data-density="comfy"] {
+  --pad-x: 72px; --pad-y: 48px; --gap: 36px; --row-pad: 28px;
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────
+   Respect OS-level "reduce motion" preferences. Stops the dispatch
+   marquee, the breathing pip, the waveform-like animations, and the
+   cursor ring's tween — interactive elements still work, the page just
+   stops moving on its own. Important for older devices and visitors
+   with vestibular sensitivity. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Keep the cursor ring useful — let it transition opacity but no
+     continuous animation needed. */
+  .cursor-ring { transition: opacity 0.2s ease !important; }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  letter-spacing: 0.02em;
+  /* Native cursor stays visible — the ring is a companion, not a replacement. */
+}
+
+body { overflow-x: hidden; }
+/* Belt-and-braces: prevent transformed fixed elements (cursor ring, grain
+   layer, boot sweep) from registering as document overflow on any axis. */
+html { overflow-x: clip; }
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; color: inherit; }
+
+/* ── Domain memory marker ─────────────────────────────────────────
+   Keeps the main logo clean while letting the SF in VoxHumanaSF.com
+   catch the active perspective accent. The domain stays readable as a
+   single artifact; only the suffix lights. */
+.domain-lock {
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0.06em;
+}
+.domain-lock .domain-sf,
+.registry-code .domain-sf,
+.brand-stamp .domain-sf,
+.topbar .right b .domain-sf,
+.brandfoot .domain-sf {
+  color: var(--signal) !important;
+  font-style: italic;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px var(--signal-dim);
+}
+.registry-code {
+  white-space: nowrap;
+}
+
+
+/* ─── Stage / Frame ─────────────────────────────────────────────────── */
+/* Outer worn frame — slightly offset corners, used, not damaged.        */
+
+.hull {
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* The screen — slight inset, soft vignette, faint border */
+.screen {
+  position: relative;
+  min-height: 100vh;
+  padding: var(--pad-y) var(--pad-x);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.012) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.5) 0%, transparent 70%),
+    var(--bg);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--gap);
+}
+
+/* Frame corner ticks — asymmetric so it feels human */
+.screen::before,
+.screen::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid var(--line-strong);
+}
+.screen::before {
+  top: 22px; left: 24px; width: 18px; height: 18px;
+  border-right: 0; border-bottom: 0;
+}
+.screen::after {
+  bottom: 21px; right: 23px; width: 18px; height: 18px;
+  border-left: 0; border-top: 0;
+}
+
+/* Scanlines + grain overlays — applied at body level so they cover all */
+.atmos {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9000;
+  mix-blend-mode: screen;
+  /* Contain the over-sized grain layer (inset:-50%) so its transforms
+     can't register as document overflow. */
+  overflow: hidden;
+}
+.atmos .scan {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--scan-op)) 0px,
+    rgba(255, 255, 255, var(--scan-op)) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.55;
+}
+.atmos .grain {
+  position: absolute; inset: -50%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/></svg>");
+  opacity: var(--grain-op);
+  animation: grain calc(1.4s / var(--motion, 1)) steps(6) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-2%, 1%); }
+  40% { transform: translate(1%, -2%); }
+  60% { transform: translate(-1%, 2%); }
+  80% { transform: translate(2%, -1%); }
+  100% { transform: translate(0,0); }
+}
+
+/* Vignette ring (worn edge) */
+.atmos .vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* ─── Boot scan-in ──────────────────────────────────────────────────── */
+
+.boot-cover {
+  position: fixed; inset: 0; background: #000; z-index: 9500;
+  pointer-events: none;
+  /* Contain the sweep line so its travel + box-shadow can't register as
+     document overflow on initial load. */
+  overflow: hidden;
+}
+.boot-cover.scanning {
+  animation: bootscan 0.95s cubic-bezier(.2,.7,.3,1) forwards;
+}
+.boot-cover.gone { display: none; }
+.boot-sweep {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ink) 50%, transparent);
+  opacity: 0.85;
+  box-shadow: 0 0 18px rgba(232,230,225,0.45);
+  animation: bootsweep 0.95s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes bootscan {
+  0%   { opacity: 1; }
+  60%  { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+@keyframes bootsweep {
+  0%   { top: 0%; opacity: 0; }
+  20%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Brief flicker on initial reveal */
+.flicker { animation: flicker 0.45s ease-out; }
+@keyframes flicker {
+  0%   { opacity: 0; }
+  18%  { opacity: 0.6; }
+  22%  { opacity: 0.15; }
+  35%  { opacity: 0.9; }
+  42%  { opacity: 0.4; }
+  60%  { opacity: 1; }
+  72%  { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+/* ─── Top bar ───────────────────────────────────────────────────────── */
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 40px;
+}
+
+.topbar .menu {
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.topbar-seal {
+  display: block;
+  flex-shrink: 0;
+  margin-top: -2px;
+  transition: filter 0.2s ease;
+}
+.topbar-seal img {
+  display: block;
+  width: 38px;
+  height: auto;
+}
+.topbar-seal:hover {
+  filter: drop-shadow(0 0 10px rgba(214, 58, 43, 0.32));
+}
+.menu-icon {
+  width: 22px; height: 14px; margin-top: 4px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  cursor: pointer;
+}
+.menu-icon i {
+  display: block; height: 1px; background: var(--ink); width: 100%;
+}
+.menu-icon i:nth-child(2) { width: 70%; }
+.menu-icon i:nth-child(3) { width: 85%; }
+
+.tag-stack { display: flex; flex-direction: column; gap: 4px; }
+.tag-stack .row {
+  display: flex; gap: 14px; font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.tag-stack .row .lbl { color: var(--ink); }
+.tag-stack .row .sub { color: var(--signal); }
+.tag-stack .row .ghost { color: var(--ink-dim); }
+
+/* ── Dispatch ticker ────────────────────────────────────────────────
+   Replaces the waveform in the topbar. A single slow line of ship
+   telemetry mixed with quiet character traces. Loops via duplicated
+   content. Mask fades the edges so entries appear and disappear into
+   the dark — listening, not announcing. */
+
+.dispatch-bar {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  position: relative;
+}
+
+.dispatch-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--signal);
+  padding-right: 16px;
+  border-right: 1px solid var(--line);
+}
+.dispatch-pip {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--signal); border-radius: 50%;
+  box-shadow: 0 0 8px var(--signal-dim);
+  animation: dpip calc(1.6s / var(--motion, 1)) ease-in-out infinite;
+}
+@keyframes dpip {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+.dispatch-window {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent 0, black 36px, black calc(100% - 36px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, black 36px, black calc(100% - 36px), transparent 100%);
+}
+
+.dispatch-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  /* 72s is the default cadence (matches motion=1 in the original React
+     version). Override with an inline style or a tweak in JS if needed. */
+  animation: dispatch-scroll 72s linear infinite;
+  will-change: transform;
+}
+@keyframes dispatch-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.dispatch-item {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding-right: 28px;
+  font-size: 12.5px; letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.dispatch-ts {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.18em;
+  color: var(--signal);
+}
+.dispatch-sep { color: var(--ink-faint); }
+.dispatch-body { color: var(--ink-dim); }
+.dispatch-gap { color: var(--ink-faint); padding-left: 12px; }
+
+.topbar .right {
+  text-align: right;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-dim);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.topbar .right b { color: var(--ink); font-weight: 400; }
+
+/* ─── Main content grid ─────────────────────────────────────────────── */
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr);
+  gap: calc(var(--gap) * 1.6);
+  align-items: start;
+  min-height: 0;
+}
+
+@media (max-width: 980px) {
+  .main { grid-template-columns: 1fr; }
+}
+
+/* ── Left: Identity ─────────────────────────────────────────────────── */
+
+/* ── Brand lockup (Option H) ─────────────────────────────────────────
+   Seal anchors left at full mass. Right column: stamp row, then VOX big,
+   then HUMANA wide-tracked. The seal and the wordmark are two artifacts
+   of the same system. */
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+ .identity .brand {
+  position: relative;
+  display: block;
+  min-height: clamp(176px, 17.5vw, 248px);
+  margin-bottom: 22px;
+  text-decoration: none;
+  color: inherit;
+  isolation: isolate;
+}
+
+/* The seal sits at the top of the WILD HUNTRESS stamp line and slips
+   behind the word block. The text stays left-weighted; the artifact moves,
+   not the lockup. */
+.brand-seal {
+  position: absolute;
+  z-index: 0;
+  left: clamp(-34px, -2.6vw, -12px);
+  top: clamp(-8px, -0.5vw, -3px);
+  width: clamp(196px, 20vw, 286px);
+  height: auto;
+  display: block;
+  transform: translateY(0) scale(1);
+  transform-origin: top center;
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  transition: filter 0.25s ease, opacity 0.25s ease;
+  animation: brandSealBreath 9s ease-in-out infinite;
+  will-change: transform;
+}
+/* The four seal images are not framed alike: B.O.B.'s and Nova's draw the
+   VH ring about 7% smaller and higher, Iri-Six's 1% smaller. These nudges
+   (measured against Quenby's) keep the ring the same size and place under
+   every Lens. Remove them if the images are re-exported on one frame. */
+[data-perspective-seal] { aspect-ratio: 461 / 308; }
+[data-perspective-seal][src*="vox-logo-iri-six."] { translate: 0.53% 0; scale: 1.009; }
+[data-perspective-seal][src*="vox-logo-bob."]     { translate: -2.3% 2.55%; scale: 1.073; }
+[data-perspective-seal][src*="vox-logo-nova."]    { translate: -1.77% 1.15%; scale: 1.077; }
+@keyframes brandSealBreath {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(0) scale(1.018); }
+}
+.brand:hover .brand-seal {
+  opacity: 0.86;
+  filter: drop-shadow(0 0 22px var(--signal-dim));
+}
+
+.brand-word {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  max-width: max-content;
+  /* Shift the type lockup clear of the VH artifact. The seal still sits
+     behind the system block, but the letters no longer collide with it. */
+  padding-left: clamp(176px, 19.2vw, 268px);
+}
+
+.brand-word { min-width: 0; }
+
+.brand-stamp {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--warm-dim);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-warm);
+}
+.brand-stamp b { color: var(--warm); font-weight: 400; }
+.brand-stamp .dot { color: var(--warm-faint); }
+
+.brand-vox {
+  font-family: var(--display);
+  font-size: clamp(60px, 8.6vw, 112px);
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+  color: var(--warm);
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
+/* ── O-as-microphone ─────────────────────────────────────────────
+   The O in VOX is the page's broadcasting eye. A small SVG grille
+   sits inside the letter's cavity — horizontal mesh lines + a center
+   diaphragm that pulses with the same cadence as the dispatch pip.
+   Sized in em so it scales with the wordmark across viewports. */
+.vox-o {
+  position: relative;
+  display: inline-block;
+}
+.vox-mic {
+  position: absolute;
+  /* Michroma's O cavity center sits a hair below the line-box midpoint —
+     tuning here lands the mic in the optical center of the O. */
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.34em;
+  height: 0.52em;
+  color: var(--signal);
+  opacity: 0.88;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(214, 58, 43, 0.32));
+}
+.vox-mic-dot {
+  animation: voxmic calc(1.6s / var(--motion, 1)) ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes voxmic {
+  0%, 100% { opacity: 0.45; transform: scale(0.85); }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+.brand-humana {
+  font-family: var(--display);
+  font-size: clamp(16px, 1.8vw, 26px);
+  letter-spacing: 0.42em;
+  color: var(--warm-dim);
+  font-weight: 400;
+  /* Start HUMANA under the optical center of the V in VOX instead of
+     hard-left under the wordmark. */
+  padding-left: 0;
+  margin-left: clamp(20px, 2.8vw, 36px);
+}
+
+/* ── Hero copy ───────────────────────────────────────────────────
+   Lives in the negative space below the lockup. Indented to start
+   under the logo's midpoint — sits like a faint marking on the artifact
+   rather than a tagline. Quiet, transparent, single voice. */
+.brand-hero {
+  /* margin-left scales with the logo size so it always lands at ~half-logo */
+  margin: 0 0 30px clamp(68px, 6.6vw, 96px);
+  padding-left: 0;
+  font-family: var(--mono);
+  font-style: italic;
+  font-size: clamp(10.5px, 0.85vw, 12px);
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  color: var(--warm-dim);
+  opacity: 0.55;
+  max-width: 46ch;
+}
+.brand-hero p { margin: 0; }
+/* Equal weight on both lines — no emphasis, just two whispers. */
+.brand-hero .bh-em { color: var(--warm-dim); }
+
+/* ── Listening panel ────────────────────────────────────────────
+   Rotates through overheard fragments from B.O.B. · Iri-Six · Q. Vox.
+   Quieter than the Captain's Dispatch — no red bar. The ship is
+   listening; we listen with it. */
+.listening {
+  position: relative;
+  margin-top: 22px;
+  padding: 18px 22px 14px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,0.006), rgba(0,0,0,0));
+  max-width: 520px;
+}
+.listening::before {
+  /* tiny corner tick — quieter than the dispatch's red bar */
+  content: ""; position: absolute; top: -1px; right: -1px;
+  width: 8px; height: 8px;
+  border: 1px solid var(--line-strong);
+  border-left: 0; border-bottom: 0;
+}
+
+.ls-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+}
+.ls-eyebrow { color: var(--ink); }
+.ls-who {
+  color: var(--signal);
+  font-variant-numeric: tabular-nums;
+}
+
+.ls-line {
+  font-family: var(--mono);
+  font-style: italic;
+  font-size: 14px; line-height: 1.6;
+  color: var(--ink);
+  letter-spacing: 0.005em;
+  margin: 0 0 14px;
+  /* fixed min-height stops the panel jumping when lines change length */
+  min-height: 3.2em;
+  transition: opacity 0.38s ease;
+}
+.ls-line.fade { opacity: 0; }
+
+.ls-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.ls-foot b { color: var(--ink-dim); font-weight: 400; font-variant-numeric: tabular-nums; }
+.ls-cycle { display: inline-flex; gap: 6px; align-items: baseline; }
+
+.ls-dots {
+  display: inline-flex; gap: 4px;
+}
+.ls-dots i {
+  display: inline-block;
+  width: 4px; height: 4px;
+  background: var(--ink-faint);
+  border-radius: 50%;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.ls-dots i.on {
+  background: var(--signal);
+  transform: scale(1.3);
+  box-shadow: 0 0 6px var(--signal-dim);
+}
+
+.listening.is-unknown .ls-who,
+.ls-who.is-unknown {
+  color: #A79EFF;
+  text-shadow: 0 0 10px rgba(140, 130, 255, 0.55);
+}
+.listening.is-unknown .ls-dots i.on {
+  background: #A79EFF;
+  box-shadow: 0 0 7px rgba(140, 130, 255, 0.7);
+}
+.dispatch-item.unknown-signal .dispatch-ts,
+.dispatch-item.unknown-signal .dispatch-body {
+  color: #A79EFF;
+  text-shadow: 0 0 8px rgba(140, 130, 255, 0.38);
+}
+
+
+@media (max-width: 720px) {
+  .identity .brand {
+    min-height: clamp(156px, 38vw, 206px);
+  }
+  .brand-seal {
+    left: -18px;
+    top: 0;
+    width: clamp(164px, 44vw, 216px);
+    opacity: 0.62;
+    transform: translateY(0) scale(1);
+    animation: brandSealBreathMobile 9s ease-in-out infinite;
+  }
+  .brand-word {
+    padding-left: clamp(138px, 37vw, 190px);
+  }
+  .brand-humana {
+    margin-left: clamp(16px, 5vw, 28px);
+  }
+  @keyframes brandSealBreathMobile {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(0) scale(1.018); }
+  }
+}
+
+.identity .byline { display: none; }
+
+.identity .divider {
+  height: 1px; background: var(--line);
+  margin: 28px 0 26px;
+  position: relative;
+}
+.identity .divider::before {
+  content: ""; position: absolute; left: 0; top: -3px;
+  width: 6px; height: 6px; border: 1px solid var(--signal);
+  border-right: 0; border-bottom: 0;
+}
+
+.identity .heading {
+  color: var(--signal);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin: 0 0 18px;
+}
+
+.identity .body {
+  color: var(--ink);
+  font-size: 14.5px;
+  line-height: 1.85;
+  max-width: 46ch;
+  white-space: pre-line;
+}
+.identity .body .caret {
+  display: inline-block; width: 7px; height: 14px;
+  background: var(--ink);
+  margin-left: 2px; vertical-align: -2px;
+  animation: blink calc(1.06s / var(--motion, 1)) steps(1) infinite;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ── CTA: BEGIN BOOK ONE ────────────────────────────────────────────── */
+
+.cta {
+  display: block;
+  margin-top: 38px;
+  padding: 22px 26px;
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.002));
+  position: relative;
+  max-width: 520px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.cta:hover {
+  border-color: var(--signal);
+  background: linear-gradient(180deg, rgba(214,58,43,0.04), rgba(214,58,43,0.01));
+}
+.cta:hover .cta-arrow { transform: translateX(4px); color: var(--signal); }
+.cta:hover .cta-pulse { color: var(--signal); }
+.cta::before,
+.cta::after {
+  content: ""; position: absolute;
+  width: 10px; height: 10px;
+  border: 1px solid var(--signal);
+}
+.cta::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.cta::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+.cta-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 22px;
+}
+
+.cta-pulse {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-dim);
+  display: grid; place-items: center;
+  color: var(--ink-dim);
+  position: relative;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.cta-pulse::before {
+  content: ""; position: absolute; inset: 4px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.6;
+  animation: pulseOut calc(2.4s / var(--motion, 1)) ease-out infinite;
+}
+.cta-pulse i {
+  width: 5px; height: 5px; background: currentColor; border-radius: 50%;
+}
+@keyframes pulseOut {
+  0%   { transform: scale(0.4); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.cta-text { line-height: 1.2; }
+.cta-text .head {
+  font-size: 18px; letter-spacing: 0.22em; color: var(--ink);
+  text-transform: uppercase;
+}
+.cta-text .sub {
+  font-size: 11px; letter-spacing: 0.28em; color: var(--signal);
+  text-transform: uppercase; margin-top: 8px;
+}
+.cta-arrow {
+  font-size: 24px; color: var(--ink-dim);
+  transition: transform 0.18s ease, color 0.18s ease;
+  line-height: 1;
+}
+
+/* ── Captain's Dispatch ─────────────────────────────────────────────
+   A small log fragment under the CTA. Implies the site has been writing
+   things down. Three lines, no metaphor doing extra work. */
+.cdispatch {
+  position: relative;
+  border: 1px solid var(--line-strong);
+  padding: 18px 22px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(0,0,0,0));
+  margin-top: 26px;
+  max-width: 520px;
+}
+.cdispatch::before {
+  content: ""; position: absolute; left: 0; top: 16%; bottom: 16%;
+  width: 2px; background: var(--signal);
+  box-shadow: 0 0 8px var(--signal-dim);
+}
+.cd-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.cd-head b { color: var(--ink); font-weight: 400; }
+.cd-ts { color: var(--signal); }
+.cd-body {
+  font-family: var(--mono);
+  font-size: 13.5px; line-height: 1.65;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.cd-body p { margin: 0 0 4px; }
+.cd-sign {
+  display: block;
+  margin-top: 12px;
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* ── Tea Rack ───────────────────────────────────────────────────────
+   Quenby's private liturgy. A taped index card with three rules above
+   five dented tins. One tin is steeping (Regret). Ambition has been
+   turned to face the wall — its label faces away, so we see the back. */
+
+.tea-rack {
+  position: relative;
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  padding: 16px 18px 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.008), rgba(0,0,0,0));
+  max-width: 520px;
+}
+.tea-rack::before {
+  content: ""; position: absolute; top: -1px; left: -1px;
+  width: 10px; height: 10px;
+  border: 1px solid var(--line-strong);
+  border-right: 0; border-bottom: 0;
+}
+
+.tr-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+}
+.tr-head b { color: var(--ink); font-weight: 400; }
+.tr-state b { color: var(--signal); }
+
+/* The card — taped above. Aged paper feel. Slight tilt for human-scaled. */
+.tr-card {
+  position: relative;
+  background: linear-gradient(180deg, #1c1a16, #161410);
+  border: 1px solid rgba(180, 158, 116, 0.18);
+  padding: 14px 16px 12px;
+  margin: 10px 8px 18px;
+  transform: rotate(-0.6deg);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  color: #d8cfb6;
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+.tr-card::after {
+  /* faint paper grain */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.78  0 0 0 0 0.58  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+.tr-tape {
+  position: absolute;
+  width: 36px; height: 12px;
+  background: rgba(214, 198, 158, 0.22);
+  border-left: 1px dashed rgba(214, 198, 158, 0.35);
+  border-right: 1px dashed rgba(214, 198, 158, 0.35);
+  filter: blur(0.2px);
+}
+.tr-tape-l { top: -6px; left: 12px; transform: rotate(-8deg); }
+.tr-tape-r { top: -6px; right: 16px; transform: rotate(6deg); }
+
+.tr-rule {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  font-size: 12px; line-height: 1.55;
+  padding: 2px 0;
+  position: relative;
+  z-index: 1;
+}
+.tr-when {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: #b29f78;
+  align-self: center;
+}
+.tr-mix { color: #e6dcc1; }
+.tr-prep { color: #9b8b6b; font-style: italic; letter-spacing: 0.02em; }
+
+/* The tins */
+.tr-tins {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tr-tin {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--line-strong);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.025), rgba(0,0,0,0.18)),
+    linear-gradient(90deg, #2a2722, #221f1b);
+  padding: 8px 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  cursor: default;
+  overflow: hidden;
+  transition: filter 0.2s ease, border-color 0.2s ease;
+}
+.tr-tin:hover { filter: brightness(1.1); border-color: var(--ink-dim); }
+.tr-tin-rim {
+  position: absolute; top: 4px; left: 4px; right: 4px; height: 3px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.4);
+}
+.tr-tin-label {
+  font-family: var(--display);
+  font-size: 8.5px; letter-spacing: 0.14em;
+  color: var(--ink);
+  line-height: 1.15;
+  word-spacing: -0.05em;
+  /* slight imperfect-print look */
+  filter: contrast(0.95);
+  opacity: 0.92;
+}
+.tr-tin-dent {
+  /* a single dent — used not damaged */
+  position: absolute; bottom: 8px; right: 6px;
+  width: 12px; height: 5px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.55), transparent 70%);
+  transform: rotate(-12deg);
+  opacity: 0.7;
+}
+.tr-tin.active {
+  border-color: var(--signal-dim);
+  box-shadow: 0 0 14px rgba(214, 58, 43, 0.18), inset 0 0 18px rgba(214, 58, 43, 0.08);
+}
+.tr-tin.active .tr-tin-label { color: var(--signal); }
+.tr-tin.active::after {
+  /* faint steam line */
+  content: ""; position: absolute; top: -2px; left: 50%;
+  width: 1px; height: 14px;
+  background: linear-gradient(to top, var(--signal-dim), transparent);
+  transform: translateX(-50%);
+  animation: trsteam calc(2.4s / var(--motion, 1)) ease-in-out infinite;
+}
+@keyframes trsteam {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) scaleY(1); }
+  50% { opacity: 0.85; transform: translateX(-50%) scaleY(1.35); }
+}
+.tr-tin.turned {
+  /* turned to face the wall — we see the back. No label. */
+  background:
+    linear-gradient(180deg, #1d1a16, #16140f);
+  filter: brightness(0.86);
+}
+.tr-tin.turned .tr-tin-rim {
+  border-top-color: rgba(0,0,0,0.5);
+  border-bottom-color: rgba(255,255,255,0.04);
+}
+
+.tr-foot {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.tr-foot b { color: var(--ink); font-weight: 400; }
+.tr-foot-quiet { color: var(--ink-faint); font-style: italic; text-transform: none; letter-spacing: 0.06em; }
+
+/* Replace simple rooms-strip styles with full Aboard Now panel. */
+
+.rooms-strip,
+.rs-head,
+.rs-grid,
+.rs-room { /* legacy — hidden, panel below takes over */ }
+
+/* ── Aboard Now panel ───────────────────────────────────────────────
+   The emotional center. Two columns:
+     · Left: small room peeks (Bridge, Medbay, Dome, Storage)
+     · Right: featured Galley with the tea rack embedded
+   Spans full width below the main grid. Slight asymmetric ticks. */
+
+.aboard {
+  position: relative;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0 32px;
+}
+
+.aboard-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 26px;
+}
+.aboard-head-left { display: flex; align-items: baseline; gap: 18px; }
+.aboard-eyebrow { color: var(--signal); letter-spacing: 0.28em; }
+.aboard-time { color: var(--ink); font-variant-numeric: tabular-nums; }
+.aboard-head-right { color: var(--ink-dim); }
+
+.aboard-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.6fr);
+  gap: 36px;
+  align-items: stretch;
+}
+@media (max-width: 980px) {
+  .aboard-body { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Room peeks — small rows with a status mark */
+.aboard-rooms {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--line);
+}
+.aroom {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none; color: inherit;
+  transition: background 0.18s ease, padding 0.18s ease;
+}
+.aroom:last-child { border-bottom: 0; }
+.aroom:hover { background: rgba(255,255,255,0.012); padding-left: 22px; }
+.aroom:hover .aroom-name { color: var(--signal); }
+.aroom-mark {
+  width: 6px; height: 6px;
+  border: 1px solid var(--ink-faint);
+  margin-top: 6px;
+}
+.aroom.lit .aroom-mark {
+  background: var(--signal);
+  border-color: var(--signal);
+  box-shadow: 0 0 10px var(--signal-dim);
+}
+.aroom-name {
+  font-family: var(--display);
+  font-size: 13px; letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 4px;
+  transition: color 0.18s ease;
+}
+.aroom-state {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.aroom.lit .aroom-name { color: var(--signal); }
+.aroom.lit .aroom-state { color: var(--ink); }
+
+/* Featured Galley */
+.aboard-galley {
+  border: 1px solid var(--line);
+  padding: 18px 20px 16px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(212, 193, 148, 0.012), rgba(0,0,0,0));
+}
+.aboard-galley::before,
+.aboard-galley::after {
+  content: ""; position: absolute; width: 8px; height: 8px;
+  border: 1px solid var(--line-warm);
+}
+.aboard-galley::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.aboard-galley::after  { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+.ag-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.ag-eyebrow {
+  font-family: var(--display);
+  font-size: 13px; letter-spacing: 0.1em;
+  color: var(--ink);
+}
+.ag-state {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--warm-dim);
+}
+
+/* Embedded tea rack — drop its outer chrome, become a flush layout
+   inside the galley card. Card + tins + foot in a horizontal layout. */
+.tea-rack.embedded {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  max-width: none;
+}
+.tea-rack.embedded::before { display: none; }
+.tea-rack.embedded .tr-card {
+  margin: 4px 12px 16px;
+}
+.tea-rack.embedded .tr-tins {
+  grid-template-columns: repeat(5, 1fr);
+  margin-bottom: 12px;
+}
+.tea-rack.embedded .tr-foot {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+/* ── Inner-page chrome ───────────────────────────────────────────────
+   Common shell used by Series Info / Artifacts / Updates / Notes /
+   Transmission Log. Each page is a thin masthead + a content stage
+   + the same operational footer as the home. */
+
+.page-shell {
+  min-height: 100vh;
+  padding: 38px clamp(28px, 5vw, 72px) 0;
+  background: var(--bg);
+  position: relative;
+}
+
+.page-masthead {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 12px 0 18px;
+  background: linear-gradient(to bottom, rgba(6,6,6,0.96) 80%, rgba(6,6,6,0));
+  backdrop-filter: blur(8px);
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--line);
+}
+.pm-seal {
+  display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; color: inherit;
+  transition: filter 0.2s ease;
+}
+.pm-seal:hover { filter: drop-shadow(0 0 10px rgba(214, 58, 43, 0.32)); }
+.pm-seal img { display: block; width: 28px; height: auto; }
+.pm-seal-text {
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.pm-seal-text b { color: var(--ink); font-weight: 400; }
+
+.pm-crumb {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.pm-crumb a { color: var(--ink-dim); text-decoration: none; transition: color 0.15s ease; }
+.pm-crumb a:hover { color: var(--signal); }
+.pm-crumb .sep { color: var(--ink-faint); }
+.pm-crumb .here { color: var(--ink); }
+
+.pm-time {
+  font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+.pm-time b { color: var(--signal); font-weight: 400; }
+
+/* Page title — a quiet section of operational chrome */
+.page-title-block {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: end;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.ptb-eyebrow {
+  font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 16px;
+}
+.ptb-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 5.8vw, 76px);
+  line-height: 0.9;
+  letter-spacing: -0.005em;
+  margin: 0;
+  color: var(--ink);
+  font-weight: 400;
+}
+.ptb-lede {
+  font-family: var(--mono);
+  font-style: italic;
+  font-size: clamp(13px, 1.05vw, 15.5px);
+  line-height: 1.6;
+  color: var(--warm-dim);
+  max-width: 56ch;
+  margin: 16px 0 0;
+  letter-spacing: 0.005em;
+}
+.ptb-meta {
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+  text-align: right;
+  line-height: 1.7;
+}
+.ptb-meta b { color: var(--ink); font-weight: 400; }
+
+/* Shared section header — small caps stamps for content groups */
+.sec-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin: 56px 0 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.sec-head b { color: var(--signal); font-weight: 400; }
+.sec-head .sec-num {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Common copy block — restrained prose register */
+.copy-block {
+  max-width: 64ch;
+  font-family: var(--mono);
+  font-size: 14px; line-height: 1.85;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.copy-block p { margin: 0 0 22px; }
+.copy-block p em { color: var(--warm); font-style: italic; }
+.copy-block .pull {
+  font-style: italic;
+  color: var(--warm);
+  font-size: 1.1em;
+  padding-left: 18px;
+  border-left: 1px solid var(--signal);
+  margin: 28px 0;
+}
+
+/* Page-bottom closer used on inner pages */
+.page-closer {
+  margin-top: 80px;
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--warm-dim);
+}
+.page-closer .pc-tick { color: var(--signal); font-style: normal; }
+.page-closer em { color: var(--warm); }
+.page-closer .pc-back {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.page-closer .pc-back:hover { color: var(--signal); }
+
+/* ── Series Info specifics ─────────────────────────────────────── */
+.si-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .si-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+.si-aside {
+  border: 1px solid var(--line);
+  padding: 20px 22px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.006), rgba(0,0,0,0));
+}
+.si-aside::before {
+  content: ""; position: absolute; top: -1px; left: -1px;
+  width: 12px; height: 12px;
+  border: 1px solid var(--signal);
+  border-right: 0; border-bottom: 0;
+}
+.si-aside h3 {
+  font-family: var(--display);
+  font-size: 13px; letter-spacing: 0.1em;
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-weight: 400;
+}
+.si-kv {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 11px; letter-spacing: 0.04em;
+}
+.si-kv:first-of-type { border-top: 0; }
+.si-kv .k {
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  align-self: center;
+}
+.si-kv .v { color: var(--ink); }
+.si-kv .v.accent { color: var(--signal); }
+
+/* ── Artifacts specifics ───────────────────────────────────────── */
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+.artifact {
+  position: relative;
+  border: 1px solid var(--line-warm);
+  padding: 24px 24px 20px;
+  background: linear-gradient(180deg, rgba(212, 193, 148, 0.018), rgba(0,0,0,0));
+  transition: border-color 0.18s ease;
+}
+.artifact:hover { border-color: var(--warm-dim); }
+.artifact::after {
+  content: ""; position: absolute; bottom: -1px; right: -1px;
+  width: 8px; height: 8px;
+  border: 1px solid var(--line-warm);
+  border-left: 0; border-top: 0;
+}
+.art-num {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--warm-faint);
+  margin-bottom: 14px;
+  display: flex; justify-content: space-between;
+}
+.art-num b { color: var(--warm-dim); font-weight: 400; }
+.art-name {
+  font-family: var(--display);
+  font-size: 17px; letter-spacing: 0.06em;
+  color: var(--warm);
+  margin-bottom: 12px;
+}
+.art-where {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+}
+.art-where b { color: var(--ink); font-weight: 400; }
+.art-note {
+  font-family: var(--mono);
+  font-style: italic;
+  font-size: 13px; line-height: 1.7;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+  margin: 0 0 14px;
+  max-width: 38ch;
+}
+.art-touched {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.art-touched b { color: var(--ink-dim); font-weight: 400; }
+
+/* The Artifacts tea-rack card spans the row */
+.art-rack {
+  grid-column: 1 / -1;
+  border-color: var(--line-strong);
+}
+.art-rack .art-name { color: var(--ink); }
+
+/* ── Updates specifics ─────────────────────────────────────────── */
+.upd-list { display: flex; flex-direction: column; }
+.upd-entry {
+  display: grid;
+  grid-template-columns: 140px 80px 1fr;
+  gap: 28px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+  align-items: baseline;
+}
+.upd-entry:last-child { border-bottom: 1px solid var(--line); }
+.upd-ts {
+  font-size: 11px; letter-spacing: 0.18em;
+  color: var(--signal);
+  font-variant-numeric: tabular-nums;
+}
+.upd-kind {
+  font-size: 9.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.upd-body {
+  font-family: var(--mono);
+  font-size: 14px; line-height: 1.7;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.upd-body p { margin: 0 0 6px; }
+.upd-body em { color: var(--warm); font-style: italic; }
+.upd-body .qmark { color: var(--ink-dim); font-style: italic; }
+
+@media (max-width: 720px) {
+  .upd-entry { grid-template-columns: 1fr; gap: 6px; }
+  .upd-kind { color: var(--signal); }
+}
+
+/* ── Notes specifics ────────────────────────────────────────────── */
+.notes-grid {
+  column-count: 2;
+  column-gap: 36px;
+}
+@media (max-width: 880px) { .notes-grid { column-count: 1; } }
+.note {
+  break-inside: avoid;
+  margin: 0 0 28px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,0.006), rgba(0,0,0,0));
+  position: relative;
+}
+.note::before {
+  content: ""; position: absolute; top: -1px; left: -1px;
+  width: 8px; height: 8px;
+  border: 1px solid var(--line-strong);
+  border-right: 0; border-bottom: 0;
+}
+.note-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.note-head .who { color: var(--signal); }
+.note-body {
+  font-family: var(--mono);
+  font-size: 13.5px; line-height: 1.75;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.note-body p { margin: 0 0 12px; }
+.note-body p:last-child { margin-bottom: 0; }
+.note-body em { color: var(--warm); font-style: italic; }
+.note-body .frag {
+  color: var(--ink-dim);
+  font-style: italic;
+}
+
+/* ── Transmission Log specifics ────────────────────────────────── */
+.log-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.log-stat {
+  padding: 16px 22px;
+  border-left: 1px solid var(--line);
+}
+.log-stat:first-child { border-left: 0; }
+.log-stat .k {
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+.log-stat .v {
+  font-family: var(--display);
+  font-size: 22px; letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.log-stat .v.accent { color: var(--signal); }
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.log-table th, .log-table td {
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.log-table th {
+  font-size: 9.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 400;
+  background: rgba(255,255,255,0.005);
+}
+.log-table tr:hover td { background: rgba(255,255,255,0.012); }
+.log-table .lt-num {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-dim);
+  width: 60px;
+}
+.log-table .lt-title {
+  font-family: var(--display);
+  font-size: 13px; letter-spacing: 0.06em;
+  color: var(--ink);
+}
+.log-table .lt-sub {
+  font-family: var(--mono); font-style: italic;
+  font-size: 12px;
+  color: var(--ink-dim);
+  margin-top: 4px;
+}
+.log-table .lt-stat {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.log-table .lt-stat.released { color: var(--ink); }
+.log-table .lt-stat.next     { color: var(--signal); }
+.log-table .lt-stat.soon     { color: var(--ink-faint); }
+.log-table .lt-date {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-dim);
+  font-size: 11.5px;
+}
+.log-table .lt-chs {
+  color: var(--ink-dim);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.log-table a.lt-row {
+  color: inherit; text-decoration: none;
+  display: block;
+}
+@media (max-width: 720px) {
+  .log-stats { grid-template-columns: repeat(2, 1fr); }
+  .log-stat { border-bottom: 1px solid var(--line); }
+  .log-table th:nth-child(4), .log-table td:nth-child(4),
+  .log-table th:nth-child(5), .log-table td:nth-child(5) { display: none; }
+}
+
+/* ── Cursor presence ─────────────────────────────────────────────
+   A companion ring that drifts behind the native cursor. The native
+   cursor stays visible — the ring is atmospheric, never the only
+   pointer. Sits at a moderate base opacity, brightens over links. */
+.cursor-ring {
+  position: fixed; top: 0; left: 0;
+  width: 26px; height: 26px;
+  border: 1px solid var(--ink-dim);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 8500;
+  opacity: 0.45;
+  mix-blend-mode: difference;
+  transition: opacity 0.25s ease, width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  will-change: transform;
+  /* Keep the transformed ring out of document overflow — without this it
+     can intermittently nudge a vertical scrollbar into existence as the
+     cursor moves near the edges. */
+  contain: layout paint;
+}
+.cursor-ring::after {
+  content: "";
+  position: absolute; inset: 11px;
+  border-radius: 50%;
+  background: var(--ink-dim);
+  transition: inset 0.18s ease, background 0.18s ease;
+}
+
+/* Slight emphasis over interactive targets. */
+.cursor-ring.over-link {
+  width: 44px; height: 44px;
+  border-color: var(--signal);
+  opacity: 0.7;
+  background: rgba(214, 58, 43, 0.04);
+}
+.cursor-ring.over-link::after {
+  inset: 20px;
+  background: var(--signal);
+}
+
+/* Over text inputs — collapse to a thin sibling line. */
+.cursor-ring.over-text {
+  width: 2px; height: 22px;
+  border: 0; border-radius: 1px;
+  background: var(--ink-dim);
+  opacity: 0.4;
+}
+.cursor-ring.over-text::after { display: none; }
+/* Over reading regions and text fields the ring fades out (page-chrome.js
+   adds .quiet); it returns as soon as the pointer leaves them. */
+.cursor-ring.quiet { opacity: 0; transition-duration: 0.4s; }
+
+/* ── Below-CTA legacy module ─ deprecated, hide ─────────────────── */
+.below-cta, .galley, .galley-icon, .galley-info, .dot-grid { display: none; }
+
+/* ── Below-CTA legacy galley/dot-grid (replaced by Tea Rack) ────── */
+.below-cta-old {
+  display: grid; grid-template-columns: minmax(0,1fr) auto;
+  gap: 18px; margin-top: 22px; align-items: stretch;
+  max-width: 520px;
+}
+
+.galley {
+  border: 1px solid var(--line);
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+.galley-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--line-strong);
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: var(--ink-dim);
+}
+.galley-info { font-size: 11.5px; line-height: 1.7; letter-spacing: 0.06em; }
+.galley-info .k { color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; }
+.galley-info .v { color: var(--ink); }
+.galley-info .v.accent { color: var(--signal); }
+.galley-info .row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.dot-grid {
+  width: 90px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  align-content: center;
+  opacity: 0.5;
+}
+.dot-grid i {
+  width: 2px; height: 2px; background: var(--ink-dim); border-radius: 50%;
+}
+
+/* ── Right: Transmission Queue ──────────────────────────────────────── */
+
+.queue {
+  border: 1px solid var(--line-strong);
+  padding: 28px 32px 24px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.008), rgba(0,0,0,0));
+}
+.queue::before,
+.queue::after {
+  content: ""; position: absolute; width: 8px; height: 8px;
+  border: 1px solid var(--line-strong);
+}
+.queue::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.queue::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+/* Frame wraps scroll + rail so the rail stays anchored to the visible area
+   while the rows scroll past behind it. */
+.q-frame {
+  position: relative;
+  padding-right: 14px;
+}
+
+.q-scroll {
+  max-height: 540px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Hide the native scrollbar — the rail + pip is the indicator. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Soft top mask only. Bottom is left clean so the next row peeks past
+     the visible window — a deliberate scroll affordance. */
+  mask-image: linear-gradient(to bottom, transparent 0, black 16px, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 16px, black 100%);
+}
+.q-scroll::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+.queue-rail {
+  position: absolute; right: 4px; top: 0; bottom: 0;
+  width: 1px; background: var(--line);
+  pointer-events: none;
+  /* match the scroll mask so the rail fades at top/bottom too */
+  mask-image: linear-gradient(to bottom, transparent 0, black 18px, black calc(100% - 18px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 18px, black calc(100% - 18px), transparent 100%);
+}
+.queue-rail i {
+  position: absolute; left: -1px; width: 3px; background: var(--signal);
+  box-shadow: 0 0 8px var(--signal-dim);
+  /* Top and height are written by Queue's scroll listener to track the
+     "Up Next" row's position. Initial values are placeholders. */
+  top: 50%;
+  height: 90px;
+  transition: top 0.18s ease-out, height 0.18s ease-out;
+}
+
+.queue-head {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 24px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.qh-left { display: flex; flex-direction: column; gap: 4px; }
+.queue-head .title {
+  font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink);
+}
+.queue-head .vol {
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* Menu block — moved into the queue header. Same internal layout as the
+   former topbar `.menu`, scoped to its new home. */
+.qh-menu {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.qh-menu .topbar-seal {
+  margin-top: -2px;
+}
+.qh-menu .menu-icon {
+  width: 22px; height: 14px; margin-top: 4px;
+}
+.qh-menu .tag-stack { display: flex; flex-direction: column; gap: 4px; }
+.qh-menu .tag-stack .row {
+  display: flex; gap: 14px;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+}
+.qh-menu .tag-stack .lbl { color: var(--ink); }
+.qh-menu .tag-stack .sub { color: var(--signal); }
+.qh-menu .tag-stack .ghost { color: var(--ink-dim); }
+
+@media (max-width: 720px) {
+  .queue-head { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .qh-menu { align-self: stretch; }
+}
+
+.q-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: var(--row-pad) 0;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+  position: relative;
+  transition: padding 0.2s ease;
+}
+.q-row:last-of-type { border-bottom: 1px solid var(--line); }
+.q-row:hover { padding-left: 6px; }
+.q-row:hover .q-title { color: var(--signal); }
+
+.q-num {
+  font-size: 13px; color: var(--ink-dim); letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  padding-right: 14px;
+  border-right: 1px solid var(--line);
+}
+.q-meta { min-width: 0; }
+.q-title {
+  font-size: 14px; letter-spacing: 0.22em; color: var(--ink);
+  text-transform: uppercase; margin-bottom: 6px;
+  transition: color 0.18s ease;
+}
+.q-sub {
+  font-size: 12.5px; color: var(--ink-dim); letter-spacing: 0.02em;
+}
+
+.q-status {
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  text-align: right;
+  line-height: 1.6;
+}
+.q-status .stat-released { color: var(--ink); }
+.q-status .stat-next { color: var(--signal); }
+.q-status .stat-soon { color: var(--ink-faint); }
+.q-status .ch { font-size: 10.5px; color: var(--ink-dim); }
+
+.q-wave {
+  width: 76px; height: 24px;
+  /* Lines inside use stroke="currentColor" so the row's color drives the
+     fill — see the per-status rules below. Slightly larger + stronger so
+     each transmission reads as its own signal rather than decoration. */
+  color: var(--ink);
+  opacity: 0.86;
+  transition: color 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
+}
+.q-row[data-status="next"] .q-wave { color: var(--signal); opacity: 1; filter: drop-shadow(0 0 6px var(--signal-dim)); }
+.q-row:hover .q-wave { opacity: 1; color: var(--signal); }
+.q-wave.soon { opacity: 0.44; }
+
+.q-wave .q-baseline {
+  stroke: var(--line-strong);
+  stroke-width: 0.65;
+}
+.q-wave .q-trace {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.q-wave .q-ghost {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.55;
+  stroke-linecap: round;
+  opacity: 0.16;
+  vector-effect: non-scaling-stroke;
+}
+
+
+.queue-foot {
+  display: flex; justify-content: space-between;
+  margin-top: 12px;
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.queue-foot b { color: var(--ink); font-weight: 400; }
+
+/* ── Queue scroll indicator ─────────────────────────────────────
+   Sits between the scroll window and the queue-foot. Shows the
+   visible range + a "N more · scroll ↓" cue that the queue extends
+   below. Procedural — the ship tells you. */
+.q-indicator {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 4px 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+.q-range b {
+  color: var(--ink); font-weight: 400;
+  letter-spacing: 0.16em;
+}
+.q-more {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--signal);
+}
+.q-arr {
+  display: inline-block;
+  font-size: 13px;
+  line-height: 1;
+  animation: qarr calc(1.6s / var(--motion, 1)) ease-in-out infinite;
+}
+@keyframes qarr {
+  0%, 100% { transform: translateY(0);   opacity: 0.7; }
+  50%      { transform: translateY(3px); opacity: 1;   }
+}
+.q-end {
+  color: var(--ink-faint);
+  font-style: italic;
+  letter-spacing: 0.12em;
+  text-transform: none;
+}
+
+/* ── Closing inscription ────────────────────────────────────────
+   A single line sealing the page before the operational footer. Quiet,
+   warm cream, italic resolution clause. The ship's own voice. */
+.closing-line {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 28px 4px 28px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--warm-dim);
+}
+.cl-tick {
+  color: var(--signal);
+  letter-spacing: 0;
+  font-size: 14px;
+}
+.cl-text { color: var(--warm-dim); }
+.cl-text em {
+  color: var(--warm);
+  font-style: italic;
+}
+
+/* ── Closing inscription ────────────────────────────────────────
+   A single line sealing the page before the operational footer. Quiet,
+   warm cream, italic resolution clause. The ship's own voice. */
+.closing-line {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 28px 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: clamp(13px, 1.05vw, 15px);
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--warm-dim);
+}
+.cl-tick {
+  color: var(--signal);
+  letter-spacing: 0;
+  font-size: 14px;
+}
+.cl-text { color: var(--warm-dim); }
+.cl-text em {
+  color: var(--warm);
+  font-style: italic;
+}
+
+.bottombar {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.1fr 1.3fr 1.6fr 1fr;
+  gap: 36px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  align-items: start;
+}
+.bottombar .col h4 {
+  margin: 0 0 12px;
+  font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--signal); font-weight: 400;
+}
+.bottombar .col li a {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.bottombar .col li a:hover { color: var(--signal); }
+
+.bottombar .col li {
+  list-style: none;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 0 5px;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  display: flex; align-items: center; gap: 8px;
+}
+.bottombar .col li:hover { color: var(--ink); }
+.bottombar .col li.active { color: var(--ink); }
+.bottombar .col li.active::before {
+  content: "▸"; color: var(--signal); font-size: 9px;
+}
+.bottombar .col ul { padding: 0; margin: 0; }
+.bottombar .col .kv {
+  display: flex; gap: 8px; font-size: 11px; margin-bottom: 4px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.bottombar .col .kv b { color: var(--ink); font-weight: 400; }
+.bottombar .care p {
+  margin: 0; font-size: 11.5px; line-height: 1.75;
+  color: var(--ink); letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* ── Receive the Signal card — promoted in place ─────────────────────
+   Same slot as before, but louder: lifted grey panel, red accent stripe,
+   pulsing eyebrow, asymmetric corner ticks, accent-filled submit button.
+   It's the noisiest card on the screen by design — without breaking the
+   threshold feel. */
+.receive {
+  position: relative;
+  margin-top: -8px;          /* sit a hair above its sibling cols — subtle asymmetry */
+  margin-right: -10px;       /* break the bottombar's tidy grid edge */
+  padding: 18px 20px 16px;
+  border: 1px solid var(--line-strong);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02)),
+    linear-gradient(90deg, rgba(214,58,43,0.05), rgba(0,0,0,0));
+  box-shadow: 0 2px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+/* Accent stripe along the left edge */
+.receive::before {
+  content: "";
+  position: absolute; left: -1px; top: 14%; bottom: 14%;
+  width: 2px;
+  background: var(--signal);
+  box-shadow: 0 0 10px var(--signal-dim);
+}
+/* Asymmetric corner ticks: top-right is the bigger, accent one */
+.receive::after {
+  content: "";
+  position: absolute; top: -1px; right: -1px;
+  width: 14px; height: 14px;
+  border: 1px solid var(--signal);
+  border-left: 0; border-bottom: 0;
+}
+/* Smaller, ink-coloured tick on bottom-left — completes the asymmetry */
+.receive .tick-bl {
+  position: absolute; bottom: -1px; left: -1px;
+  width: 7px; height: 7px;
+  border: 1px solid var(--line-strong);
+  border-right: 0; border-top: 0;
+}
+
+.receive-eyebrow {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 9.5px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 8px;
+}
+.receive-pulse {
+  position: relative; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.receive-pulse i {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 6px var(--signal-dim);
+}
+.receive-pulse::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid var(--signal-dim);
+  animation: rpulse calc(2.4s / var(--motion, 1)) ease-out infinite;
+}
+@keyframes rpulse {
+  0%   { transform: scale(0.4); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+
+.receive h4 {
+  font-family: var(--display);
+  margin: 0 0 8px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.15;
+}
+.receive p {
+  margin: 0 0 14px;
+  font-size: 11px; line-height: 1.6;
+  color: var(--ink-dim);
+  text-transform: none; letter-spacing: 0.02em;
+}
+
+.receive .field {
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: stretch;
+  border: 1px solid var(--line-strong);
+  background: rgba(0,0,0,0.35);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.receive .field input {
+  background: transparent; border: 0; outline: 0;
+  color: var(--ink); font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 10px 12px;
+  width: 100%; min-width: 0;
+}
+.receive .field input::placeholder { color: #A79EFF; opacity: 0.9; }
+.receive .field button {
+  appearance: none; border: 0;
+  border-left: 1px solid var(--line);
+  background: var(--signal);
+  color: #fff;
+  font: inherit;
+  font-size: 10.5px; letter-spacing: 0.24em; text-transform: uppercase;
+  padding: 0 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: gap 0.18s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+/* Nova hover — the system briefly destabilises in a human direction.
+   A diagonal gradient bleeds across the button + a soft purple glow,
+   independent of which perspective is active. */
+.receive .field button::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #8C82FF 0%, #A79EFF 55%, #C7C2FF 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.receive .field button:hover  { gap: 12px; box-shadow: 0 0 22px rgba(140, 130, 255, 0.55); }
+.receive .field button:hover::before { opacity: 1; }
+.receive .field button:focus-visible { outline: 1px solid #C7C2FF; outline-offset: 2px; }
+/* Keep label + arrow above the bleed layer */
+.receive .field button > span { position: relative; z-index: 1; }
+.receive .field button .ar { font-size: 14px; }
+
+/* When the input is focused, soften the receive card with a faint Nova
+   tint — suggests the system is paying attention to you. */
+.receive .field:focus-within {
+  border-color: #A79EFF;
+  box-shadow: 0 0 14px rgba(167, 158, 255, 0.22);
+}
+
+.receive .ack {
+  margin: 0; padding: 12px 14px;
+  border: 1px solid var(--signal);
+  background: rgba(214,58,43,0.06);
+  color: var(--ink); font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+.receive-fine {
+  margin-top: 10px;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex; justify-content: space-between;
+}
+.receive-fine b { color: var(--signal); font-weight: 400; }
+
+.brandfoot {
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  text-align: right;
+  line-height: 1.7;
+}
+.brandfoot b { color: var(--ink); font-weight: 400; }
+
+/* Last sync line */
+.sync-line {
+  position: absolute; left: var(--pad-x); bottom: 14px;
+  font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-dim);
+  display: flex; align-items: center; gap: 10px;
+}
+.sync-line .pip {
+  width: 4px; height: 4px; border-radius: 50%; background: var(--signal);
+  box-shadow: 0 0 8px var(--signal-dim);
+  animation: pip calc(1.6s / var(--motion, 1)) ease-in-out infinite;
+}
+@keyframes pip {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.sync-line b { color: var(--ink); font-weight: 400; font-variant-numeric: tabular-nums; }
+
+.foot-indicators {
+  position: absolute; right: var(--pad-x); bottom: 14px;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--ink-faint);
+}
+.foot-indicators .perspective { display: inline-flex; gap: 4px; }
+.foot-indicators .psp-btn {
+  appearance: none;
+  display: block;
+  width: 9px; height: 9px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease,
+              box-shadow 0.15s ease, transform 0.15s ease;
+}
+.foot-indicators .psp-btn:hover  { transform: scale(1.2); border-color: currentColor; }
+.foot-indicators .psp-btn:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
+.foot-indicators .psp-btn.active {
+  background: currentColor;
+  border-color: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+/* Each perspective carries its own colour as `currentColor` so the
+   styles above stay generic. */
+.foot-indicators .psp-q-vox   { color: #E05A4F; }
+.foot-indicators .psp-iri-six { color: #7FD6A3; }
+.foot-indicators .psp-bob     { color: #7FD7FF; }
+.foot-indicators .psp-nova    { color: #8C82FF; }
+
+/* Nova is reserved (not yet selectable). Lower contrast + no-pointer
+   cursor signal it's disabled, but a slow shimmer hints it's "almost
+   there" — a continuity that hasn't bloomed yet. */
+/* Applies only while a voice is disabled (Nova is selectable from launch). */
+.foot-indicators .psp-nova[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  animation: nova-pulse 4s ease-in-out infinite;
+}
+.foot-indicators .psp-nova[disabled]:hover { transform: none; opacity: 0.55; }
+@keyframes nova-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(140, 130, 255, 0); }
+  50%      { box-shadow: 0 0 6px rgba(140, 130, 255, 0.6); }
+}
+
+
+.glitch {
+  animation: glitch 0.18s steps(2) 1;
+}
+@keyframes glitch {
+  0%   { transform: translate(0, 0); filter: none; }
+  20%  { transform: translate(1px, -1px); filter: hue-rotate(15deg) brightness(1.1); }
+  40%  { transform: translate(-2px, 1px); filter: hue-rotate(-10deg); }
+  60%  { transform: translate(1px, 0); filter: brightness(1.15); }
+  80%  { transform: translate(-1px, -1px); filter: none; }
+  100% { transform: translate(0, 0); filter: none; }
+}
+
+/* ─── Chapter reader ────────────────────────────────────────────────── */
+
+.reader {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--pad-y) 24px 120px;
+}
+.reader .breadcrumb {
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim); margin-bottom: 32px;
+  display: flex; gap: 14px; align-items: center;
+}
+.reader .breadcrumb a:hover { color: var(--signal); }
+.reader .breadcrumb .sep { color: var(--ink-faint); }
+.reader .meta {
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: 14px 0; margin-bottom: 36px;
+}
+.reader .meta b { color: var(--ink); font-weight: 400; }
+.reader .meta .ch-num { color: var(--signal); }
+
+.reader h1 {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05; letter-spacing: -0.01em;
+  color: var(--ink);
+  font-weight: 400;
+  margin: 0 0 14px;
+}
+.reader .epigraph {
+  font-size: 12.5px; letter-spacing: 0.04em; color: var(--ink-dim);
+  font-style: italic; margin: 0 0 60px;
+  border-left: 1px solid var(--signal); padding-left: 18px;
+}
+.reader p {
+  font-family: var(--mono);
+  font-size: 15px; line-height: 1.95;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+  margin: 0 0 26px;
+  max-width: 64ch;
+}
+.reader p.dropcap::first-letter {
+  font-family: var(--display);
+  font-size: 3em; line-height: 0.9;
+  float: left; padding: 6px 14px 0 0;
+  color: var(--signal);
+}
+.reader .scene-break {
+  text-align: center; color: var(--ink-faint); letter-spacing: 1em;
+  margin: 50px 0;
+}
+.reader .next-up {
+  margin-top: 80px; padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.reader .next-up a {
+  color: var(--ink);
+  display: inline-flex; align-items: center; gap: 14px;
+}
+.reader .next-up a:hover { color: var(--signal); }
+.reader .next-up .ch-title { letter-spacing: 0.2em; }
+
+/* Reader page lives a quieter version of the interface — same DNA, less HUD. */
+body { background: var(--bg); }
+.reader-frame { position: relative; min-height: 100vh; }
+
+.sample-tag {
+  display: inline-block;
+  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--signal); border: 1px solid var(--signal-dim);
+  padding: 3px 10px; margin-bottom: 18px;
+}
+
+/* Subtle ambient — just the scan + grain, no vignette */
+.atmos-light {
+  position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  mix-blend-mode: screen;
+}
+.atmos-light .scan {
+ position: absolute;
+ inset: 0;
+ opacity: 0.45;
+ background-image: repeating-linear-gradient(
+ to bottom,
+ rgba(255, 255, 255, 0.025) 0px,
+ rgba(255, 255, 255, 0.025) 1px,
+ transparent 1px,
+ transparent 6px
+  );
+}
+/* Next-chapter stamp — replaces the bare "01 / 06" counter. Reads
+   as a small operational marker: VH · Next Chapter · 02. */
+.next-stamp {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+.next-stamp:hover {
+  border-color: var(--signal);
+  color: var(--ink);
+}
+.next-stamp .ns-mark {
+  font-family: var(--display);
+  color: var(--signal);
+  letter-spacing: 0.12em;
+}
+.next-stamp .ns-sep { color: var(--ink-faint); }
+.next-stamp .ns-num {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Reader masthead seal — quiet sibling to the breadcrumb */
+.reader-seal {
+  display: inline-flex; align-items: center;
+  margin-right: 4px;
+  transition: filter 0.2s ease;
+}
+.reader-seal img {
+  display: block; width: 22px; height: auto;
+}
+.reader-seal:hover {
+  filter: drop-shadow(0 0 8px rgba(214, 58, 43, 0.32));
+}
+
+/* G-spirit watermark — moved to the meta line. The seal sits behind
+   the "07 min · presence-paced" stamp on the right, rotated and
+   partly off the column edge. Stylistic offset, not centered. */
+.title-block {
+  position: relative;
+  padding: 24px 0 8px;
+  margin-bottom: 50px;
+}
+.title-block h1 {
+  position: relative; z-index: 1;
+}
+.title-block .epigraph {
+  position: relative; z-index: 1;
+}
+
+.meta {
+  position: relative;
+  overflow: visible;
+}
+.meta > div {
+  position: relative;
+  z-index: 2;
+}
+.meta .ch-num {
+  /* Ink shadow so the timestamp reads cleanly over the watermark */
+  text-shadow:
+	0 0 14px rgba(6,6,6,0.95),
+	0 0 4px rgba(6,6,6,0.95);
+}
+.meta-seal {
+  position: absolute;
+  right: -120px;
+  top: -110px;
+  width: 360px;
+  height: auto;
+  opacity: 0.30;
+  pointer-events: none;
+  transform: rotate(-9deg);
+  filter: drop-shadow(0 0 28px rgba(214, 58, 43, 0.18));
+  z-index: 0;
+  /* Quiet breath — the watermark inhales and exhales over 9 seconds.
+	 Imperceptible by the second, but the page feels alive. */
+  animation: sealbreath 9s ease-in-out infinite;
+}
+@keyframes sealbreath {
+  0%, 100% { opacity: 0.27; transform: rotate(-9deg) scale(1);     }
+  50%      { opacity: 0.33; transform: rotate(-9deg) scale(1.015); }
+}
+@media (max-width: 720px) {
+  .meta-seal { width: 240px; right: -60px; top: -80px; }
+}
+
+/* Slow scan beam — drifts down the page roughly every 22s.
+   Sits dimmer than the seal watermark (~0.32) — visible
+   but not insistent. The reader's gentle heartbeat. */
+.reader-frame::after {
+  content: "";
+  position: fixed;
+  left: 0; right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 8%, var(--signal) 50%, transparent 92%);
+  box-shadow: 0 0 8px rgba(214, 58, 43, 0.22);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 99;
+  animation: scandrift 22s linear infinite;
+  will-change: top;
+}
+@keyframes scandrift {
+  0%   { top: -2%;  opacity: 0;    }
+  5%   { opacity: 0.15; }
+  95%  { opacity: 0.15; }
+  100% { top: 102%; opacity: 0;    }
+}
+
+/* Respect reduced-motion preferences — kills the breath + scan beam
+   for visitors who've asked their OS for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .meta-seal { animation: none; }
+  .reader-frame::after { animation: none; opacity: 0; }
+}
+
+
+/* ─── Chapter reader block-quote ───────────────────────────────────────── */
+.signal-quote {
+  position: relative;
+  margin: 42px 0;
+  padding: 18px 22px 18px 26px;
+
+  border-left: 1px solid var(--signal);
+  background:
+    linear-gradient(
+      to right,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.012)
+    );
+
+  color: var(--ink-soft);
+
+  font-family: "Space Mono", monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  letter-spacing: 0.035em;
+
+  opacity: 0.92;
+}
+
+.signal-quote::before {
+  content: "SIGNAL";
+  position: absolute;
+  top: -9px;
+  left: 12px;
+
+  padding: 0 8px;
+
+  background: var(--bg);
+  color: var(--signal);
+
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.signal-quote p {
+  margin: 0;
+}
+
+.signal-quote em {
+  color: var(--signal);
+  font-style: normal;
+}
+
+.signal-quote strong {
+  color: var(--ink);
+  font-weight: 400;
+}
+
+/* ─── Chapter reader lense translation ───────────────────────────────────────── */
+.lens-translation {
+  margin: -18px 0 34px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.025);
+  color: var(--ink-dim);
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.08em;
+}
+
+.lens-translation[hidden] {
+  display: none;
+}
+
+.lens-translation .lt-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--signal);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.lens-translation .lt-copy {
+  display: block;
+}
+
+
+/* Reader top bar (minimal) */
+.reader-top {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 24px;
+  background: rgba(6,6,6,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.reader-top .left { display: flex; gap: 22px; align-items: center; }
+.reader-top a:hover { color: var(--signal); }
+.reader-top .progress {
+  width: 120px; height: 1px; background: var(--line);
+  position: relative;
+}
+.reader-top .progress i {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--signal); box-shadow: 0 0 6px var(--signal-dim);
+}
+
+/* ── Selection — keep it ship ──────────────────────────────────────── */
+::selection { background: var(--signal); color: #fff; }

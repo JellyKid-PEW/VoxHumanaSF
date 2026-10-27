@@ -1,0 +1,42 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "risk",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 2,
+  "lines": [
+    {
+      "id": "lst-bob-13",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 58,
+      "surface": "listen-section",
+      "slot": "risk",
+      "context_key": "B.O.B. · Risk Assessment",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The pessimistic subsystem has been outvoted."
+    },
+    {
+      "id": "lst-bob-14",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 57,
+      "surface": "listen-section",
+      "slot": "risk",
+      "context_key": "B.O.B. · Debt Ledger",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Debt flag present. Status: inconveniently alive."
+    }
+  ],
+  "generated_at": 1793062847767
+}

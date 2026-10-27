@@ -1,0 +1,107 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "care",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 7,
+  "lines": [
+    {
+      "id": "lst-bob-03",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 68,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Medbay Monitor",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Crew vitals remain technically discouraging."
+    },
+    {
+      "id": "lst-bob-04",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 67,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Environmental Control",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Atmospheric normals holding. Emotional normals unavailable."
+    },
+    {
+      "id": "lst-bob-09",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 62,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Environmental Control",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Comfort loops reduced. Complaint likelihood elevated."
+    },
+    {
+      "id": "lst-bob-16",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 55,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Medbay Monitor",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Hydration recommended before the next argument."
+    },
+    {
+      "id": "lst-bob-20",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 51,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Rest Cycle Log",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Archive note: nobody aboard sleeps correctly."
+    },
+    {
+      "id": "lst-bob-28",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 43,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Environmental Control",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Environmental loop trimmed by captain request. Regret probable."
+    },
+    {
+      "id": "lst-bob-38",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 33,
+      "surface": "listen-section",
+      "slot": "care",
+      "context_key": "B.O.B. · Rest Cycle Log",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Crew rest recommendation filed. Crew ignored filing."
+    }
+  ],
+  "generated_at": 1793062847766
+}

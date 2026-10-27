@@ -1,0 +1,120 @@
+{
+  "kind": "memory-listing",
+  "view": "bob",
+  "surface": "listen-section",
+  "slot": "archive",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 8,
+  "lines": [
+    {
+      "id": "lst-bob-01",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 70,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Archive",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Archive note: logged and idle."
+    },
+    {
+      "id": "lst-bob-05",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 66,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Cargo Manifest",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Manifest reads green. Crew judgment pending."
+    },
+    {
+      "id": "lst-bob-08",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 63,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Registry Cache",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Registry mismatch ignored by mutual consent."
+    },
+    {
+      "id": "lst-bob-10",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 61,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Crew Log",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Crew designation update deferred."
+    },
+    {
+      "id": "lst-bob-25",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 46,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Port Registry",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Port registry ping declined to become useful."
+    },
+    {
+      "id": "lst-bob-26",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 45,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Archive",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Archive query returned seventeen rumors and no apology."
+    },
+    {
+      "id": "lst-bob-32",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 39,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Legacy File",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Legacy file opened itself. I did not appreciate that."
+    },
+    {
+      "id": "lst-bob-35",
+      "view": "bob",
+      "behavior": "Current",
+      "weight": 36,
+      "surface": "listen-section",
+      "slot": "archive",
+      "context_key": "B.O.B. · Archive",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Archive note: Vox references remain culturally unstable."
+    }
+  ],
+  "generated_at": 1793062847768
+}

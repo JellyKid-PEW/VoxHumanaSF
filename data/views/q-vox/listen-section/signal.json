@@ -1,0 +1,68 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "signal",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 4,
+  "lines": [
+    {
+      "id": "lst-q-vox-08",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 63,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Q. Vox · Relay Station",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "We look. We don’t promise."
+    },
+    {
+      "id": "lst-q-vox-23",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 48,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Q. Vox · Relay Station",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "The room wants a show. Don’t give it one."
+    },
+    {
+      "id": "lst-q-vox-28",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 43,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Q. Vox · Internal Comms",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Good news should make less noise."
+    },
+    {
+      "id": "lst-q-vox-29",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 42,
+      "surface": "listen-section",
+      "slot": "signal",
+      "context_key": "Q. Vox · Relay Station",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Keep your hands where the ship can see them."
+    }
+  ],
+  "generated_at": 1793062847742
+}

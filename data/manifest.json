@@ -1,0 +1,97 @@
+{
+  "kind": "memory-manifest",
+  "views": [
+    {
+      "id": "q-vox",
+      "name": "Quenby Vox",
+      "kind": "character",
+      "selectable": 1,
+      "gated": 0
+    },
+    {
+      "id": "iri-six",
+      "name": "Iri-Six",
+      "kind": "character",
+      "selectable": 1,
+      "gated": 0
+    },
+    {
+      "id": "bob",
+      "name": "B.O.B.",
+      "kind": "character",
+      "selectable": 1,
+      "gated": 0
+    },
+    {
+      "id": "nova",
+      "name": "Nova",
+      "kind": "character",
+      "selectable": 1,
+      "gated": 0
+    },
+    {
+      "id": "unknown-signal",
+      "name": "Unknown Signal",
+      "kind": "signal",
+      "selectable": 0,
+      "gated": 0
+    },
+    {
+      "id": "margins",
+      "name": "Margins",
+      "kind": "proximity",
+      "selectable": 1,
+      "gated": 1
+    }
+  ],
+  "surfaces": [
+    "bridge",
+    "post-chapter",
+    "object-note",
+    "listen-section",
+    "drift-frame",
+    "archive-frame",
+    "margins-frame",
+    "generic"
+  ],
+  "slots": {
+    "bridge": [
+      "signal"
+    ],
+    "listen-section": [
+      "command",
+      "systems",
+      "threshold",
+      "care",
+      "risk",
+      "ritual",
+      "signal",
+      "archive",
+      "drift"
+    ]
+  },
+  "observation_types": [
+    "operational",
+    "pattern",
+    "deviation",
+    "correlation",
+    "consistency",
+    "anomaly"
+  ],
+  "objects": [
+    "mug",
+    "tea",
+    "kettle",
+    "blanket",
+    "manifest",
+    "garden"
+  ],
+  "current_state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "files": 97,
+  "generated_at": 1793062847797
+}

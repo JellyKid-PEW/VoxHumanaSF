@@ -1,0 +1,29 @@
+{
+  "kind": "memory-listing",
+  "view": "q-vox",
+  "surface": "listen-section",
+  "slot": "ritual",
+  "state": {
+    "id": "b01-complete",
+    "ordinal": 1,
+    "book_id": "b01",
+    "label": "Book 1 Complete"
+  },
+  "count": 1,
+  "lines": [
+    {
+      "id": "lst-q-vox-14",
+      "view": "q-vox",
+      "behavior": "Current",
+      "weight": 57,
+      "surface": "listen-section",
+      "slot": "ritual",
+      "context_key": "Q. Vox · Tea Rack",
+      "observation_type": null,
+      "book_id": "b01",
+      "release_state_id": null,
+      "text": "Don’t confuse craving with feeling."
+    }
+  ],
+  "generated_at": 1793062847742
+}
