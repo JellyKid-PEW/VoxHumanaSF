@@ -1,496 +1,580 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Vox Humana · A Slow-Burn Sci-Fi Web Serial</title>
-
-  <meta name="description" content="Vox Humana is a character-led sci-fi web serial about drift, debt, and the uneasy beginnings of a crew. Free to read. Launching soon at voxhumanasf.com." />
-  <meta name="robots" content="index,follow" />
-
-  <!-- Open Graph / Social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Vox Humana – Web Serial Fiction Coming Soon" />
-  <meta property="og:description" content="A ship that won’t quit, a captain outrunning her past, and a crew forming in the quiet. Vox Humana is a twice-monthly serial with interstitial releases between drops." />
-  <meta property="og:url" content="https://voxhumanasf.com" />
-  <meta property="og:image" content="https://voxhumanasf.com/og-image.jpg" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Vox Humana – Web Serial Fiction Coming Soon" />
-  <meta name="twitter:description" content="A character-led sci-fi serial: twice-monthly core chapters, plus interstitial releases between drops. Launching soon at voxhumanasf.com." />
-  <meta name="twitter:image" content="https://voxhumanasf.com/og-image.jpg" />
-
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CreativeWorkSeries",
-    "name": "Vox Humana",
-    "alternateName": "Vox Humana SF",
-    "url": "https://voxhumanasf.com",
-    "inLanguage": "en-US",
-    "isAccessibleForFree": true,
-    "description": "Vox Humana is a character-led science fiction web serial about drift, debt, and the uneasy beginnings of a crew.",
-    "author": {
-      "@type": "Person",
-      "name": ""
-    }
-  }
-  </script>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-  <link href="style.css" rel="stylesheet" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Vox Humana SF · Manual Interface</title>
+<link href="assets/vox-logo-q-vox.png" rel="icon" type="image/png"/>
+<meta content="Vox Humana SF — a sci-fi serial fiction signal from the Wild Huntress." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<!-- Newsreader is the chapter reader's "Page" face — used here only for the
+     Chapter One opening so the excerpt reads like the chapter itself. -->
+<link href="https://fonts.googleapis.com/css2?family=Michroma&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="style/styles.css" rel="stylesheet"/>
+<link href="style/perspective-selector.css" rel="stylesheet"/>
+<!-- Index-only refinements (navigation, opening panel, Lens, layout).
+     Remove this line to fall back to the original index styling. -->
+<link href="style/home.css" rel="stylesheet"/>
+<noscript><style>#panel-queue[hidden]{display:block!important}.panel-switch{display:none!important}</style></noscript>
 </head>
-
-<body>
-  <a class="skip" href="#content">Skip to content</a>
-  <div class="bg" aria-hidden="true"></div>
-
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a class="brand" href="#" aria-label="Vox Humana home">
-        <span class="brand-mark" aria-hidden="true">VH</span>
-        <span class="brand-text">
-          <span class="brand-kicker">Vox Humana</span>
-          <span class="brand-sub">A slow-burn sci-fi web serial</span>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#preview">Tone</a>
-        <a href="#calendar">Calendar</a>
-        <a href="#subscribe" class="nav-cta">Subscribe</a>
-      </nav>
+<body class="home" data-ambiance-no-control="" data-lens-variant="rail-identity">
+<!-- ── Atmospherics — scanlines, grain, vignette ─────────────────────── -->
+<div class="atmos">
+<div class="scan"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
+</div>
+<!-- Boot scan-in — a single bright line sweeps top→bottom on page load,
+       then fades. Remove this div to disable. -->
+<div class="boot-cover scanning" id="boot-cover">
+<div class="boot-sweep"></div>
+</div>
+<div class="hull" data-density="regular">
+<div class="screen">
+<!-- ── Top bar: dispatch ticker + status ─────────────────────────── -->
+<header class="topbar">
+<div aria-label="Ship dispatches" class="dispatch-bar">
+<div class="dispatch-label">
+<span aria-hidden="true" class="dispatch-pip"></span>
+<span>Dispatch</span>
+</div>
+<div aria-label="Dispatch feed — pauses on hover or focus" class="dispatch-window" tabindex="0">
+<div class="dispatch-track" id="dispatch-track">
+<!-- Populated from #dispatch-source by home.js on load + on
+                   perspective change. Items get duplicated for the
+                   seamless marquee loop. Edit entries in the template below. -->
+</div>
+</div>
+<div aria-hidden="true" class="dispatch-edge"></div>
+<template id="dispatch-source">
+<!-- B.O.B. / Archive / Ship Systems -->
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">23:58</span><span class="dispatch-sep">·</span><span class="dispatch-body">Archive pulse stable · No external query returned</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">23:41</span><span class="dispatch-sep">·</span><span class="dispatch-body">Coolant lines holding · Manifest balance acceptable</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">23:22</span><span class="dispatch-sep">·</span><span class="dispatch-body">Comfort loops minimized · Crew objections inferred</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">23:07</span><span class="dispatch-sep">·</span><span class="dispatch-body">Bridge lit · Galley quiet · Corridor pressure nominal</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">22:49</span><span class="dispatch-sep">·</span><span class="dispatch-body">Kettle cycle complete · Cup unclaimed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">22:31</span><span class="dispatch-sep">·</span><span class="dispatch-body">Vital spread impolite · Improving by fractions</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">22:17</span><span class="dispatch-sep">·</span><span class="dispatch-body">Advisory paused · Captain tone hazardous</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">22:03</span><span class="dispatch-sep">·</span><span class="dispatch-body">Atmosphere stable · Behavioral readouts unresolved</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">21:46</span><span class="dispatch-sep">·</span><span class="dispatch-body">Manual helm active · Huntress tolerating input</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">21:21</span><span class="dispatch-sep">·</span><span class="dispatch-body">Dock clamps remembered us · Cooperation delayed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">21:04</span><span class="dispatch-sep">·</span><span class="dispatch-body">Silence request received · Compliance partial</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">20:52</span><span class="dispatch-sep">·</span><span class="dispatch-body">Heat patch estimate unstable · Confidence narrowing</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">20:36</span><span class="dispatch-sep">·</span><span class="dispatch-body">Registry ghost ping ignored · Local log sealed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">20:18</span><span class="dispatch-sep">·</span><span class="dispatch-body">Water level low · Argument likelihood elevated</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">19:59</span><span class="dispatch-sep">·</span><span class="dispatch-body">Proximity threshold crossed · Commentary suppressed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">19:43</span><span class="dispatch-sep">·</span><span class="dispatch-body">Galley drawer impact logged · Source unconfirmed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">19:27</span><span class="dispatch-sep">·</span><span class="dispatch-body">Environmental bias adjusted · Credit not requested</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">19:12</span><span class="dispatch-sep">·</span><span class="dispatch-body">Two awake · One motionless · Neither resting</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">18:58</span><span class="dispatch-sep">·</span><span class="dispatch-body">Drive hum uneven · Manual trim pending</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="bob"><span class="dispatch-ts">18:39</span><span class="dispatch-sep">·</span><span class="dispatch-body">Surface web: <span class="domain-lock">VoxHumana<strong><em class="domain-sf">SF</em></strong>.com</span> · Registry <span class="registry-code">VH-<strong><em class="domain-sf">SF</em></strong>-001</span></span><span class="dispatch-gap">·</span></span>
+<!-- Iri-Six / Navigation / Tactical -->
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">18:22</span><span class="dispatch-sep">·</span><span class="dispatch-body">Vector stable · Passive scan open</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">18:09</span><span class="dispatch-sep">·</span><span class="dispatch-body">Three rotations since last dock</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">17:54</span><span class="dispatch-sep">·</span><span class="dispatch-body">Patch window active · Local signal only</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">17:39</span><span class="dispatch-sep">·</span><span class="dispatch-body">Drift at seam logged · Correction deferred</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">17:21</span><span class="dispatch-sep">·</span><span class="dispatch-body">Interior seal confirmed · Hatch response clean</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">17:02</span><span class="dispatch-sep">·</span><span class="dispatch-body">Reserve shaved · Back vector remains clean</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">16:48</span><span class="dispatch-sep">·</span><span class="dispatch-body">External scan narrow · Signature low</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">16:31</span><span class="dispatch-sep">·</span><span class="dispatch-body">Gravity well mapped · First step holds</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">16:17</span><span class="dispatch-sep">·</span><span class="dispatch-body">Tool rack checked · Missing nothing useful</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">15:59</span><span class="dispatch-sep">·</span><span class="dispatch-body">West line flushed · Rattle cleared</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">15:41</span><span class="dispatch-sep">·</span><span class="dispatch-body">Lamp film noted · Dry cloth required</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">15:27</span><span class="dispatch-sep">·</span><span class="dispatch-body">Tail lost · Pace unsustainable</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">15:10</span><span class="dispatch-sep">·</span><span class="dispatch-body">Route holds under current mass</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">14:52</span><span class="dispatch-sep">·</span><span class="dispatch-body">Seal checked · Adhesion questionable</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">14:36</span><span class="dispatch-sep">·</span><span class="dispatch-body">Cycle list updated · Breaks allowed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">14:18</span><span class="dispatch-sep">·</span><span class="dispatch-body">Second path closed · Primary remains viable</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">13:59</span><span class="dispatch-sep">·</span><span class="dispatch-body">Designation review paused · Result unstable</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">13:29</span><span class="dispatch-sep">·</span><span class="dispatch-body">Climbing line tied · Slack preserved</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="iri-six"><span class="dispatch-ts">13:11</span><span class="dispatch-sep">·</span><span class="dispatch-body">Dual input required · Single-hand risk high</span><span class="dispatch-gap">·</span></span>
+<!-- Quenby Vox / Bridge / Myth / Captain -->
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">12:56</span><span class="dispatch-sep">·</span><span class="dispatch-body">Ambition tin rotated · Label hidden</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">12:39</span><span class="dispatch-sep">·</span><span class="dispatch-body">Comfort draw cut · Heat accepted</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">12:08</span><span class="dispatch-sep">·</span><span class="dispatch-body">Crew field left blank · Update postponed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">11:47</span><span class="dispatch-sep">·</span><span class="dispatch-body">Dirty lane accepted · Exits prioritized</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">11:31</span><span class="dispatch-sep">·</span><span class="dispatch-body">Public signal suppressed · Route kept narrow</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">10:58</span><span class="dispatch-sep">·</span><span class="dispatch-body">Dock eyes counted · None invited</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">10:41</span><span class="dispatch-sep">·</span><span class="dispatch-body">Bridge cradle occupied · Rest unconfirmed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">09:52</span><span class="dispatch-sep">·</span><span class="dispatch-body">Forward vector costly · Accepted anyway</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">09:37</span><span class="dispatch-sep">·</span><span class="dispatch-body">Ration math hostile · Tea possible</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">09:22</span><span class="dispatch-sep">·</span><span class="dispatch-body">Asset terminology declined · No formal reply</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">09:06</span><span class="dispatch-sep">·</span><span class="dispatch-body">Old access method detected · Drawer unchecked</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">08:49</span><span class="dispatch-sep">·</span><span class="dispatch-body">Helm surface warm · Grip pressure high</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">08:17</span><span class="dispatch-sep">·</span><span class="dispatch-body">Visual confirmation pending · No commitment logged</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="q-vox"><span class="dispatch-ts">07:48</span><span class="dispatch-sep">·</span><span class="dispatch-body">Low-signature departure queued</span><span class="dispatch-gap">·</span></span>
+<!-- Nova / Signal / Variable / Galley -->
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">07:31</span><span class="dispatch-sep">·</span><span class="dispatch-body">Bolt stack collapsed · Repeat attempt likely</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">07:16</span><span class="dispatch-sep">·</span><span class="dispatch-body">Sugar tin handled · Lid left crooked</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">06:59</span><span class="dispatch-sep">·</span><span class="dispatch-body">Signal fit improved · Cause unconfirmed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">06:44</span><span class="dispatch-sep">·</span><span class="dispatch-body">Glove cuffs adjusted · Pressure points reduced</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">06:27</span><span class="dispatch-sep">·</span><span class="dispatch-body">Drift complaint logged · Acoustic force excessive</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">06:12</span><span class="dispatch-sep">·</span><span class="dispatch-body">Galley hatch struck · Impact controlled</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">05:58</span><span class="dispatch-sep">·</span><span class="dispatch-body">Garden line accepted · Stem response positive</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">05:39</span><span class="dispatch-sep">·</span><span class="dispatch-body">Asset tag contested · Verbal strike recorded</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">05:21</span><span class="dispatch-sep">·</span><span class="dispatch-body">Training chamber active · Wall impacts rising</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">05:07</span><span class="dispatch-sep">·</span><span class="dispatch-body">First block successful · Pattern not established</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">04:51</span><span class="dispatch-sep">·</span><span class="dispatch-body">Name pressure rising · Designation disputed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">04:33</span><span class="dispatch-sep">·</span><span class="dispatch-body">Door tone irregular · Response delayed</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">04:16</span><span class="dispatch-sep">·</span><span class="dispatch-body">Sweetener request filed · Nutritional value secondary</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">03:59</span><span class="dispatch-sep">·</span><span class="dispatch-body">Tin label updated · Hand pressure uneven</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">03:44</span><span class="dispatch-sep">·</span><span class="dispatch-body">Station odor flagged · Organic category uncertain</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">03:26</span><span class="dispatch-sep">·</span><span class="dispatch-body">Restraint memory active · Hands withdrawn</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">03:11</span><span class="dispatch-sep">·</span><span class="dispatch-body">Copilot chair occupied incorrectly</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">02:52</span><span class="dispatch-sep">·</span><span class="dispatch-body">Question asked · Answer avoided · Pattern noted</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">02:34</span><span class="dispatch-sep">·</span><span class="dispatch-body">Signal pull forward · Map unavailable</span><span class="dispatch-gap">·</span></span>
+<span class="dispatch-item" data-who="nova"><span class="dispatch-ts">02:17</span><span class="dispatch-sep">·</span><span class="dispatch-body">Unregistered occupant present · Listening confirmed</span><span class="dispatch-gap">·</span></span>
+</template>
+</div>
+<div class="right">
+<div>Surface Web: <b><span class="domain-lock">VoxHumana<strong><em class="domain-sf">SF</em></strong>.com</span></b></div>
+<div>Registry: <b>VH-<strong><em class="domain-sf">SF</em></strong>-001</b></div>
+</div>
+</header>
+<!-- ── Main: Identity (left) + Transmission Queue (right) ────────── -->
+<main class="main">
+<!-- ── Identity ───────────────────────────────────────────────── -->
+<section class="identity">
+<!-- Brand lockup -->
+<a class="brand" data-glitch="" href="index.html">
+<img alt="" aria-hidden="true" class="brand-seal" data-perspective-seal="" src="assets/vox-logo-q-vox.png"/>
+<div class="brand-word">
+<div class="brand-stamp">
+<span>Wild Huntress · <b>Manual Interface</b></span>
+<span class="dot">·</span>
+<span>Registry <b>VH-<strong><em class="domain-sf">SF</em></strong>·001</b></span>
+</div>
+<div class="brand-vox">
+                V<span class="vox-o">O<svg aria-hidden="true" class="vox-mic" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 160">
+<g fill="none" stroke="currentColor" stroke-linecap="round">
+<line stroke-width="3" x1="22" x2="78" y1="32" y2="32"></line>
+<line stroke-width="3" x1="16" x2="84" y1="50" y2="50"></line>
+<line stroke-width="3" x1="12" x2="88" y1="68" y2="68"></line>
+<line stroke-width="3" x1="11" x2="89" y1="86" y2="86"></line>
+<line stroke-width="3" x1="12" x2="88" y1="104" y2="104"></line>
+<line stroke-width="3" x1="16" x2="84" y1="122" y2="122"></line>
+<line stroke-width="3" x1="22" x2="78" y1="140" y2="140"></line>
+<line opacity="0.32" stroke-width="1.5" x1="50" x2="50" y1="24" y2="148"></line>
+</g>
+<circle class="vox-mic-dot" cx="50" cy="86" fill="currentColor" r="6"></circle>
+</svg></span>X
+              </div>
+<div class="brand-humana">HUMANA</div>
+</div>
+</a>
+<!-- Hero copy -->
+<div aria-label="Series tagline" class="brand-hero">
+<p>The universe remembers Quenby Vox badly.</p>
+<p class="bh-em">The ship remembers enough.</p>
+</div>
+<!-- CTA -->
+<a class="cta" data-glitch="" href="chapters/volume1/book1/V1_B1_C01.html">
+<div class="cta-inner">
+<div class="cta-pulse"><i></i></div>
+<div class="cta-text">
+<div class="head">Begin Book One</div>
+<div class="sub">Open the signal</div>
+</div>
+<div class="cta-arrow">›</div>
+</div>
+</a>
+<!-- Captain's Dispatch — articles are GENERATED from scripts/voices.js by
+               home.js (buildCaptainArticles). To edit copy for a character,
+               edit that character's `dispatch` block in voices.js. This host
+               wrapper is intentionally empty. -->
+<div data-cdispatch-host></div>
+<!-- Listening panel — cycles via home.js, filtered by perspective -->
+<article aria-label="Listening" class="listening" id="listening">
+<header class="ls-head">
+<span class="ls-eyebrow">— Listening</span>
+<span class="ls-who" data-ls-who="">Quenby Vox · Bridge</span>
+</header>
+<p aria-live="off" class="ls-line" data-ls-line="">“We run quiet until we don’t.”</p>
+<!-- Bottom strip: position, selectable dots, previous / pause / next.
+     home.js drives it. These are the visual quote carousel's controls —
+     separate from the ship-ambience audio in the navigation. -->
+<footer class="ls-foot">
+<span class="ls-cycle" data-ls-cycle="">Cycle <b data-ls-num="">01</b> / <span data-ls-total="">06</span></span>
+<span aria-label="Choose a quote" class="ls-dots" data-ls-dots="" role="group"></span>
+<span class="ls-controls">
+<button aria-label="Previous quote" class="ls-btn" data-ls-prev="" type="button"><svg aria-hidden="true" viewbox="0 0 12 12"><path d="M7.5 2.5 4 6l3.5 3.5"></path></svg></button>
+<button aria-label="Pause automatic rotation" aria-pressed="false" class="ls-btn ls-toggle" data-ls-toggle="" type="button"><svg aria-hidden="true" class="i-pause" viewbox="0 0 12 12"><path d="M4.25 2.5v7M7.75 2.5v7"></path></svg><svg aria-hidden="true" class="i-play" viewbox="0 0 12 12"><path d="M4 2.5 9 6 4 9.5z"></path></svg></button>
+<button aria-label="Next quote" class="ls-btn" data-ls-next="" type="button"><svg aria-hidden="true" viewbox="0 0 12 12"><path d="M4.5 2.5 8 6l-3.5 3.5"></path></svg></button>
+</span>
+</footer>
+</article>
+</section>
+<!-- ── Lens column ──────────────────────────────────────────────
+     Perspective lens switcher — Crew Rail (concept D). It now has its own
+     narrow column between the identity and the transmission panel (it used
+     to hang off the queue's left edge). perspective-selector.js builds it
+     and wires it to window.VoxPerspective. -->
+<div class="lens-col">
+<nav aria-label="Perspective" class="lens-dock" data-lens-dock="" data-lens-hint="Choose perspective"></nav>
+</div>
+<!-- ── Console column: site navigation + transmission panel ──────── -->
+<div class="console-col">
+<!-- Site navigation — replaces the footer's Interface / Signal Log
+     columns. Same URLs. home-interface.js wires the Explore menu. -->
+<nav aria-label="Site" class="site-nav">
+<ul class="sn-list">
+<li><a class="sn-link" href="world/transmission-log.html">Read<span class="sn-note">Transmission log</span></a></li>
+<li class="sn-has-menu">
+<button aria-controls="sn-explore" aria-expanded="false" class="sn-link sn-toggle" type="button">Explore<span aria-hidden="true" class="sn-caret"></span></button>
+<div class="sn-menu" hidden="" id="sn-explore">
+<div aria-hidden="true" class="sn-menu-head">Signal Log</div>
+<ul>
+<li><a href="world/signal.html"><b>Signal</b><span>Live ship feed, tuned by perspective</span></a></li>
+<li><a href="world/hold.html"><b>Hold</b><span>Memory anchors the crew keeps</span></a></li>
+<li><a href="world/drift.html"><b>Drift</b><span>Loose fragments and reader questions</span></a></li>
+</ul>
+</div>
+</li>
+<li><a class="sn-link" href="world/series-info.html">About<span class="sn-note">Series info</span></a></li>
+<li><a class="sn-link" href="world/support.html">Support</a></li>
+<!-- Ship ambience — opens the mixer (scripts/ship-sound.js). Starts muted
+     on every load; only the mixer's own "Sound on" starts playback. -->
+<li class="sn-has-menu sn-sound">
+<button aria-controls="sn-sound-panel" aria-expanded="false" aria-label="Ship ambience — sound off" class="sn-link sn-sound-btn" data-sound-btn="" type="button">
+<svg aria-hidden="true" class="snd-icon" viewbox="0 0 20 20"><path class="snd-body" d="M3.5 7.5h3L10.5 4v12l-4-3.5h-3z"></path><path class="snd-off" d="M13.5 7.5l5 5M18.5 7.5l-5 5"></path><path class="snd-on" d="M13.5 7.2c1.1 1.5 1.1 4.1 0 5.6M15.8 5.2c2.2 2.8 2.2 6.8 0 9.6"></path></svg>
+<span aria-hidden="true" class="sn-sound-label">Ship ambience</span>
+</button>
+<div aria-label="Ship ambience mixer" class="sn-menu sn-mixer" hidden="" id="sn-sound-panel" role="dialog"></div>
+</li>
+</ul>
+</nav>
+<!-- ── Transmission panel ─────────────────────────────────────────
+     Two views: the Chapter One opening (initial, experimental) and the
+     original transmission queue. To revert the experiment, set
+     data-initial-view="queue". #queue links from chapters open the queue. -->
+<section class="queue" data-initial-view="opening" id="queue">
+<div class="queue-head">
+<div class="qh-left">
+<div class="title">Transmission · Volume 1</div>
+<a href="chapters/volume1/book1/V1_B1_C01.html">VoxHumana:NEXT</a>
+</div>
+<div class="qh-menu">
+<a aria-label="Vox Humana home" class="topbar-seal" href="index.html">
+<img alt="" aria-hidden="true" data-perspective-seal="" src="assets/vox-logo-q-vox.png"/>
+</a>
+<div class="tag-stack">
+<div class="row"><span class="lbl">Wild Huntress</span><span class="ghost">// Manual Interface</span></div>
+<div class="row"><span class="sub">Listen first.</span><span class="sub">Then choose.</span></div>
+</div>
+</div>
+</div>
+<!-- Panel switch — changes what the panel shows (not site navigation). -->
+<div aria-label="Transmission panel view" class="panel-switch" role="tablist">
+<button aria-controls="panel-opening" aria-selected="true" class="ps-tab" id="tab-opening" role="tab" type="button"><span aria-hidden="true" class="ps-mark"></span>Read the opening</button>
+<button aria-controls="panel-queue" aria-selected="false" class="ps-tab" id="tab-queue" role="tab" tabindex="-1" type="button"><span aria-hidden="true" class="ps-mark"></span>Transmission queue</button>
+</div>
+<!-- View 1 · Chapter One opening. Text is copied verbatim from
+     chapters/volume1/book1/V1_B1_C01.html (title, epigraph, first 42
+     paragraphs). Perspective changes do not touch it. -->
+<div aria-labelledby="tab-opening" class="panel-view opening" id="panel-opening" role="tabpanel" tabindex="0">
+<header class="op-head">
+<div class="op-kicker">Book One · Chapter 01 · Opening</div>
+<h2 class="op-title">The Ship That Listens</h2>
+<p class="op-epigraph">You don't earn a ship.<br/>You survive what it hears.</p>
+</header>
+<div class="op-prose">
+<p class="dropcap">The ship was already moving. Not fast. Not loud. Forward.</p>
+<p>That suited Quenby fine.</p>
+<p>She crouched beside an open panel beneath the bridge console, sleeves pushed past her elbows, wire casing peeled back with the confidence of someone who didn&#x27;t need permission anymore. She&#x27;d rerouted power through this panel before. First out of necessity. Then out of spite.</p>
+<p>Now it was habit.</p>
+<p>She rested a hand against the console housing, feeling the vibration through her palm as she listened.</p>
+<p>The <em>Wild Huntress</em> didn&#x27;t hum exactly. She had rhythm. Low. Off-kilter. Too syncopated for factory specs.</p>
+<p>Quenby liked it.</p>
+<p>Ships should be a little wrong.</p>
+<p>She pulled the heat-dampening cloth tighter around her fingers and reached into the exposed cabling feeling for contact.</p>
+<p>The core reroute engaged with a satisfying click. A regulator ticked. Pressure trimmed a decimal and held.</p>
+<p>From overhead: &quot;Unnecessary, but impressive.&quot;</p>
+<p>B.O.B. didn&#x27;t sigh. He couldn&#x27;t, but the pause in his tone had the shape of one.</p>
+<p>&quot;You remain the only person I&#x27;ve logged who actively chooses to downgrade ship lighting from optimal to theatrically brooding.&quot;</p>
+<p>&quot;I perform better under pressure.&quot;</p>
+<p>&quot;You&#x27;re alone.&quot;</p>
+<p>&quot;Exactly.&quot;</p>
+<p>She stood slowly. Her knees popped. Her right wrist ached again. She ignored both.</p>
+<p>The forward viewport flickered, then cleared on empty drift and the long pull of space.</p>
+<p>&quot;Still nothing?&quot;</p>
+<p>&quot;No significant bodies within scan range. Two echo returns, possibly buoy debris. One flagged with a partial tag code. Likely a collapsed station node. Not actionable.&quot;</p>
+<p>&quot;Is that you saying &#x27;not interesting&#x27; in ship-speak?&quot;</p>
+<p>&quot;I am not saying,&quot; B.O.B. replied, with just enough pause to be smug, &quot;that if you choose to chase it, we will need to conserve fuel on the return vector.&quot;</p>
+<p>Quenby didn&#x27;t answer right away.</p>
+<p>She ran one hand along the edge of the bridge railing. Smooth with wear that wasn&#x27;t hers.</p>
+<p>But the ship was hers now.</p>
+<p>Not legally.</p>
+<p>Just in the way a sharp blade belongs to the person willing to use it.</p>
+<p>She tapped the console. &quot;Keep the trace active. Tag it &#x27;Maybe.&#x27;&quot;</p>
+<p>&quot;Done.&quot;</p>
+<p>She exhaled, caught somewhere between breath and decision.</p>
+<p>&quot;Captain Quenby Vox, would now be a good time to discuss your intake levels?&quot;</p>
+<p>&quot;No.&quot;</p>
+<p>&quot;You have not eaten—&quot;</p>
+<p>&quot;No.&quot;</p>
+<p>&quot;You could at least—&quot;</p>
+<p>She looked up toward the ceiling. &quot;You&#x27;re going to list nutrients again, aren&#x27;t you?&quot;</p>
+<p>The briefest silence.</p>
+<p>Then, brightly: &quot;Fiber is a critical—&quot;</p>
+<p>&quot;Mute.&quot;</p>
+<p>Chime.</p>
+<p>Silence.</p>
+</div>
+<footer class="op-continue">
+<a class="op-continue-link" href="chapters/volume1/book1/V1_B1_C01.html#opening-continue">
+<span class="op-c-label">Continue Chapter 01</span>
+<span class="op-c-from">from “Quenby dropped into the captain&#x27;s chair…”</span>
+<span aria-hidden="true" class="op-c-arrow">›</span>
+</a>
+<a class="op-restart" href="chapters/volume1/book1/V1_B1_C01.html">Open the full chapter from the start</a>
+</footer>
+</div>
+<!-- View 2 · Transmission queue (unchanged rows + perspective titles) -->
+<div aria-labelledby="tab-queue" class="panel-view" hidden="" id="panel-queue" role="tabpanel">
+<div class="q-frame">
+<div aria-label="Transmission queue chapters" class="q-scroll" id="q-scroll" role="list" tabindex="0">
+<a class="q-row" data-chapter="01" data-status="released" href="chapters/volume1/book1/V1_B1_C01.html">
+<div class="q-num">01</div>
+<div class="q-meta">
+<div class="q-title">The Ship That Listens</div>
+<div class="q-sub">You don’t earn a ship. You survive what it hears.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave" data-wave="01" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="02" data-status="released" href="chapters/volume1/book1/V1_B1_C02.html">
+<div class="q-num">02</div>
+<div class="q-meta">
+<div class="q-title">Filter by Honesty</div>
+<div class="q-sub">Not the clean signal. The one that admits what it wants.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave" data-wave="02" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="03" data-status="released" href="chapters/volume1/book1/V1_B1_C03.html">
+<div class="q-num">03</div>
+<div class="q-meta">
+<div class="q-title">A Room That Grows</div>
+<div class="q-sub">She came for supplies. The room had other ideas.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave" data-wave="03" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="04" data-status="released" href="chapters/volume1/book1/V1_B1_C04.html">
+<div class="q-num">04</div>
+<div class="q-meta">
+<div class="q-title">Beauty’s Not Always Optional</div>
+<div class="q-sub">Some doors look like weakness until they refuse to close.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave" data-wave="04" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="05" data-status="released" href="chapters/volume1/book1/V1_B1_C05.html">
+<div class="q-num">05</div>
+<div class="q-meta">
+<div class="q-title">For Whoever’s Left Out There</div>
+<div class="q-sub">Going back counts as strategy if no one says care out loud.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="05" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="06" data-status="released" href="chapters/volume1/book1/V1_B1_C06.html">
+<div class="q-num">06</div>
+<div class="q-meta">
+<div class="q-title">No Way Back</div>
+<div class="q-sub">The wreck opened its mouth. She went in anyway.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="06" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="07" data-status="released" href="chapters/volume1/book1/V1_B1_C07.html">
+<div class="q-num">07</div>
+<div class="q-meta">
+<div class="q-title">Momentum, Not Relief</div>
+<div class="q-sub">Surviving the event does not mean surviving the quiet after.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="07" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="08" data-status="released" href="chapters/volume1/book1/V1_B1_C08.html">
+<div class="q-num">08</div>
+<div class="q-meta">
+<div class="q-title">Presence Is a Choice</div>
+<div class="q-sub">Staying in the room is harder when no one makes you.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="08" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="09" data-status="released" href="chapters/volume1/book1/V1_B1_C09.html">
+<div class="q-num">09</div>
+<div class="q-meta">
+<div class="q-title">Cadence Mapping</div>
+<div class="q-sub">Some routes aren’t hidden. They’re waiting to be noticed.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="09" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="10" data-status="released" href="chapters/volume1/book1/V1_B1_C10.html">
+<div class="q-num">10</div>
+<div class="q-meta">
+<div class="q-title">Location Only</div>
+<div class="q-sub">Coordinates are safer than wanting to be found.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="10" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="11" data-status="released" href="chapters/volume1/book1/V1_B1_C11.html">
+<div class="q-num">11</div>
+<div class="q-meta">
+<div class="q-title">Destination: Optional</div>
+<div class="q-sub">If the route won’t save you, make the light mean something.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="11" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+<a class="q-row" data-chapter="12" data-status="released" href="chapters/volume1/book1/V1_B1_Epilogue.html">
+<div class="q-num">12</div>
+<div class="q-meta">
+<div class="q-title">Give Them the Sound</div>
+<div class="q-sub">Don’t give them the name. Let the ship remember the rhythm.</div>
+</div>
+<div class="q-status">
+<div class="stat-released">Released</div>
+<div class="ch">Jun26</div>
+</div>
+<svg aria-hidden="true" class="q-wave released" data-wave="12" preserveaspectratio="none" viewbox="0 0 64 22"></svg>
+</a>
+</div>
+<div aria-hidden="true" class="queue-rail" id="q-rail">
+<i id="q-pip"></i>
+</div>
+</div>
+<div aria-live="polite" class="q-indicator" id="q-indicator">
+<span class="q-range">
+              Viewing <b id="q-range">01–06</b> of 12
+            </span>
+<span class="q-more" id="q-more">
+<span class="q-more-text" id="q-more-text">6 more · scroll</span>
+<span aria-hidden="true" class="q-arr">↓</span>
+</span>
+<span class="q-end" hidden="" id="q-end">End of transmission queue</span>
+</div>
+</div>
+<div class="queue-foot">
+<div>Release Cadence: <b>Every Fortnight</b></div>
+<div>Ship Time · <b>Universal</b></div>
+</div>
+</section>
+</div>
+</main>
+<!-- ── Footer ─────────────────────────────────────────────────── -->
+<footer class="bottombar">
+<!-- Interface + Signal Log link columns moved to the site navigation
+     above the transmission panel. -->
+<div class="col">
+<h4>Ship Status</h4>
+<div class="kv"><span>Vector:</span><b>Stable</b></div>
+<div class="kv"><span>Drift:</span><b>Minimal</b></div>
+<div class="kv"><span>Systems:</span><b>Nominal</b></div>
+<div class="kv"><span>Crew:</span><b>2</b></div>
+</div>
+<div class="col care">
+<h4>Care Protocol</h4>
+<p>
+            This is a living story.<br/>
+            Take what you need.<br/>
+            Step away if you must.<br/>
+            The signal will wait.
+          </p>
+</div>
+<div class="col">
+<div class="receive">
+<span aria-hidden="true" class="tick-bl"></span>
+<div class="receive-eyebrow">
+<span aria-hidden="true" class="receive-pulse"><i></i></span>
+<span>Open Channel</span>
+</div>
+<h4>Receive the Signal</h4>
+<p>New transmissions from <span class="domain-lock">VoxHumana<strong><em class="domain-sf">SF</em></strong>.com</span>, Every Fortnight. No extra noise.</p>
+<form action="#" class="field" id="signal-form" method="post">
+<input name="email" placeholder="signal@yourdomain" required="" type="email"/>
+<button aria-label="Open channel" type="submit">
+<span>Open</span>
+<span class="ar">→</span>
+</button>
+</form>
+<div class="ack" hidden="" id="signal-ack">— Frequency held. Signal will reach you.<br>Next release.</div>
+<div class="receive-fine">Vox Humana · Presence <b>Nov26</b></div>
+</div>
+</div>
+<div class="brandfoot">
+<div><b>Wild Huntress</b></div>
+<div>Manual Interface</div>
+<div><span class="domain-lock">VoxHumana<strong><em class="domain-sf">SF</em></strong>.com</span></div>
+<div>v1.0.0</div>
+</div>
+<!-- Ship time line: sits on the footer's top rule, right-aligned (home.css §14). -->
+<div class="sync-line">
+<i class="pip"></i>
+      Ship Time <b data-ship-clock="">00:00:00</b> <span class="sync-sep">·</span> Signal Drift <b data-ship-drift="">+00:00</b>
     </div>
-  </header>
-
-  <main id="content" class="wrap">
-    <section class="hero" aria-label="Intro">
-      <div class="hero-copy">
-        <p class="badge">
-          <span class="dot" aria-hidden="true"></span>
-          Launching soon • free to read
-        </p>
-
-        <h1>
-          A ship that won’t quit.<br/>
-          A captain outrunning her past.<br/>
-          <span class="grad">A crew forming in the quiet.</span>
-        </h1>
-
-        <p class="lede">
-          <strong>Vox Humana</strong> is character-led science fiction: drift, survival, dry humor, and the slow,
-          uncomfortable work of letting people exist in your orbit.
-        </p>
-
-        <div class="cta-row">
-          <a class="btn primary" href="#subscribe">
-            Get launch updates
-            <span class="arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="btn ghost" href="#preview">Read the tone note</a>
-        </div>
-
-        <dl class="signals" aria-label="Series signals">
-          <div class="sig">
-            <dt>Vibe</dt>
-            <dd>Slow-burn tension, dry humor, quiet pressure</dd>
-          </div>
-          <div class="sig">
-            <dt>Focus</dt>
-            <dd>Character first, world as pressure</dd>
-          </div>
-          <div class="sig">
-            <dt>Format</dt>
-            <dd>Twice-monthly core chapters + interstitial releases</dd>
-          </div>
-        </dl>
-      </div>
-
-      <aside class="hero-panel" aria-label="Status panel">
-        <div class="panel-head">
-          <span class="panel-title">Ship telemetry</span>
-          <span class="panel-status">
-            <span class="status-led" aria-hidden="true"></span>
-            Coming online
-          </span>
-        </div>
-
-        <div class="panel-body">
-          <div class="metric">
-            <div class="m-label">Signal integrity</div>
-            <div class="m-value">92%</div>
-            <div class="m-bar" role="presentation"><span style="width:92%"></span></div>
-          </div>
-
-          <div class="grid">
-            <div class="cell">
-              <div class="c-label">Cadence</div>
-              <div class="c-value">Every 14 days</div>
-            </div>
-            <div class="cell">
-              <div class="c-label">Arc</div>
-              <div class="c-value">Book One</div>
-            </div>
-            <div class="cell">
-              <div class="c-label">Access</div>
-              <div class="c-value">Free</div>
-            </div>
-          </div>
-
-          <div class="panel-note">
-            Minimal spam. Just launch updates, new chapter links, and occasional behind-the-scenes notes.
-          </div>
-        </div>
-
-        <div class="panel-foot">
-          <span class="tiny">
-            Contact:
-            <a href="mailto:voxhumanasf@gmail.com">voxhumanasf@gmail.com</a>
-          </span>
-          <span class="tiny muted">ID: VH-01</span>
-        </div>
-      </aside>
-    </section>
-
-    <section id="about" class="section">
-      <div class="section-head">
-        <h2>What this is</h2>
-        <p>
-          Vox Humana is a story about what happens after the noise stops—
-          when survival becomes routine, and connection becomes the harder work.
-        </p>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <h3>Character-led</h3>
-          <p>
-            Relationships are the engine. Tension lives in proximity, trust is earned slowly,
-            and the crew forms by accumulation rather than declaration.
-          </p>
-        </article>
-
-        <article class="card">
-          <h3>Fringe survival</h3>
-          <p>
-            Broken infrastructure, quiet debts, small jobs, and a ship kept alive
-            through habit, maintenance, and refusal to quit.
-          </p>
-        </article>
-
-        <article class="card">
-          <h3>Serialized by design</h3>
-          <p>
-            Twice-monthly core chapters. Optional interstitial releases land between drops—
-            additive, not a replacement for story progress.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="preview" class="section preview" aria-label="Tone note">
-      <div class="section-head">
-        <h2>Before you begin</h2>
-        <p>
-          Vox Humana starts quiet on purpose. This isn’t an excerpt from Chapter One—just a short tone note
-          so you know what kind of story you’re stepping into: pressure in the small moments, meaning in the pauses,
-          and momentum that builds by accumulation.
-        </p>
-      </div>
-
-      <figure class="excerpt" role="group" aria-label="Tone note">
-        <blockquote>
-          The ship doesn’t rush.<br/>
-          It keeps moving because it has to.<br/><br/>
-
-          Out here, survival isn’t spectacle.<br/>
-          It’s maintenance. Habit. The choice to keep systems online when no one’s watching.<br/><br/>
-
-          Drift isn’t failure.<br/>
-          It’s what happens when you keep going without applause.<br/><br/>
-
-          Read it like that.<br/>
-          Slow. Deliberate. Layer by layer.
-        </blockquote>
-        <figcaption>— A tone note for <em>Vox Humana</em></figcaption>
-      </figure>
-    </section>
-
-    <section id="details" class="section" aria-label="Release details">
-      <div class="section-head">
-        <h2>How it releases</h2>
-        <p>
-          Short drops, deliberate momentum—each chapter adds weight instead of resetting the board.
-        </p>
-      </div>
-
-      <div class="cards">
-        <article class="card">
-          <h3>Cadence</h3>
-          <p><strong>Every 14 days</strong> for core chapters, with optional interstitial releases between drops.</p>
-        </article>
-
-        <article class="card">
-          <h3>What you get</h3>
-          <p>Character-first sci-fi: drift, survival, dry humor, and a crew forming one small shift at a time.</p>
-        </article>
-
-        <article class="card">
-          <h3>Start point</h3>
-          <p>Begin at <strong>Book One</strong>. No prior reading required. Clean chapter navigation on launch.</p>
-        </article>
-      </div>
-
-      <div class="cta-row" style="margin-top: 1rem;">
-        <a class="btn ghost" href="#" aria-disabled="true" onclick="return false;">
-          Start at Book One (available on launch)
-        </a>
-        <a class="btn ghost" href="#subscribe">
-          Get the first chapter link
-        </a>
-      </div>
-    </section>
-
-    <section id="calendar" class="section calendar" aria-label="Book One release calendar">
-      <div class="section-head">
-        <h2>Book One release calendar</h2>
-        <p>
-          Core chapters drop <strong>every two weeks</strong>. Between drops, you’ll get optional interstitial releases
-          (artifacts, cast notes, short extras) that deepen the crew without replacing story progress.
-        </p>
-      </div>
-
-      <div class="calendar-controls" role="group" aria-label="Calendar controls">
-        <div class="calendar-meta">
-          <div class="meta-pill">
-            <span class="meta-label">Start date</span>
-            <span class="meta-value" id="calStartPretty">—</span>
-          </div>
-          <div class="meta-pill">
-            <span class="meta-label">Cadence</span>
-            <span class="meta-value">Every 14 days</span>
-          </div>
-          <div class="meta-pill">
-            <span class="meta-label">Timezone</span>
-            <span class="meta-value" id="calTz">—</span>
-          </div>
-        </div>
-
-        <label class="toggle">
-          <input type="checkbox" id="showInterludes" checked />
-          <span>Show between-drop windows</span>
-        </label>
-      </div>
-
-      <ol class="timeline" id="releaseTimeline" aria-label="Release timeline">
-        <!-- Items populated by JS -->
-      </ol>
-
-      <p class="fineprint calendar-note">
-        Dates are generated from a single start date in the script below. Change <code>START_DATE</code> to update the entire calendar.
-      </p>
-    </section>
-
-    <section id="subscribe" class="section subscribe" aria-label="Subscribe">
-      <div class="section-head">
-        <h2>Get launch updates</h2>
-        <p>One email when we go live, then only when new chapters drop.</p>
-      </div>
-
-      <form class="form" id="signup" novalidate>
-        <label class="field">
-          <span>Email</span>
-          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@domain.com" required />
-        </label>
-
-        <button class="btn primary" type="submit">
-          Notify me
-          <span class="arrow" aria-hidden="true">→</span>
-        </button>
-
-        <p class="fineprint">
-          By subscribing, you agree to receive Vox Humana email updates. Unsubscribe anytime.
-        </p>
-
-        <div class="form-msg" id="msg" role="status" aria-live="polite"></div>
-      </form>
-    </section>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        <span>© <span id="year"></span> Vox Humana SF. All rights reserved.</span>
-        <span class="footer-links">
-          <a href="#about">About</a>
-          <a href="#calendar">Calendar</a>
-          <a href="#subscribe">Subscribe</a>
-          <a href="mailto:voxhumanasf@gmail.com">Email</a>
-        </span>
-      </div>
-    </footer>
-  </main>
-
-  <script>
-    // =========================
-    // Global: Year + Signup
-    // =========================
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Lightweight client-side validation (no backend wired)
-    const form = document.getElementById("signup");
-    const email = document.getElementById("email");
-    const msg = document.getElementById("msg");
-
-    function setMsg(type, text) {
-      msg.className = "form-msg " + type;
-      msg.textContent = text;
-    }
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const value = (email.value || "").trim();
-
-      if (!value) {
-        email.focus();
-        setMsg("error", "Add an email address to get launch updates.");
-        return;
-      }
-
-      if (!email.checkValidity()) {
-        email.focus();
-        setMsg("error", "That email doesn’t look right. Double-check the format.");
-        return;
-      }
-
-      // TODO: connect to your provider (Buttondown/Mailchimp/etc.)
-      setMsg("success", "You’re on the list. Watch for launch day.");
-      form.reset();
-    });
-  </script>
-
-  <script>
-    // =========================
-    // Release Calendar Settings
-    // =========================
-    // EDIT THIS DATE to shift the whole calendar:
-    // Use ISO format: YYYY-MM-DD
-    const START_DATE = "2026-07-01";     // <-- change me
-    const INTERVAL_DAYS = 14;            // core chapter cadence
-    const INCLUDE_INTERLUDES_DEFAULT = true;
-
-    // Chapter data (Book One)
-    const CHAPTERS = [
-      { num: "01", a: "Momentum",            b: "Seeds in the Dark" },
-      { num: "02", a: "Echo Drift",          b: "Curiosity’s Allowed" },
-      { num: "03", a: "Soft Spot",           b: "Somewhere with Shade" },
-      { num: "04", a: "Pattern Recognition", b: "The Door Left Open" },
-      { num: "05", a: "Decision Vector",     b: "For Whoever’s Left" },
-      { num: "06", a: "No Way Back",         b: "Born First" },
-      { num: "07", a: "Threshold",           b: "Room Tone" },
-      { num: "08", a: "Half-Open",           b: "Presence" },
-      { num: "09", a: "Audition",            b: "Audition" },
-      { num: "10", a: "Manual Mode",         b: "Location Only" },
-      { num: "11", a: "Resonance",           b: "Resonance" },
-      { num: "12", a: "Epilogue",            b: "Black Box" }
-    ];
-
-    function addDays(date, days) {
-      const d = new Date(date);
-      d.setDate(d.getDate() + days);
-      return d;
-    }
-
-    function formatDate(d) {
-      return new Intl.DateTimeFormat(undefined, {
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      }).format(d);
-    }
-
-    function getTimezoneLabel() {
-      try {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
-      } catch {
-        return "Local";
-      }
-    }
-
-    function buildTimeline(includeInterludes) {
-      const list = document.getElementById("releaseTimeline");
-      list.innerHTML = "";
-
-      // Parse start date in local time safely (noon avoids DST edge weirdness)
-      const start = new Date(START_DATE + "T12:00:00");
-      document.getElementById("calStartPretty").textContent = formatDate(start);
-      document.getElementById("calTz").textContent = getTimezoneLabel();
-
-      CHAPTERS.forEach((ch, idx) => {
-        const releaseDate = addDays(start, idx * INTERVAL_DAYS);
-
-        // Core chapter item
-        const li = document.createElement("li");
-        li.className = "timeline-item";
-        li.innerHTML = `
-          <span class="timeline-dot" aria-hidden="true"></span>
-          <div class="timeline-card">
-            <div class="timeline-top">
-              <div class="release-date">${formatDate(releaseDate)}</div>
-              <div class="release-tag">Core chapter</div>
-            </div>
-
-            <div class="chapter-line">
-              <div class="ch-num">${ch.num}</div>
-              <div>
-                <div class="ch-title">${ch.a} <span style="opacity:.65"> // </span>${ch.b}</div>
-                <div class="ch-subtitle">Book One</div>
-              </div>
-            </div>
-          </div>
-        `;
-        list.appendChild(li);
-
-        // Optional interlude window: halfway between core drops (~7 days after)
-        if (includeInterludes && idx < CHAPTERS.length - 1) {
-          const interludeDate = addDays(releaseDate, Math.floor(INTERVAL_DAYS / 2));
-          const inter = document.createElement("li");
-          inter.className = "timeline-item";
-          inter.innerHTML = `
-            <span class="timeline-dot" aria-hidden="true"></span>
-            <div class="timeline-card interlude">
-              <div class="timeline-top">
-                <div class="release-date">${formatDate(interludeDate)}</div>
-                <div class="release-tag">Between-drop</div>
-              </div>
-              <div class="chapter-line">
-                <div class="ch-num">•</div>
-                <div>
-                  <div class="ch-title">Interstitial release</div>
-                  <div class="ch-subtitle">Optional extras: artifacts, cast notes, short pieces—no plot replacement.</div>
-                </div>
-              </div>
-            </div>
-          `;
-          list.appendChild(inter);
-        }
-      });
-    }
-
-    // Initialize calendar
-    const interludeToggle = document.getElementById("showInterludes");
-    interludeToggle.checked = INCLUDE_INTERLUDES_DEFAULT;
-    buildTimeline(interludeToggle.checked);
-    interludeToggle.addEventListener("change", () => buildTimeline(interludeToggle.checked));
-  </script>
+</footer>
+</div>
+</div>
+<script>
+/* Margins server (supporter notes, character audio). Static hosts such as
+   GitHub Pages have none, so on public hosts the page doesn't call it.
+   Once it's deployed, put its address here, e.g. "https://margins.example.com/api". */
+window.VOX_MARGINS_API = window.VOX_MARGINS_API != null ? window.VOX_MARGINS_API
+  : (/^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$/.test(location.hostname) ? "/margins/api" : "");
+</script>
+<script src="scripts/voices.js"></script>
+<script src="scripts/memory.js"></script>
+<script src="scripts/ship-time.js"></script>
+<script src="scripts/page-chrome.js"></script>
+<script src="scripts/perspective-selector.js"></script>
+<script src="scripts/home.js"></script>
+<script src="scripts/home-interface.js"></script>
+<script src="scripts/lens-variants.js"></script>
+<!-- ── Atmospherics — sound mixer ─────────────────────── -->
+<script src="scripts/ambiance.js"></script>
+<!-- Navigation mixer + supporter character audio (index only) -->
+<script src="scripts/voice-scheduler.js"></script>
+<script src="scripts/ship-sound.js"></script>
 </body>
 </html>
