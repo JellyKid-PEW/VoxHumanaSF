@@ -141,7 +141,8 @@
   function suspendSoon() {
     clearTimeout(suspendTimer);
     suspendTimer = setTimeout(function () {
-      if (!wantOn && ctx && ctx.state === "running") ctx.suspend().then(notify);
+      // If sound was turned back on while suspending, resume straight away.
+      if (!wantOn && ctx && ctx.state === "running") ctx.suspend().then(function () { if (wantOn) return ctx.resume(); }).then(notify);
     }, 1500);
   }
   function isLive() { return !!(wantOn && started && ctx && ctx.state === "running"); }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html data-bg="1 3 4" lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -19,7 +19,7 @@
 <link href="style/home.css" rel="stylesheet"/>
 <noscript><style>#panel-queue[hidden]{display:block!important}.panel-switch{display:none!important}</style></noscript>
 </head>
-<body class="home" data-ambiance-no-control="" data-lens-variant="rail-identity">
+<body class="home" data-ambiance-no-control="" data-lens-mark="3" data-lens-variant="rail-identity">
 <!-- ── Atmospherics — scanlines, grain, vignette ─────────────────────── -->
 <div class="atmos">
 <div class="scan"></div>
@@ -180,6 +180,14 @@
 <div class="cta-arrow">›</div>
 </div>
 </a>
+<!-- Continue reading: shown only when this device has a saved place (scripts/reading-progress.js). -->
+<div class="resume" hidden="" id="resume">
+<a class="resume-link" data-resume-link="" href="#">
+<span class="resume-top"><span class="resume-k">Continue reading</span><span class="resume-ch" data-resume-ch=""></span></span>
+<span class="resume-line"><span class="resume-from" data-resume-from=""></span><span class="resume-note">saved on this device only</span></span>
+<span aria-hidden="true" class="resume-ar">›</span>
+</a>
+</div>
 <!-- Captain's Dispatch — articles are GENERATED from scripts/voices.js by
                home.js (buildCaptainArticles). To edit copy for a character,
                edit that character's `dispatch` block in voices.js. This host
@@ -574,6 +582,7 @@ window.VOX_SIGNAL_ENDPOINT = window.VOX_SIGNAL_ENDPOINT || "";
 <script src="scripts/page-chrome.js"></script>
 <script src="scripts/perspective-selector.js"></script>
 <script src="scripts/home.js"></script>
+<script src="scripts/reading-progress.js"></script>
 <script src="scripts/home-interface.js"></script>
 <script src="scripts/lens-variants.js"></script>
 <!-- ── Atmospherics — sound mixer ─────────────────────── -->

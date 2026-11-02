@@ -629,6 +629,11 @@ function pickOne(items) {
     if (!wide.matches) return;
     fitPanel(1);
     if (!('zoom' in frame.style)) return;
+    // Never undo the reader's own browser zoom: when they've zoomed in to
+    // make things larger (window wider than the page's CSS width, as in
+    // Chrome/Edge), skip the scale step and let the page scroll instead.
+    const browserZoom = window.outerWidth && window.innerWidth ? window.outerWidth / window.innerWidth : 1;
+    if (browserZoom > 1.1) return;
     // Scaling reflows the page slightly (it gains width), so settle in a
     // few passes; 2px spare so rounding never brings back a scrollbar.
     let z = 1;

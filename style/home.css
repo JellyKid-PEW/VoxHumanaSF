@@ -1681,3 +1681,135 @@ body.home { overflow-x: clip; }
 @media (min-width: 1080px) and (max-width: 1499px) {
   .home .bottombar > .col:first-child { grid-template-columns: max-content; }
 }
+
+/* ── 18. Lens station markers. index.html sets <body data-lens-mark="3">
+   (the status pip). On local hosts ?mark=1..4 previews the others and
+   ?mark=0 the original display-font initial (no attribute).
+     1 · channel number 01–04, lit like an annunciator legend when selected
+     2 · initial in Space Mono (its I has serifs, so it reads as a letter)
+     3 · status pip: hollow square, filled in the character's colour
+     4 · bracketed initial [Q], brackets take the colour when selected
+   Unlike the default, every option stays visible on narrow rails. */
+body[data-lens-mark] .lr-ini {
+  align-self: start; margin-top: 2px; padding: 2px 3px 1px;
+  font-family: var(--mono); font-weight: 700; font-size: 10px; line-height: 1;
+  letter-spacing: 0; color: var(--ink-dim); border-radius: 1px;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+body[data-lens-mark] .lr-item:hover .lr-ini,
+body[data-lens-mark] .lr-item:focus-visible .lr-ini { color: var(--c); }
+body[data-lens-mark="1"] .lr-item.on .lr-ini,
+body[data-lens-mark="2"] .lr-item.on .lr-ini { background: var(--c); color: #060606; }
+body[data-lens-mark="3"] .lr-ini {
+  box-sizing: border-box; width: 7px; height: 7px; padding: 0; margin-top: 5px;
+  border: 1px solid var(--ink-dim); border-radius: 0;
+}
+body[data-lens-mark="3"] .lr-item:hover .lr-ini,
+body[data-lens-mark="3"] .lr-item:focus-visible .lr-ini { border-color: var(--c); }
+body[data-lens-mark="3"] .lr-item.on .lr-ini {
+  border-color: var(--c); background: var(--c);
+  box-shadow: 0 0 5px color-mix(in srgb, var(--c) 60%, transparent);
+}
+body[data-lens-mark="4"] .lr-ini { padding: 2px 0 1px; letter-spacing: -0.04em; }
+body[data-lens-mark="4"] .lr-item.on .lr-ini { color: var(--c); }
+@container (max-width: 400px) {
+  body[data-lens-mark] .lr--identity .lr-item { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "mark mark" "ini text"; }
+  body[data-lens-mark] .lr--identity .lr-line .lr-item { column-gap: 4px; }
+  body[data-lens-mark] .lr--identity .lr-ini { display: block; font-size: 9px; padding: 2px 2px 1px; }
+  body[data-lens-mark="3"] .lr--identity .lr-ini { padding: 0; }
+  body[data-lens-mark="4"] .lr--identity .lr-ini { padding: 2px 0 1px; }
+}
+/* Phones: a hair smaller and closer, and names may use the gap after
+   their station, so "Quenby Vox" keeps one line. */
+@container (max-width: 350px) {
+  body[data-lens-mark] .lr--identity .lr-line .lr-item { column-gap: 3px; }
+  body[data-lens-mark] .lr--identity .lr-line .lr-text { margin-right: -13px; }
+  body[data-lens-mark] .lr--identity .lr-ini { font-size: 8px; padding: 2px 1px 1px; }
+  body[data-lens-mark="3"] .lr--identity .lr-ini { width: 6px; height: 6px; padding: 0; margin-top: 4px; }
+  body[data-lens-mark="4"] .lr--identity .lr-ini { padding: 2px 0 1px; }
+  body[data-lens-mark] .lr--identity .lr-z { display: none; }
+  body[data-lens-mark] .lr--identity .lr-b { margin: 0 -1.5px; }
+}
+
+/* ── 19. Continue reading (returning readers only; reading-progress.js) ──
+   A compact two-line entrance under Begin Book One: the chapter, then
+   where the reader stopped and that the place lives on this device. */
+.home .resume { margin-top: 8px; max-width: min(100%, 35rem); }
+.home .resume[hidden] { display: none; }
+.home .resume-link {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; align-items: center;
+  padding: 7px 14px;
+  border-left: 2px solid var(--signal);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--signal) 7%, transparent), transparent 70%);
+  color: var(--ink); text-decoration: none;
+  transition: background 0.2s ease;
+}
+.home .resume-link:hover,
+.home .resume-link:focus-visible { background: linear-gradient(90deg, color-mix(in srgb, var(--signal) 13%, transparent), transparent 80%); }
+.home .resume-link:focus-visible { outline: 1px solid var(--signal); outline-offset: 2px; }
+.home .resume-top,
+.home .resume-line { grid-column: 1; min-width: 0; display: flex; align-items: baseline; gap: 10px; white-space: nowrap; overflow: hidden; }
+.home .resume-line { margin-top: 2px; }
+.home .resume-k { flex: none; font-size: 9.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--signal); }
+.home .resume-ch { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+.home .resume-from { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 11px; font-style: italic; color: var(--ink-dim); }
+.home .resume-from:empty { display: none; }
+.home .resume-note { flex: none; font-size: 9.5px; letter-spacing: 0.06em; color: var(--ink-faint); }
+.home .resume-from:not(:empty) + .resume-note::before { content: "\00B7  "; }
+.home .resume-ar { grid-column: 2; grid-row: 1 / span 2; font-size: 18px; color: var(--ink-dim); }
+
+/* ── 20. Background layers. index.html chooses them on <html data-bg>:
+   the default is "1 3 4" (tonal panel, edge ruler, warmer grain). On
+   local hosts ?bg= previews others (e.g. ?bg=2, ?bg=13, ?bg=0 for none).
+   All static, existing palette, nothing placed under the prose.
+     1 · tonal zoning: the reading panel one flat step lighter
+     2 · registration marks + a small registry title block in the margin
+     3 · a measuring ruler down the left edge of the frame
+     4 · warmer, finer grain */
+html[data-bg~="1"] .home .queue { background: #0c0c0b; }
+
+html[data-bg~="2"] .home .hull::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  --x: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='11' height='11'><path d='M5.5 0v11M0 5.5h11' stroke='rgb(232,230,225)' stroke-opacity='0.16'/></svg>");
+  background:
+    var(--x) no-repeat right 30px top 30px,
+    var(--x) no-repeat left 30px bottom 30px,
+    var(--x) no-repeat 50% 14px,
+    var(--x) no-repeat 50% calc(100% - 14px);
+}
+html[data-bg~="2"] .home .hull::after {
+  content: "REGISTRY VH-SF·001  ·  MANUAL INTERFACE";
+  position: absolute; left: 56px; bottom: 7px; pointer-events: none; z-index: 1;
+  font: 700 8px/1 var(--mono); letter-spacing: 0.22em; white-space: pre;
+  color: rgba(232, 230, 225, 0.2);
+}
+
+html[data-bg~="3"] .home .hull::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 6px; width: 10px;
+  pointer-events: none; z-index: 1;
+  background:
+    repeating-linear-gradient(to bottom, rgba(232, 230, 225, 0.16) 0 1px, transparent 1px 64px) 0 0 / 10px 100% no-repeat,
+    repeating-linear-gradient(to bottom, rgba(232, 230, 225, 0.09) 0 1px, transparent 1px 8px) 0 0 / 4px 100% no-repeat;
+}
+
+/* Narrow screens have a slim margin: the ruler moves to the edge and
+   shortens, leaving clear space before the content. */
+@media (max-width: 720px) {
+  html[data-bg~="3"] .home .hull::before { left: 2px; width: 7px; background-size: 7px 100%, 3px 100%; }
+}
+
+html[data-bg~="4"] .atmos .grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.91  0 0 0 0 0.86  0 0 0 0 0.74  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.085;
+}
+
+/* Long names wrap within their own station instead of running into the
+   next one (the shared narrow-rail rule keeps names on one line). */
+.home .lr--identity .lr-name { white-space: normal; overflow-wrap: anywhere; }
+@container (max-width: 400px) {
+  .home .lr--identity .lr-name { white-space: normal; overflow-wrap: anywhere; }
+}
+/* …but give names the empty gap after their station first, so the real
+   names keep one line (as before) and only genuinely long ones wrap. */
+.home .lr--identity .lr-item { column-gap: 6px; }
+.home .lr--identity .lr-text { margin-right: -12px; }

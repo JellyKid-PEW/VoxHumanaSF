@@ -31,6 +31,18 @@
   let q = new URLSearchParams(location.search).get("lens");
   q = alias[q] || q;
   const known = /^(rail|seam|type|rail-identity|rail-nav|rail-panel|classic|current)$/;
+  // Previews on local hosts only (public hosts always get the page's defaults):
+  //   ?bg=0..4   background layers, combinable: ?bg=134 (home.css §20)
+  //   ?mark=0..4 Lens station markers; 0 = original initial (home.css §18)
+  const params = new URLSearchParams(location.search);
+  // The page's own data-bg / data-lens-mark are the defaults.
+  const bgq = params.get("bg");
+  if (isDevHost && /^[0-4]+$/.test(bgq || "")) document.documentElement.dataset.bg = bgq.replace(/0/g, "").split("").join(" ");
+  const markq = params.get("mark");
+  if (isDevHost && /^[0-4]$/.test(markq || "")) {
+    if (markq === "0") delete body.dataset.lensMark; else body.dataset.lensMark = markq;
+  }
+  const mark = /^[1-4]$/.test(body.dataset.lensMark || "") ? body.dataset.lensMark : "";
   const variant = (isDevHost && known.test(q || "")) ? q : (known.test(body.dataset.lensVariant || "") ? body.dataset.lensVariant : "current");
   body.dataset.lensVariant = variant;
   // "classic" is the original vertical Lens (perspective-selector.js) with a
@@ -42,6 +54,12 @@
   const keys = Vox.keys().filter((k) => Vox.get(k).selectable);
   const v = (k) => Vox.get(k);
   const initial = (k) => ((v(k).name || "").replace(/[^A-Za-z]/g, "").charAt(0) || "?").toUpperCase();
+  // Marker options: 1 channel number · 2 mono initial · 3 status pip ·
+  // 4 bracketed initial. Default (no option): the display-font initial.
+  const marker = (k, i) => mark === "1" ? `<span class="lr-z">0</span>${i + 1}`
+    : mark === "3" ? ""
+    : mark === "4" ? `<span class="lr-b">[</span>${initial(k)}<span class="lr-b">]</span>`
+    : initial(k);
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   // Shared radio-group behaviour for every variant.
@@ -84,10 +102,10 @@
     el.innerHTML = `
       <div class="lr-head"><span class="lr-k" id="lr-k">Lens</span><span class="lr-invite">${esc(invite)}</span></div>
       <div class="lr-line">
-        ${keys.map((k) => `
+        ${keys.map((k, i) => `
           <button type="button" role="radio" class="lr-item" data-key="${k}" style="--c:${v(k).signal}" aria-label="${ariaFor(k)}">
             <span class="lr-text" aria-hidden="true"><span class="lr-name">${esc(v(k).name)}</span><span class="lr-role">${esc(v(k).role)}</span></span>
-            <span class="lr-ini" aria-hidden="true">${initial(k)}</span>
+            <span class="lr-ini" aria-hidden="true">${marker(k, i)}</span>
             <span class="lr-mark" aria-hidden="true"></span>
           </button>`).join("")}
       </div>`;
